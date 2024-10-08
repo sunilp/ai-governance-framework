@@ -1,0 +1,94 @@
+# AI System Risk Assessment Template
+# Complete this template for every new AI system before development begins.
+# Submit to the AI Risk Committee for T1/T2 classifications.
+
+system:
+  name: ""                          # e.g., "Retail Credit Scoring Model v3"
+  id: ""                            # Unique identifier from AI system inventory
+  version: "1.0"
+  owner:
+    name: ""
+    role: ""                        # e.g., "Head of Retail Credit Risk"
+    business_unit: ""               # e.g., "Consumer Banking"
+  sponsor:
+    name: ""
+    role: ""                        # Senior management sponsor
+
+description:
+  purpose: ""                       # What business problem does this system solve?
+  methodology: ""                   # e.g., "Gradient boosted trees (XGBoost)"
+  inputs: []                        # List key input features/data sources
+  outputs: ""                       # What does the system produce?
+  target_users: ""                  # Who consumes the output?
+  decision_type: ""                 # "automated" | "recommendation" | "informational"
+
+data:
+  classification: ""                # "highly_restricted" | "restricted" | "internal" | "public"
+  sources: []                       # List all data sources
+  contains_pii: false
+  pii_types: []                     # e.g., ["name", "address", "financial_records"]
+  cross_border_transfer: false
+  retention_period: ""              # e.g., "7 years per regulatory requirement"
+
+risk_assessment:
+  decision_autonomy:
+    score: ""                       # "critical" | "high" | "medium" | "low"
+    justification: ""
+  data_sensitivity:
+    score: ""
+    justification: ""
+  regulatory_exposure:
+    score: ""
+    justification: ""
+    applicable_regulations: []      # e.g., ["SR 11-7", "EU AI Act Art. 6", "ECOA"]
+  reversibility:
+    score: ""
+    justification: ""
+  scale_of_impact:
+    score: ""
+    justification: ""
+    affected_customers: 0
+    capital_exposure: ""            # e.g., "$500M"
+
+  overall_tier: ""                  # "T1" | "T2" | "T3" | "T4"
+  tier_justification: ""            # Why this tier? Reference the highest-scoring dimension.
+
+human_oversight:
+  level: ""                         # "human_in_the_loop" | "human_on_the_loop" | "human_out_of_the_loop"
+  override_mechanism: ""            # How can a human override the system's output?
+  escalation_threshold: ""          # When must a human review be triggered?
+
+fairness:
+  protected_attributes_used: false
+  proxy_risk_assessed: false
+  bias_testing_planned: false
+  disparate_impact_analysis: false
+  fairness_metrics: []              # e.g., ["demographic_parity", "equalized_odds"]
+
+explainability:
+  method: ""                        # e.g., "SHAP values", "LIME", "inherently interpretable"
+  audience: ""                      # Who needs explanations? e.g., "customers", "regulators", "internal reviewers"
+  individual_explanations: false    # Can the system explain individual decisions?
+
+security:
+  adversarial_risk: ""              # "high" | "medium" | "low"
+  prompt_injection_risk: ""         # For LLM-based systems
+  data_poisoning_risk: ""
+  access_control_model: ""          # How is access to the system controlled?
+
+operational:
+  availability_requirement: ""      # e.g., "99.9% uptime"
+  latency_requirement: ""           # e.g., "<200ms p99"
+  fallback_mechanism: ""            # What happens if the system is unavailable?
+  monitoring_plan: ""               # How will the system be monitored in production?
+
+approval:
+  assessor:
+    name: ""
+    date: ""
+  reviewer:                         # AI Risk Committee reviewer (T1/T2 only)
+    name: ""
+    date: ""
+  model_risk_management:            # Independent validation (T1 only)
+    name: ""
+    date: ""
