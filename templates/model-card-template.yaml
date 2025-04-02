@@ -1,0 +1,118 @@
+# Model Card Template
+# Based on Google Model Cards for Model Reporting, extended for regulatory requirements.
+# Complete this template for every model before it can proceed to validation.
+
+model_details:
+  name: ""                              # Human-readable model name
+  id: ""                                # Unique model identifier
+  version: ""                           # Semantic version (e.g., "2.1.0")
+  type: ""                              # e.g., "classification", "regression", "ranking", "generative"
+  methodology: ""                       # e.g., "XGBoost gradient boosted trees"
+  framework: ""                         # e.g., "scikit-learn 1.4", "TensorFlow 2.15", "PyTorch 2.2"
+  risk_tier: ""                         # T1 / T2 / T3 / T4
+  date_created: ""
+  last_updated: ""
+
+  owners:
+    developer:
+      name: ""
+      team: ""
+    business_owner:
+      name: ""
+      business_unit: ""
+
+  references:
+    development_document: ""            # Link to full development documentation
+    validation_report: ""               # Link to validation report (post-validation)
+    risk_assessment: ""                 # Link to risk assessment
+    code_repository: ""                 # Link to model code repository
+
+intended_use:
+  primary_use: ""                       # What is this model designed to do?
+  primary_users: ""                     # Who consumes the model's output?
+  out_of_scope_uses: []                 # Uses the model is explicitly NOT designed for
+  decision_type: ""                     # "automated" | "recommendation" | "informational"
+  human_oversight: ""                   # "in_the_loop" | "on_the_loop" | "out_of_the_loop"
+
+training_data:
+  description: ""                       # What data was the model trained on?
+  source: ""                            # Where does the training data come from?
+  size: ""                              # Number of records, time range
+  features_count: 0                     # Number of input features
+  target_variable: ""                   # What is the model predicting?
+  class_distribution: ""                # For classification — balance of classes
+  known_limitations: ""                 # Known gaps or biases in the training data
+  preprocessing: ""                     # Key preprocessing steps
+  data_version: ""                      # Dataset version identifier
+  collection_date_range: ""             # Time period covered by training data
+
+evaluation:
+  datasets:
+    - name: ""                          # e.g., "hold-out test set"
+      size: ""
+      time_period: ""
+  metrics:
+    - name: ""                          # e.g., "AUC-ROC"
+      value: 0.0
+      threshold: 0.0                    # Minimum acceptable value
+      confidence_interval: ""           # e.g., "0.82–0.86 (95% CI)"
+  calibration:
+    method: ""                          # e.g., "Platt scaling"
+    result: ""                          # Calibration quality assessment
+  baseline_comparison:
+    baseline_model: ""                  # What was the baseline?
+    baseline_performance: ""            # Baseline metric values
+    improvement: ""                     # How much better is this model?
+
+fairness:
+  protected_attributes_evaluated: []    # e.g., ["age_group", "gender", "ethnicity"]
+  metrics:
+    - attribute: ""
+      metric: ""                        # e.g., "demographic_parity_ratio"
+      value: 0.0
+      threshold: 0.0                    # Minimum acceptable value
+      result: ""                        # "pass" | "fail" | "conditional"
+  bias_mitigations: ""                  # What mitigations were applied?
+  ongoing_monitoring: ""                # How will fairness be monitored in production?
+
+explainability:
+  global:
+    method: ""                          # e.g., "SHAP summary plot"
+    top_features: []                    # Top 5-10 most important features
+  individual:
+    method: ""                          # e.g., "SHAP values per prediction"
+    available_to: ""                    # Who can access individual explanations?
+  model_behavior_description: ""        # Plain-language description of what drives model decisions
+
+robustness:
+  stress_tests_performed: []            # e.g., ["extreme input values", "missing features", "temporal shift"]
+  adversarial_testing: ""               # Was adversarial testing performed? Results?
+  known_failure_modes: []               # When does the model fail or degrade?
+  out_of_distribution_handling: ""      # How does the model handle OOD inputs?
+
+operational:
+  serving_infrastructure: ""            # e.g., "Vertex AI Prediction endpoint"
+  latency:
+    p50: ""
+    p99: ""
+    sla: ""
+  throughput: ""                        # Expected requests per second
+  availability_target: ""              # e.g., "99.9%"
+  fallback_mechanism: ""               # What happens if the model is unavailable?
+  monitoring:
+    performance_metrics: []             # Which metrics are monitored?
+    drift_detection: ""                 # Method and thresholds
+    alert_thresholds: []
+  retraining_cadence: ""               # How often is the model retrained?
+
+limitations:
+  known_limitations: []                 # Technical or data limitations
+  ethical_considerations: []            # Potential ethical concerns
+  domains_not_suitable: []             # Contexts where this model should not be used
+  regulatory_constraints: []            # Regulatory limitations on model use
+
+change_history:
+  - version: ""
+    date: ""
+    description: ""
+    validated_by: ""
