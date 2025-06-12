@@ -1,0 +1,175 @@
+# Model Card — Retail Credit Scoring Model v3
+# This is a worked example demonstrating how to apply the model card template.
+
+model_details:
+  name: "Retail Credit Scoring Model"
+  id: "MDL-CS-003"
+  version: "3.1.0"
+  type: "classification"
+  methodology: "XGBoost gradient boosted trees with isotonic calibration"
+  framework: "scikit-learn 1.4, XGBoost 2.0"
+  risk_tier: "T1"
+  date_created: "2024-06-15"
+  last_updated: "2024-11-20"
+
+  owners:
+    developer:
+      name: "Credit Risk Analytics Team"
+      team: "Retail Risk"
+    business_owner:
+      name: "Head of Retail Credit Risk"
+      business_unit: "Consumer Banking"
+
+  references:
+    development_document: "internal://docs/MDL-CS-003/development-report-v3.pdf"
+    validation_report: "internal://docs/MDL-CS-003/validation-report-v3.pdf"
+    risk_assessment: "internal://docs/MDL-CS-003/risk-assessment.pdf"
+    code_repository: "internal://git/credit-models/retail-scoring-v3"
+
+intended_use:
+  primary_use: "Predict the probability of default (PD) for unsecured retail credit applications within a 12-month horizon. Score is used as a primary input to the credit decision engine."
+  primary_users: "Credit decision engine (automated), credit underwriters (manual review for edge cases)"
+  out_of_scope_uses:
+    - "Secured lending decisions (mortgage, auto loan)"
+    - "Business or commercial lending"
+    - "Collection prioritization or recovery estimation"
+    - "Marketing or cross-selling targeting"
+  decision_type: "automated"
+  human_oversight: "on_the_loop"   # Underwriters review applications near decision boundary
+
+training_data:
+  description: "Retail unsecured credit applications with 12-month outcome labels (default/non-default). Includes bureau data, application data, and behavioral data for existing customers."
+  source: "Internal application database + credit bureau feeds (Experian, CIBIL)"
+  size: "2.4M applications, Jan 2020 — Dec 2023"
+  features_count: 147
+  target_variable: "default_12m — binary indicator of 90+ DPD within 12 months of origination"
+  class_distribution: "4.2% default rate (imbalanced)"
+  known_limitations: "Training period includes COVID-19 era (2020-2021) which may not represent normal economic conditions. Pandemic-era forbearance programs suppressed observed default rates."
+  preprocessing: "Missing value imputation (median for numeric, mode for categorical), WoE binning for key features, feature selection via Boruta"
+  data_version: "DS-CREDIT-2024Q1-v2"
+  collection_date_range: "January 2020 — December 2023"
+
+evaluation:
+  datasets:
+    - name: "Out-of-time test set"
+      size: "320K applications"
+      time_period: "January 2024 — June 2024"
+    - name: "Stratified hold-out"
+      size: "480K applications"
+      time_period: "Same as training (random 20% hold-out)"
+  metrics:
+    - name: "AUC-ROC"
+      value: 0.847
+      threshold: 0.80
+      confidence_interval: "0.841–0.853 (95% CI)"
+    - name: "Gini coefficient"
+      value: 0.694
+      threshold: 0.60
+      confidence_interval: "0.682–0.706 (95% CI)"
+    - name: "KS statistic"
+      value: 0.512
+      threshold: 0.40
+    - name: "Brier score"
+      value: 0.034
+      threshold: 0.05
+  calibration:
+    method: "Isotonic calibration on validation set"
+    result: "Well-calibrated across score deciles. Maximum absolute calibration error: 0.8pp in top decile."
+  baseline_comparison:
+    baseline_model: "Logistic regression (v2.x) with 42 features"
+    baseline_performance: "AUC-ROC: 0.812, Gini: 0.624"
+    improvement: "AUC-ROC +3.5pp, Gini +7.0pp. Improvement primarily from capturing non-linear interactions in bureau tradeline data."
+
+fairness:
+  protected_attributes_evaluated:
+    - "age_group"
+    - "gender"
+    - "geographic_region"
+  metrics:
+    - attribute: "gender"
+      metric: "equalized_odds_ratio"
+      value: 0.92
+      threshold: 0.80
+      result: "pass"
+    - attribute: "age_group"
+      metric: "demographic_parity_ratio"
+      value: 0.87
+      threshold: 0.80
+      result: "pass"
+    - attribute: "geographic_region"
+      metric: "equalized_odds_ratio"
+      value: 0.89
+      threshold: 0.80
+      result: "pass"
+  bias_mitigations: "Age is excluded as a direct feature. Bureau features with strong age correlation (e.g., length of credit history) are retained but monitored. Regional economic indicators are included to reduce geographic proxy effects."
+  ongoing_monitoring: "Monthly fairness metrics computed on production decisions. Quarterly review by MRM."
+
+explainability:
+  global:
+    method: "SHAP summary plots computed on validation set"
+    top_features:
+      - "bureau_delinquency_count_12m"
+      - "total_outstanding_balance_ratio"
+      - "months_since_last_delinquency"
+      - "num_active_tradelines"
+      - "application_income_to_debt_ratio"
+      - "bureau_enquiry_count_6m"
+      - "employment_tenure_months"
+  individual:
+    method: "SHAP waterfall explanations generated per prediction"
+    available_to: "Underwriters (via decision support UI), compliance (via audit system), customers (simplified version via adverse action notices)"
+  model_behavior_description: "The model primarily relies on credit bureau delinquency history, current debt burden, and income-to-debt ratios. Applicants with recent delinquencies, high utilization, and frequent credit enquiries receive higher PD scores. Employment stability and length of credit history provide positive signals."
+
+robustness:
+  stress_tests_performed:
+    - "2x increase in default rate (simulating economic downturn)"
+    - "30% increase in missing bureau data (simulating data feed interruption)"
+    - "Removal of top 3 features (simulating feature unavailability)"
+  adversarial_testing: "Input perturbation testing completed. Model is robust to small perturbations in continuous features. Synthetic adversarial applications tested — model correctly identifies high-risk patterns."
+  known_failure_modes:
+    - "Thin-file applicants (< 6 months credit history) — PD estimates have higher uncertainty"
+    - "Applicants with only secured credit history — model may underestimate risk for unsecured products"
+  out_of_distribution_handling: "OOD detection module flags applications where input features fall outside training distribution bounds. Flagged applications are routed to manual underwriting."
+
+operational:
+  serving_infrastructure: "Vertex AI Prediction endpoint (us-central1)"
+  latency:
+    p50: "45ms"
+    p99: "180ms"
+    sla: "200ms"
+  throughput: "500 requests/second"
+  availability_target: "99.95%"
+  fallback_mechanism: "If model endpoint is unavailable, applications are queued and processed when service is restored. If outage exceeds 30 minutes, fallback to rule-based scoring with conservative thresholds."
+  monitoring:
+    performance_metrics: ["AUC-ROC (monthly)", "PSI (daily)", "approval_rate (daily)", "default_rate (monthly, lagged)"]
+    drift_detection: "PSI on top 20 features, computed daily. Alert threshold: PSI > 0.15 (warning), PSI > 0.25 (critical)."
+    alert_thresholds:
+      - "AUC-ROC < 0.82 (warning), < 0.80 (critical)"
+      - "Approval rate deviation > 5pp from baseline (warning)"
+  retraining_cadence: "Semi-annual scheduled retraining, or triggered by drift/performance degradation"
+
+limitations:
+  known_limitations:
+    - "Model trained on data including COVID-19 period — may not generalize to all economic conditions"
+    - "Limited effectiveness for thin-file applicants with less than 6 months credit history"
+    - "Does not incorporate alternative data sources (rent payments, utility bills)"
+  ethical_considerations:
+    - "Credit decisions directly affect individuals' financial access — false positives deny creditworthy applicants"
+    - "Potential for geographic proxies that correlate with demographic attributes"
+  domains_not_suitable:
+    - "Secured lending products"
+    - "Markets without established credit bureau infrastructure"
+  regulatory_constraints:
+    - "Subject to SR 11-7 model risk management requirements"
+    - "Adverse action notices required under ECOA/Regulation B"
+    - "EU AI Act high-risk classification (Annex III, paragraph 5(b))"
+
+change_history:
+  - version: "3.1.0"
+    date: "2024-11-20"
+    description: "Retraining with updated data through Q1 2024. Added 12 new bureau features. Recalibrated."
+    validated_by: "Model Risk Management — Independent Validation Team"
+  - version: "3.0.0"
+    date: "2024-06-15"
+    description: "Major version — migrated from logistic regression to XGBoost. New feature engineering pipeline."
+    validated_by: "Model Risk Management — Independent Validation Team"
