@@ -1,0 +1,149 @@
+# Model Card — Real-Time Transaction Fraud Detection
+# Worked example demonstrating framework application to a high-autonomy, real-time system.
+
+model_details:
+  name: "Real-Time Transaction Fraud Detection"
+  id: "MDL-FD-007"
+  version: "7.2.0"
+  type: "classification"
+  methodology: "Two-stage ensemble — LightGBM for scoring + rule engine for high-confidence patterns"
+  framework: "LightGBM 4.2, custom rule engine (Java)"
+  risk_tier: "T2"
+  date_created: "2024-03-10"
+  last_updated: "2024-12-01"
+
+  owners:
+    developer:
+      name: "Financial Crime Analytics Team"
+      team: "Financial Crime Prevention"
+    business_owner:
+      name: "Head of Fraud Operations"
+      business_unit: "Financial Crime"
+
+  references:
+    development_document: "internal://docs/MDL-FD-007/development-report-v7.pdf"
+    validation_report: "internal://docs/MDL-FD-007/validation-report-v7.pdf"
+    risk_assessment: "internal://docs/MDL-FD-007/risk-assessment.pdf"
+    code_repository: "internal://git/fraud-models/txn-fraud-v7"
+
+intended_use:
+  primary_use: "Score every card-present and card-not-present transaction in real-time for fraud probability. High-risk transactions are blocked or stepped up for additional authentication."
+  primary_users: "Transaction authorization engine (automated), fraud analysts (investigation queue)"
+  out_of_scope_uses:
+    - "AML/CTF transaction monitoring (separate system)"
+    - "Account takeover detection (handled by identity team)"
+    - "Merchant fraud or bust-out fraud"
+  decision_type: "automated"
+  human_oversight: "on_the_loop"   # Fraud analysts review blocked transactions and investigate alerts
+
+training_data:
+  description: "Card transaction data with confirmed fraud labels. Includes transaction attributes, merchant data, device/channel signals, and customer behavioral history."
+  source: "Internal transaction processing system + confirmed fraud case database"
+  size: "850M transactions, Jul 2023 — Jun 2024"
+  features_count: 203
+  target_variable: "is_fraud — binary indicator confirmed within 45-day chargeback window"
+  class_distribution: "0.12% fraud rate (highly imbalanced)"
+  known_limitations: "Fraud labels are based on customer reports and chargeback data. Undetected fraud (where customer did not report) creates label noise. Friendly fraud is excluded from positive labels where identifiable."
+  preprocessing: "Real-time feature engineering (velocity features, aggregates), SMOTE oversampling for training, feature hashing for high-cardinality merchant categories"
+  data_version: "DS-FRAUD-2024H1-v3"
+  collection_date_range: "July 2023 — June 2024"
+
+evaluation:
+  datasets:
+    - name: "Out-of-time test set"
+      size: "120M transactions"
+      time_period: "July 2024 — September 2024"
+  metrics:
+    - name: "AUC-ROC"
+      value: 0.983
+      threshold: 0.97
+    - name: "Precision at 3% FPR"
+      value: 0.72
+      threshold: 0.60
+    - name: "Recall (fraud detection rate)"
+      value: 0.89
+      threshold: 0.85
+    - name: "False positive rate"
+      value: 0.028
+      threshold: 0.05
+  calibration:
+    method: "Not applicable — model used for ranking, not probability estimation"
+    result: "N/A"
+  baseline_comparison:
+    baseline_model: "Previous version (v6.x) — LightGBM without behavioral velocity features"
+    baseline_performance: "AUC-ROC: 0.974, Recall: 0.84, FPR: 0.035"
+    improvement: "Recall +5pp, FPR -0.7pp. Improvement from new velocity-based features capturing rapid successive transactions."
+
+fairness:
+  protected_attributes_evaluated:
+    - "geographic_region"
+    - "transaction_channel"
+  metrics:
+    - attribute: "geographic_region"
+      metric: "false_positive_rate_parity"
+      value: 0.88
+      threshold: 0.80
+      result: "pass"
+    - attribute: "transaction_channel"
+      metric: "detection_rate_parity"
+      value: 0.91
+      threshold: 0.80
+      result: "pass"
+  bias_mitigations: "Geographic region is not used as a direct feature. Merchant category codes are grouped to reduce geographic proxy effects. Online vs. in-store channel differences are addressed through channel-specific feature engineering."
+  ongoing_monitoring: "Quarterly fairness review on false positive rates by region and channel."
+
+explainability:
+  global:
+    method: "SHAP feature importance on sampled validation set"
+    top_features:
+      - "txn_amount_vs_customer_avg_ratio"
+      - "velocity_count_1h"
+      - "merchant_risk_category"
+      - "distance_from_last_txn_km"
+      - "is_card_not_present"
+      - "time_since_last_txn_seconds"
+      - "device_fingerprint_match"
+  individual:
+    method: "Top 5 contributing features returned with each score"
+    available_to: "Fraud analysts (via investigation UI)"
+  model_behavior_description: "The model identifies fraud primarily through unusual transaction patterns — amounts significantly deviating from customer norms, rapid successive transactions, transactions at high-risk merchants, and geographic inconsistencies. Card-not-present transactions and unrecognized devices increase risk scores."
+
+operational:
+  serving_infrastructure: "Custom low-latency serving on GKE (dedicated node pool)"
+  latency:
+    p50: "12ms"
+    p99: "45ms"
+    sla: "50ms"
+  throughput: "10,000 transactions/second peak"
+  availability_target: "99.99%"
+  fallback_mechanism: "If model endpoint is unavailable, transactions are authorized with rule-based fallback (conservative rules, higher false positive rate). Fallback activates automatically after 3 consecutive timeouts."
+  monitoring:
+    performance_metrics: ["detection_rate (daily)", "false_positive_rate (daily)", "model_latency (real-time)", "throughput (real-time)"]
+    drift_detection: "Feature distribution monitoring hourly. Alert on sustained shifts in transaction amount distributions or channel mix."
+    alert_thresholds:
+      - "Detection rate < 0.85 (critical)"
+      - "FPR > 0.05 (warning)"
+      - "p99 latency > 50ms (critical)"
+  retraining_cadence: "Monthly incremental retraining. Full retraining quarterly."
+
+limitations:
+  known_limitations:
+    - "New fraud patterns (zero-day attacks) may not be detected until retraining incorporates new examples"
+    - "Friendly fraud is difficult to distinguish from genuine fraud — creates noise in both training and evaluation"
+    - "Model performance degrades for customers with very short transaction history (< 30 days)"
+  ethical_considerations:
+    - "False positives cause customer friction — legitimate transactions blocked, requiring manual authentication"
+    - "Systematic false positives for certain merchant categories could disadvantage specific customer segments"
+  regulatory_constraints:
+    - "PSD2 Strong Customer Authentication requirements for stepped-up authentication"
+    - "Transaction data subject to PCI-DSS requirements"
+
+change_history:
+  - version: "7.2.0"
+    date: "2024-12-01"
+    description: "Monthly incremental retrain. Added 3 new velocity features for card-not-present transactions."
+    validated_by: "Senior Data Scientist — Financial Crime Analytics"
+  - version: "7.0.0"
+    date: "2024-09-15"
+    description: "Major version — added two-stage architecture with rule engine overlay. New device fingerprinting features."
+    validated_by: "Model Risk Management — Independent Validation Team"
