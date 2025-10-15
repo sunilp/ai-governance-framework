@@ -95,3 +95,4 @@ How many people or how much capital is affected by the system's outputs?
 | Board reporting | Yes | Summarized | No | No |
 | Incident response SLA | 1 hour | 4 hours | 24 hours | 72 hours |
 | Pre-deployment gates | 5 gates | 4 gates | 2 gates | 1 gate |
+
