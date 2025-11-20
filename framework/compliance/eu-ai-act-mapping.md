@@ -92,3 +92,4 @@ For high-risk AI systems (T1 in our framework):
 - The EU AI Act applies to AI systems placed on the market or put into service in the EU, regardless of where the provider is established
 - Financial services AI systems may also be subject to sector-specific requirements (CRD, Solvency II, MiFID II) that complement the AI Act
 - This mapping should be reviewed whenever the Act's delegated or implementing acts are published
+
