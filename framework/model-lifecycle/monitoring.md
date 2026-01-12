@@ -102,3 +102,4 @@ For T1 and T2 systems, a quarterly review must cover:
 6. **Risk tier reassessment:** Has anything changed that would affect the risk classification?
 
 The quarterly review is documented and presented to the AI Risk Committee for T1 systems.
+
