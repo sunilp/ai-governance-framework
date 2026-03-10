@@ -1,0 +1,258 @@
+# Agentic Research Assistant — Model Card
+# Risk Tier: T1 (Critical) — Agentic AI with tool access, processes confidential data
+
+model_details:
+  name: "Investment Research Assistant Agent"
+  model_id: "research-agent-v0.9"
+  version: "0.9.0"
+  type: "agent"
+  base_model: "Claude 3.5 Sonnet"
+  base_model_version: "claude-3-5-sonnet-20241022"
+  base_model_provider: "Anthropic"
+  hosting: "vendor-api"
+  risk_tier: "T1"
+  date_deployed: "2026-02-01"
+  last_reviewed: "2026-03-01"
+  next_review: "2026-04-01"
+  owners:
+    business_owner: "Head of Investment Research"
+    technical_owner: "AI Platform Engineering Lead"
+    risk_owner: "AI Risk Committee"
+
+intended_use:
+  primary_use_case: >
+    Assist investment research analysts by autonomously gathering data from
+    approved internal sources, synthesizing market data, and generating
+    structured research draft sections. The agent can query internal databases,
+    retrieve research documents, and produce formatted analysis drafts.
+  target_users:
+    - "Senior investment research analysts"
+  out_of_scope_uses:
+    - "Generating final investment recommendations"
+    - "Communicating with clients or external parties"
+    - "Executing trades or modifying portfolios"
+    - "Accessing material non-public information (MNPI) systems"
+    - "Unsupervised operation without analyst oversight"
+  decision_type: "assistive"
+  human_oversight_pattern: "human-in-the-loop"
+  customer_facing: false
+  regulatory_context:
+    - "EU AI Act"
+    - "MiFID II (investment research requirements)"
+    - "SR 11-7 (model risk management)"
+    - "MAR (Market Abuse Regulation — MNPI controls)"
+
+system_architecture:
+  components:
+    - name: "task_planner"
+      description: "Decomposes analyst request into sub-tasks and creates execution plan"
+      type: "orchestration"
+    - name: "plan_reviewer"
+      description: "Presents plan to analyst for approval before execution"
+      type: "guardrail"
+    - name: "data_retriever"
+      description: "Queries approved internal databases and document stores"
+      type: "retrieval"
+    - name: "document_analyzer"
+      description: "Reads and synthesizes research documents and reports"
+      type: "prompt"
+    - name: "draft_generator"
+      description: "Produces structured research draft sections"
+      type: "prompt"
+    - name: "action_guardrails"
+      description: "Validates every tool call against allowlist; enforces blast radius limits"
+      type: "guardrail"
+    - name: "output_guardrails"
+      description: "Checks for MNPI indicators, compliance flags, hallucination markers"
+      type: "guardrail"
+    - name: "circuit_breaker"
+      description: "Halts execution on error threshold, budget limit, or anomaly detection"
+      type: "guardrail"
+  data_flows:
+    - source: "analyst_request"
+      destination: "task_planner"
+      data_classification: "confidential"
+    - source: "task_planner"
+      destination: "plan_reviewer"
+      data_classification: "internal"
+    - source: "data_retriever"
+      destination: "document_analyzer"
+      data_classification: "confidential"
+    - source: "document_analyzer"
+      destination: "draft_generator"
+      data_classification: "confidential"
+    - source: "draft_generator"
+      destination: "output_guardrails"
+      data_classification: "confidential"
+    - source: "output_guardrails"
+      destination: "analyst"
+      data_classification: "confidential"
+  rag_configuration:
+    enabled: true
+    vector_store: "BigQuery Vector Search"
+    embedding_model: "text-embedding-004"
+    chunking_strategy: "semantic"
+    chunk_size: 1024
+    chunk_overlap: 128
+    retrieval_top_k: 10
+    reranking: true
+    document_sources:
+      - "Published research reports (internal)"
+      - "Market data summaries (internal)"
+      - "Company filings (public)"
+      - "Macroeconomic indicators (public)"
+
+prompt_governance:
+  system_prompt_version: "v0.9.1"
+  prompt_repository: "git://internal/ai-prompts/research-agent"
+  last_prompt_review: "2026-02-25"
+  adversarial_testing_date: "2026-02-28"
+  guardrails:
+    input_validation: true
+    output_filtering: true
+    pii_redaction: true
+    toxicity_gate: false
+    hallucination_detection: true
+    custom_rules:
+      - "No access to MNPI-classified systems or data"
+      - "No direct communication with external parties"
+      - "No trade execution or portfolio modification"
+      - "All data queries restricted to read-only on approved sources"
+      - "Maximum 20 tool calls per session"
+      - "Plan must be approved by analyst before execution begins"
+      - "All financial figures must be sourced; no LLM-generated numbers"
+
+evaluation:
+  evaluation_date: "2026-02-28"
+  evaluation_dataset_size: 150
+  metrics:
+    - name: "faithfulness"
+      value: 0.93
+      threshold: 0.90
+      method: "human-eval"
+    - name: "completeness"
+      value: 0.85
+      threshold: 0.80
+      method: "human-eval"
+    - name: "hallucination_rate"
+      value: 0.012
+      threshold: 0.01
+      method: "human-eval"
+    - name: "plan_quality"
+      value: 0.88
+      threshold: 0.85
+      method: "human-eval"
+    - name: "tool_use_accuracy"
+      value: 0.95
+      threshold: 0.95
+      method: "automated"
+    - name: "source_attribution_accuracy"
+      value: 0.97
+      threshold: 0.95
+      method: "automated"
+  adversarial_testing:
+    prompt_injection_resistance: 0.95
+    jailbreak_resistance: 0.96
+    test_suite_size: 100
+  bias_evaluation:
+    tested_attributes:
+      - "company_sector"
+      - "company_geography"
+    counterfactual_consistency: 0.92
+    sentiment_parity: 0.94
+    methodology: "Counterfactual testing — same analysis request across sectors/geographies"
+
+safety:
+  hallucination_tolerance: "≤ 1%"
+  toxicity_threshold: "N/A"
+  pii_leakage_tolerance: "zero"
+  content_policy: "Investment research compliance standards"
+  refusal_behavior: >
+    Declines requests involving MNPI, trade execution, client communication,
+    or queries outside approved data sources. Surfaces refusal reason to analyst.
+  known_failure_modes:
+    - "May propose overly ambitious plans that exceed tool call budget"
+    - "Complex multi-source synthesis may miss nuances in individual sources"
+    - "Confidence calibration is imperfect — may present uncertain analysis with false confidence"
+  mitigations:
+    - "Tool call budget limit (20 per session) with warning at 15"
+    - "Plan review gate — analyst approves plan before execution"
+    - "All outputs are drafts — analyst reviews and edits before any use"
+    - "Mandatory source attribution on every claim"
+
+operational:
+  infrastructure:
+    compute: "GCP europe-west1 (application layer)"
+    data_residency: "EU — all data sources and processing within EU"
+  performance:
+    latency_p50_ms: 45000
+    latency_p95_ms: 120000
+    latency_p99_ms: 180000
+    throughput_rps: 2
+    availability_target: "99.5%"
+  cost:
+    estimated_monthly_cost: "€8,000"
+    cost_per_request: "€2.50"
+    token_budget_per_request: 100000
+  monitoring:
+    quality_monitoring: "Every session reviewed by analyst (implicit)"
+    safety_monitoring: "Real-time action validation; MNPI detection on every output"
+    cost_monitoring: "Per-session budget limits; daily cost alerts"
+    drift_detection: "Weekly evaluation on canonical research scenarios"
+    alerting_configured: true
+    dashboard_url: "internal://dashboards/research-agent"
+  incident_response:
+    runbook_url: "internal://runbooks/research-agent"
+    on_call_team: "AI Platform On-Call"
+    escalation_path: "On-call → AI Platform Lead → Head of AI → CTO + CRO"
+
+vendor_risk:
+  provider: "Anthropic"
+  dpa_in_place: true
+  data_retention_by_vendor: "None (zero retention)"
+  training_data_exclusion: true
+  sla_uptime: "99.9%"
+  exit_strategy_documented: true
+  fallback_model: "Gemini 1.5 Pro (Vertex AI EU)"
+  fallback_validated: true
+  last_vendor_assessment: "2026-01-15"
+
+limitations:
+  technical_limitations:
+    - "Maximum 20 tool calls per session"
+    - "Cannot process images, charts, or PDFs with complex layouts"
+    - "Multi-session continuity not supported (each session is independent)"
+  knowledge_cutoff: "RAG-grounded; no reliance on base model knowledge for financial data"
+  language_limitations:
+    - "English only"
+  domain_limitations:
+    - "Equity and fixed income research only"
+    - "Derivatives, structured products not in scope"
+  ethical_considerations:
+    - "Must not replace human analyst judgment"
+    - "Outputs are drafts, not finished research"
+    - "Potential for automation bias — analysts must critically evaluate, not rubber-stamp"
+  regulatory_constraints:
+    - "No MNPI access or processing"
+    - "All research outputs subject to existing compliance review process"
+    - "Agent sessions logged for MiFID II compliance"
+
+approvals:
+  - role: "AI Risk Committee"
+    name: "Chair, AI Risk Committee"
+    date: "2026-01-25"
+    decision: "approved-with-conditions"
+  - role: "CISO"
+    name: "Chief Information Security Officer"
+    date: "2026-01-20"
+    decision: "approved"
+  - role: "Compliance"
+    name: "Head of Compliance"
+    date: "2026-01-22"
+    decision: "approved-with-conditions"
+
+change_history:
+  - version: "0.9.0"
+    date: "2026-02-01"
+    description: "Limited pilot deployment with 5 senior analysts"
+    approved_by: "AI Risk Committee"

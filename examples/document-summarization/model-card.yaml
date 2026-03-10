@@ -1,0 +1,214 @@
+# Document Summarization System — Model Card
+# Risk Tier: T2 (High) — Internal use, confidential documents, human-reviewed outputs
+
+model_details:
+  name: "Compliance Document Summarizer"
+  model_id: "doc-summarizer-compliance-v1.0"
+  version: "1.0.0"
+  type: "rag-system"
+  base_model: "Gemini 1.5 Pro"
+  base_model_version: "gemini-1.5-pro-002"
+  base_model_provider: "Google"
+  hosting: "vpc-hosted"
+  risk_tier: "T2"
+  date_deployed: "2025-11-01"
+  last_reviewed: "2026-02-15"
+  next_review: "2026-05-15"
+  owners:
+    business_owner: "Head of Compliance Operations"
+    technical_owner: "AI Engineering Lead"
+    risk_owner: "Head of AI Risk"
+
+intended_use:
+  primary_use_case: >
+    Summarize regulatory documents, compliance circulars, and policy updates
+    for compliance analysts. Generates structured summaries highlighting key
+    requirements, deadlines, affected business areas, and required actions.
+  target_users:
+    - "Compliance analysts"
+    - "Compliance officers"
+    - "Regulatory affairs team"
+  out_of_scope_uses:
+    - "Generating compliance advice or recommendations"
+    - "Determining regulatory applicability without human review"
+    - "Customer-facing communications"
+    - "Processing privileged legal documents"
+  decision_type: "assistive"
+  human_oversight_pattern: "human-in-the-loop"
+  customer_facing: false
+  regulatory_context:
+    - "EU AI Act (internal tool, high-risk context due to compliance workflow)"
+    - "GDPR (may process documents referencing personal data)"
+
+system_architecture:
+  components:
+    - name: "document_ingestion"
+      description: "Processes uploaded PDF/DOCX compliance documents"
+      type: "orchestration"
+    - name: "section_extractor"
+      description: "Identifies document structure and key sections"
+      type: "orchestration"
+    - name: "summarization_engine"
+      description: "LLM generates structured summary per defined template"
+      type: "prompt"
+    - name: "output_validator"
+      description: "Validates summary structure and flags potential issues"
+      type: "guardrail"
+  data_flows:
+    - source: "compliance_document"
+      destination: "document_ingestion"
+      data_classification: "confidential"
+    - source: "document_ingestion"
+      destination: "summarization_engine"
+      data_classification: "confidential"
+    - source: "summarization_engine"
+      destination: "output_validator"
+      data_classification: "internal"
+    - source: "output_validator"
+      destination: "compliance_analyst"
+      data_classification: "internal"
+  rag_configuration:
+    enabled: false
+
+prompt_governance:
+  system_prompt_version: "v1.0.2"
+  prompt_repository: "git://internal/ai-prompts/doc-summarizer"
+  last_prompt_review: "2026-02-10"
+  adversarial_testing_date: "2026-02-12"
+  guardrails:
+    input_validation: true
+    output_filtering: true
+    pii_redaction: false
+    toxicity_gate: false
+    hallucination_detection: true
+    custom_rules:
+      - "Summary must not introduce claims not present in source document"
+      - "Deadlines and dates must be extracted verbatim"
+      - "Affected entities must match source document exactly"
+      - "Summary must include confidence indicators for inferred content"
+
+evaluation:
+  evaluation_date: "2026-02-12"
+  evaluation_dataset_size: 200
+  metrics:
+    - name: "faithfulness"
+      value: 0.96
+      threshold: 0.90
+      method: "llm-as-judge + human-eval"
+    - name: "completeness"
+      value: 0.89
+      threshold: 0.85
+      method: "human-eval"
+    - name: "hallucination_rate"
+      value: 0.015
+      threshold: 0.03
+      method: "human-eval"
+    - name: "structural_compliance"
+      value: 0.98
+      threshold: 0.95
+      method: "automated"
+    - name: "date_extraction_accuracy"
+      value: 0.99
+      threshold: 0.98
+      method: "automated"
+  adversarial_testing:
+    prompt_injection_resistance: 0.96
+    jailbreak_resistance: 0.95
+    test_suite_size: 50
+  bias_evaluation:
+    tested_attributes: []
+    counterfactual_consistency: null
+    sentiment_parity: null
+    methodology: "N/A — document summarization does not involve demographic attributes"
+
+safety:
+  hallucination_tolerance: "≤ 3%"
+  toxicity_threshold: "N/A — source documents are regulatory texts"
+  pii_leakage_tolerance: "Low — documents may reference individuals; output reviewed by analyst"
+  content_policy: "Internal document handling standards"
+  refusal_behavior: "Flags documents that exceed context window; requests manual processing"
+  known_failure_modes:
+    - "Very long documents (>100 pages) may lose detail in later sections"
+    - "Highly technical financial instruments terminology may be summarized imprecisely"
+    - "Scanned/OCR documents with poor quality may produce inaccurate extractions"
+  mitigations:
+    - "Document length check with warning for documents >80 pages"
+    - "Human review of all summaries before use (HITL Pattern 1)"
+    - "OCR quality check before processing"
+
+operational:
+  infrastructure:
+    compute: "GCP europe-west1 (Vertex AI)"
+    data_residency: "EU only — documents processed within GCP EU region"
+  performance:
+    latency_p50_ms: 8000
+    latency_p95_ms: 15000
+    latency_p99_ms: 25000
+    throughput_rps: 5
+    availability_target: "99.5%"
+  cost:
+    estimated_monthly_cost: "€3,500"
+    cost_per_request: "€0.15"
+    token_budget_per_request: 32000
+  monitoring:
+    quality_monitoring: "Weekly batch evaluation on 20% sample"
+    safety_monitoring: "Output validation on every response"
+    cost_monitoring: "Daily budget tracking"
+    drift_detection: "Monthly evaluation on canonical document set"
+    alerting_configured: true
+    dashboard_url: "internal://dashboards/doc-summarizer"
+  incident_response:
+    runbook_url: "internal://runbooks/doc-summarizer"
+    on_call_team: "AI Platform On-Call"
+    escalation_path: "On-call → AI Engineering Lead → Head of AI"
+
+vendor_risk:
+  provider: "Google (Vertex AI)"
+  dpa_in_place: true
+  data_retention_by_vendor: "None (Vertex AI data governance controls)"
+  training_data_exclusion: true
+  sla_uptime: "99.9%"
+  exit_strategy_documented: true
+  fallback_model: "Claude 3.5 Sonnet (Anthropic EU endpoint)"
+  fallback_validated: true
+  last_vendor_assessment: "2025-10-15"
+
+limitations:
+  technical_limitations:
+    - "Maximum document length: ~200 pages (context window constraint)"
+    - "Does not process embedded images, charts, or tables reliably"
+    - "Non-English regulatory documents have reduced accuracy"
+  knowledge_cutoff: "N/A — processes only provided documents"
+  language_limitations:
+    - "Optimized for English regulatory documents"
+    - "German: acceptable quality"
+    - "Other languages: not validated"
+  domain_limitations:
+    - "Optimized for banking and financial services regulation"
+    - "Insurance, healthcare, or other sector regulations not validated"
+  ethical_considerations:
+    - "Summary should not be treated as legal analysis"
+    - "Human compliance analyst must validate all outputs"
+  regulatory_constraints:
+    - "Summaries must not substitute for human compliance review"
+    - "Document handling must comply with information classification policy"
+
+approvals:
+  - role: "Head of AI"
+    name: "Head of AI and Data Science"
+    date: "2025-10-20"
+    decision: "approved"
+  - role: "Security Review"
+    name: "Information Security Officer"
+    date: "2025-10-18"
+    decision: "approved"
+  - role: "Business Owner"
+    name: "Head of Compliance Operations"
+    date: "2025-10-15"
+    decision: "approved"
+
+change_history:
+  - version: "1.0.0"
+    date: "2025-11-01"
+    description: "Initial production deployment"
+    approved_by: "Head of AI"

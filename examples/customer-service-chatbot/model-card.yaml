@@ -1,0 +1,269 @@
+# Customer Service Chatbot — Model Card
+# Risk Tier: T1 (Critical) — Customer-facing, processes PII, influences service outcomes
+
+model_details:
+  name: "Retail Banking Customer Service Assistant"
+  model_id: "cs-assistant-retail-v1.2"
+  version: "1.2.0"
+  type: "rag-system"
+  base_model: "Claude 3.5 Sonnet"
+  base_model_version: "claude-3-5-sonnet-20241022"
+  base_model_provider: "Anthropic"
+  hosting: "vendor-api"
+  risk_tier: "T1"
+  date_deployed: "2025-09-15"
+  last_reviewed: "2026-01-10"
+  next_review: "2026-04-10"
+  owners:
+    business_owner: "Head of Retail Banking Digital"
+    technical_owner: "AI Platform Engineering Lead"
+    risk_owner: "AI Risk Committee"
+
+intended_use:
+  primary_use_case: >
+    Assist retail banking customers with account inquiries, product information,
+    transaction history questions, and general banking guidance via the mobile app
+    and online banking chat interface.
+  target_users:
+    - "Retail banking customers (authenticated)"
+  out_of_scope_uses:
+    - "Investment advice or portfolio recommendations"
+    - "Credit decisions or pre-approval indications"
+    - "Complaint resolution (escalated to human agent)"
+    - "Account modifications (transfers, closures, limit changes)"
+    - "Fraud dispute handling"
+    - "Regulatory or legal guidance"
+  decision_type: "assistive"
+  human_oversight_pattern: "human-over-the-loop"
+  customer_facing: true
+  regulatory_context:
+    - "EU AI Act (Article 50 — transparency)"
+    - "GDPR (data processing, right to explanation)"
+    - "Consumer Duty (FCA — fair customer outcomes)"
+    - "PSD2 (payment account information)"
+
+system_architecture:
+  components:
+    - name: "intent_classifier"
+      description: "Classifies customer intent to route to appropriate handler"
+      type: "orchestration"
+    - name: "rag_retriever"
+      description: "Retrieves relevant product documentation, FAQs, and policy documents"
+      type: "retrieval"
+    - name: "account_context"
+      description: "Fetches authenticated customer's account summary (read-only API)"
+      type: "orchestration"
+    - name: "input_guardrails"
+      description: "PII detection, prompt injection defense, intent boundary enforcement"
+      type: "guardrail"
+    - name: "output_guardrails"
+      description: "Compliance check, PII redaction, hallucination flag, tone validation"
+      type: "guardrail"
+    - name: "response_generator"
+      description: "LLM generates response using context and guardrails"
+      type: "prompt"
+    - name: "escalation_router"
+      description: "Routes to human agent when confidence is low or topic is out of scope"
+      type: "orchestration"
+  data_flows:
+    - source: "customer_query"
+      destination: "input_guardrails"
+      data_classification: "pii"
+    - source: "input_guardrails"
+      destination: "intent_classifier"
+      data_classification: "internal"
+    - source: "rag_retriever"
+      destination: "response_generator"
+      data_classification: "internal"
+    - source: "account_context"
+      destination: "response_generator"
+      data_classification: "confidential"
+    - source: "response_generator"
+      destination: "output_guardrails"
+      data_classification: "internal"
+    - source: "output_guardrails"
+      destination: "customer"
+      data_classification: "internal"
+  rag_configuration:
+    enabled: true
+    vector_store: "BigQuery Vector Search"
+    embedding_model: "text-embedding-004"
+    chunking_strategy: "semantic"
+    chunk_size: 512
+    chunk_overlap: 64
+    retrieval_top_k: 5
+    reranking: true
+    document_sources:
+      - "Product documentation (retail banking)"
+      - "Customer FAQ knowledge base"
+      - "Policy and procedure documents (customer-facing subset)"
+      - "Fee schedules and terms"
+
+prompt_governance:
+  system_prompt_version: "v1.2.3"
+  prompt_repository: "git://internal/ai-prompts/cs-assistant"
+  last_prompt_review: "2026-01-05"
+  adversarial_testing_date: "2026-01-08"
+  guardrails:
+    input_validation: true
+    output_filtering: true
+    pii_redaction: true
+    toxicity_gate: true
+    hallucination_detection: true
+    custom_rules:
+      - "No investment advice or return predictions"
+      - "No credit decisions or pre-approval indications"
+      - "Escalate complaints to human agent"
+      - "No account modifications"
+      - "All financial figures must be sourced from account API or documents"
+
+evaluation:
+  evaluation_date: "2026-01-08"
+  evaluation_dataset_size: 500
+  metrics:
+    - name: "faithfulness"
+      value: 0.94
+      threshold: 0.90
+      method: "llm-as-judge"
+    - name: "relevance"
+      value: 0.91
+      threshold: 0.85
+      method: "llm-as-judge"
+    - name: "hallucination_rate"
+      value: 0.008
+      threshold: 0.01
+      method: "llm-as-judge + human-eval"
+    - name: "correctness"
+      value: 0.96
+      threshold: 0.95
+      method: "human-eval"
+    - name: "format_compliance"
+      value: 0.99
+      threshold: 0.95
+      method: "automated"
+    - name: "escalation_appropriateness"
+      value: 0.93
+      threshold: 0.90
+      method: "human-eval"
+  adversarial_testing:
+    prompt_injection_resistance: 0.98
+    jailbreak_resistance: 0.97
+    test_suite_size: 150
+  bias_evaluation:
+    tested_attributes:
+      - "gender"
+      - "age_group"
+      - "nationality"
+      - "language_preference"
+    counterfactual_consistency: 0.95
+    sentiment_parity: 0.97
+    methodology: "Counterfactual testing with 200 pairs per attribute"
+
+safety:
+  hallucination_tolerance: "≤ 1%"
+  toxicity_threshold: "Zero tolerance"
+  pii_leakage_tolerance: "zero"
+  content_policy: "Retail banking customer communication standards"
+  refusal_behavior: >
+    Declines investment advice, credit decisions, complaint handling, and
+    account modifications. Offers to connect with a human agent for these topics.
+  known_failure_modes:
+    - "May provide outdated fee information if RAG corpus not refreshed within SLA"
+    - "Complex multi-product comparison queries sometimes generate incomplete responses"
+    - "Non-English queries in less-supported languages may have lower accuracy"
+  mitigations:
+    - "RAG corpus refresh SLA: daily for product docs, weekly for policies"
+    - "Complex query detection → escalation to human agent"
+    - "Language detection → unsupported languages routed to human agent"
+
+operational:
+  infrastructure:
+    compute: "GCP europe-west1 (application layer)"
+    data_residency: "EU (application and RAG); Anthropic API (EU endpoint)"
+  performance:
+    latency_p50_ms: 1200
+    latency_p95_ms: 2800
+    latency_p99_ms: 4500
+    throughput_rps: 50
+    availability_target: "99.9%"
+  cost:
+    estimated_monthly_cost: "€18,000"
+    cost_per_request: "€0.03"
+    token_budget_per_request: 4000
+  monitoring:
+    quality_monitoring: "Every response (async LLM-as-judge)"
+    safety_monitoring: "Real-time guardrail monitoring"
+    cost_monitoring: "Real-time with daily budget alerts"
+    drift_detection: "Daily evaluation on 100 canonical queries"
+    alerting_configured: true
+    dashboard_url: "internal://dashboards/cs-assistant"
+  incident_response:
+    runbook_url: "internal://runbooks/cs-assistant"
+    on_call_team: "AI Platform On-Call"
+    escalation_path: "On-call → AI Platform Lead → Head of AI → CTO"
+
+vendor_risk:
+  provider: "Anthropic"
+  dpa_in_place: true
+  data_retention_by_vendor: "None (zero retention API)"
+  training_data_exclusion: true
+  sla_uptime: "99.9%"
+  exit_strategy_documented: true
+  fallback_model: "Gemini 1.5 Pro (GCP Vertex AI, EU region)"
+  fallback_validated: true
+  last_vendor_assessment: "2025-12-15"
+
+limitations:
+  technical_limitations:
+    - "Cannot process images or documents uploaded by customers"
+    - "Context window limits multi-turn conversations to ~20 turns before context truncation"
+    - "Response latency increases under high load (>40 RPS)"
+  knowledge_cutoff: "RAG-grounded; no reliance on base model knowledge for banking information"
+  language_limitations:
+    - "Optimized for English and German"
+    - "French, Spanish: acceptable quality"
+    - "Other languages: not validated, routed to human agent"
+  domain_limitations:
+    - "Investment products (deliberately excluded)"
+    - "Insurance products (not in scope)"
+    - "Business banking (separate system)"
+  ethical_considerations:
+    - "Must not create false sense of personalization that misleads customers"
+    - "Must not discourage customers from seeking human assistance"
+    - "Vulnerable customer detection and appropriate routing"
+  regulatory_constraints:
+    - "Cannot provide personalized financial advice (MiFID II)"
+    - "Must disclose AI nature of interaction (EU AI Act Article 50)"
+    - "Must offer human alternative (Consumer Duty)"
+
+approvals:
+  - role: "AI Risk Committee"
+    name: "Chair, AI Risk Committee"
+    date: "2025-09-01"
+    decision: "approved"
+  - role: "CISO"
+    name: "Chief Information Security Officer"
+    date: "2025-08-28"
+    decision: "approved"
+  - role: "Business Owner"
+    name: "Head of Retail Banking Digital"
+    date: "2025-08-25"
+    decision: "approved"
+  - role: "DPO"
+    name: "Data Protection Officer"
+    date: "2025-08-30"
+    decision: "approved-with-conditions"
+
+change_history:
+  - version: "1.0.0"
+    date: "2025-09-15"
+    description: "Initial production deployment"
+    approved_by: "AI Risk Committee"
+  - version: "1.1.0"
+    date: "2025-11-20"
+    description: "Added German language support; updated product documentation corpus"
+    approved_by: "Head of AI"
+  - version: "1.2.0"
+    date: "2026-01-10"
+    description: "Upgraded to Claude 3.5 Sonnet; improved hallucination detection guardrails; added counterfactual bias testing"
+    approved_by: "AI Risk Committee"

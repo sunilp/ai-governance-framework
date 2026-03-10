@@ -1,0 +1,163 @@
+# LLM Model Card Template
+# For foundation models, fine-tuned models, and LLM-based systems
+# Adapted for enterprise GenAI governance
+
+model_details:
+  name: ""                              # e.g., "Customer Service Assistant v2.1"
+  model_id: ""                          # Unique identifier
+  version: ""                           # Semantic version
+  type: ""                              # foundation | fine-tuned | rag-system | agent
+  base_model: ""                        # Foundation model used (e.g., "GPT-4", "Claude 3.5 Sonnet", "Llama 3 70B")
+  base_model_version: ""                # Specific version or checkpoint
+  base_model_provider: ""               # OpenAI | Anthropic | Google | Meta | Self-hosted
+  hosting: ""                           # vendor-api | self-hosted | vpc-hosted
+  risk_tier: ""                         # T1 | T2 | T3 | T4
+  date_deployed: ""                     # YYYY-MM-DD
+  last_reviewed: ""                     # YYYY-MM-DD
+  next_review: ""                       # YYYY-MM-DD
+  owners:
+    business_owner: ""
+    technical_owner: ""
+    risk_owner: ""
+
+intended_use:
+  primary_use_case: ""                  # Clear description of what the system does
+  target_users: []                      # Who uses this system
+  out_of_scope_uses: []                 # What this system should NOT be used for
+  decision_type: ""                     # advisory | assistive | autonomous
+  human_oversight_pattern: ""           # human-in-the-loop | human-on-the-loop | human-over-the-loop | autonomous
+  customer_facing: false                # true | false
+  regulatory_context: []               # Applicable regulations
+
+system_architecture:
+  components:
+    - name: ""                          # e.g., "prompt_router", "rag_retriever", "guardrail_layer"
+      description: ""
+      type: ""                          # prompt | retrieval | guardrail | orchestration | evaluation
+  data_flows:
+    - source: ""
+      destination: ""
+      data_classification: ""           # public | internal | confidential | pii | regulated
+  rag_configuration:                    # If applicable
+    enabled: false
+    vector_store: ""                    # e.g., "BigQuery Vector Search", "Pinecone", "pgvector"
+    embedding_model: ""
+    chunking_strategy: ""
+    chunk_size: null
+    chunk_overlap: null
+    retrieval_top_k: null
+    reranking: false
+    document_sources: []
+
+prompt_governance:
+  system_prompt_version: ""
+  prompt_repository: ""                 # Git repo or path
+  last_prompt_review: ""                # YYYY-MM-DD
+  adversarial_testing_date: ""          # YYYY-MM-DD
+  guardrails:
+    input_validation: false
+    output_filtering: false
+    pii_redaction: false
+    toxicity_gate: false
+    hallucination_detection: false
+    custom_rules: []
+
+evaluation:
+  evaluation_date: ""                   # YYYY-MM-DD
+  evaluation_dataset_size: null         # Number of test cases
+  metrics:
+    - name: "faithfulness"
+      value: null
+      threshold: null
+      method: ""                        # llm-as-judge | human-eval | automated
+    - name: "relevance"
+      value: null
+      threshold: null
+      method: ""
+    - name: "hallucination_rate"
+      value: null
+      threshold: null
+      method: ""
+    - name: "correctness"
+      value: null
+      threshold: null
+      method: ""
+    - name: "format_compliance"
+      value: null
+      threshold: null
+      method: ""
+  adversarial_testing:
+    prompt_injection_resistance: null    # Pass rate against injection test suite
+    jailbreak_resistance: null
+    test_suite_size: null
+  bias_evaluation:
+    tested_attributes: []               # e.g., ["gender", "ethnicity", "age"]
+    counterfactual_consistency: null     # Score
+    sentiment_parity: null              # Score
+    methodology: ""
+
+safety:
+  hallucination_tolerance: ""           # e.g., "≤ 1%"
+  toxicity_threshold: ""
+  pii_leakage_tolerance: "zero"
+  content_policy: ""                    # Reference to content policy document
+  refusal_behavior: ""                  # Description of what the system refuses
+  known_failure_modes: []               # Document known failure scenarios
+  mitigations: []                       # Safety mitigations in place
+
+operational:
+  infrastructure:
+    compute: ""                         # e.g., "GCP us-central1", "Azure East US"
+    data_residency: ""                  # Where data is processed
+  performance:
+    latency_p50_ms: null
+    latency_p95_ms: null
+    latency_p99_ms: null
+    throughput_rps: null
+    availability_target: ""             # e.g., "99.9%"
+  cost:
+    estimated_monthly_cost: ""
+    cost_per_request: ""
+    token_budget_per_request: null
+  monitoring:
+    quality_monitoring: ""              # Real-time | sampled | periodic
+    safety_monitoring: ""
+    cost_monitoring: ""
+    drift_detection: ""
+    alerting_configured: false
+    dashboard_url: ""
+  incident_response:
+    runbook_url: ""
+    on_call_team: ""
+    escalation_path: ""
+
+vendor_risk:                            # If using external model provider
+  provider: ""
+  dpa_in_place: false
+  data_retention_by_vendor: ""          # "None" | retention terms
+  training_data_exclusion: false        # Vendor contractually excluded from using your data
+  sla_uptime: ""
+  exit_strategy_documented: false
+  fallback_model: ""
+  fallback_validated: false
+  last_vendor_assessment: ""            # YYYY-MM-DD
+
+limitations:
+  technical_limitations: []             # Known technical limitations
+  knowledge_cutoff: ""                  # Base model knowledge cutoff date
+  language_limitations: []              # Languages with degraded performance
+  domain_limitations: []                # Domains where performance is unreliable
+  ethical_considerations: []
+  regulatory_constraints: []
+
+approvals:
+  - role: ""                            # e.g., "Business Owner", "AI Risk Committee"
+    name: ""
+    date: ""                            # YYYY-MM-DD
+    decision: ""                        # approved | approved-with-conditions | rejected
+
+change_history:
+  - version: ""
+    date: ""                            # YYYY-MM-DD
+    description: ""
+    approved_by: ""
