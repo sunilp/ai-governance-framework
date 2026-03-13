@@ -125,6 +125,11 @@ This framework has been designed with explicit alignment to:
 
 Contributions are welcome. If you work in regulated industries and have governance patterns worth sharing, open a PR. Practical experience matters more than theoretical frameworks.
 
+### Related Writing
+
+- [Your ML Risk Framework Wasn't Built for GenAI](https://sunilprakash.com/writing/ai-governance-genai/)
+- [The Year LLMs Met Compliance — And Compliance Wasn't Ready](https://sunilprakash.com/writing/llms-meet-compliance/)
+
 ## License
 
 Apache 2.0 — see [LICENSE](LICENSE).
