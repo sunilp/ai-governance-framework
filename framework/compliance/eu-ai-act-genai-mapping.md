@@ -141,3 +141,30 @@ When a GenAI system is used in a high-risk context (Annex III — credit scoring
 3. **Now:** Implement transparency measures for all customer-facing AI (Article 50)
 4. **By August 2026:** Full compliance for high-risk GenAI systems (Articles 9–15)
 5. **Ongoing:** Monitor regulatory guidance and standards from the AI Office
+
+---
+
+## Enforcement Status (as of March 2026)
+
+| Obligation | Status | Practical Impact |
+|-----------|--------|-----------------|
+| GPAI model obligations (Art. 53) | **In force since August 2025** | Your model providers must already be compliant. If they are not providing technical documentation and training data summaries, escalate to procurement. |
+| Systemic risk GPAI obligations (Art. 55) | **In force since August 2025** | If you use GPT-4, Claude, Gemini Ultra, or similar high-capability models — verify the provider has completed model evaluations and adversarial testing per Article 55. |
+| Transparency (Art. 50) | **In force since August 2025** | All customer-facing GenAI systems must disclose AI involvement NOW. Audit all customer-facing systems for compliance. |
+| High-risk GenAI systems (Art. 6–15) | **August 2026** | T1 GenAI systems must have full conformity evidence in 5 months. Prioritize conformity assessment for highest-risk systems. |
+
+---
+
+## Practical Compliance Evidence for Deployers
+
+For organizations deploying (not developing) GPAI models — what you need in your compliance files:
+
+| Requirement | Evidence to Maintain |
+|-------------|---------------------|
+| Provider technical documentation (Art. 53(1)(a)) | Filed copy of provider's system card or model card; date obtained; review notes |
+| Copyright compliance (Art. 53(1)(c)) | Provider's published copyright policy + your internal assessment of IP risk |
+| Training data summary (Art. 53(1)(d)) | Provider's training data disclosure + your bias assessment based on it |
+| Deployment transparency (Art. 50) | Screenshots or logs of AI disclosure implementation in your systems |
+| Adversarial testing (Art. 55) | Your own red-team report for your specific use case — not just the provider's general testing |
+| Incident reporting | Incident report template ready; records of any incidents reported to the AI Office |
+| Conformity evidence (Art. 6–15, for high-risk) | Complete package: risk assessment, model card, validation report, audit trail, monitoring evidence |

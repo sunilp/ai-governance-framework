@@ -93,3 +93,31 @@ For high-risk AI systems (T1 in our framework):
 - Financial services AI systems may also be subject to sector-specific requirements (CRD, Solvency II, MiFID II) that complement the AI Act
 - This mapping should be reviewed whenever the Act's delegated or implementing acts are published
 
+---
+
+## Enforcement Status (as of March 2026)
+
+| Obligation | Effective Date | Status | Action Required |
+|-----------|---------------|--------|----------------|
+| Prohibited AI practices (Art. 5) | February 2025 | **In force** | Verify no prohibited AI practices in portfolio |
+| GPAI model obligations (Art. 53–55) | August 2025 | **In force** | Verify model provider compliance; see [GenAI mapping](eu-ai-act-genai-mapping.md) |
+| Transparency obligations (Art. 50) | August 2025 | **In force** | Ensure AI disclosure on all customer-facing systems |
+| High-risk AI system requirements (Art. 6–15) | August 2026 | **5 months to compliance** | Finalize conformity assessment for all T1 systems |
+| Annex I high-risk (regulated products) | August 2027 | Coming | Monitor and prepare |
+
+---
+
+## Compliance Evidence Requirements
+
+What auditors and regulators expect to see for each article:
+
+| Article | Required Evidence | Framework Source |
+|---------|------------------|-----------------|
+| Art. 9 — Risk Management | Completed risk assessments; review meeting minutes; remediation tracking | Risk assessment templates; review cadence records |
+| Art. 10 — Data Governance | Data quality reports; bias testing results; data lineage documentation | Development standards; evaluation records |
+| Art. 11 — Technical Documentation | Model cards; architecture documents; change history | [Model Card Template](../../templates/model-card-template.yaml); audit trail |
+| Art. 12 — Record-Keeping | Audit trail exports; log retention evidence | [Audit Trail Requirements](audit-trail-requirements.md) |
+| Art. 13 — Transparency | User-facing AI disclosures; model documentation | [Transparency Standards](../responsible-ai/transparency-standards.md) |
+| Art. 14 — Human Oversight | Oversight procedure documentation; override logs | [Human-in-the-Loop Patterns](../responsible-ai/human-in-loop-patterns.md) |
+| Art. 15 — Accuracy/Robustness | Validation reports; adversarial testing results; security assessments | [Validation](../model-lifecycle/validation.md); [Red-Teaming Protocol](../ai-security/red-teaming-protocol.md) |
+
