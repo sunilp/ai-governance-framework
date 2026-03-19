@@ -10,7 +10,7 @@ This document is the complete governance trail from idea intake through the firs
 
 ## 1. Intake Record (Stage 1)
 
-*Control IDs: IN-001, IN-002*
+*Pre-register artifact — no Control ID. See governance-workflow.md Stage 1.*
 
 | Field | Value |
 |-------|-------|
