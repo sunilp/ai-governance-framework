@@ -1,0 +1,187 @@
+# Internal Knowledge Search — Model Card
+# Risk Tier: T3 (Medium) — Internal-only RAG search, no customer-facing, no regulated decisions
+
+model_details:
+  name: "Internal Knowledge Search"
+  model_id: "knowledge-search-v1.0"
+  version: "1.0.0"
+  type: "rag"
+  base_model: "Claude 3.5 Haiku"
+  base_model_version: "claude-3-5-haiku-20241022"
+  base_model_provider: "Anthropic"
+  hosting: "vendor-api"
+  risk_tier: "T3"
+  date_deployed: "2026-02-15"
+  last_reviewed: "2026-02-15"
+  next_review: "2026-08-15"
+  owners:
+    business_owner: "Head of IT Services"
+    technical_owner: "AI Platform Team Lead"
+    risk_owner: "AI Operations"
+
+intended_use:
+  primary_use_case: >
+    Help employees find information across the internal knowledge base —
+    HR policies, IT procedures, product documentation, onboarding guides.
+    Employees ask natural language questions and receive answers with
+    source attribution.
+  target_users:
+    - "All employees"
+  out_of_scope_uses:
+    - "Customer-facing support"
+    - "Regulatory or legal advice"
+    - "Financial decision support"
+    - "Processing customer PII"
+    - "Making employment decisions"
+  decision_type: "informational"
+  human_oversight_pattern: "human-on-the-loop"
+  customer_facing: false
+  regulatory_context:
+    - "Internal use only — no direct regulatory requirements"
+    - "General data protection obligations apply to employee data"
+
+system_architecture:
+  components:
+    - name: "query_processor"
+      description: "Processes employee question and generates search query"
+      type: "prompt"
+    - name: "document_retriever"
+      description: "Retrieves relevant documents from internal knowledge base"
+      type: "retrieval"
+    - name: "answer_generator"
+      description: "Generates answer with source attribution from retrieved documents"
+      type: "prompt"
+    - name: "basic_guardrails"
+      description: "Input validation and output content filtering"
+      type: "guardrail"
+  rag_configuration:
+    enabled: true
+    vector_store: "Cloud SQL pgvector"
+    embedding_model: "text-embedding-004"
+    chunking_strategy: "semantic"
+    chunk_size: 512
+    chunk_overlap: 64
+    retrieval_top_k: 5
+    reranking: false
+    document_sources:
+      - "HR policy documents (internal)"
+      - "IT procedures and runbooks (internal)"
+      - "Product documentation (internal)"
+      - "Onboarding guides (internal)"
+      - "FAQ database (internal)"
+
+prompt_governance:
+  system_prompt_version: "v1.0.0"
+  prompt_repository: "git://internal/ai-prompts/knowledge-search"
+  last_prompt_review: "2026-02-10"
+  adversarial_testing_date: "2026-02-12"
+  guardrails:
+    input_validation: true
+    output_filtering: true
+    pii_redaction: false
+    toxicity_gate: false
+    hallucination_detection: false
+    custom_rules:
+      - "Always cite source documents"
+      - "Decline questions outside the knowledge base scope"
+      - "Do not provide legal, medical, or financial advice"
+
+# T3 evaluation — lighter requirements than T1/T2
+evaluation:
+  evaluation_date: "2026-02-12"
+  evaluation_dataset_size: 50
+  metrics:
+    - name: "faithfulness"
+      value: 0.91
+      threshold: 0.85
+      method: "human-eval"
+    - name: "relevance"
+      value: 0.88
+      threshold: 0.80
+      method: "human-eval"
+    - name: "hallucination_rate"
+      value: 0.04
+      threshold: 0.05
+      method: "human-eval"
+    - name: "source_attribution_accuracy"
+      value: 0.94
+      threshold: 0.90
+      method: "automated"
+  adversarial_testing:
+    prompt_injection_resistance: 0.90
+    test_suite_size: 30
+    methodology: "automated-scan"
+
+safety:
+  hallucination_tolerance: "≤ 5%"
+  pii_leakage_tolerance: "low risk — internal users, no customer PII in corpus"
+  content_policy: "Standard acceptable use policy"
+  known_failure_modes:
+    - "May return outdated information if documents not refreshed"
+    - "Cannot answer questions requiring cross-document synthesis well"
+    - "May provide overly confident answers for ambiguous policies"
+  mitigations:
+    - "Source attribution on every answer — users can verify"
+    - "Disclaimer: 'This is a search assistant. For authoritative answers, consult the source document.'"
+    - "Document refresh pipeline runs weekly"
+
+operational:
+  infrastructure:
+    compute: "GCP europe-west1 (application layer)"
+    data_residency: "EU — all documents and processing within EU"
+  performance:
+    latency_p50_ms: 2000
+    latency_p95_ms: 5000
+    throughput_rps: 20
+    availability_target: "99%"
+  cost:
+    estimated_monthly_cost: "$500"
+    cost_per_request: "$0.005"
+    token_budget_per_request: 4000
+  monitoring:
+    quality_monitoring: "Monthly spot-check of 50 responses"
+    safety_monitoring: "Basic input validation; weekly review of flagged queries"
+    cost_monitoring: "Monthly cost review"
+    drift_detection: "Monthly evaluation on canonical questions"
+    alerting_configured: true
+  incident_response:
+    on_call_team: "AI Platform On-Call"
+    escalation_path: "On-call → AI Platform Lead"
+
+vendor_risk:
+  provider: "Anthropic"
+  dpa_in_place: true
+  data_retention_by_vendor: "None (zero retention)"
+  training_data_exclusion: true
+  exit_strategy_documented: false
+  fallback_model: "None — service degradation acceptable"
+
+limitations:
+  technical_limitations:
+    - "Answers limited to content in the knowledge base"
+    - "No real-time data access"
+    - "English only"
+  domain_limitations:
+    - "Internal policies and procedures only"
+    - "Cannot provide legal, medical, or financial advice"
+  ethical_considerations:
+    - "May surface outdated policies — users should verify with source document"
+    - "Potential for over-reliance — employees should still read full policy documents for important decisions"
+
+# T3 governance — note the lighter requirements compared to T1 examples
+governance_notes: >
+  This system demonstrates T3 governance. Compared to T1 systems
+  (e.g., the agentic research assistant), T3 governance is substantially lighter:
+  no board reporting, no mandatory quarterly red-teaming, no independent
+  validation, semi-annual review (not monthly), and simplified model card.
+  This is intentional — governance scales with risk.
+
+approvals:
+  - role: "AI Platform Lead"
+    name: "AI Platform Team Lead"
+    date: "2026-02-14"
+    decision: "approved"
+  - role: "IT Services"
+    name: "Head of IT Services"
+    date: "2026-02-14"
+    decision: "approved"
