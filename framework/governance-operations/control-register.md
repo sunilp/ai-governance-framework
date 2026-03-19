@@ -106,4 +106,4 @@ For the end-to-end process connecting these stages, see [governance-workflow.md]
 
 ## Summary
 
-This register contains 53 controls across 10 lifecycle stages. For the full governance workflow describing how systems progress through these stages, see [governance-workflow.md](governance-workflow.md). For a complete worked example showing every control's evidence for a T1 system, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md).
+This register contains 48 controls across 10 lifecycle stages. For the full governance workflow describing how systems progress through these stages, see [governance-workflow.md](governance-workflow.md). For a complete worked example showing every control's evidence for a T1 system, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md).
