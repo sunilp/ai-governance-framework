@@ -44,6 +44,7 @@ Governance standards specific to large language models and generative AI systems
 - [RAG Governance](framework/llm-lifecycle/rag-governance.md) — retrieval quality, access controls, document lifecycle
 - [GenAI Deployment Gates](framework/llm-lifecycle/deployment-gates.md) — what must pass before GenAI goes live
 - [LLM Production Monitoring](framework/llm-lifecycle/monitoring.md) — output quality, drift, cost, safety
+- [Evaluation Governance](framework/llm-lifecycle/evaluation-governance.md) — what to evaluate, thresholds by tier, release criteria, dataset governance
 - [Multimodal Governance](framework/llm-lifecycle/multimodal-governance.md) — input/output governance for non-text modalities
 - [Multi-Agent Governance](framework/llm-lifecycle/multi-agent-governance.md) — orchestration, coordination, and accountability for multi-agent systems
 - [Open-Source Model Governance](framework/llm-lifecycle/open-source-model-governance.md) — evaluation, licensing, and maintenance for open-weight models
@@ -90,6 +91,11 @@ Who does what, when, and how decisions escalate.
 - [GRC Integration](framework/operating-model/grc-integration.md) — COSO, ISO 31000, three lines of defense
 - [Incident Forensics](framework/operating-model/incident-forensics.md) — post-incident investigation and evidence preservation
 
+### Governance Operations
+The operational backbone — controls, evidence, and the end-to-end process.
+- [Control Register](framework/governance-operations/control-register.md) — master mapping of every control to its evidence, owner, and escalation
+- [Governance Workflow](framework/governance-operations/governance-workflow.md) — end-to-end process from idea intake to retirement, with gates and evidence packs
+
 ## Templates
 Ready-to-use templates for immediate adoption:
 
@@ -114,7 +120,7 @@ See the framework applied to real-world use cases:
 - [Fraud Detection System](examples/fraud-detection/) — T2 (High), real-time, high-autonomy
 
 **GenAI / LLM:**
-- [Customer Service Chatbot](examples/customer-service-chatbot/) — T1 (Critical), customer-facing, RAG-based
+- [Customer Service Chatbot](examples/customer-service-chatbot/) — T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md)
 - [Document Summarization](examples/document-summarization/) — T2 (High), compliance docs, human-reviewed
 - [Agentic Research Assistant](examples/agentic-research-assistant/) — T1 (Critical), agentic AI with tool access
 - [Internal Knowledge Search](examples/internal-knowledge-search/) — T3 (Medium), internal RAG, lighter governance
