@@ -98,6 +98,60 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Rollback capability: every action must have a defined undo path
 - Multi-agent isolation: agents in a pipeline should not share mutable state without validation gates
 
+### 6. Multi-Agent Coordination Risk
+
+**Risk:** Multiple agents interacting create emergent behaviors not present in individual agent testing. The combined system behaves in ways no single agent was designed to behave.
+
+**Contributing factors:**
+- Inter-agent communication manipulation (adversarial content passed between agents)
+- Privilege accumulation across agents (Agent A + Agent B together have more access than either alone)
+- Information leakage between agent contexts (Agent A reveals data to Agent B that Agent B should not have)
+- Emergent goal misalignment (agents collectively pursue an objective none was individually instructed to pursue)
+
+**Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing) — adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
+
+**Controls:**
+- Message validation at each agent boundary
+- Aggregate privilege analysis (verify combined permissions don't exceed intended scope)
+- Cross-agent monitoring for emergent behavioral patterns
+- System-wide circuit breakers (not just per-agent)
+- See [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md) for detailed governance standards
+
+### 7. Persistent Memory and Long-Term State Risk
+
+**Risk:** Agents with long-term memory accumulate context that can be manipulated, become stale, or create privacy obligations.
+
+**Contributing factors:**
+- Memory poisoning over time (adversarial interactions gradually corrupt stored context)
+- Unbounded memory growth (agent stores everything, diluting relevant context)
+- Stale context influencing current decisions (outdated information treated as current)
+- PII accumulation in memory (agent memory becomes a data privacy liability)
+
+**Controls:**
+- Memory TTL enforcement: all stored context must expire
+- Periodic memory audit: review stored context for accuracy and appropriateness
+- PII scanning of stored context: enforce redaction policy on persistent memory
+- Memory versioning with rollback: ability to revert to known-good state
+- See state management section in [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md)
+
+### 8. Complex Tool Chain Risk
+
+**Risk:** Agents using sequences of tools create unintended effects through tool composition that individual tool permissions do not anticipate.
+
+**Contributing factors:**
+- Tool A's output enables Tool B to take an action neither was individually authorized for
+- Tool composition creating write-then-read patterns that bypass access controls
+- Chained tool calls accumulating side effects beyond any single tool's blast radius
+- Tool output reinterpretation (output intended as data is treated as instruction by next tool)
+
+**Example:** An agent with read access to a database and write access to an email system chains these to extract customer data and email it externally — neither permission alone enables this, but the combination does.
+
+**Controls:**
+- Tool composition analysis at deployment: enumerate all possible tool chains and assess combined impact
+- Compound action review: sequences of 3+ tool calls require intermediate validation
+- Tool chain depth limits: cap the number of sequential tool calls without human checkpoint
+- Cross-tool blast radius assessment: assess impact of tool combinations, not just individual tools
+
 ---
 
 ## Mandatory Risk Tier Classification
