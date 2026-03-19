@@ -14,7 +14,7 @@ This document defines lifecycle governance standards for multimodal systems. For
 
 | Risk | Required Control | Tier |
 |------|-----------------|:---:|
-| CSAM / child exploitation content | Mandatory content safety classifier (PhotoDNA, CSAM detection API, or equivalent); block and report | All |
+| CSAM / child exploitation content | Mandatory content safety classifier (PhotoDNA, CSAM detection API, or equivalent); block and report per applicable jurisdiction (US: 18 U.S.C. 2258A; EU: Directive 2011/93/EU; other: local mandatory reporting laws) | All |
 | Violence / explicit content | Content safety classifier; block or flag per policy | T1/T2 mandatory; T3/T4 recommended |
 | PII in images (faces, documents, license plates) | PII detection and redaction before processing; consent verification | T1/T2 |
 | Biometric data (faces for identification) | Explicit consent; GDPR Article 9 DPIA; legal basis documented | T1 mandatory |
@@ -55,8 +55,8 @@ This document defines lifecycle governance standards for multimodal systems. For
 | Generated images | Machine-readable provenance metadata (C2PA / Content Credentials) | C2PA 1.4+ | T1/T2 mandatory |
 | Generated images for external distribution | Visible watermark in addition to metadata | Organizational standard | T1 mandatory |
 | Generated audio | Provenance metadata; disclosure of AI generation | C2PA where supported | T1/T2 |
-| Synthetic voice (text-to-speech) | Disclosure that voice is AI-generated when presented to end users | EU AI Act Article 50 | All customer-facing |
-| Generated video | Mandatory disclosure per EU AI Act Article 50; machine-readable metadata | C2PA | T1/T2 |
+| Synthetic voice (text-to-speech) | Disclosure that voice is AI-generated when presented to end users (EU AI Act Art. 50 where applicable; check local jurisdiction requirements) | C2PA where supported | All customer-facing |
+| Generated video | Disclosure of AI generation (EU AI Act Art. 50 where applicable); machine-readable metadata | C2PA | T1/T2 |
 | Modified images/video | Disclosure of AI modification; original preserved for audit | C2PA | T1/T2 |
 
 ### Content Safety on Outputs

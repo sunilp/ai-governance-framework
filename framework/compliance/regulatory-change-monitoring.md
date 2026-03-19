@@ -99,7 +99,7 @@ When a new regulation, guidance, or enforcement action is identified:
 
 ## Integration with Review Cadence
 
-Regulatory change monitoring is a standing agenda item at the [quarterly AI Risk Committee](review-cadence.md):
+Regulatory change monitoring is a standing agenda item at the [quarterly AI Risk Committee](../operating-model/review-cadence.md):
 
 | Agenda Item | Content |
 |------------|---------|

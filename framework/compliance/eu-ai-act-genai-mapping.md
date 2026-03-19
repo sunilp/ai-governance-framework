@@ -150,7 +150,8 @@ When a GenAI system is used in a high-risk context (Annex III — credit scoring
 |-----------|--------|-----------------|
 | GPAI model obligations (Art. 53) | **In force since August 2025** | Your model providers must already be compliant. If they are not providing technical documentation and training data summaries, escalate to procurement. |
 | Systemic risk GPAI obligations (Art. 55) | **In force since August 2025** | If you use GPT-4, Claude, Gemini Ultra, or similar high-capability models — verify the provider has completed model evaluations and adversarial testing per Article 55. |
-| Transparency (Art. 50) | **In force since August 2025** | All customer-facing GenAI systems must disclose AI involvement NOW. Audit all customer-facing systems for compliance. |
+| Transparency for GPAI providers (Art. 50(1-2)) | **In force since August 2025** | Providers of GPAI must ensure outputs are machine-detectable as AI-generated. |
+| Transparency for deployers (Art. 50(4)) | **August 2026** | Deployers of AI systems interacting with people must ensure users are informed. Implement disclosure controls now to be ready. |
 | High-risk GenAI systems (Art. 6–15) | **August 2026** | T1 GenAI systems must have full conformity evidence in 5 months. Prioritize conformity assessment for highest-risk systems. |
 
 ---

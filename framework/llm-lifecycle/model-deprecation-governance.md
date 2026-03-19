@@ -95,10 +95,10 @@ Migration cutover follows the same [deployment gates](deployment-gates.md) as an
 
 | Element | Requirement |
 |---------|-------------|
-| Rollback capability | Ability to revert to deprecated model for at least 30 days post-cutover |
+| Rollback capability | Ability to revert to a validated fallback path for at least 30 days post-cutover. If the deprecated model is unavailable (vendor EOL), the fallback must be the pre-validated alternative model, not the deprecated version. |
 | Rollback trigger | Define metrics that trigger automatic or manual rollback |
 | Rollback testing | Test rollback procedure before cutover |
-| Vendor API rollback | Confirm deprecated model version remains available during transition period |
+| Vendor API rollback | Confirm deprecated model version remains available during transition period; if not, validate the alternative fallback model before cutover begins |
 
 ---
 

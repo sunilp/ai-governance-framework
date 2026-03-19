@@ -52,8 +52,8 @@ Open-source models offer control and cost advantages but shift responsibility fo
 |---------|:---:|:---:|-------------|:---:|
 | Apache 2.0 | Yes | Yes | Patent grant; attribution | Low |
 | MIT | Yes | Yes | Attribution | Low |
-| Llama Community License | Conditional | Yes | Revenue threshold; use restrictions | Medium |
-| Mistral Research License | No | Limited | Research only | High |
+| Llama Community License | Yes (MAU-gated) | Yes | >700M MAU triggers additional commercial terms; acceptable use policy | Medium |
+| Mistral licenses (vary by model) | Varies | Varies | Some models Apache 2.0; others have commercial restrictions — check per model | Medium-High |
 | CC BY-NC | No | Yes | Non-commercial only | High |
 | Custom community licenses | Varies | Varies | Case-by-case legal review required | Variable |
 

@@ -42,7 +42,7 @@ Do not proceed to deployment if:
 | Apache 2.0 | Yes | Yes | Attribution; patent grant | Low | Routine |
 | MIT | Yes | Yes | Attribution | Low | Routine |
 | BSD 2/3-Clause | Yes | Yes | Attribution; no endorsement | Low | Routine |
-| Llama Community License | Conditional | Yes | >700M MAU revenue threshold; acceptable use policy; no training competing models | Medium | Yes |
+| Llama Community License | Yes | Yes | >700M monthly active users (MAU) threshold triggers additional commercial terms; acceptable use policy; no training competing models | Medium | Yes |
 | Gemma Terms of Use | Yes | Yes | Acceptable use restrictions; no building competing models | Medium | Yes |
 | DeepSeek License | Conditional | Yes | Varies by model; some have commercial restrictions | Medium | Yes |
 | CC BY-NC | No | Yes | Non-commercial only | High | Required |

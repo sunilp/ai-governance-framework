@@ -36,7 +36,8 @@ All multi-agent systems are classified as **minimum T2 (High)**. Systems with pr
 
 ### Message Validation
 
-- All inter-agent messages must be logged with: source agent, destination agent, timestamp, message content, correlation ID
+- All inter-agent messages must be logged in structured format with: source agent, destination agent, timestamp, message content (PII-redacted/tokenized per data classification policy), correlation ID
+- Log retention follows the system's tier-based retention policy; apply data minimization — log message metadata and content hashes at minimum, full content only where required by tier
 - Messages must conform to a defined schema — free-form text between agents creates untraceable accountability
 - No agent may inject instructions to another agent's system prompt — inter-agent communication is data, not instructions
 
@@ -55,6 +56,7 @@ All multi-agent systems are classified as **minimum T2 (High)**. Systems with pr
 - Classify data at each agent boundary — data classification may change as it flows through agents
 - Prevent unintended information propagation (e.g., Agent A has access to PII; Agent B should not receive PII in its context)
 - Implement data minimization — each agent receives only the information it needs, not the full context of previous agents
+- Apply PII redaction/tokenization at each boundary crossing where the downstream agent does not need PII to perform its task
 - Monitor for information leakage patterns across agent boundaries
 
 ---

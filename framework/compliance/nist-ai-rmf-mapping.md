@@ -12,10 +12,10 @@ This document maps our governance framework controls to the AI RMF's four core f
 
 | NIST AI RMF Function | Purpose | Framework Equivalent | Key References |
 |---------------------|---------|---------------------|----------------|
-| **Govern** | Establish organizational governance, culture, and accountability for AI risk | Operating model (roles, review cadence, escalation, board reporting) | operating-model/ |
-| **Map** | Identify and contextualize AI risks through stakeholder engagement and risk framing | Risk classification (matrices, assessment templates, tier determination) | risk-classification/ |
-| **Measure** | Assess, analyze, and monitor AI risks through testing and evaluation | Lifecycle standards (validation, evaluation, monitoring) | model-lifecycle/, llm-lifecycle/ |
-| **Manage** | Prioritize, respond to, and communicate AI risks | Compliance, incident response, escalation, board reporting | compliance/, operating-model/ |
+| **Govern** | Establish organizational governance, culture, and accountability for AI risk | Operating model (roles, review cadence, escalation, board reporting) | [operating-model/](../operating-model/) |
+| **Map** | Identify and contextualize AI risks through stakeholder engagement and risk framing | Risk classification (matrices, assessment templates, tier determination) | [risk-classification/](../risk-classification/) |
+| **Measure** | Assess, analyze, and monitor AI risks through testing and evaluation | Lifecycle standards (validation, evaluation, monitoring) | [model-lifecycle/](../model-lifecycle/), [llm-lifecycle/](../llm-lifecycle/) |
+| **Manage** | Prioritize, respond to, and communicate AI risks | Compliance, incident response, escalation, board reporting | [compliance/](./), [operating-model/](../operating-model/) |
 
 ---
 

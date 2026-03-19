@@ -101,7 +101,8 @@ For high-risk AI systems (T1 in our framework):
 |-----------|---------------|--------|----------------|
 | Prohibited AI practices (Art. 5) | February 2025 | **In force** | Verify no prohibited AI practices in portfolio |
 | GPAI model obligations (Art. 53–55) | August 2025 | **In force** | Verify model provider compliance; see [GenAI mapping](eu-ai-act-genai-mapping.md) |
-| Transparency obligations (Art. 50) | August 2025 | **In force** | Ensure AI disclosure on all customer-facing systems |
+| Transparency obligations — GPAI providers (Art. 50) | August 2025 | **In force** | Verify model providers mark AI-generated output as such |
+| Transparency obligations — deployers (Art. 50) | August 2026 | **5 months to compliance** | Ensure AI disclosure on all customer-facing systems |
 | High-risk AI system requirements (Art. 6–15) | August 2026 | **5 months to compliance** | Finalize conformity assessment for all T1 systems |
 | Annex I high-risk (regulated products) | August 2027 | Coming | Monitor and prepare |
 

@@ -66,7 +66,7 @@ No automatic tier overrides apply. System remains at T3 based on aggregate score
 **Mitigations:**
 1. Access restricted to authenticated employees only
 2. Knowledge base contains non-sensitive operational documents only
-3. Queries and responses logged per audit trail requirements (3-year retention for T3)
+3. Queries and responses logged per audit trail requirements (3-year retention for T3); PII-bearing fields (employee name, role) tokenized before storage; access to logs restricted to AI Operations and Compliance
 4. No customer PII or MNPI in the knowledge base
 
 ### Prompt Injection Risk
@@ -105,7 +105,7 @@ This system demonstrates proportional governance — T3 controls are lighter tha
 
 ### Comparison with T1 Governance
 
-For context, here is what a T1 system (e.g., the [agentic research assistant](../agentic-research-assistant/)) requires that this T3 system does not:
+For context, here is what a T1 system (e.g., the [agentic research assistant](../agentic-research-assistant)) requires that this T3 system does not:
 
 | T1 Requirement | T3 Equivalent |
 |---------------|---------------|

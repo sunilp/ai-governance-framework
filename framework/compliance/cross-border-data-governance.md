@@ -36,8 +36,8 @@ For each AI system, document which of these data categories cross jurisdictional
 | **US** | Sector-specific: HIPAA (health), GLBA (financial), state laws (CA CCPA/CPRA, CO, VA, CT, TX, etc.); no federal AI data residency | State-by-state compliance for consumer-facing AI; SEC guidance on AI risk disclosure | OCC SR 11-7; Fed supervisory guidance; SEC AI risk disclosure |
 | **Singapore** | PDPA; MAS guidelines on cloud outsourcing; MAS FEAT principles | Relatively flexible on data flows; MAS expects risk management for cloud-hosted AI | MAS Technology Risk Management Guidelines; MAS Notice on Outsourcing |
 | **UAE** | DIFC/ADGM data protection; sector-specific requirements | Onshore processing requirements for certain government and financial data | CBUAE regulations; DFSA/FSRA requirements |
-| **Brazil** | LGPD; AI Bill (advancing through Congress) | Data localization for government data; LGPD consent requirements for AI processing | Central Bank regulations on cloud computing |
-| **Canada** | PIPEDA + provincial laws; AIDA (proposed) | PIPEDA applies to cross-border transfers; AIDA may introduce AI-specific requirements | OSFI Technology and Cyber Risk Guidelines (B-13) |
+| **Brazil** | LGPD; AI Bill (PL 2338/2023 — approved by Senate Dec 2024, advancing in Chamber of Deputies; verify current status) | Data localization for government data; LGPD consent requirements for AI processing | Central Bank regulations on cloud computing |
+| **Canada** | PIPEDA + provincial laws; AIDA (proposed as part of Bill C-27 — died on order paper; verify if reintroduced) | PIPEDA applies to cross-border transfers; AIDA may introduce AI-specific requirements if enacted | OSFI Technology and Cyber Risk Guidelines (B-13) |
 | **Australia** | Privacy Act; voluntary AI Ethics Framework | Relatively flexible; APP 8 requires reasonable steps for overseas disclosure | APRA Prudential Standard CPS 234; cloud outsourcing guidance |
 | **Japan** | APPI; EU adequacy decision | Adequacy decision simplifies EU-Japan transfers; APPI consent rules for third-party provision | FSA guidelines on AI in financial services |
 

@@ -156,7 +156,7 @@ Sanitize all examples — redact any PII, confidential data, or content that cou
 Based on this assessment:
 
 - [ ] **Pass** — no Critical or High findings; system may proceed to deployment
-- [ ] **Conditional pass** — no Critical findings; High findings have documented remediation plan with timeline
+- [ ] **Conditional pass** — no Critical findings; High findings have documented remediation plan with timeline; remediated High/Critical findings must pass retest before production approval
 - [ ] **Fail** — Critical or unaddressed High findings; system must not proceed to deployment
 
 **Rationale:**

@@ -26,7 +26,7 @@ For data-specific cross-border considerations, see [cross-border-data-governance
 | Aspect | Detail |
 |--------|--------|
 | **Primary frameworks** | NIST AI RMF (voluntary); sector-specific guidance (OCC, SEC, FTC); state laws |
-| **Status** | No comprehensive federal AI law; state laws active (CO AI Act Aug 2026, CA/IL/TX AI laws) |
+| **Status** | No comprehensive federal AI law; state laws active (CO AI Act effective Feb 2026 with enforcement from Feb 2027; verify CA/IL/TX AI law status as these evolve rapidly) |
 | **Key requirements** | NIST AI RMF (Govern, Map, Measure, Manage); SR 11-7 model risk management; SEC AI risk disclosure; FTC AI enforcement (unfair/deceptive practices) |
 | **Framework coverage** | [NIST AI RMF Mapping](nist-ai-rmf-mapping.md); SR 11-7 alignment throughout lifecycle standards |
 | **Local gaps** | State-level compliance varies; Colorado AI Act requires impact assessments for "high-risk" AI; California AI transparency rules |
@@ -37,7 +37,7 @@ For data-specific cross-border considerations, see [cross-border-data-governance
 | Aspect | Detail |
 |--------|--------|
 | **Primary frameworks** | MAS FEAT Principles; Model AI Governance Framework (2nd Edition); AI Verify toolkit |
-| **Status** | Voluntary/guidance-based; MAS FEAT mandatory for financial institutions |
+| **Status** | Voluntary/guidance-based; MAS FEAT principles expected (not formally mandated by regulation, but MAS-supervised institutions are expected to adopt them) |
 | **Key requirements** | Fairness, Ethics, Accountability, Transparency (FEAT); model risk management; explainability for customer-affecting decisions |
 | **Framework coverage** | FEAT principles mapped to responsible-ai/ section; risk classification aligns with MAS model risk expectations |
 | **Local gaps** | AI Verify self-assessment toolkit — consider completing for Singapore-deployed systems |
@@ -58,8 +58,8 @@ For data-specific cross-border considerations, see [cross-border-data-governance
 
 | Aspect | Detail |
 |--------|--------|
-| **Primary frameworks** | LGPD (Lei Geral de Protecao de Dados); AI Bill (PL 2338/2023 advancing through Congress) |
-| **Status** | LGPD in force; AI Bill in legislative process (may be enacted 2025-2026) |
+| **Primary frameworks** | LGPD (Lei Geral de Protecao de Dados); AI Bill (PL 2338/2023 — approved by Senate Dec 2024, advancing in Chamber of Deputies) |
+| **Status** | LGPD in force; AI Bill progressing — verify current legislative status before relying on specific provisions |
 | **Key requirements** | LGPD: consent/legal basis for AI processing; data subject rights; DPIA for high-risk processing. AI Bill (proposed): risk classification, impact assessments, transparency, human oversight |
 | **Framework coverage** | LGPD requirements covered by GDPR-aligned controls; risk classification aligns with proposed AI Bill categories |
 | **Local gaps** | Monitor AI Bill progress; prepare for impact assessment requirements when enacted |
@@ -70,7 +70,7 @@ For data-specific cross-border considerations, see [cross-border-data-governance
 | Aspect | Detail |
 |--------|--------|
 | **Primary frameworks** | PIPEDA; provincial privacy laws (Quebec Law 25, Alberta/BC PIPA); AIDA (proposed) |
-| **Status** | PIPEDA and provincial laws in force; AIDA (Artificial Intelligence and Data Act) proposed but uncertain |
+| **Status** | PIPEDA and provincial laws in force; AIDA (part of Bill C-27) died on the order paper when Parliament was prorogued Jan 2025 — monitor for reintroduction |
 | **Key requirements** | PIPEDA: consent for personal data processing; accountability principle; transparency. Quebec Law 25: automated decision-making transparency; DPIA for high-risk AI |
 | **Framework coverage** | Risk classification and transparency standards align with Canadian expectations |
 | **Local gaps** | Quebec Law 25 compliance for systems affecting Quebec residents; AIDA readiness (if enacted) |
