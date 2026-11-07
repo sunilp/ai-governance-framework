@@ -144,7 +144,7 @@ Passing deployment gates is not the end. Post-deployment obligations:
 
 When a criterion is not met:
 
-1. **Document the failure** — what criterion was not met, with evidence
-2. **Assess severity** — is this a blocking issue or a risk to be accepted?
-3. **Remediate** — fix the issue and re-submit evidence
+1. **Document the failure:** what criterion was not met, with evidence
+2. **Assess severity:** is this a blocking issue or a risk to be accepted?
+3. **Remediate:** fix the issue and re-submit evidence
 4. **Exception (not routine):** if remediation is not feasible, request an exception with compensating controls under [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance), which sets the approvers, maximum duration and the controls that cannot be excepted

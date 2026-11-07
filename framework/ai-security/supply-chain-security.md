@@ -12,7 +12,7 @@ In public taxonomies this is OWASP [LLM03:2025 Supply Chain](https://genai.owasp
 
 ## Model Provenance
 
-Before deploying any model — commercial, open-source, or community-contributed — verify its provenance.
+Before deploying any model (commercial, open-source, or community-contributed), verify its provenance.
 
 | Check | Description | Tier Requirement |
 |-------|-------------|:---:|
@@ -108,7 +108,7 @@ Every AI system should maintain an AI Bill of Materials documenting its supply c
 | Embedding model | Provider, version, embedding dimensions, hosting |
 | Inference framework | Name, version, deployment configuration |
 | Key dependencies | Framework versions, critical libraries, container base image |
-| Guardrail components | Safety classifiers, content filters, PII detectors — versions and sources |
+| Guardrail components | Safety classifiers, content filters, PII detectors: versions and sources |
 | Agent tools and integrations | For agentic systems: each tool or tool server the agent can call, its version, source, and the permissions granted to the agent |
 
 ### Formats

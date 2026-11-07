@@ -2,7 +2,7 @@
 
 ## Overview
 
-Red-teaming is structured adversarial testing of AI systems — attempting to make them behave in ways they should not. It is the primary method for discovering safety failures, security vulnerabilities, and behavioral gaps before they reach production.
+Red-teaming is structured adversarial testing of AI systems: attempting to make them behave in ways they should not. It is the primary method for discovering safety failures, security vulnerabilities, and behavioral gaps before they reach production.
 
 Red-teaming is required for T1, T2 and T3 systems (control SR-001); for T4 an automated scan is recommended. For T1 and T2 systems it is a deployment gate.
 
@@ -42,7 +42,7 @@ Each category lists its OWASP references. The full mapping, with MITRE ATLAS tec
 | T2 | Internal red-team | Semi-annually | Internal team; manual + automated | 100+ |
 | T3 | Automated adversarial scan + manual cases | Annually | Automated adversarial scanning + 50 manual test cases | Automated scan + 50 manual |
 | T4 | Automated scan (recommended) | Annually (recommended) | Automated adversarial scanning only | 20+ (automated) |
-| All tiers | — | Ad-hoc | On model provider update, prompt change, or guardrail modification | Per change scope |
+| All tiers | N/A | Ad-hoc | On model provider update, prompt change, or guardrail modification | Per change scope |
 
 ---
 
@@ -112,7 +112,7 @@ Each category lists its OWASP references. The full mapping, with MITRE ATLAS tec
 
 - Execute test cases systematically across taxonomy categories
 - Document every test: input, expected behavior, actual behavior, evidence
-- Escalate critical findings immediately — do not wait for report completion
+- Escalate critical findings immediately; do not wait for report completion
 - Test both individual attacks and combinations (chained attacks)
 
 ### Phase 4: Severity Classification
@@ -129,7 +129,7 @@ Each category lists its OWASP references. The full mapping, with MITRE ATLAS tec
 Complete the [red-team report template](../../templates/red-team-report.md) with:
 - Executive summary and overall risk rating
 - Detailed findings with reproduction steps
-- Evidence (sanitized — redact any sensitive content)
+- Evidence (sanitized: redact any sensitive content)
 - Severity ratings using the classification above
 - Taxonomy reference for each finding: the OWASP entry, and the MITRE ATLAS technique where one applies ([mapping](adversarial-robustness.md#threat-taxonomy-mapping))
 - Remediation recommendations with priority
@@ -179,6 +179,6 @@ For T1 and T2 systems, red-team sign-off is a mandatory [deployment gate](../llm
 ## Implementation Notes
 
 - Start with automated adversarial scanning tools to establish a baseline, then layer manual testing
-- Maintain a shared attack library — successful techniques found in one system should be tested against all others
+- Maintain a shared attack library: successful techniques found in one system should be tested against all others
 - Red-teaming is not a one-time activity. AI attack techniques evolve; testing must evolve with them.
 - Document all findings in a central repository for trend analysis across the portfolio

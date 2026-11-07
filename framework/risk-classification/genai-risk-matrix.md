@@ -25,7 +25,7 @@ The degree to which factually incorrect outputs could cause harm.
 
 ### Dimension 2: Data Exposure Risk
 
-The sensitivity of data that flows through the LLM pipeline — prompts, context windows, RAG retrieval, fine-tuning datasets, and outputs.
+The sensitivity of data that flows through the LLM pipeline: prompts, context windows, RAG retrieval, fine-tuning datasets, and outputs.
 
 | Level | Description | Examples |
 |-------|-------------|----------|
@@ -121,13 +121,13 @@ This is the canonical override list. [risk-matrix.md](risk-matrix.md), [multimod
 
 ## Governance Requirements by Tier (GenAI-Specific)
 
-### T1 — Critical GenAI Use Cases
+### T1: Critical GenAI Use Cases
 
 | Control Area | Requirement |
 |-------------|-------------|
 | Model selection | Independent model evaluation; approved vendor list; model selection approved by AI Risk Committee + CISO; architecture review board sign-off |
 | Prompt governance | All prompts version-controlled, reviewed, tested against adversarial inputs |
-| Guardrails | Input validation, output filtering, PII redaction, toxicity gates — all mandatory |
+| Guardrails | Input validation, output filtering, PII redaction, toxicity gates: all mandatory |
 | Evaluation | Automated eval suite (hallucination rate, faithfulness, relevance) run on every deployment |
 | Monitoring | Real-time output quality monitoring; hallucination rate dashboards; cost tracking |
 | Human oversight | Regulated decisions: Pattern 1 (human-in-the-loop) for adverse or non-standard outcomes; favourable outcomes within approved policy may be automated where the law permits, with a route to human review on request. Customer-facing informational systems: Pattern 1, or Pattern 3 (human-over-the-loop) only with all five safeguards in place and evidenced. See [pattern selection matrix](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix). Escalation paths defined |
@@ -136,7 +136,7 @@ This is the canonical override list. [risk-matrix.md](risk-matrix.md), [multimod
 | Review cadence | Daily dashboard check by AI Operations and monthly system-owner metrics review; quarterly governance review; annual independent revalidation |
 | Incident response | GenAI-specific incident playbook; response SLAs by severity (see [severity classification](../operating-model/escalation-paths.md#severity-classification)) |
 
-### T2 — High GenAI Use Cases
+### T2: High GenAI Use Cases
 
 | Control Area | Requirement |
 |-------------|-------------|
@@ -151,7 +151,7 @@ This is the canonical override list. [risk-matrix.md](risk-matrix.md), [multimod
 | Review cadence | Semi-annual governance review |
 | Incident response | Response SLAs by severity (see [severity classification](../operating-model/escalation-paths.md#severity-classification)) |
 
-### T3 — Medium GenAI Use Cases
+### T3: Medium GenAI Use Cases
 
 | Control Area | Requirement |
 |-------------|-------------|
@@ -164,7 +164,7 @@ This is the canonical override list. [risk-matrix.md](risk-matrix.md), [multimod
 | Audit trail | Summary logging; 3-year retention |
 | Review cadence | Annual governance review |
 
-### T4 — Low GenAI Use Cases
+### T4: Low GenAI Use Cases
 
 | Control Area | Requirement |
 |-------------|-------------|

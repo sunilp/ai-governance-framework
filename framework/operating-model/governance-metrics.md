@@ -2,7 +2,7 @@
 
 ## Overview
 
-What gets measured gets managed. A governance program without metrics is a governance program without evidence — of effectiveness, of compliance, or of value.
+What gets measured gets managed. A governance program without metrics is a governance program without evidence: of effectiveness, of compliance, or of value.
 
 These KPIs measure the health of the AI governance program itself, not the performance of individual AI systems (which is covered in [monitoring](../llm-lifecycle/monitoring.md) and [model-lifecycle monitoring](../model-lifecycle/monitoring.md)).
 
@@ -25,9 +25,9 @@ Measure whether governance controls are being applied consistently across the AI
 
 ### Interpreting Governance Health
 
-- **Deployment gate pass rate < 60%**: standards may be unclear or teams undertrained — investigate root causes, not symptoms
+- **Deployment gate pass rate < 60%**: standards may be unclear or teams undertrained; investigate root causes, not symptoms
 - **Overdue reviews increasing**: governance team may be under-resourced or review process too burdensome
-- **Policy exceptions increasing**: either the policy is too rigid or risk acceptance is becoming a habit — either way, investigate
+- **Policy exceptions increasing**: either the policy is too rigid or risk acceptance is becoming a habit; either way, investigate
 
 ---
 
@@ -110,6 +110,6 @@ See [board-reporting.md](board-reporting.md) for the board-level reporting templ
 ## Implementation Notes
 
 - Start with 3–5 KPIs that your organization can actually measure today. Expand coverage as data collection matures.
-- Automate collection wherever possible — manual KPI collection degrades within months.
+- Automate collection wherever possible; manual KPI collection degrades within months.
 - Every KPI must have a named owner. Unowned metrics stop being measured.
-- Review the KPI framework itself annually — retire metrics that no longer drive behavior, add metrics for emerging risks.
+- Review the KPI framework itself annually: retire metrics that no longer drive behavior, add metrics for emerging risks.

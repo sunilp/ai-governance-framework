@@ -2,7 +2,7 @@
 
 ## Instructions
 
-Complete this template for quarterly board/risk committee reporting on AI systems. Keep it concise — 5 pages maximum. Lead with decisions required, not with data. Reference detailed incident reports, risk assessments, and monitoring dashboards rather than reproducing them here.
+Complete this template for quarterly board/risk committee reporting on AI systems. Keep it concise: 5 pages maximum. Lead with decisions required, not with data. Reference detailed incident reports, risk assessments, and monitoring dashboards rather than reproducing them here.
 
 For the reporting standards behind this template, see [board-reporting.md](../framework/operating-model/board-reporting.md).
 
@@ -168,7 +168,7 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 
 ## Appendices
 
-*Reference only — do not include full documents in the board pack.*
+*Reference only; do not include full documents in the board pack.*
 
 | Appendix | Description | Location |
 |----------|-------------|----------|

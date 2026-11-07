@@ -40,7 +40,7 @@ training_data:
   size: ""                              # Number of records, time range
   features_count: 0                     # Number of input features
   target_variable: ""                   # What is the model predicting?
-  class_distribution: ""                # For classification — balance of classes
+  class_distribution: ""                # For classification: balance of classes
   known_limitations: ""                 # Known gaps or biases in the training data
   preprocessing: ""                     # Key preprocessing steps
   data_version: ""                      # Dataset version identifier

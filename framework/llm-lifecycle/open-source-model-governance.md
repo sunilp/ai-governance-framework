@@ -2,7 +2,7 @@
 
 ## Overview
 
-Open-weight and community models (Llama, Mistral, Qwen, Gemma, DeepSeek, Phi, etc.) offer organizations full control over data residency, inference infrastructure, and model customization. They also shift responsibilities that commercial API providers absorb — safety evaluation, security patching, infrastructure operations, and legal risk — entirely to the deploying organization.
+Open-weight and community models (Llama, Mistral, Qwen, Gemma, DeepSeek, Phi, etc.) offer organizations full control over data residency, inference infrastructure, and model customization. They also shift responsibilities that commercial API providers absorb (safety evaluation, security patching, infrastructure operations, and legal risk) entirely to the deploying organization.
 
 This document defines governance standards for evaluating, deploying, and maintaining open-source models. It complements the [third-party model risk assessment](../compliance/third-party-model-risk.md) (which covers commercial API providers) and [fine-tuning governance](fine-tuning-governance.md) (which covers additional considerations when fine-tuning any model).
 

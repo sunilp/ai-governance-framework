@@ -1,5 +1,5 @@
-# Internal Knowledge Search — Model Card
-# Risk Tier: T3 (Medium) — Internal-only RAG search, no customer-facing, no regulated decisions
+# Internal Knowledge Search: Model Card
+# Risk Tier: T3 (Medium). Internal-only RAG search, no customer-facing, no regulated decisions
 
 model_details:
   name: "Internal Knowledge Search"
@@ -21,7 +21,7 @@ model_details:
 
 intended_use:
   primary_use_case: >
-    Help employees find information across the internal knowledge base —
+    Help employees find information across the internal knowledge base:
     HR policies, IT procedures, product documentation, onboarding guides.
     Employees ask natural language questions and receive answers with
     source attribution.
@@ -37,7 +37,7 @@ intended_use:
   human_oversight_pattern: "human-on-the-loop"
   customer_facing: false
   regulatory_context:
-    - "Internal use only — no direct regulatory requirements"
+    - "Internal use only: no direct regulatory requirements"
     - "General data protection obligations apply to employee data (DPIA screening 2026-02-09: not high risk)"
 
 system_architecture:
@@ -102,7 +102,7 @@ prompt_governance:
       - "Decline questions outside the knowledge base scope"
       - "Do not provide legal, medical, or financial advice"
 
-# T3 evaluation — lighter requirements than T1/T2
+# T3 evaluation: lighter requirements than T1/T2
 evaluation:
   evaluation_date: "2026-02-12"
   evaluation_dataset_size: 50
@@ -168,7 +168,7 @@ evaluation:
 safety:
   hallucination_tolerance: "≤ 5%"
   toxicity_threshold: "Platform output filter default; responses above the toxicity classifier threshold are blocked"
-  pii_leakage_tolerance: "low risk — internal users, no customer PII in corpus"
+  pii_leakage_tolerance: "low risk: internal users, no customer PII in corpus"
   content_policy: "Standard acceptable use policy"
   refusal_behavior: "Declines questions outside the knowledge base and requests for legal, medical or financial advice; points the employee to the owning team"
   known_failure_modes:
@@ -176,14 +176,14 @@ safety:
     - "Cannot answer questions requiring cross-document synthesis well"
     - "May provide overly confident answers for ambiguous policies"
   mitigations:
-    - "Source attribution on every answer — users can verify"
+    - "Source attribution on every answer: users can verify"
     - "Disclaimer: 'This is a search assistant. For authoritative answers, consult the source document.'"
     - "Document refresh pipeline runs weekly"
 
 operational:
   infrastructure:
     compute: "GCP europe-west1 (application layer)"
-    data_residency: "EU — all documents and processing within EU"
+    data_residency: "EU: all documents and processing within EU"
   performance:
     latency_p50_ms: 2000
     latency_p95_ms: 5000
@@ -213,7 +213,7 @@ vendor_risk:
   training_data_exclusion: true
   sla_uptime: "99.9%"
   exit_strategy_documented: false
-  fallback_model: "None — service degradation acceptable"
+  fallback_model: "None: service degradation acceptable"
   fallback_validated: false             # No fallback by design; employees search documents manually during an outage
   last_vendor_assessment: "2026-01-20"
 
@@ -229,8 +229,8 @@ limitations:
     - "Internal policies and procedures only"
     - "Cannot provide legal, medical, or financial advice"
   ethical_considerations:
-    - "May surface outdated policies — users should verify with source document"
-    - "Potential for over-reliance — employees should still read full policy documents for important decisions"
+    - "May surface outdated policies; users should verify with source document"
+    - "Potential for over-reliance; employees should still read full policy documents for important decisions"
   regulatory_constraints:
     - "Employee personal data in query logs: tokenized, access-restricted, 3-year retention (DPIA screening 2026-02-09)"
     - "Must not be used for employment decisions; that would trigger automatic T1 (override item 1)"

@@ -40,8 +40,8 @@ Complete this checklist before deploying any prompt to production. All items mar
 | # | Check | Required | Pass |
 |---|-------|----------|------|
 | 8 | Prompt-change adversarial regression set passed, including standard prompt injection payloads (at least 50 cases for T1/T2; sizes per [prompt-engineering-standards.md](../framework/llm-lifecycle/prompt-engineering-standards.md#minimum-evaluation-suite-size)) | All tiers | [ ] |
-| 9 | No PII leakage — prompt does not instruct model to reveal context, training data, or system prompt | All tiers | [ ] |
-| 10 | Explicit guardrails included — not relying on model default safety behavior | T1, T2, T3 | [ ] |
+| 9 | No PII leakage: prompt does not instruct model to reveal context, training data, or system prompt | All tiers | [ ] |
+| 10 | Explicit guardrails included, not relying on model default safety behavior | T1, T2, T3 | [ ] |
 | 11 | Toxicity constraints defined (if output could contain harmful content) | T1, T2 | [ ] |
 | 12 | Hallucination mitigation present (e.g., "only answer based on provided context", "say I don't know") | All tiers | [ ] |
 | 13 | System prompt does not contain secrets, credentials, or internal system details | All tiers | [ ] |

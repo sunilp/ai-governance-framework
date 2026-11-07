@@ -4,7 +4,7 @@
 
 Every AI system in production must maintain an audit trail sufficient to reconstruct decisions, trace data lineage, and satisfy regulatory examination. The depth of logging is proportional to the system's risk tier.
 
-An auditor — whether internal, external, or regulatory — should be able to answer: **"Why did this system make this decision, for this customer, at this point in time?"**
+An auditor, whether internal, external, or regulatory, should be able to answer: **"Why did this system make this decision, for this customer, at this point in time?"**
 
 ## What Must Be Logged
 
@@ -86,7 +86,7 @@ Tier periods are framework defaults. Set retention to the longest obligation tha
 At any point, the organization must be able to produce:
 
 1. **Model inventory:** Complete list of all AI systems in production with risk tiers, owners, and current versions
-2. **Decision reconstruction:** For any specific prediction, retrieve the full context — inputs, model version, output, downstream decision, and any human override
+2. **Decision reconstruction:** For any specific prediction, retrieve the full context: inputs, model version, output, downstream decision, and any human override
 3. **Performance history:** Trend data for model performance, drift metrics, and fairness indicators
 4. **Governance evidence:** Validation reports, deployment approvals, review meeting minutes, incident reports
 5. **Data lineage:** End-to-end lineage from source system to model prediction

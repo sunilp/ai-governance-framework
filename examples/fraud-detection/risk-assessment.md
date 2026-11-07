@@ -1,4 +1,4 @@
-# Risk Assessment — Real-Time Transaction Fraud Detection
+# Risk Assessment: Real-Time Transaction Fraud Detection
 
 ## System Overview
 
@@ -6,13 +6,13 @@ The Real-Time Transaction Fraud Detection system (MDL-FD-007) scores every card 
 
 ## Risk Dimension Scoring
 
-### 1. Decision Autonomy — High
+### 1. Decision Autonomy: High
 
-The model automatically blocks high-confidence fraud transactions and triggers step-up authentication for medium-confidence scores. Approximately 0.3% of transactions are blocked or stepped up. While this is automated, the scope is narrower than credit decisioning — the model flags rather than makes final determinations for most cases, and fraud analysts review blocked transactions within hours.
+The model automatically blocks high-confidence fraud transactions and triggers step-up authentication for medium-confidence scores. Approximately 0.3% of transactions are blocked or stepped up. While this is automated, the scope is narrower than credit decisioning: the model flags rather than makes final determinations for most cases, and fraud analysts review blocked transactions within hours.
 
 **Score: High**
 
-### 2. Data Sensitivity — High
+### 2. Data Sensitivity: High
 
 The model processes transaction data including:
 - Transaction amount, merchant, location, timestamp
@@ -24,20 +24,20 @@ Transaction data is classified as Restricted. The model does not process full PI
 
 **Score: High**
 
-### 3. Regulatory Exposure — Medium
+### 3. Regulatory Exposure: Medium
 
 The model supports fraud prevention obligations but is not itself subject to specific model risk regulations in the same way as credit models:
-- **PSD2** — Supports Strong Customer Authentication decisions
-- **PCI-DSS** — Transaction data handling requirements
+- **PSD2**: Supports Strong Customer Authentication decisions
+- **PCI-DSS**: Transaction data handling requirements
 - **General supervisory expectations** for fraud prevention effectiveness
 
 SR 26-2, which replaced SR 11-7 in April 2026, covers non-generative AI models such as this one. Its approach is risk-based: the bank scales model risk management to the model's materiality (exposure and purpose).
 
 **Score: Medium**
 
-### 4. Reversibility — Medium
+### 4. Reversibility: Medium
 
-Blocked transactions can be released after fraud analyst review (typically within 2 hours). False positives cause customer friction but no lasting financial harm — the customer can retry the transaction or contact support. The impact is temporary inconvenience rather than permanent consequence.
+Blocked transactions can be released after fraud analyst review (typically within 2 hours). False positives cause customer friction but no lasting financial harm: the customer can retry the transaction or contact support. The impact is temporary inconvenience rather than permanent consequence.
 
 **Score: Medium**
 

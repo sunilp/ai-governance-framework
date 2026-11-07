@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Every AI system in a regulated organization must be classified by risk tier before development begins. The tier determines the governance intensity — how much oversight, documentation, validation, and monitoring the system requires.
+Every AI system in a regulated organization must be classified by risk tier before development begins. The tier determines the governance intensity: how much oversight, documentation, validation, and monitoring the system requires.
 
 This is not a theoretical exercise. Regulators expect you to demonstrate that you understand the risk profile of every AI system in production and that governance controls are proportional to that risk.
 

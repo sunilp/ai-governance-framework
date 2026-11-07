@@ -2,7 +2,7 @@
 
 ## Overview
 
-Hallucination — the generation of plausible-sounding but factually incorrect, unsupported, or fabricated content — is an inherent characteristic of large language models. It cannot be eliminated, only managed.
+Hallucination (the generation of plausible-sounding but factually incorrect, unsupported, or fabricated content) is an inherent characteristic of large language models. It cannot be eliminated, only managed.
 
 This policy defines organizational tolerance for hallucination, measurement standards, mitigation requirements, and disclosure obligations.
 
@@ -82,10 +82,10 @@ Tier caps restate [evaluation-governance.md](../llm-lifecycle/evaluation-governa
 | Mitigation | T1 | T2 | T3 | T4 |
 |-----------|----|----|----|----|
 | RAG with verified sources | Required | Required | Recommended | Optional |
-| Automated faithfulness evaluation on every response | Required | Recommended | Optional | — |
+| Automated faithfulness evaluation on every response | Required | Recommended | Optional | N/A |
 | Human oversight per [human-in-loop-patterns.md](human-in-loop-patterns.md#pattern-selection-matrix) | Regulated decisions: Pattern 1 for adverse or non-standard outcomes. Customer-facing informational: Pattern 1, or Pattern 3 with all five safeguards | Outputs reaching external parties: Pattern 1, or Pattern 3 with sampled review | N/A | N/A |
-| Confidence scoring | Required | Recommended | Optional | — |
-| Output cross-verification against structured data | Required for factual claims | Recommended | — | — |
+| Confidence scoring | Required | Recommended | Optional | N/A |
+| Output cross-verification against structured data | Required for factual claims | Recommended | N/A | N/A |
 | Guardrail-based hallucination detection | Required | Required | Recommended | Optional |
 
 ### Retrieval-Augmented Generation (RAG) Requirements

@@ -1,4 +1,4 @@
-# Customer Service Chatbot — Model Card
+# Customer Service Chatbot: Model Card
 # Risk Tier: T1 (Critical). Override trigger 2: customer-facing content delivered without per-output human review.
 # Current state: v1.2.0 (deployed 2026-01-10). Governance trail: governance-case-file.md
 
@@ -51,9 +51,9 @@ intended_use:
     hallucination_monitoring: "Every response scored (async); P2 alert if rolling 7-day rate > 1%, P1 alert if rolling 24-hour rate > 2%"
   customer_facing: true
   regulatory_context:
-    - "EU AI Act (Article 50 — transparency)"
+    - "EU AI Act (Article 50, transparency)"
     - "GDPR (data processing, right to explanation)"
-    - "Consumer Duty (FCA — fair customer outcomes)"
+    - "Consumer Duty (FCA, fair customer outcomes)"
     - "PSD2 (payment account information)"
 
 system_architecture:

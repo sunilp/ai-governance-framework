@@ -8,7 +8,7 @@ New here? Read [START-HERE.md](START-HERE.md) first: a short reading path for yo
 
 ## Philosophy
 
-Governance is enablement, not gatekeeping. The goal is not to slow down AI adoption — it is to make AI adoption durable, defensible, and scalable across a regulated organization.
+Governance is enablement, not gatekeeping. The goal is not to slow down AI adoption. It is to make AI adoption durable, defensible, and scalable across a regulated organization.
 
 This framework provides opinionated, field-tested patterns for governing both traditional ML and GenAI/LLM systems in financial services, healthcare, and other industries where model risk, data privacy, and regulatory compliance are non-negotiable.
 
@@ -25,14 +25,14 @@ This framework provides opinionated, field-tested patterns for governing both tr
 
 ### Risk Classification
 Define how AI systems are tiered by risk and what governance intensity each tier requires.
-- [Risk Matrix (Traditional ML)](framework/risk-classification/risk-matrix.md) — tiering criteria for classical ML models
-- [GenAI Risk Matrix](framework/risk-classification/genai-risk-matrix.md) — risk dimensions specific to LLMs and generative AI
-- [Agentic AI Risk](framework/risk-classification/agentic-ai-risk.md) — risk taxonomy for autonomous AI agents (single and multi-agent)
-- [Multimodal AI Risk Matrix](framework/risk-classification/multimodal-risk-matrix.md) — risk dimensions for vision, audio, video, and mixed-modality systems
-- [Assessment Template](framework/risk-classification/assessment-template.yaml) — structured risk assessment
+- [Risk Matrix (Traditional ML)](framework/risk-classification/risk-matrix.md): tiering criteria for classical ML models
+- [GenAI Risk Matrix](framework/risk-classification/genai-risk-matrix.md): risk dimensions specific to LLMs and generative AI
+- [Agentic AI Risk](framework/risk-classification/agentic-ai-risk.md): risk taxonomy for autonomous AI agents (single and multi-agent)
+- [Multimodal AI Risk Matrix](framework/risk-classification/multimodal-risk-matrix.md): risk dimensions for vision, audio, video, and mixed-modality systems
+- [Assessment Template](framework/risk-classification/assessment-template.yaml): structured risk assessment
 
 ### Model Lifecycle (Traditional ML)
-Standards and gates across the full model lifecycle — from development through production monitoring.
+Standards and gates across the full model lifecycle, from development through production monitoring.
 - [Development Standards](framework/model-lifecycle/development.md)
 - [Validation Requirements](framework/model-lifecycle/validation.md)
 - [Deployment Gates](framework/model-lifecycle/deployment.md)
@@ -40,24 +40,24 @@ Standards and gates across the full model lifecycle — from development through
 
 ### LLM Lifecycle (GenAI)
 Governance standards specific to large language models and generative AI systems.
-- [Foundation Model Selection](framework/llm-lifecycle/model-selection.md) — evaluation criteria for choosing LLMs
-- [Prompt Engineering Standards](framework/llm-lifecycle/prompt-engineering-standards.md) — version control, review, testing
-- [Fine-Tuning Governance](framework/llm-lifecycle/fine-tuning-governance.md) — when and how to fine-tune safely
-- [RAG Governance](framework/llm-lifecycle/rag-governance.md) — retrieval quality, access controls, document lifecycle
-- [GenAI Deployment Gates](framework/llm-lifecycle/deployment-gates.md) — what must pass before GenAI goes live
-- [LLM Production Monitoring](framework/llm-lifecycle/monitoring.md) — output quality, drift, cost, safety
-- [Evaluation Governance](framework/llm-lifecycle/evaluation-governance.md) — what to evaluate, thresholds by tier, release criteria, dataset governance
-- [Multimodal Governance](framework/llm-lifecycle/multimodal-governance.md) — input/output governance for non-text modalities
-- [Multi-Agent Governance](framework/llm-lifecycle/multi-agent-governance.md) — orchestration, coordination, and accountability for multi-agent systems
-- [Open-Source Model Governance](framework/llm-lifecycle/open-source-model-governance.md) — evaluation, licensing, and maintenance for open-weight models
-- [Model Deprecation Governance](framework/llm-lifecycle/model-deprecation-governance.md) — sunsetting, migration, and archival
+- [Foundation Model Selection](framework/llm-lifecycle/model-selection.md): evaluation criteria for choosing LLMs
+- [Prompt Engineering Standards](framework/llm-lifecycle/prompt-engineering-standards.md): version control, review, testing
+- [Fine-Tuning Governance](framework/llm-lifecycle/fine-tuning-governance.md): when and how to fine-tune safely
+- [RAG Governance](framework/llm-lifecycle/rag-governance.md): retrieval quality, access controls, document lifecycle
+- [GenAI Deployment Gates](framework/llm-lifecycle/deployment-gates.md): what must pass before GenAI goes live
+- [LLM Production Monitoring](framework/llm-lifecycle/monitoring.md): output quality, drift, cost, safety
+- [Evaluation Governance](framework/llm-lifecycle/evaluation-governance.md): what to evaluate, thresholds by tier, release criteria, dataset governance
+- [Multimodal Governance](framework/llm-lifecycle/multimodal-governance.md): input/output governance for non-text modalities
+- [Multi-Agent Governance](framework/llm-lifecycle/multi-agent-governance.md): orchestration, coordination, and accountability for multi-agent systems
+- [Open-Source Model Governance](framework/llm-lifecycle/open-source-model-governance.md): evaluation, licensing, and maintenance for open-weight models
+- [Model Deprecation Governance](framework/llm-lifecycle/model-deprecation-governance.md): sunsetting, migration, and archival
 - [Agent Identity and Tool Governance](framework/llm-lifecycle/agent-identity-and-tool-governance.md): agent identities, delegation, tool and MCP/A2A allowlists, memory, kill switch, agent action audit
 
 ### AI Security
 Standards for securing AI systems against adversarial threats.
-- [Red-Teaming Protocol](framework/ai-security/red-teaming-protocol.md) — structured adversarial testing methodology
-- [Adversarial Robustness](framework/ai-security/adversarial-robustness.md) — defenses against jailbreaking, prompt injection, model extraction, data poisoning
-- [Supply Chain Security](framework/ai-security/supply-chain-security.md) — model provenance, open-source risk, AI bill of materials
+- [Red-Teaming Protocol](framework/ai-security/red-teaming-protocol.md): structured adversarial testing methodology
+- [Adversarial Robustness](framework/ai-security/adversarial-robustness.md): defenses against jailbreaking, prompt injection, model extraction, data poisoning
+- [Supply Chain Security](framework/ai-security/supply-chain-security.md): model provenance, open-source risk, AI bill of materials
 
 ### Compliance Mapping
 How framework controls map to specific regulatory requirements.
@@ -66,39 +66,39 @@ How framework controls map to specific regulatory requirements.
 - [ISO/IEC 42001 Mapping](framework/compliance/iso-42001-mapping.md): clauses 4 to 10 and Annex A mapped to docs and controls, with the gaps a certification audit will find
 - [Multi-Jurisdictional Guide](framework/compliance/multi-jurisdictional-guide.md): EU, US, UK, Singapore, Canada, Australia, Japan, Brazil, UAE, South Korea, China, India
 - [Cross-Border Data and LLM Data Residency](framework/compliance/cross-border-data-governance.md): data flows across jurisdictions and LLM architectures, residency by data class, sovereignty, conflict resolution
-- [Regulatory Change Monitoring](framework/compliance/regulatory-change-monitoring.md) — horizon scanning and impact assessment
-- [Prompt Audit Trail](framework/compliance/prompt-audit-trail.md) — logging, retention, reconstruction
-- [Third-Party Model Risk](framework/compliance/third-party-model-risk.md) — vendor assessment and ongoing monitoring
+- [Regulatory Change Monitoring](framework/compliance/regulatory-change-monitoring.md): horizon scanning and impact assessment
+- [Prompt Audit Trail](framework/compliance/prompt-audit-trail.md): logging, retention, reconstruction
+- [Third-Party Model Risk](framework/compliance/third-party-model-risk.md): vendor assessment and ongoing monitoring
 - [AI Procurement Clauses](framework/compliance/ai-procurement-clauses.md): contract clause set for AI vendors, including EU AI Act value-chain terms and DORA Art. 30
 - [Responsible AI Checklist](framework/compliance/responsible-ai-checklist.md)
 - [Audit Trail Requirements](framework/compliance/audit-trail-requirements.md)
 
 ### Responsible AI
 Standards for ethical and responsible deployment of AI systems.
-- [Bias Detection for LLMs](framework/responsible-ai/bias-detection-llm.md) — counterfactual testing, metrics, monitoring
-- [Hallucination Policy](framework/responsible-ai/hallucination-policy.md) — tolerance levels, measurement, mitigation
-- [Transparency Standards](framework/responsible-ai/transparency-standards.md) — disclosure, labeling, explainability
-- [Human-in-the-Loop Patterns](framework/responsible-ai/human-in-loop-patterns.md) — when and how humans review AI output
+- [Bias Detection for LLMs](framework/responsible-ai/bias-detection-llm.md): counterfactual testing, metrics, monitoring
+- [Hallucination Policy](framework/responsible-ai/hallucination-policy.md): tolerance levels, measurement, mitigation
+- [Transparency Standards](framework/responsible-ai/transparency-standards.md): disclosure, labeling, explainability
+- [Human-in-the-Loop Patterns](framework/responsible-ai/human-in-loop-patterns.md): when and how humans review AI output
 
 ### Operating Model
 Who does what, when, and how decisions escalate.
-- [AI CoE Design & Evolution](framework/operating-model/ai-coe-design.md) — from centralized CoE to distributed operating model
-- [GenAI Roles & Responsibilities](framework/operating-model/roles-genai.md) — prompt engineers, AI risk analysts, LLMOps
+- [AI CoE Design & Evolution](framework/operating-model/ai-coe-design.md): from centralized CoE to distributed operating model
+- [GenAI Roles & Responsibilities](framework/operating-model/roles-genai.md): prompt engineers, AI risk analysts, LLMOps
 - [Roles & Responsibilities (RACI)](framework/operating-model/roles-responsibilities.md)
 - [Review Cadence](framework/operating-model/review-cadence.md)
 - [Escalation Paths](framework/operating-model/escalation-paths.md)
-- [Board Reporting](framework/operating-model/board-reporting.md) — quarterly risk report structure, material incident criteria, risk appetite
-- [Governance Metrics & KPIs](framework/operating-model/governance-metrics.md) — measuring governance program health
-- [Cost Governance](framework/operating-model/cost-governance.md) — budgeting, attribution, optimization governance
-- [GRC Integration](framework/operating-model/grc-integration.md) — COSO, ISO 31000, three lines of defense
-- [Incident Forensics](framework/operating-model/incident-forensics.md) — post-incident investigation and evidence preservation
+- [Board Reporting](framework/operating-model/board-reporting.md): quarterly risk report structure, material incident criteria, risk appetite
+- [Governance Metrics & KPIs](framework/operating-model/governance-metrics.md): measuring governance program health
+- [Cost Governance](framework/operating-model/cost-governance.md): budgeting, attribution, optimization governance
+- [GRC Integration](framework/operating-model/grc-integration.md): COSO, ISO 31000, three lines of defense
+- [Incident Forensics](framework/operating-model/incident-forensics.md): post-incident investigation and evidence preservation
 - [AI Literacy](framework/operating-model/ai-literacy.md): literacy measures by role (EU AI Act Art. 4)
 - [Acceptable Use of AI Tools](framework/operating-model/acceptable-use.md): employee use of AI, coding assistants, AI embedded in SaaS, shadow AI
 
 ### Governance Operations
-The operational backbone — controls, evidence, and the end-to-end process.
-- [Control Register](framework/governance-operations/control-register.md) — master mapping of every control to its evidence, owner, and escalation
-- [Governance Workflow](framework/governance-operations/governance-workflow.md) — end-to-end process from idea intake to retirement, with gates and evidence packs
+The operational backbone: controls, evidence, and the end-to-end process.
+- [Control Register](framework/governance-operations/control-register.md): master mapping of every control to its evidence, owner, and escalation
+- [Governance Workflow](framework/governance-operations/governance-workflow.md): end-to-end process from idea intake to retirement, with gates and evidence packs
 - [AI Inventory](framework/governance-operations/ai-inventory.md): what to register, required fields, quarterly reconciliation
 - [When to Say No](framework/governance-operations/when-to-say-no.md): when not to use GenAI or an agent, and when an external model API is unacceptable
 
@@ -121,12 +121,12 @@ Ready-to-use templates for immediate adoption:
 - [Incident Report Template](templates/incident-report-template.md)
 
 **GenAI / LLM:**
-- [LLM Model Card Template](templates/llm-model-card.yaml) — model card for LLM-based systems
-- [GenAI Use Case Assessment](templates/genai-use-case-assessment.md) — risk assessment for new GenAI projects
-- [Prompt Review Checklist](templates/prompt-review-checklist.md) — pre-deployment prompt review
-- [GenAI Incident Report](templates/incident-report-genai.md) — GenAI-specific incident template
-- [Board AI Risk Report](templates/board-ai-risk-report.md) — quarterly board reporting template
-- [Red-Team Report](templates/red-team-report.md) — adversarial testing findings template
+- [LLM Model Card Template](templates/llm-model-card.yaml): model card for LLM-based systems
+- [GenAI Use Case Assessment](templates/genai-use-case-assessment.md): risk assessment for new GenAI projects
+- [Prompt Review Checklist](templates/prompt-review-checklist.md): pre-deployment prompt review
+- [GenAI Incident Report](templates/incident-report-genai.md): GenAI-specific incident template
+- [Board AI Risk Report](templates/board-ai-risk-report.md): quarterly board reporting template
+- [Red-Team Report](templates/red-team-report.md): adversarial testing findings template
 
 **Programme:**
 - [AI Policy](templates/ai-policy.md): board-approved AI policy skeleton
@@ -138,14 +138,14 @@ Ready-to-use templates for immediate adoption:
 See the framework applied to real-world use cases:
 
 **Traditional ML:**
-- [Credit Scoring Model](examples/credit-scoring-model/) — T1 (Critical), heavily regulated, full validation
+- [Credit Scoring Model](examples/credit-scoring-model/): T1 (Critical), heavily regulated, full validation
 - [Fraud Detection System](examples/fraud-detection/): T1 (Critical), real-time automated blocking; Critical on scale (25M transactions a day)
 
 **GenAI / LLM:**
-- [Customer Service Chatbot](examples/customer-service-chatbot/) — T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md)
-- [Document Summarization](examples/document-summarization/) — T2 (High), compliance docs, human-reviewed
-- [Agentic Research Assistant](examples/agentic-research-assistant/) — T1 (Critical), agentic AI with tool access
-- [Internal Knowledge Search](examples/internal-knowledge-search/) — T3 (Medium), internal RAG, lighter governance
+- [Customer Service Chatbot](examples/customer-service-chatbot/): T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md)
+- [Document Summarization](examples/document-summarization/): T2 (High), compliance docs, human-reviewed
+- [Agentic Research Assistant](examples/agentic-research-assistant/): T1 (Critical), agentic AI with tool access
+- [Internal Knowledge Search](examples/internal-knowledge-search/): T3 (Medium), internal RAG, lighter governance
 
 ## Adoption Approach
 
@@ -191,11 +191,11 @@ Contributions are welcome. If you work in regulated industries and have governan
 ### Related Writing
 
 - [Your ML Risk Framework Wasn't Built for GenAI](https://sunilprakash.com/writing/ai-governance-genai/)
-- [The Year LLMs Met Compliance — And Compliance Wasn't Ready](https://sunilprakash.com/writing/llms-meet-compliance/)
+- [The Year LLMs Met Compliance, And Compliance Wasn't Ready](https://sunilprakash.com/writing/llms-meet-compliance/)
 
 ## Changelog
 
-### March 2026 — Comprehensive Update
+### March 2026: Comprehensive Update
 
 - **AI Security:** Added red-teaming protocol, adversarial robustness standards, supply chain security
 - **Regulatory breadth:** Added NIST AI RMF mapping, ISO/IEC 42001 mapping, multi-jurisdictional guide (8 jurisdictions), regulatory change monitoring, cross-border data governance
@@ -207,4 +207,4 @@ Contributions are welcome. If you work in regulated industries and have governan
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0. See [LICENSE](LICENSE).

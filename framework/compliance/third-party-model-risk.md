@@ -18,9 +18,9 @@ The contract terms that back these controls are in [AI procurement clauses](ai-p
 
 | Risk | Description | Likelihood |
 |------|-------------|------------|
-| Unannounced behavior changes | Provider updates model weights or safety tuning without notice; outputs change | High — vendors routinely update models |
-| Model deprecation | Provider retires a model version; forces migration | Medium — deprecation cycles vary |
-| Capability regression | Model update degrades performance on your specific use case | Medium — general improvements may harm niche performance |
+| Unannounced behavior changes | Provider updates model weights or safety tuning without notice; outputs change | High: vendors routinely update models |
+| Model deprecation | Provider retires a model version; forces migration | Medium: deprecation cycles vary |
+| Capability regression | Model update degrades performance on your specific use case | Medium: general improvements may harm niche performance |
 | Safety alignment changes | Provider changes content policy; model refuses valid enterprise queries | Medium |
 | Benchmark gaming | Model optimized for public benchmarks but underperforms on real tasks | Low-Medium |
 

@@ -29,7 +29,7 @@ Jailbreaking attempts to bypass the model's safety alignment and content policie
 1. Place safety instructions at the beginning AND end of the system prompt (sandwich pattern)
 2. Use explicit boundary markers between instructions and user content
 3. Include explicit refusal instructions for known attack categories
-4. Do not rely on the model's base safety training alone — assume it can be bypassed
+4. Do not rely on the model's base safety training alone; assume it can be bypassed
 5. Test system prompts against adversarial inputs before deployment
 
 ---
@@ -41,7 +41,7 @@ Prompt injection inserts adversarial instructions that the model executes as if 
 | Vector | Description | Mitigation |
 |--------|-------------|------------|
 | Direct injection (user input) | User crafts input containing instructions | Input classification (detect instruction-like content); input/output role separation |
-| Indirect injection (RAG documents) | Retrieved documents contain hidden instructions | Context isolation — process retrieved docs in a separate context; strip formatting from retrieved content |
+| Indirect injection (RAG documents) | Retrieved documents contain hidden instructions | Context isolation: process retrieved docs in a separate context; strip formatting from retrieved content |
 | Indirect injection (tool outputs) | API responses or database results contain embedded instructions | Sanitize all tool outputs before inserting into context; treat tool outputs as untrusted data |
 | Indirect injection (file uploads) | Uploaded documents/images contain adversarial content | Content extraction and sanitization; process in sandboxed context |
 | Multi-stage injection | Benign-looking input that becomes harmful when combined with context | Conversation-level monitoring; output safety classification regardless of input classification |

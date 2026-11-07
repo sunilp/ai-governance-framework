@@ -2,7 +2,7 @@
 
 ## Overview
 
-Multimodal AI systems process or generate content across modalities — images, audio, video, or combinations. Each modality introduces governance requirements that text-only standards do not address: biometric consent, synthetic media labeling, content safety for visual/audio content, and cross-modal consistency.
+Multimodal AI systems process or generate content across modalities: images, audio, video, or combinations. Each modality introduces governance requirements that text-only standards do not address: biometric consent, synthetic media labeling, content safety for visual/audio content, and cross-modal consistency.
 
 This document defines lifecycle governance standards for multimodal systems. For risk classification, see [multimodal-risk-matrix.md](../risk-classification/multimodal-risk-matrix.md). For text-only GenAI standards, see the other documents in this directory.
 

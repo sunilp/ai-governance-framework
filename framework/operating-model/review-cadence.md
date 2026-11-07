@@ -76,11 +76,11 @@ The committee's authority, quorum, decision rights, delegation and escalation to
 
 **Agenda:**
 1. **Pipeline review** (20 min)
-   - Models in development — status, timeline, tier
-   - Models in validation — findings, blockers
-   - Models pending deployment — gate status
+   - Models in development: status, timeline, tier
+   - Models in validation: findings, blockers
+   - Models pending deployment: gate status
 2. **Production model health** (20 min)
-   - Monitoring dashboard review — T1 and T2 systems
+   - Monitoring dashboard review: T1 and T2 systems
    - Models with active alerts or drift warnings
    - Retraining pipeline status
 3. **Validation backlog** (10 min)

@@ -170,7 +170,7 @@ The AIMS can be integrated into the existing ISMS rather than managed as a separ
 ## Implementation Notes
 
 - ISO 42001 certification audits examine evidence of implementation, not just documentation. Ensure controls are operating, not just written.
-- The standard requires continual improvement — static governance that never changes will fail certification renewal.
+- The standard requires continual improvement; static governance that never changes will fail certification renewal.
 - Certification timeline: typically 6–12 months from decision to certification, assuming the governance framework is already in place.
 - Maintenance: surveillance audits annually; recertification every 3 years.
 

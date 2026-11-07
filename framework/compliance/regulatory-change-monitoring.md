@@ -149,20 +149,20 @@ Maintain a running log of all regulatory changes identified and their dispositio
 
 ### Status Values
 
-- **Monitoring** — change identified, tracking progress (e.g., proposed legislation not yet enacted)
-- **Assessing** — gap analysis in progress
-- **Implementing** — changes being made to framework, controls, or procedures
-- **Complete** — all actions completed; compliance verified
-- **Not Applicable** — assessed and determined not to apply to our organization
+- **Monitoring:** change identified, tracking progress (e.g., proposed legislation not yet enacted)
+- **Assessing:** gap analysis in progress
+- **Implementing:** changes being made to framework, controls, or procedures
+- **Complete:** all actions completed; compliance verified
+- **Not Applicable:** assessed and determined not to apply to our organization
 
 ---
 
 ## Implementation Notes
 
-- Assign a named owner for regulatory change monitoring — this cannot be a shared responsibility
+- Assign a named owner for regulatory change monitoring; this cannot be a shared responsibility
 - Subscribe to mailing lists and RSS feeds from key regulatory bodies (automate where possible)
-- Build relationships with industry working groups — early awareness of regulatory direction is valuable
-- Budget for regulatory change — it is a recurring operational cost, not a one-time project
+- Build relationships with industry working groups; early awareness of regulatory direction is valuable
+- Budget for regulatory change; it is a recurring operational cost, not a one-time project
 
 ---
 

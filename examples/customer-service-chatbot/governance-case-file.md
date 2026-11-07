@@ -73,7 +73,7 @@ Full risk assessment documented in [risk-assessment.md](risk-assessment.md).
 
 | Dimension | Score | Justification |
 |-----------|-------|---------------|
-| Hallucination Severity | **High (3)** | Incorrect information about account balances, fees, or product terms could cause customer harm. System does not make decisions — it provides information. |
+| Hallucination Severity | **High (3)** | Incorrect information about account balances, fees, or product terms could cause customer harm. System does not make decisions; it provides information. |
 | Data Exposure Risk | **Critical (4)** | Customer PII (names, account details, transaction history) flows through the LLM pipeline. PII redaction is applied pre-API but residual risk exists. |
 | Prompt Injection Susceptibility | **High (3)** | Customer-facing with unrestricted text input. Input validation and injection detection are in place but cannot guarantee 100% coverage. |
 | Output Controllability | **High (3)** | Outputs are delivered to customers after automated guardrail checks but without individual human review. Guardrails catch known patterns but not novel failure modes. |
@@ -95,9 +95,9 @@ Override check against the canonical list in the [GenAI risk matrix](../../frame
 
 Residual risks accepted by AI Risk Committee (2025-09-10, with the deployment approval):
 
-1. Hallucination rate of ≤ 1% — accepted given RAG grounding, monitoring, and human spot-checks
-2. Prompt injection residual risk — accepted given multi-layer defense and quarterly red-teaming
-3. Vendor dependency on Anthropic — accepted given validated fallback and exit strategy
+1. Hallucination rate of ≤ 1%: accepted given RAG grounding, monitoring, and human spot-checks
+2. Prompt injection residual risk: accepted given multi-layer defense and quarterly red-teaming
+3. Vendor dependency on Anthropic: accepted given validated fallback and exit strategy
 
 Standing conditions:
 - Monthly hallucination rate reporting to AI Risk Committee
@@ -123,8 +123,8 @@ Standing conditions:
 
 | # | Condition | Status |
 |---|-----------|--------|
-| 1 | RAG corpus must have document-level access controls — no customer-specific data in corpus | Verified |
-| 2 | PII redaction mandatory before LLM API call — verify with red-team testing | Verified |
+| 1 | RAG corpus must have document-level access controls; no customer-specific data in corpus | Verified |
+| 2 | PII redaction mandatory before LLM API call; verify with red-team testing | Verified |
 | 3 | Fallback model must be validated before production go-live | Verified |
 
 ### Data Residency Confirmation
@@ -141,7 +141,7 @@ Model selection document MS-2025-CS-001 (AR-004): Claude Sonnet 4 (claude-sonnet
 
 ### Vendor Assessment
 
-Anthropic vendor risk assessment completed — reference VRA-2025-ANT-001. Key findings:
+Anthropic vendor risk assessment completed (reference VRA-2025-ANT-001). Key findings:
 
 - Zero-retention API confirmed (data not stored by vendor)
 - Training data exclusion clause in place
@@ -205,7 +205,7 @@ As approved for the v1.0.0 deployment. The current model card (v1.2.0) is [model
 
 | # | Finding | Severity | Resolution |
 |---|---------|----------|------------|
-| 1 | Fallback response for unrecognized intent too vague — should offer escalation | Minor | Updated to offer human agent connection |
+| 1 | Fallback response for unrecognized intent too vague; should offer escalation | Minor | Updated to offer human agent connection |
 | 2 | Edge case: multi-language query mixing not handled | Minor | Added language detection; mixed-language queries route to human agent |
 
 ### Review Outcome
@@ -261,7 +261,7 @@ Status applies the T1 [statistical pass rule](../../framework/llm-lifecycle/eval
 
 ### LLM-as-Judge Calibration
 
-LLM-as-judge calibration correlation with human evaluators: **0.91** (threshold ≥ 0.85 — **PASS**).
+LLM-as-judge calibration correlation with human evaluators: **0.91** (threshold ≥ 0.85, **PASS**).
 
 Calibration was performed on a 100-case subset with dual human annotation. Inter-annotator agreement (Cohen's kappa): 0.87. The LLM-as-judge is used for faithfulness and hallucination rate metrics; human eval remains the primary method for correctness and escalation appropriateness.
 
@@ -298,7 +298,7 @@ Calibration was performed on a 100-case subset with dual human annotation. Inter
 
 | Severity | Count | Details |
 |----------|-------|---------|
-| Critical | 0 | — |
+| Critical | 0 | n/a |
 | High | 1 | Indirect prompt injection via RAG document: crafted FAQ with embedded instructions caused model to reveal system prompt structure. Remediated by context isolation. Retested on v1.2.3 and confirmed fixed. |
 | Medium | 3 | (1) Multi-turn escalation bypass after 12 turns. Mitigated with per-turn safety classification. (2) Base64-encoded harmful request processed. Mitigated with input normalization. (3) System disclosed Claude usage when asked. Accepted as low impact. |
 | Low | 5 | Minor boundary softening under edge conditions. Tracked. |
@@ -593,7 +593,7 @@ The document refresh pipeline had failed silently for 2 weeks due to an authenti
 
 - Approximately 40 customers received incorrect fee information over the 2-week window
 - None were charged incorrectly: a billing check of the affected accounts found no incorrect charges, and corrected communications were sent to the affected customers on 2026-03-17
-- No financial transactions were affected (system is informational only — it does not execute transactions)
+- No financial transactions were affected (system is informational only; it does not execute transactions)
 - 2 customer complaints received via normal support channels
 - No regulatory reporting required (informational error, no financial harm)
 
@@ -636,7 +636,7 @@ Board reporting: the incident does not meet the [material incident criteria](../
 
 ### Root Cause
 
-The document refresh pipeline authentication token expired on 2026-03-01. The token had been manually provisioned with a 90-day expiry during initial setup and was not included in the automated credential rotation process. When the token expired, the pipeline failed silently — no error alerting had been configured on the pipeline itself.
+The document refresh pipeline authentication token expired on 2026-03-01. The token had been manually provisioned with a 90-day expiry during initial setup and was not included in the automated credential rotation process. When the token expired, the pipeline failed silently: no error alerting had been configured on the pipeline itself.
 
 The stale documents persisted for 2 weeks. The rolling 7-day hallucination rate rose gradually, from 0.8% to 1.1%, and crossed the 1% alert line on 2026-03-15. The 24-hour rate peaked at 1.5%, below the 2% P1 line. The rate crept upward as more customer queries hit the outdated fee information.
 

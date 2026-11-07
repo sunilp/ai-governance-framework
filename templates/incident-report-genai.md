@@ -30,17 +30,17 @@ Complete this template for any incident involving a GenAI system. Classify sever
 
 ### Incident Type
 
-- [ ] Hallucination — System generated factually incorrect or fabricated content
-- [ ] Prompt injection — Adversarial input manipulated system behavior
-- [ ] Data leakage — Sensitive data exposed through model outputs
-- [ ] PII exposure — Personally identifiable information in outputs
-- [ ] Bias incident — Discriminatory or biased output detected
-- [ ] Toxicity — Harmful, offensive, or inappropriate content generated
-- [ ] Safety bypass — Model safety controls circumvented
-- [ ] Unauthorized action — Agentic system took unintended action
-- [ ] Service degradation — Quality or performance fell below thresholds
-- [ ] Vendor incident — Issue with external model provider
-- [ ] Cost overrun — Unexpected or unauthorized cost spike
+- [ ] Hallucination: System generated factually incorrect or fabricated content
+- [ ] Prompt injection: Adversarial input manipulated system behavior
+- [ ] Data leakage: Sensitive data exposed through model outputs
+- [ ] PII exposure: Personally identifiable information in outputs
+- [ ] Bias incident: Discriminatory or biased output detected
+- [ ] Toxicity: Harmful, offensive, or inappropriate content generated
+- [ ] Safety bypass: Model safety controls circumvented
+- [ ] Unauthorized action: Agentic system took unintended action
+- [ ] Service degradation: Quality or performance fell below thresholds
+- [ ] Vendor incident: Issue with external model provider
+- [ ] Cost overrun: Unexpected or unauthorized cost spike
 - [ ] Other: _______________
 
 ### Detection Method

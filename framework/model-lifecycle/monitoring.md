@@ -2,7 +2,7 @@
 
 ## Purpose
 
-A model that is not monitored is a model that is not governed. Monitoring is not optional — it is a regulatory expectation and an operational necessity. Every production AI system must have monitoring proportional to its risk tier.
+A model that is not monitored is a model that is not governed. Monitoring is not optional; it is a regulatory expectation and an operational necessity. Every production AI system must have monitoring proportional to its risk tier.
 
 ## Monitoring Dimensions
 
@@ -29,7 +29,7 @@ Track model accuracy against ground truth as it becomes available.
 **Metrics to monitor:**
 - Primary business metric (e.g., default rate for credit models, false positive rate for fraud)
 - Statistical performance metrics (AUC, precision, recall) computed on rolling windows
-- Calibration — are predicted probabilities aligned with observed outcomes?
+- Calibration: are predicted probabilities aligned with observed outcomes?
 
 **Degradation thresholds:**
 - **Warning:** Performance drops >5% relative from validation baseline
@@ -83,7 +83,7 @@ Retraining follows the same lifecycle as initial development:
 - New training data must meet the same quality standards
 - Retrained model must pass validation (with updated challenger comparison)
 - Deployment follows the same gate process (shadow/canary as appropriate)
-- The retrained model is a new version — it does not overwrite the previous version
+- The retrained model is a new version; it does not overwrite the previous version
 
 ## Periodic Model Review
 

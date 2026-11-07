@@ -161,7 +161,7 @@ _Based on this assessment, is the system appropriate for deployment? Under what 
 
 - [ ] Approved for deployment as designed
 - [ ] Approved with conditions (list below)
-- [ ] Not approved — material concerns require resolution
+- [ ] Not approved: material concerns require resolution
 - [ ] Further assessment needed
 
 **Conditions (if applicable):**

@@ -153,11 +153,11 @@ For other uses, select a pattern using the factors below.
 ### Reviewer Training
 
 All human reviewers must be trained on:
-1. **AI system capabilities and limitations** — what the system can and cannot do reliably
-2. **Common failure modes** — hallucination patterns, bias indicators, quality degradation signs
-3. **Review criteria** — what to check, what constitutes acceptable vs. unacceptable output
-4. **Feedback procedures** — how to report issues and provide feedback that improves the system
-5. **Escalation procedures** — when and how to escalate concerns
+1. **AI system capabilities and limitations:** what the system can and cannot do reliably
+2. **Common failure modes:** hallucination patterns, bias indicators, quality degradation signs
+3. **Review criteria:** what to check, what constitutes acceptable vs. unacceptable output
+4. **Feedback procedures:** how to report issues and provide feedback that improves the system
+5. **Escalation procedures:** when and how to escalate concerns
 
 ### Reviewer Fatigue Mitigation
 

@@ -4,7 +4,7 @@
 
 In a regulated environment, every consequential AI output must be reconstructable. For LLM systems, this means logging sufficient information to reproduce what the system was asked, what context it had, what it generated, and what the user did with that output.
 
-This is not application logging. This is regulatory-grade audit trail designed to answer the question: "On this date, for this user, with this query — what did your AI system produce, and why?"
+This is not application logging. This is regulatory-grade audit trail designed to answer the question: "On this date, for this user, with this query, what did your AI system produce, and why?"
 
 ---
 
@@ -120,7 +120,7 @@ Tier periods are framework defaults. Set retention to the longest obligation tha
 If audit records contain PII (user queries about their own accounts, for example):
 - PII fields must be encrypted at rest with key management per data security policy
 - Access to PII fields requires additional authorization
-- GDPR right-to-erasure requests must be handled — implement pseudonymization at ingestion so that PII can be removed without destroying the audit record's integrity
+- GDPR right-to-erasure requests must be handled; implement pseudonymization at ingestion so that PII can be removed without destroying the audit record's integrity
 - Document the legal basis for PII retention in audit logs (legitimate interest for regulatory compliance)
 
 ---
@@ -134,7 +134,7 @@ For T1 and T2 use cases, the audit trail must support full decision reconstructi
 Given a `request_id`, you must be able to reproduce:
 1. The exact system prompt that was active at that time
 2. The user's input
-3. The retrieved context (if RAG) — the actual documents, not just references
+3. The retrieved context (if RAG): the actual documents, not just references
 4. The model and version used
 5. The raw model output
 6. The guardrail actions applied

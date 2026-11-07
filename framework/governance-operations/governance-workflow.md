@@ -1,16 +1,16 @@
 # Governance Workflow
 
-This document defines the end-to-end governance process for AI systems — from idea to retirement. Every AI system, regardless of tier, follows these stages. The depth of governance at each stage scales with the system's risk tier. For the master list of controls and their evidence requirements, see [control-register.md](control-register.md).
+This document defines the end-to-end governance process for AI systems, from idea to retirement. Every AI system, regardless of tier, follows these stages. The depth of governance at each stage scales with the system's risk tier. For the master list of controls and their evidence requirements, see [control-register.md](control-register.md).
 
 ## Stage 1: Idea Intake
 
-**What happens:** A use case proposal is submitted with business justification, intended users, and data requirements. An initial risk screening identifies early signals — customer-facing? Regulated decisions? PII? Agentic capabilities?
+**What happens:** A use case proposal is submitted with business justification, intended users, and data requirements. An initial risk screening identifies early signals: customer-facing? Regulated decisions? PII? Agentic capabilities?
 
 **Gate criteria:** Sponsor identified, business justification documented, initial risk screening completed.
 
 **Evidence produced:**
-- Intake form with business justification (no Control ID — pre-register artifact)
-- Initial risk screening questionnaire (no Control ID — pre-register artifact)
+- Intake form with business justification (no Control ID; pre-register artifact)
+- Initial risk screening questionnaire (no Control ID; pre-register artifact)
 
 **Tier scaling:**
 
@@ -176,7 +176,7 @@ START: New AI system proposed
 
 ## Stage 5: Evaluation & Testing
 
-**What happens:** Eval suites executed per evaluation governance standard — safety benchmarks, domain accuracy, RAG retrieval quality, bias evaluation, and regression testing. Eval dataset integrity verified to prevent contamination.
+**What happens:** Eval suites executed per evaluation governance standard: safety benchmarks, domain accuracy, RAG retrieval quality, bias evaluation, and regression testing. Eval dataset integrity verified to prevent contamination.
 
 **Gate criteria:** All required evals pass tier thresholds under the [statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule) (T1/T2 judged on the 95% confidence bound), safety eval passed, regression shows no degradation (T1/T2), dataset integrity verified.
 
@@ -248,7 +248,7 @@ The team that builds a T1 or T2 model never validates it.
 
 ## Stage 7: Deployment Approval
 
-**What happens:** Evidence pack assembled, verified for completeness, and routed through the sign-off chain. This is the final gate before production — captures who approved, what was reviewed, and any conditions.
+**What happens:** Evidence pack assembled, verified for completeness, and routed through the sign-off chain. This is the final gate before production. It captures who approved, what was reviewed, and any conditions.
 
 **Gate criteria:** All evidence present per tier requirements, all sign-offs obtained, deployment gates passed, rollback plan tested (T1/T2).
 
@@ -407,7 +407,7 @@ Response SLAs depend on severity, not tier. Any incident on a T1 system that rea
 - Impact assessment with affected systems and migration plan (Control ID: DR-001)
 - Migration assessment with parallel running evidence and cutover approval (Control ID: DR-002)
 - Archival confirmation with artifact inventory (Control ID: DR-003)
-- Decommission record — monitoring removed, access revoked, documentation archived (Control ID: DR-004)
+- Decommission record: monitoring removed, access revoked, documentation archived (Control ID: DR-004)
 
 **Tier scaling:**
 
@@ -539,9 +539,9 @@ Any other control can be excepted through this process.
 
 For organizations with AI systems already in production without this evidence trail:
 
-1. **Inventory** — List all production AI systems. Assign a tier to each using the risk assessment process in Stage 2. Do not skip the auto-override checks.
-2. **Gap assessment** — For each system, walk the control register and mark every control as: evidence exists, evidence missing, or not applicable. This produces a gap matrix per system.
-3. **Prioritize by tier** — T1 systems are remediated first, then T2, T3, and T4. Within a tier, prioritize by customer impact and regulatory exposure.
-4. **Remediation plan** — For each missing evidence item, define: who will produce it, by when, and what interim mitigation is in place until the evidence is produced.
-5. **Timeline** — T1 gap remediation within 3 months. T2 within 6 months. T3/T4 within 12 months. These timelines are non-negotiable for regulated environments.
-6. **Governance operations** — Once remediated, systems enter the normal ongoing governance cycle (Stage 9). From that point forward, they follow the same cadence as newly deployed systems.
+1. **Inventory**: List all production AI systems. Assign a tier to each using the risk assessment process in Stage 2. Do not skip the auto-override checks.
+2. **Gap assessment**: For each system, walk the control register and mark every control as: evidence exists, evidence missing, or not applicable. This produces a gap matrix per system.
+3. **Prioritize by tier**: T1 systems are remediated first, then T2, T3, and T4. Within a tier, prioritize by customer impact and regulatory exposure.
+4. **Remediation plan**: For each missing evidence item, define: who will produce it, by when, and what interim mitigation is in place until the evidence is produced.
+5. **Timeline**: T1 gap remediation within 3 months. T2 within 6 months. T3/T4 within 12 months. These timelines are non-negotiable for regulated environments.
+6. **Governance operations**: Once remediated, systems enter the normal ongoing governance cycle (Stage 9). From that point forward, they follow the same cadence as newly deployed systems.

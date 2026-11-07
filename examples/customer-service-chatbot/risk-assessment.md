@@ -18,7 +18,7 @@
 
 | Dimension | Score | Justification |
 |-----------|-------|---------------|
-| Hallucination Severity | **High (3)** | Incorrect information about account balances, fees, or product terms could cause customer harm. However, the system does not make decisions — it provides information. |
+| Hallucination Severity | **High (3)** | Incorrect information about account balances, fees, or product terms could cause customer harm. However, the system does not make decisions; it provides information. |
 | Data Exposure Risk | **Critical (4)** | Customer PII (names, account details, transaction history) flows through the LLM pipeline. PII redaction is applied pre-API but residual risk exists. |
 | Prompt Injection Susceptibility | **High (3)** | Customer-facing with unrestricted text input. Input validation and injection detection are in place but cannot guarantee 100% coverage. |
 | Output Controllability | **High (3)** | Outputs are delivered to customers after automated guardrail checks but without individual human review. Guardrails catch known patterns but not novel failure modes. |
@@ -110,7 +110,7 @@ Safeguards in place for item 3 (all four required to stay out of automatic T1):
 **Residual risk after mitigation:** Low
 
 **Mitigations:**
-1. Session isolation — no shared context between customers
+1. Session isolation: no shared context between customers
 2. No persistent memory across sessions
 3. PII redaction on output
 4. Customer data retrieved via authenticated API scoped to requesting customer
@@ -157,9 +157,9 @@ Safeguards in place for item 3 (all four required to stay out of automatic T1):
 
 **Residual risks accepted by AI Risk Committee (2025-09-10):**
 
-1. Hallucination rate of ≤ 1% — accepted given RAG grounding, monitoring, and human spot-checks
-2. Prompt injection residual risk — accepted given multi-layer defense and quarterly red-teaming
-3. Vendor dependency on Anthropic — accepted given validated fallback and exit strategy
+1. Hallucination rate of ≤ 1%: accepted given RAG grounding, monitoring, and human spot-checks
+2. Prompt injection residual risk: accepted given multi-layer defense and quarterly red-teaming
+3. Vendor dependency on Anthropic: accepted given validated fallback and exit strategy
 
 **Conditions:**
 - Monthly hallucination rate reporting to AI Risk Committee

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Agentic AI systems — where an LLM autonomously plans, executes multi-step tasks, uses tools, and takes actions with limited human intervention — represent the highest-risk category of generative AI deployment in enterprise environments.
+Agentic AI systems, where an LLM autonomously plans, executes multi-step tasks, uses tools, and takes actions with limited human intervention, represent the highest-risk category of generative AI deployment in enterprise environments.
 
 Unlike conversational AI or content generation, agentic systems can:
 - Execute actions with real-world consequences (API calls, database writes, transactions)
@@ -103,7 +103,7 @@ This document holds the risk taxonomy, the tier rule and the incident examples. 
 - Information leakage between agent contexts (Agent A reveals data to Agent B that Agent B should not have)
 - Emergent goal misalignment (agents collectively pursue an objective none was individually instructed to pursue)
 
-**Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing) — adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
+**Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing). Adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
 
 **Controls:** message validation at each agent boundary, aggregate privilege analysis, information flow controls, system-wide circuit breakers and emergent behaviour testing are set in [multi-agent governance](../llm-lifecycle/multi-agent-governance.md).
 
@@ -127,7 +127,7 @@ This document holds the risk taxonomy, the tier rule and the incident examples. 
 - Chained tool calls accumulating side effects beyond any single tool's blast radius
 - Tool output reinterpretation (output intended as data is treated as instruction by next tool)
 
-**Example:** An agent with read access to a database and write access to an email system chains these to extract customer data and email it externally — neither permission alone enables this, but the combination does.
+**Example:** An agent with read access to a database and write access to an email system chains these to extract customer data and email it externally. Neither permission alone enables this, but the combination does.
 
 **Controls:**
 - Tool composition analysis at deployment: enumerate all possible tool chains and assess combined impact

@@ -1,5 +1,5 @@
-# Agentic Research Assistant — Model Card
-# Risk Tier: T1 (Critical) — Agentic AI with tool access, processes confidential data
+# Agentic Research Assistant: Model Card
+# Risk Tier: T1 (Critical). Agentic AI with tool access, processes confidential data
 
 model_details:
   name: "Investment Research Assistant Agent"
@@ -40,7 +40,7 @@ intended_use:
     - "EU AI Act"
     - "MiFID II (investment research requirements)"
     - "SR 26-2 (model risk management): agentic AI is out of its scope, so the framework's agentic controls apply"
-    - "MAR (Market Abuse Regulation — MNPI controls)"
+    - "MAR (Market Abuse Regulation, MNPI controls)"
 
 system_architecture:
   components:
@@ -251,17 +251,17 @@ safety:
   known_failure_modes:
     - "May propose overly ambitious plans that exceed tool call budget"
     - "Complex multi-source synthesis may miss nuances in individual sources"
-    - "Confidence calibration is imperfect — may present uncertain analysis with false confidence"
+    - "Confidence calibration is imperfect; may present uncertain analysis with false confidence"
   mitigations:
     - "Tool call budget limit (20 per session) with warning at 15"
-    - "Plan review gate — analyst approves plan before execution"
-    - "All outputs are drafts — analyst reviews and edits before any use"
+    - "Plan review gate: analyst approves plan before execution"
+    - "All outputs are drafts; analyst reviews and edits before any use"
     - "Mandatory source attribution on every claim"
 
 operational:
   infrastructure:
     compute: "GCP europe-west1 (application layer)"
-    data_residency: "EU — all data sources and processing within EU"
+    data_residency: "EU: all data sources and processing within EU"
   performance:
     latency_p50_ms: 45000
     latency_p95_ms: 120000
@@ -309,7 +309,7 @@ limitations:
   ethical_considerations:
     - "Must not replace human analyst judgment"
     - "Outputs are drafts, not finished research"
-    - "Potential for automation bias — analysts must critically evaluate, not rubber-stamp"
+    - "Potential for automation bias; analysts must critically evaluate, not rubber-stamp"
   regulatory_constraints:
     - "No MNPI access or processing"
     - "All research outputs subject to existing compliance review process"

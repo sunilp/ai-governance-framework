@@ -2,7 +2,7 @@
 
 ## Overview
 
-AI cost governance ensures that spending on AI systems is intentional, attributed, and proportional to business value. Without structured cost governance, AI spend becomes opaque — individual teams optimize locally, shared costs go unattributed, and cost overruns surface only when budgets are already blown.
+AI cost governance ensures that spending on AI systems is intentional, attributed, and proportional to business value. Without structured cost governance, AI spend becomes opaque: individual teams optimize locally, shared costs go unattributed, and cost overruns surface only when budgets are already blown.
 
 This is not about minimizing cost. It is about making cost visible, accountable, and governed with the same rigor as other operational expenses.
 
@@ -25,10 +25,10 @@ This is not about minimizing cost. It is about making cost visible, accountable,
 
 | Tier | Budget Approval Authority | Review Frequency | Budget Change Process |
 |------|--------------------------|-----------------|----------------------|
-| T1 — Critical | CTO + CFO | Monthly | Change request to AI Risk Committee |
-| T2 — High | VP / Head of AI | Quarterly | Approval from budget owner |
-| T3 — Medium | Team lead / Director | Semi-annually | Standard budget process |
-| T4 — Low | Self-service within department budget | Annually | No separate approval |
+| T1 (Critical) | CTO + CFO | Monthly | Change request to AI Risk Committee |
+| T2 (High) | VP / Head of AI | Quarterly | Approval from budget owner |
+| T3 (Medium) | Team lead / Director | Semi-annually | Standard budget process |
+| T4 (Low) | Self-service within department budget | Annually | No separate approval |
 
 ### Budget Setting
 
@@ -77,8 +77,8 @@ Start with showback. Move to chargeback for production systems once attribution 
 
 ### Automated Controls
 
-- T1/T2: alert only — never auto-throttle production critical systems
-- T3/T4: auto-throttle option available (reduce request rate, switch to smaller model) — must be pre-configured and tested
+- T1/T2: alert only; never auto-throttle production critical systems
+- T3/T4: auto-throttle option available (reduce request rate, switch to smaller model); must be pre-configured and tested
 - All tiers: daily cost digest email to system owners
 - All tiers: weekly cost summary to budget approvers
 
@@ -86,7 +86,7 @@ Start with showback. Move to chargeback for production systems once attribution 
 
 ## Cost Optimization Governance
 
-Cost optimization is legitimate and encouraged — but not at the expense of safety, quality, or compliance.
+Cost optimization is legitimate and encouraged, but not at the expense of safety, quality, or compliance.
 
 ### Acceptable Optimization
 

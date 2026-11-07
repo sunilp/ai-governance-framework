@@ -1,4 +1,4 @@
-# AI Center of Excellence — Design and Evolution
+# AI Center of Excellence: Design and Evolution
 
 ## Overview
 
@@ -12,9 +12,9 @@ This document defines how to design an effective AI CoE, when to use it, and how
 
 The AI CoE exists to do three things:
 
-1. **Establish standards** — governance frameworks, development practices, evaluation methods, deployment patterns
-2. **Build shared capability** — platforms, tools, templates, training programs
-3. **Enable domain teams** — not to build AI for them, but to make them capable of building AI themselves
+1. **Establish standards**: governance frameworks, development practices, evaluation methods, deployment patterns
+2. **Build shared capability**: platforms, tools, templates, training programs
+3. **Enable domain teams**: not to build AI for them, but to make them capable of building AI themselves
 
 If the CoE becomes the team that "does AI" for the organization, it has failed. It will become a bottleneck, and shadow AI will grow around it.
 
@@ -36,7 +36,7 @@ If the CoE becomes the team that "does AI" for the organization, it has failed. 
 The CoE should report to a senior leader with both technical authority and business influence:
 - **Preferred:** CTO, Chief Data Officer, or Chief AI Officer
 - **Acceptable:** VP Engineering, VP Data & Analytics
-- **Avoid:** Reporting to a single business unit — this limits cross-organizational mandate
+- **Avoid:** Reporting to a single business unit; this limits cross-organizational mandate
 
 ### Staffing Model
 

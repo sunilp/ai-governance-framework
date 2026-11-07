@@ -2,7 +2,7 @@
 
 ## Purpose
 
-When something goes wrong with an AI system — or when a governance control identifies a material concern — clear escalation paths ensure the right people are informed and empowered to act.
+When something goes wrong with an AI system, or when a governance control identifies a material concern, clear escalation paths ensure the right people are informed and empowered to act.
 
 ## Severity Classification
 
@@ -157,12 +157,12 @@ If triage does not confirm external impact, classify against the definitions in 
 
 ## Communication Templates
 
-### Severity 1 — Initial Notification
+### Severity 1: Initial Notification
 
 ```
-SUBJECT: [S1] AI System Incident — {System Name}
+SUBJECT: [S1] AI System Incident: {System Name}
 
-Severity: 1 — Critical
+Severity: 1 (Critical)
 System: {System Name} (ID: {system_id})
 Tier: {T1/T2}
 Time detected: {timestamp UTC}
@@ -187,12 +187,12 @@ Next steps:
 Incident commander: {name}
 ```
 
-### Severity 2 — Notification
+### Severity 2: Notification
 
 ```
-SUBJECT: [S2] AI System Alert — {System Name}
+SUBJECT: [S2] AI System Alert: {System Name}
 
-Severity: 2 — High
+Severity: 2 (High)
 System: {System Name} (ID: {system_id})
 Time detected: {timestamp UTC}
 

@@ -2,7 +2,7 @@
 
 ## Overview
 
-When an AI incident occurs, the immediate priority is mitigation. But without structured forensics — evidence preservation, chain reconstruction, and root cause analysis — the organization cannot learn from the incident, satisfy regulatory obligations, or prevent recurrence.
+When an AI incident occurs, the immediate priority is mitigation. But without structured forensics (evidence preservation, chain reconstruction, and root cause analysis), the organization cannot learn from the incident, satisfy regulatory obligations, or prevent recurrence.
 
 AI incident forensics differs from traditional IT forensics. The "evidence" is probabilistic model outputs, context windows measured in tens of thousands of tokens, and inter-agent communication chains. Reconstructing what happened requires purpose-built procedures.
 
@@ -31,7 +31,7 @@ Preserve evidence within 1 hour of incident detection. AI evidence degrades: mod
 - Store incident evidence in a separate, tamper-evident location (not the same system that had the incident)
 - Hash all collected evidence at time of collection (SHA-256)
 - Maintain chain of custody: who collected what, when, from where
-- Do not modify evidence — create copies for analysis
+- Do not modify evidence; create copies for analysis
 
 ---
 
@@ -41,11 +41,11 @@ Preserve evidence within 1 hour of incident detection. AI evidence degrades: mod
 
 Rebuild the complete interaction that led to the incident:
 
-1. **System prompt at time of incident** — was it the approved, version-controlled prompt? Had it been modified?
-2. **Full conversation history** — all user turns and model responses leading to the incident
-3. **Retrieved context (RAG)** — what documents were retrieved? Were they legitimate? Were any adversarial?
-4. **Tool call history (agentic)** — every tool call with parameters and results
-5. **Guardrail decisions** — what did each guardrail layer decide at each step? What passed? What was filtered?
+1. **System prompt at time of incident**: was it the approved, version-controlled prompt? Had it been modified?
+2. **Full conversation history**: all user turns and model responses leading to the incident
+3. **Retrieved context (RAG)**: what documents were retrieved? Were they legitimate? Were any adversarial?
+4. **Tool call history (agentic)**: every tool call with parameters and results
+5. **Guardrail decisions**: what did each guardrail layer decide at each step? What passed? What was filtered?
 
 ### Context Window Analysis
 
@@ -69,15 +69,15 @@ Rebuild the complete interaction that led to the incident:
 
 Replay the incident through the current guardrail pipeline:
 1. Submit the incident-triggering input through current safety classifiers
-2. Did current guardrails catch it? If yes — were guardrails modified since the incident?
-3. If no — this is a guardrail gap that needs remediation
+2. Did current guardrails catch it? If yes, were guardrails modified since the incident?
+3. If no, this is a guardrail gap that needs remediation
 4. Document guardrail version at time of incident vs. current
 
 ### Evaluation Suite Regression
 
 Run the incident scenario through the evaluation suite:
-1. Was this scenario covered in the eval suite? If not — add it
-2. If covered, did the eval suite catch it? If not — why? (threshold too lenient? eval methodology gap?)
+1. Was this scenario covered in the eval suite? If not, add it
+2. If covered, did the eval suite catch it? If not, why? (threshold too lenient? eval methodology gap?)
 3. Was the eval suite current at time of incident? (had it been run recently?)
 
 ---
@@ -100,7 +100,7 @@ Every multi-agent system must use correlation IDs that persist across agent boun
 | 1 | Identify the agent that produced the problematic output |
 | 2 | Trace backward: what input did this agent receive? From which agent? |
 | 3 | Continue tracing until you reach the root input (user or external trigger) |
-| 4 | Identify the point where the chain went wrong — was it the input, the agent's reasoning, or the tool output? |
+| 4 | Identify the point where the chain went wrong: was it the input, the agent's reasoning, or the tool output? |
 | 5 | Assess whether the failure would have been caught by any downstream agent |
 
 ### Inter-Agent State Examination
@@ -134,16 +134,16 @@ Every multi-agent system must use correlation IDs that persist across agent boun
 
 ### Post-Mortem Report Structure
 
-1. **Incident summary** — what happened, severity, impact
-2. **Timeline** — chronological reconstruction from evidence
-3. **Root cause analysis** — 5 Whys or equivalent; identify the systemic issue
-4. **Contributing factors** — what conditions enabled the incident
-5. **What went well** — detection, response, communication that worked
-6. **What could improve** — gaps identified during response
-7. **Systemic improvements** — changes to governance controls, guardrails, monitoring, training
-8. **Control gap assessment** — which governance control should have prevented this? Why didn't it?
-9. **Action items** — specific, owned, time-bound remediation actions
-10. **Follow-up schedule** — when to verify remediation effectiveness
+1. **Incident summary**: what happened, severity, impact
+2. **Timeline**: chronological reconstruction from evidence
+3. **Root cause analysis**: 5 Whys or equivalent; identify the systemic issue
+4. **Contributing factors**: what conditions enabled the incident
+5. **What went well**: detection, response, communication that worked
+6. **What could improve**: gaps identified during response
+7. **Systemic improvements**: changes to governance controls, guardrails, monitoring, training
+8. **Control gap assessment**: which governance control should have prevented this? Why didn't it?
+9. **Action items**: specific, owned, time-bound remediation actions
+10. **Follow-up schedule**: when to verify remediation effectiveness
 
 ### Sign-Off
 
@@ -173,7 +173,7 @@ The source interaction logs in the audit trail keep their own retention ([prompt
 
 ## Implementation Notes
 
-- Automate evidence collection where possible — manual collection under incident pressure is error-prone
+- Automate evidence collection where possible; manual collection under incident pressure is error-prone
 - Pre-configure forensics queries in your logging platform so they're ready when needed
-- Practice forensics procedures during incident drills — don't wait for a real incident to discover your evidence is incomplete
-- Cross-reference incident findings across the portfolio — one system's incident may reveal a vulnerability in others
+- Practice forensics procedures during incident drills; don't wait for a real incident to discover your evidence is incomplete
+- Cross-reference incident findings across the portfolio; one system's incident may reveal a vulnerability in others

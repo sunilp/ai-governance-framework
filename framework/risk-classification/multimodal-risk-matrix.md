@@ -2,7 +2,7 @@
 
 ## Overview
 
-Multimodal AI systems — those that process or generate images, audio, video, or combinations of modalities — introduce risk categories that text-only GenAI frameworks do not cover. Misidentified medical imagery, cloned voices, and synthetic video each carry distinct harm profiles that require dedicated assessment.
+Multimodal AI systems (those that process or generate images, audio, video, or combinations of modalities) introduce risk categories that text-only GenAI frameworks do not cover. Misidentified medical imagery, cloned voices, and synthetic video each carry distinct harm profiles that require dedicated assessment.
 
 This matrix extends the existing four-tier risk classification (T1–T4) with modality-specific risk dimensions. Use it alongside the existing [risk-matrix.md](risk-matrix.md) and [genai-risk-matrix.md](genai-risk-matrix.md). The highest tier across all applicable matrices applies to the combined system.
 

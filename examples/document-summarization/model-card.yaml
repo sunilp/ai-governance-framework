@@ -1,5 +1,5 @@
-# Document Summarization System — Model Card
-# Risk Tier: T2 (High) — Internal use, confidential documents, human-reviewed outputs
+# Document Summarization System: Model Card
+# Risk Tier: T2 (High). Internal use, confidential documents, human-reviewed outputs
 
 model_details:
   name: "Compliance Document Summarizer"
@@ -181,8 +181,8 @@ evaluation:
 
 safety:
   hallucination_tolerance: "≤ 3%"
-  toxicity_threshold: "N/A — source documents are regulatory texts"
-  pii_leakage_tolerance: "Low — documents may reference individuals; output reviewed by analyst"
+  toxicity_threshold: "N/A: source documents are regulatory texts"
+  pii_leakage_tolerance: "Low: documents may reference individuals; output reviewed by analyst"
   content_policy: "Internal document handling standards"
   refusal_behavior: "Flags documents that exceed context window; requests manual processing"
   known_failure_modes:
@@ -236,7 +236,7 @@ limitations:
     - "Maximum document length: ~200 pages (context window constraint)"
     - "Does not process embedded images, charts, or tables reliably"
     - "Non-English regulatory documents have reduced accuracy"
-  knowledge_cutoff: "N/A — processes only provided documents"
+  knowledge_cutoff: "N/A: processes only provided documents"
   language_limitations:
     - "Optimized for English regulatory documents"
     - "German: acceptable quality"

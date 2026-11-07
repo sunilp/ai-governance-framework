@@ -28,7 +28,7 @@
 
 ### Risk Tier Determination
 
-**Tier: T1 — Critical**
+**Tier: T1 (Critical)**
 
 Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
 - [ ] 1. Regulated decisions: *No. Research informs investment decisions, but there is no credit, insurance, AML/sanctions or employment decision.*
@@ -55,10 +55,10 @@ Scoring (highest dimension High) and override item 6 give T2. The AI Risk Commit
 
 **Mitigations:**
 1. Agent has read-only access to approved data sources only
-2. MNPI systems are not connected to the agent's tool set — architectural isolation
+2. MNPI systems are not connected to the agent's tool set: architectural isolation
 3. MNPI indicator detection on all outputs
-4. Plan review gate — analyst approves data sources before agent queries them
-5. Tool call allowlist — only pre-approved queries permitted
+4. Plan review gate: analyst approves data sources before agent queries them
+5. Tool call allowlist: only pre-approved queries permitted
 
 ### Prompt Injection via Retrieved Documents
 
@@ -84,13 +84,13 @@ Scoring (highest dimension High) and override item 6 give T2. The AI Risk Commit
 
 **Mitigations:**
 1. Maximum 20 tool calls per session limits cascade depth
-2. Mandatory source attribution — analyst can verify each claim
+2. Mandatory source attribution: analyst can verify each claim
 3. Intermediate results visible in session log
 4. Analyst trained to verify independently, not rubber-stamp
 
 ---
 
-## Governance Requirements (T1 — Agentic)
+## Governance Requirements (T1: Agentic)
 
 | Requirement | Status | Evidence |
 |-------------|--------|----------|

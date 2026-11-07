@@ -18,17 +18,17 @@
 | Dimension | Score | Justification |
 |-----------|-------|---------------|
 | Hallucination Severity | **Medium (2)** | Incorrect answers about internal policies cause confusion but no financial, legal, or safety harm. Users can verify via source documents. |
-| Data Exposure Risk | **Medium (2)** | Internal documents only — no customer PII, no MNPI, no regulated data in knowledge base. Employee queries may contain internal context. |
+| Data Exposure Risk | **Medium (2)** | Internal documents only: no customer PII, no MNPI, no regulated data in knowledge base. Employee queries may contain internal context. |
 | Prompt Injection Susceptibility | **Low (1)** | Internal users only with controlled access. No connection to external systems. Basic input validation in place. |
 | Output Controllability | **Low (1)** | Output is informational only. Users make their own decisions. No downstream system consumes outputs. |
-| Third-Party Model Dependency | **Medium (2)** | Anthropic Claude API. Service degradation is acceptable — employees can search documents manually. No business-critical dependency. |
+| Third-Party Model Dependency | **Medium (2)** | Anthropic Claude API. Service degradation is acceptable: employees can search documents manually. No business-critical dependency. |
 
 **Highest Dimension: Medium (2)**
 **Aggregate Score: 8** (context only; does not set the tier)
 
 ### Risk Tier Determination
 
-**Tier: T3 — Medium**
+**Tier: T3 (Medium)**
 
 Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
 - [ ] 1. Regulated decisions: *No. Employment decisions are out of scope.*
@@ -53,7 +53,7 @@ No override applies. The highest-scoring dimension is Medium, so the tier is T3.
 **Residual risk after mitigation:** Low
 
 **Mitigations:**
-1. All answers include source document citation — user can click through to verify
+1. All answers include source document citation; user can click through to verify
 2. Disclaimer on every response: search assistant, not authoritative source
 3. Hallucination rate tracked through 5% sampled automated scoring and the monthly metrics review; T3 cap ≤ 5%
 4. Knowledge base documents reviewed and refreshed weekly
@@ -83,14 +83,14 @@ No override applies. The highest-scoring dimension is Medium, so the tier is T3.
 **Mitigations:**
 1. Basic input validation
 2. System prompt instructs model to answer only from retrieved documents
-3. No tool access or action capability — read-only information retrieval
+3. No tool access or action capability: read-only information retrieval
 4. Red-team completed pre-deployment: automated adversarial scan (200 generated prompts) plus 50 manual cases
 
 ---
 
 ## T3 Governance Requirements
 
-This system demonstrates proportional governance — T3 controls are lighter than T1/T2.
+This system demonstrates proportional governance: T3 controls are lighter than T1/T2.
 
 | Requirement | T3 Standard | This System |
 |-------------|------------|-------------|

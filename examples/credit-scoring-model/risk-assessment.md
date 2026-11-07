@@ -1,4 +1,4 @@
-# Risk Assessment — Retail Credit Scoring Model
+# Risk Assessment: Retail Credit Scoring Model
 
 ## System Overview
 
@@ -8,13 +8,13 @@ Human oversight follows the T1 rule for regulated decisions in [human-in-loop-pa
 
 ## Risk Dimension Scoring
 
-### 1. Decision Autonomy — Critical
+### 1. Decision Autonomy: Critical
 
 The model makes binding approval decisions for about 60% of applications with no human review. Proposed declines and other adverse outcomes are decided by an underwriter, but the model score is the main input to that decision. Binding automated decisions at this volume are the highest level of decision autonomy.
 
 **Score: Critical**
 
-### 2. Data Sensitivity — Critical
+### 2. Data Sensitivity: Critical
 
 The model processes highly restricted PII including:
 - Full name, address, date of birth
@@ -26,18 +26,18 @@ All data is classified as Highly Restricted under the organization's data classi
 
 **Score: Critical**
 
-### 3. Regulatory Exposure — Critical
+### 3. Regulatory Exposure: Critical
 
 The model is directly in scope for:
 - **SR 26-2**: model risk management guidance issued jointly by the Federal Reserve, OCC and FDIC on 17 April 2026, replacing SR 11-7
-- **EU AI Act** — Classified as high-risk AI system (Annex III, paragraph 5(b): creditworthiness assessment)
-- **ECOA / Regulation B** — Fair lending requirements, adverse action notice obligations
-- **GDPR** — Automated decision-making provisions (Article 22)
-- **BCBS 239** — Risk data aggregation (model outputs feed risk reporting)
+- **EU AI Act**: Classified as high-risk AI system (Annex III, paragraph 5(b): creditworthiness assessment)
+- **ECOA / Regulation B**: Fair lending requirements, adverse action notice obligations
+- **GDPR**: Automated decision-making provisions (Article 22)
+- **BCBS 239**: Risk data aggregation (model outputs feed risk reporting)
 
 **Score: Critical**
 
-### 4. Reversibility — High
+### 4. Reversibility: High
 
 Incorrect credit decisions can be reversed (approved applications can be monitored, declined applications can be reconsidered), but:
 - A wrongful decline causes immediate customer frustration and potential financial harm
@@ -46,7 +46,7 @@ Incorrect credit decisions can be reversed (approved applications can be monitor
 
 **Score: High**
 
-### 5. Scale of Impact — Critical
+### 5. Scale of Impact: Critical
 
 - ~15,000 decisions per day across retail banking
 - Affects 5.5M applications annually
@@ -55,7 +55,7 @@ Incorrect credit decisions can be reversed (approved applications can be monitor
 
 **Score: Critical**
 
-## Overall Risk Tier: T1 — Critical
+## Overall Risk Tier: T1 (Critical)
 
 **Justification:** Decision autonomy, data sensitivity, regulatory exposure and scale of impact all score Critical, and any Critical dimension sets T1. Override item 1 (regulated credit decisions) in the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules) also makes it T1 automatically. Aggregate score: 19 of 20, recorded for context only.
 
@@ -63,13 +63,13 @@ Incorrect credit decisions can be reversed (approved applications can be monitor
 
 | Requirement | Status |
 |-------------|--------|
-| Independent validation by MRM | Completed — validation report approved 2024-11-15 |
-| Full model card | Completed — see model-card.yaml |
-| Impact assessment | Completed — reviewed by compliance |
-| Challenger model | Active — logistic regression v2.x maintained as challenger |
+| Independent validation by MRM | Completed: validation report approved 2024-11-15 |
+| Full model card | Completed: see model-card.yaml |
+| Impact assessment | Completed: reviewed by compliance |
+| Challenger model | Active: logistic regression v2.x maintained as challenger |
 | Metrics review | Configured: daily dashboard check by AI Operations (PSI, approval rate); monthly system-owner review (AUC, fairness) |
 | Human oversight | Pattern 1 for every proposed decline or adverse outcome; automated approvals within policy; human review on request |
-| Quarterly review | Scheduled — next review 2025-Q1 |
+| Quarterly review | Scheduled: next review 2025-Q1 |
 | Board reporting | Included in quarterly risk report |
 | Deployment approval | AI Risk Committee, CISO and DPO approved 2024-11-22 |
 | Pre-deployment evidence | Full T1 evidence pack per [governance workflow](../../framework/governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) (GenAI-only items not applicable) |

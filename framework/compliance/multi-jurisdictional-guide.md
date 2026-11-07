@@ -160,7 +160,7 @@ When regulations from different jurisdictions conflict:
 |-----------|-------------|
 | **Apply the strictest standard** | Unless doing so creates a direct conflict with another jurisdiction's mandatory requirement |
 | **Document the conflict** | Record the conflicting requirements, analysis, and chosen resolution |
-| **Seek legal guidance** | Regulatory conflicts require legal analysis — do not resolve based on technical judgment alone |
+| **Seek legal guidance** | Regulatory conflicts require legal analysis; do not resolve based on technical judgment alone |
 | **Implement jurisdiction-aware controls** | Where standards differ, implement controls that detect user/data jurisdiction and apply appropriate rules |
 | **Engage regulators** | For genuine conflicts with no clear resolution, engage with the relevant regulators (after legal counsel) |
 
@@ -172,8 +172,8 @@ Common conflict patterns and resolutions are documented in [cross-border-data-go
 
 - No organization needs to comply with all 12 jurisdictions simultaneously. Start with your primary operating jurisdictions.
 - The base framework was designed for EU, UK and US financial services. Use the gaps row in each profile to see what it does not cover elsewhere.
-- Regulatory landscape is evolving rapidly — review this guide quarterly against [regulatory change monitoring](regulatory-change-monitoring.md) outputs.
-- Engage local legal counsel in each operating jurisdiction — this guide provides governance direction, not legal advice.
+- Regulatory landscape is evolving rapidly; review this guide quarterly against [regulatory change monitoring](regulatory-change-monitoring.md) outputs.
+- Engage local legal counsel in each operating jurisdiction; this guide provides governance direction, not legal advice.
 
 ---
 

@@ -107,8 +107,8 @@ prompts/
 
 ### Versioning Rules
 
-- **Major version (v1 → v2):** Behavioral change — different output characteristics, new guardrails, different model target. Requires full review.
-- **Minor version (v1.0 → v1.1):** Refinement — improved phrasing, additional examples, minor guardrail adjustments. Requires peer review.
+- **Major version (v1 → v2):** Behavioral change: different output characteristics, new guardrails, different model target. Requires full review.
+- **Minor version (v1.0 → v1.1):** Refinement: improved phrasing, additional examples, minor guardrail adjustments. Requires peer review.
 - **No unversioned changes.** Every prompt change creates a new version.
 
 ### Deployment

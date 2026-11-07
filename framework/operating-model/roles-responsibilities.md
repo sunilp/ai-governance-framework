@@ -1,4 +1,4 @@
-# Roles and Responsibilities — RACI Matrix
+# Roles and Responsibilities: RACI Matrix
 
 ## Purpose
 

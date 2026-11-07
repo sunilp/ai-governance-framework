@@ -28,7 +28,7 @@
 
 ### Risk Tier Determination
 
-**Tier: T2 — High**
+**Tier: T2 (High)**
 
 Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
 - [ ] 1. Regulated decisions: *No. Summaries inform compliance analysts; no credit, insurance, AML/sanctions or employment decision.*
@@ -98,7 +98,7 @@ No override applies. The highest-scoring dimension is High (Hallucination Severi
 
 **Residual risks accepted by AI Risk (second line) with the risk assessment approval (2025-10-14):**
 
-1. Hallucination rate of ≤ 3% — accepted given full human review of every output
-2. Document length limitations — accepted with user warning for documents >80 pages
+1. Hallucination rate of ≤ 3%: accepted given full human review of every output
+2. Document length limitations: accepted with user warning for documents >80 pages
 
 **No conditions or restrictions beyond standard T2 governance requirements.**

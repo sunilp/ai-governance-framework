@@ -8,7 +8,7 @@ These standards apply to all AI/ML models developed for use in production system
 
 ### Data Quality
 - **Source documentation:** Every dataset must have a documented source, extraction method, and known limitations.
-- **Quality assessment:** Data profiling must be completed before model training — null rates, cardinality, distribution analysis, temporal coverage.
+- **Quality assessment:** Data profiling must be completed before model training: null rates, cardinality, distribution analysis, temporal coverage.
 - **Representativeness:** Training data must be assessed for representativeness against the target population. Document any known gaps.
 - **Labeling standards:** For supervised learning, labeling methodology must be documented. Inter-annotator agreement must be measured for manually labeled data.
 
@@ -84,4 +84,4 @@ Peer review must assess: methodology soundness, code quality, test coverage, doc
 - All model code must be in version control (Git).
 - Model artifacts (weights, configs) must be versioned in an artifact registry.
 - Dataset versions must be tracked and linked to model versions.
-- Changes to production models require a new version — no in-place modifications.
+- Changes to production models require a new version: no in-place modifications.

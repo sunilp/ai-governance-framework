@@ -136,10 +136,10 @@ Severity levels and response SLAs (S1 15 minutes, S2 4 hours, S3 24 hours, S4 ne
 |----------|-------------|---------------|
 | Prompt engineering | Include explicit instructions for balanced, unbiased output | High for representational bias |
 | Few-shot examples | Provide diverse, balanced examples in prompts | Medium-High |
-| Output post-processing | Filter or flag outputs that fail bias checks | Medium — catches obvious cases |
+| Output post-processing | Filter or flag outputs that fail bias checks | Medium: catches obvious cases |
 | Model selection | Choose models with better bias benchmarks | Foundational |
 | Fine-tuning | Fine-tune on balanced, curated datasets | High but resource-intensive |
-| Guardrail rules | Automated rules that flag demographic-specific language patterns | Medium — limited to known patterns |
+| Guardrail rules | Automated rules that flag demographic-specific language patterns | Medium: limited to known patterns |
 | Human review | Human reviewers check outputs for bias | High but not scalable |
 
 ### Mitigation Priority

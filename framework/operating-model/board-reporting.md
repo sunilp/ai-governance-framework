@@ -102,5 +102,5 @@ For ongoing visibility between quarterly reports, maintain an executive dashboar
 
 - Keep the board report concise. If it exceeds 5 pages, it won't be read. Details belong in appendices.
 - Lead with decisions required, not with data. The board's job is governance, not operations.
-- Use consistent terminology quarter-over-quarter — changing how you describe risk confuses the audience.
+- Use consistent terminology quarter-over-quarter; changing how you describe risk confuses the audience.
 - The first board report is the hardest. Start imperfect and iterate. The board values consistency and improvement.
