@@ -1,0 +1,76 @@
+name: AI governance gate
+description: >
+  Pre-deployment governance gate. Checks a system's governance.yaml against the framework's
+  controls, evaluation thresholds and exception rules, writes gate-result.json and a job summary,
+  and fails the step when the gate fails.
+author: ai-governance-framework
+
+inputs:
+  governance-file:
+    description: Path to the system's governance.yaml, relative to the workspace.
+    default: governance.yaml
+  framework-path:
+    description: >
+      Directory holding the framework's controls/ and policy/. Leave empty to use framework.path
+      from governance.yaml, or else the copy of this repository that GitHub downloaded at the ref
+      you pinned in `uses:`.
+    default: ""
+  phase:
+    description: pre-deploy (every control, including the signed approval) or pre-approval (before sign-off; DA-002 may be pending).
+    default: pre-deploy
+  output:
+    description: Where to write gate-result.json.
+    default: gate-result.json
+  today:
+    description: Date to judge exception expiry against (YYYY-MM-DD). Empty means today (UTC).
+    default: ""
+  setup-python:
+    description: Set to false if the job already provides Python 3.10 or later.
+    default: "true"
+  python-version:
+    description: Python version for actions/setup-python.
+    default: "3.12"
+
+outputs:
+  result:
+    description: pass or fail.
+    value: ${{ steps.gate.outputs.result }}
+  result-file:
+    description: Path to gate-result.json.
+    value: ${{ steps.gate.outputs.result-file }}
+
+runs:
+  using: composite
+  steps:
+    - if: inputs.setup-python == 'true'
+      uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install PyYAML
+      shell: bash
+      run: python -m pip install --disable-pip-version-check --quiet "PyYAML>=6,<7"
+
+    - id: gate
+      name: Run governance gate
+      shell: bash
+      env:
+        GATE_GOVERNANCE_FILE: ${{ inputs.governance-file }}
+        GATE_FRAMEWORK_PATH: ${{ inputs.framework-path }}
+        GATE_PHASE: ${{ inputs.phase }}
+        GATE_OUTPUT: ${{ inputs.output }}
+        GATE_TODAY: ${{ inputs.today }}
+        GATE_FRAMEWORK_REF: ${{ github.action_ref }}
+      run: |
+        args=("$GATE_GOVERNANCE_FILE" --output "$GATE_OUTPUT" --phase "$GATE_PHASE")
+        if [ -n "$GATE_FRAMEWORK_PATH" ]; then args+=(--framework "$GATE_FRAMEWORK_PATH"); fi
+        if [ -z "$GATE_FRAMEWORK_PATH" ] && [ -n "$GATE_FRAMEWORK_REF" ]; then args+=(--framework-ref "$GATE_FRAMEWORK_REF"); fi
+        if [ -n "$GATE_TODAY" ]; then args+=(--today "$GATE_TODAY"); fi
+        set +e
+        python "$GITHUB_ACTION_PATH/gate.py" "${args[@]}"
+        code=$?
+        set -e
+        if [ "$code" -eq 0 ]; then result=pass; else result=fail; fi
+        echo "result=$result" >> "$GITHUB_OUTPUT"
+        echo "result-file=$GATE_OUTPUT" >> "$GITHUB_OUTPUT"
+        exit "$code"

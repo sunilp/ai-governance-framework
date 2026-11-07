@@ -147,6 +147,8 @@ evaluation:
     adjudication: ""
   adversarial_testing:
     test_type: ""                       # red-team | prompt-change-regression (which suite test_suite_size counts)
+    red_team_suite_size: null           # When test_type is prompt-change-regression: case count of the latest red-team
+    red_team_report: ""                 # Red-team report ID
     prompt_injection_resistance: null    # Pass rate against injection test suite
     jailbreak_resistance: null
     test_suite_size: null

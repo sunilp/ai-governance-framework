@@ -38,6 +38,7 @@ Setup: Python 3.10 or later, then `pip install -r tools/requirements.txt`.
 - a T1 or T2 card metric does not record `n` and `failures` (proportion metrics) or `n`, `lower_bound` and `interval_method` (mean metrics), or its one-sided 95% bound misses the threshold under the [statistical pass rule](../framework/llm-lifecycle/evaluation-governance.md#statistical-pass-rule); the check recomputes Clopper-Pearson bounds from `n` and `failures`;
 - a T1 or T2 suite minimum in `thresholds.yaml` is too small for zero failures to demonstrate the cap;
 - a T1 or T2 segment with 100 or more cases (`segment_results`) misses the threshold, a counterfactual attribute (`attribute_results`) misses it, human evaluation (`human_evaluation`) double-rates less than 20% of items or reports agreement below 0.6, or a guardrail false positive threshold is above the framework default ceiling;
+- the governance gate's unit tests fail, or the gate fails on `examples/customer-service-chatbot/governance.yaml` (separate CI job);
 - a `Status as of <Month YYYY>` line in `framework/` is more than 180 days old, counted from the first day of that month. After 90 days it is a warning.
 
 Warnings report checks that could not run, for example a framework metric that a card does not record. They do not fail the run. Notes record passes that depend on an exception or a recorded failure.

@@ -109,6 +109,7 @@ The control register and the canonical policy tables are generated from YAML, so
 - [`controls/`](controls/): every control with owner, evidence, frequency, escalation, control type, the test an auditor runs, and the docs that define it
 - [`policy/`](policy/): roles, tier parameters (cadences, approvers, retention), evaluation thresholds and pass rules, incident severity
 - [`schemas/`](schemas/): JSON Schemas for controls, policy files, model cards and inventory entries
+- [`reference-implementations/`](reference-implementations/): a pre-deployment governance gate (GitHub Action and Python script) that checks a system's evidence, evaluation results and exceptions against `controls/` and `policy/`, plus ticketing, model registry and OpenTelemetry audit logging patterns
 
 `python tools/build.py` regenerates the Markdown tables. `python tools/check.py` validates schemas, control references, links, generated-table drift, example conformance and the age of regulatory status lines. CI runs both on every push and pull request. See [tools/README.md](tools/README.md).
 
@@ -142,7 +143,7 @@ See the framework applied to real-world use cases:
 - [Fraud Detection System](examples/fraud-detection/): T1 (Critical), real-time automated blocking; Critical on scale (25M transactions a day)
 
 **GenAI / LLM:**
-- [Customer Service Chatbot](examples/customer-service-chatbot/): T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md)
+- [Customer Service Chatbot](examples/customer-service-chatbot/): T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md), and its [governance gate input](examples/customer-service-chatbot/governance.yaml)
 - [Document Summarization](examples/document-summarization/): T2 (High), compliance docs, human-reviewed
 - [Agentic Research Assistant](examples/agentic-research-assistant/): T1 (Critical), agentic AI with tool access
 - [Internal Knowledge Search](examples/internal-knowledge-search/): T3 (Medium), internal RAG, lighter governance
@@ -195,15 +196,7 @@ Contributions are welcome. If you work in regulated industries and have governan
 
 ## Changelog
 
-### March 2026: Comprehensive Update
-
-- **AI Security:** Added red-teaming protocol, adversarial robustness standards, supply chain security
-- **Regulatory breadth:** Added NIST AI RMF mapping, ISO/IEC 42001 mapping, multi-jurisdictional guide (8 jurisdictions), regulatory change monitoring, cross-border data governance
-- **Frontier AI coverage:** Added multimodal AI risk matrix and governance, multi-agent governance, open-source model governance, model deprecation governance
-- **Enterprise operations:** Added board reporting, governance metrics/KPIs, cost governance, GRC integration, incident forensics
-- **Templates:** Added board risk report and red-team report templates
-- **Examples:** Added T3 internal knowledge search (lighter governance demonstration)
-- **Updated:** EU AI Act mappings with enforcement status and compliance evidence requirements; agentic AI risk taxonomy with multi-agent, persistent memory, and tool chain risk dimensions
+See [CHANGELOG.md](CHANGELOG.md). Version 2.0.0 (November 2026) added machine-readable controls with CI checks, statistical pass rules, 22 new controls, agent identity and tool governance, and regulatory content updated to November 2026.
 
 ## License
 

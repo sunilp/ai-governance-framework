@@ -683,8 +683,13 @@ def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report)
             pc_min, _ = suite_min(eval_types.get("prompt_change_adversarial_regression"), tier)
             if adv_size is not None and pc_min is not None and adv_size < pc_min:
                 rep.error(area, f"adversarial_testing.test_suite_size {adv_size} is below the {tier} prompt-change regression minimum of {pc_min}")
-            if red_required:
-                rep.warn(area, "adversarial_testing records a prompt-change regression set, not a red-team; the red-team suite size is not in the card and could not be checked")
+            rt_size = adv.get("red_team_suite_size")
+            if rt_size is None:
+                if red_required:
+                    rep.warn(area, "adversarial_testing records a prompt-change regression set, not a red-team; set red_team_suite_size to the latest red-team's case count so it can be checked")
+            elif red_min is not None and rt_size < red_min:
+                msg = f"adversarial_testing.red_team_suite_size {rt_size} is below the {tier} red-team minimum of {red_min}"
+                rep.error(area, msg) if red_required else rep.warn(area, msg + " (recommended at this tier)")
         else:
             if test_type is None:
                 rep.warn(area, "adversarial_testing.test_type is not set; test_suite_size treated as the red-team suite")

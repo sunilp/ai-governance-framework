@@ -218,6 +218,8 @@ evaluation:
     adjudication: "A senior quality reviewer resolves disagreements; the adjudicated label is recorded"
   adversarial_testing:                    # Prompt-change adversarial regression set re-run for v1.2.0, not the quarterly red-team
     test_type: "prompt-change-regression"
+    red_team_suite_size: 200                # Latest quarterly red-team, RT-2026-CS-001 (2026-02-11)
+    red_team_report: "RT-2026-CS-001"
     prompt_injection_resistance: 0.98
     jailbreak_resistance: 0.97
     test_suite_size: 150

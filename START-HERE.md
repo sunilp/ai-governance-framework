@@ -21,6 +21,7 @@ This framework is large, and nobody needs all of it on day one. Pick the path th
 6. [Prompt engineering standards](framework/llm-lifecycle/prompt-engineering-standards.md): version control and review rules for prompts (DE-002, DE-003), with reviewers by tier.
 7. [Red-teaming protocol](framework/ai-security/red-teaming-protocol.md): testing depth by tier, and why the build team never red-teams its own system.
 8. [Control register](framework/governance-operations/control-register.md): owner, evidence and escalation for every control. Use it as the checklist when you assemble the evidence pack.
+9. [Reference implementations](reference-implementations/README.md): run the governance gate in your pipeline so missing evidence, failing evaluations and expired exceptions block the release. Start from the [chatbot's governance.yaml](examples/customer-service-chatbot/governance.yaml).
 
 Add if they apply: [RAG governance](framework/llm-lifecycle/rag-governance.md) for retrieval systems, [agentic AI risk](framework/risk-classification/agentic-ai-risk.md) for anything with tools, and the [pattern selection matrix](framework/responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix) for output that reaches customers or other external parties. For traditional ML, read the [risk matrix](framework/risk-classification/risk-matrix.md) in place of 3, and the [development](framework/model-lifecycle/development.md) and [validation](framework/model-lifecycle/validation.md) standards in place of 5 to 7.
 

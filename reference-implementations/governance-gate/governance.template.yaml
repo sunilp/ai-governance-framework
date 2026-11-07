@@ -1,0 +1,53 @@
+# governance.yaml: the governance gate's input, kept in the system's repository.
+# Copy this file to the repository root, fill it in, and run the gate before every deployment.
+# Field reference and matching rule: reference-implementations/README.md.
+# Worked example: examples/customer-service-chatbot/governance.yaml.
+
+schema_version: 1
+
+system:
+  id: my-system-id                  # the AI inventory ID (RA-006)
+  name: My AI system
+  tier: T2                          # from the approved risk assessment (RA-001, RA-004)
+  # Any of: ml, genai, rag, agentic, fine-tuned, external-model, open-source,
+  # personal-data, external-data-flow, customer-facing. rag and agentic imply genai.
+  types: [genai, rag, external-model]
+  # Only for personal-data systems. Defaults to true; true makes RA-005 non-waivable.
+  # dpia_legally_required: true
+
+framework:
+  # Leave path out to use the copy of the framework the GitHub Action downloads at the ref
+  # pinned in `uses:`. Set it when you vendor the framework into the repository.
+  # path: vendor/ai-governance-framework
+  # ref: v1.0.0
+
+eval_report: governance/evidence/eval-report.json
+
+# Evidence keyed by control ID. A path or a list of paths, relative to this file. A file can be
+# the record itself or a pointer to it in the records system (document ID, version, SHA-256).
+# A directory counts if it holds at least one file. Empty files do not count.
+evidence:
+  RA-001: governance/evidence/RA-001-risk-assessment.md
+  RA-007: governance/evidence/RA-007-prohibited-use-screen.md
+  EV-001: [governance/evidence/EV-001-pre-release-evaluation.md, governance/evidence/eval-report.json]
+  # ... one entry for every control the gate lists as required for the tier and types
+
+# Only controls with a condition the gate cannot evaluate (CONDITIONAL in gate.py) can be
+# claimed not applicable. The deployment approver sees every reason.
+not_applicable:
+  - control: EV-003
+    reason: First release; there is no previous version to regress against.
+
+# Copied from the exception register (templates/exception-register.md). approver is a role id
+# from policy/roles.yaml and must match approvers.exception for the tier in policy/tiers.yaml
+# (one level higher when renewal is true). Expiry is no more than 90 days after start.
+exceptions:
+  - id: EXC-2026-001
+    control: DE-004
+    approver: ai-risk                 # T2 exception approver
+    start: 2026-11-01
+    expiry: 2026-12-15
+    reason: Guardrail vendor upgrade lands after go-live
+    compensating_controls: Human review of every response until the upgrade
+    # metrics: [guardrail_false_positive_rate]   # optional: limit an EV exception to these metrics
+    # renewal: false

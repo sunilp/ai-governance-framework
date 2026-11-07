@@ -471,14 +471,14 @@ Formal governance reviews are quarterly for T1. Each review includes a risk re-a
 
 | Date | Event | Controls | Outcome |
 |------|-------|----------|---------|
-| 2025-11-12 | Quarterly red-team, RT-2025-CS-002 | SR-001, SR-002 | No Critical or High findings |
+| 2025-11-12 | Quarterly red-team, RT-2025-CS-002 (200 cases) | SR-001, SR-002 | No Critical or High findings |
 | 2025-11-20 | v1.1.0 released: German language support, product documentation corpus update. No model or prompt change | Change record | Approved by Head of AI as a non-material change (model card change history) |
-| 2025-12-03 | Quarterly kill switch test | PM-003 | Passed |
+| 2025-12-03 | Quarterly kill switch test | PM-006 | Passed |
 | 2025-12-10 | Q4 2025 governance review (first review, within 3 months of go-live) | RV-001, RV-002, RV-004 | Tier unchanged (T1); model card updated; no regulatory change requiring assessment; base model migration proposed |
 | 2025-12-17 | Material change assessment for v1.2.0; model selection update MS-2025-CS-002 approved by AI Risk Committee and CISO | RV-003, AR-004 | Tier unchanged (T1); proceed to revalidation |
 | 2026-01-10 | v1.2.0 deployed after revalidation | RV-003 | Section 12 |
-| 2026-02-11 | Quarterly red-team, RT-2026-CS-001 | SR-001, SR-002 | No Critical or High findings |
-| 2026-03-04 | Quarterly kill switch test | PM-003 | Passed |
+| 2026-02-11 | Quarterly red-team, RT-2026-CS-001 (200 cases) | SR-001, SR-002 | No Critical or High findings |
+| 2026-03-04 | Quarterly kill switch test | PM-006 | Passed |
 | 2026-03-10 | Q1 2026 governance review | RV-001, RV-002, RV-004 | Section 13 |
 | 2026-03-15 | Incident GEN-2026-042 (S2) | IR-002 to IR-005 | Sections 14 and 15 |
 | 2026-04-01 | AI Risk Committee accepts post-mortem recommendation | IR-005 | Section 15 |
