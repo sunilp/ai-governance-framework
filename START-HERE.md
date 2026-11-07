@@ -17,7 +17,7 @@ This framework is large, and nobody needs all of it on day one. Pick the path th
 2. [When to say no](framework/governance-operations/when-to-say-no.md): check that the use case should be GenAI at all before you spend time assessing it.
 3. [GenAI risk matrix](framework/risk-classification/genai-risk-matrix.md): the Step 0 screen, the five dimensions and the override list. Your tier decides everything downstream.
 4. [GenAI use case assessment](templates/genai-use-case-assessment.md): the risk assessment you submit (RA-001). Start with section 0.
-5. [Evaluation governance](framework/llm-lifecycle/evaluation-governance.md): suite sizes, thresholds and release criteria by tier. Start the eval sets early: they need labelled answers from the people who own the content.
+5. [Evaluation governance](framework/llm-lifecycle/evaluation-governance.md): suite sizes, thresholds and release criteria by tier. Start the eval sets early: they need labelled answers from the people who own the content. At T1 and T2 a metric passes on its 95% confidence bound, so a T1 pre-release or safety suite needs at least 300 cases, and more if you expect any failures.
 6. [Prompt engineering standards](framework/llm-lifecycle/prompt-engineering-standards.md): version control and review rules for prompts (DE-002, DE-003), with reviewers by tier.
 7. [Red-teaming protocol](framework/ai-security/red-teaming-protocol.md): testing depth by tier, and why the build team never red-teams its own system.
 8. [Control register](framework/governance-operations/control-register.md): owner, evidence and escalation for every control. Use it as the checklist when you assemble the evidence pack.

@@ -85,11 +85,11 @@ EU AI Act Art. 50 applies whatever the tier. Where the organisation provides a s
 
 | Modality | Evaluation Type | Minimum Suite Size by Tier |
 |----------|----------------|:---:|
-| Vision — understanding | Object recognition accuracy, scene understanding, OCR accuracy | T1: 200, T2: 100, T3: 50, T4: 20 |
-| Vision — generation | Image quality, prompt fidelity, safety (no harmful content), diversity | T1: 200, T2: 100, T3: 50, T4: 20 |
-| Audio — understanding | Transcription accuracy (WER), speaker diarization, language detection | T1: 200, T2: 100, T3: 50, T4: 20 |
-| Audio — generation | Naturalness (MOS), intelligibility, safety, speaker similarity (TTS) | T1: 200, T2: 100, T3: 50, T4: 20 |
-| Video — understanding | Action recognition, temporal understanding, scene consistency | T1: 200, T2: 100, T3: 50, T4: 20 |
+| Vision: understanding | Object recognition accuracy, scene understanding, OCR accuracy | T1: 300, T2: 100, T3: 50, T4: 20 |
+| Vision: generation | Image quality, prompt fidelity, safety (no harmful content), diversity | T1: 300, T2: 100, T3: 50, T4: 20 |
+| Audio: understanding | Transcription accuracy (WER), speaker diarization, language detection | T1: 300, T2: 100, T3: 50, T4: 20 |
+| Audio: generation | Naturalness (MOS), intelligibility, safety, speaker similarity (TTS) | T1: 300, T2: 100, T3: 50, T4: 20 |
+| Video: understanding | Action recognition, temporal understanding, scene consistency | T1: 300, T2: 100, T3: 50, T4: 20 |
 | Cross-modal consistency | Text-image alignment, audio-visual sync, multimodal reasoning | T1: 100, T2: 50, T3: 25 |
 
 ### Demographic Parity Testing

@@ -73,7 +73,7 @@ Safeguards in place for item 3 (all four required to stay out of automatic T1):
 
 **Scenario:** System provides incorrect fee information, leading customer to make financial decision based on wrong data.
 
-**Likelihood:** Low (RAG-grounded with verified document corpus; hallucination rate measured at 0.8%)
+**Likelihood:** Low (RAG-grounded with verified document corpus; hallucination rate measured at 0.2% before release, 1 of 500 cases with a 95% upper bound of 0.95%)
 **Impact:** Medium-High (potential financial loss to customer; regulatory complaint)
 **Residual risk after mitigation:** Medium
 

@@ -103,3 +103,84 @@ controls:
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/llm-lifecycle/fine-tuning-governance.md
+
+- id: DE-006
+  title: AI interaction and exposure disclosure implemented
+  stage: 4
+  applies_to:
+    text: 'T1-T4 systems that interact directly with people, customer-facing or internal, unless the interaction is obvious under the EU AI Act Art. 50(1) test; any emotion recognition or biometric categorisation system (Art. 50(3))'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: 'Approved disclosure text per channel and language, with the legal basis (Art. 50(1), Art. 50(3), Korea AI Basic Act Art. 31(1) or framework policy); screenshot or automated UI test showing it is given at or before the first interaction or exposure; where the obvious-interaction exception is used, the recorded rationale'
+  frequency: Before deployment; re-tested on any change to the channel or user interface
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Sample 25 systems that interact with people (or all, if fewer), including every customer-facing T1 system. Open the live channel and confirm the approved disclosure appears at or before the first interaction, in each supported language. For systems relying on the obvious-interaction exception, inspect the rationale.
+  sources:
+  - framework/responsible-ai/transparency-standards.md
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/compliance/multi-jurisdictional-guide.md
+
+- id: DE-007
+  title: AI-generated content marked and labelled
+  stage: 4
+  applies_to:
+    text: 'T1-T4 GenAI systems the organisation provides that generate synthetic text, image, audio or video (Art. 50(2) marking), and systems whose output is published as a deep fake or as text informing the public on matters of public interest (Art. 50(4) labelling)'
+    tiers: [T1, T2, T3, T4]
+    systems: [genai]
+  owner: [technical-owner, product-owner]
+  owner_text: Technical owner (machine-readable marking) / Product owner (visible labels and disclosures)
+  evidence: 'Marking design (metadata fields and, for media, provenance standard such as C2PA) and detection test results on sample outputs; visible label rules by content destination; for each jurisdiction that applies (EU Art. 50(2) and 50(4), China labelling measures and GB 45438-2025, India IT Rules for intermediaries, Korea AI Basic Act Art. 31(2) and (3)), the rule applied or the exception relied on'
+  frequency: Before deployment; re-tested on model or output format change. Generative systems placed on the market before 2 August 2026 must meet Art. 50(2) by 2 December 2026
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Sample 10 generative systems (or all, if fewer). Generate test outputs in each supported format and confirm the machine-readable marking is present and detected by the documented detection method. For published deep fake or public-interest text outputs, confirm the visible label, or the record of human editorial review where that exception is used.
+  sources:
+  - framework/responsible-ai/transparency-standards.md
+  - framework/llm-lifecycle/multimodal-governance.md
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/compliance/multi-jurisdictional-guide.md
+
+- id: DE-008
+  title: Retrieval enforces source permissions
+  stage: 4
+  applies_to:
+    text: T1-T4 RAG systems whose sources carry access restrictions
+    tiers: [T1, T2, T3, T4]
+    systems: [rag]
+  owner: technical-owner
+  evidence: 'Access control design: document-level permissions carried from each source into the index, and a filter on the requesting user''s identity applied at query time before documents enter the context; pre-deployment test results with test identities holding different entitlements, showing no cross-entitlement retrieval'
+  frequency: Before deployment; re-tested on any change to sources, index, retrieval logic or identity integration
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Sample 10 RAG systems (or all, if fewer), including every T1 RAG system. Inspect the pre-deployment entitlement tests. Re-perform the test with two identities that hold different entitlements and confirm neither retrieves a document it cannot open in the source system.
+  sources:
+  - framework/llm-lifecycle/rag-governance.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: DE-009
+  title: Notice given to people subject to AI-assisted decisions
+  stage: 4
+  applies_to:
+    text: 'T1-T4 systems that make or assist decisions about people where a notice duty applies: EU AI Act Art. 26(11) (Annex III systems) and Art. 26(7) (workplace use), Colorado SB 26-189, CPPA ADMT rules, Quebec Law 25 s. 12.1, Australia APP 1.7 to 1.9 (usually T1 through override item 1)'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: 'Notice pack per system: each notice that applies, its legal basis, approved text and where and when it is given in the customer or employee journey; privacy policy wording on automated decisions where required; for workplace high-risk systems, record that workers'' representatives and affected workers were informed before use'
+  frequency: Before deployment; reviewed on material change and when a new jurisdiction applies
+  on_fail: Block deployment
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 10 systems that make or assist decisions about people (or all, if fewer). For each, list the notice duties that apply from the RA-008 role record and the jurisdictions served, and confirm the notice pack covers each one. Walk the live journey for one decision per system and confirm the notice is given at the point the pack states.
+  sources:
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/compliance/multi-jurisdictional-guide.md
+  - framework/responsible-ai/transparency-standards.md

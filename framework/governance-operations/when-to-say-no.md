@@ -20,7 +20,7 @@ Each position below gives the rule, why it holds, what to do instead, and which 
 | 2 | [GenAI never makes an adverse regulated decision on its own](#2-genai-never-makes-an-adverse-regulated-decision-on-its-own) | Override item 1, RA-002, PM-003 |
 | 3 | [No autonomous write that cannot be undone or capped](#3-no-autonomous-write-that-cannot-be-undone-or-capped) | Override item 4, agentic pre-deployment requirements, DA-004, kill switch |
 | 4 | [No external model API without evidenced residency and zero retention](#4-no-external-model-api-without-evidenced-residency-and-zero-retention) | AR-003, AR-005, RA-005, override items 3 and 8 |
-| 5 | [No launch when the evaluation cannot show the threshold is met](#5-no-launch-when-the-evaluation-cannot-show-the-threshold-is-met) | EV-001 to EV-007, release criteria, independent validation |
+| 5 | [No launch when the evaluation cannot show the threshold is met](#5-no-launch-when-the-evaluation-cannot-show-the-threshold-is-met) | EV-001 to EV-009, statistical pass rule, release criteria, independent validation |
 | 6 | [Prohibited practices are rejected at Step 0](#6-prohibited-practices-are-rejected-at-step-0) | RA-001, non-waivable list |
 | 7 | [No GenAI where a simpler method meets the need](#7-no-genai-where-a-simpler-method-meets-the-need) | Business justification, AR-004, validation |
 | 8 | [No business-critical process on a model you cannot replace](#8-no-business-critical-process-on-a-model-you-cannot-replace) | AR-004, AR-005, exit strategy requirements |
@@ -90,16 +90,16 @@ Each position below gives the rule, why it holds, what to do instead, and which 
 
 **Rule.** A system does not launch unless its evaluation can show, on suites of at least the tier size and against an agreed definition of a correct answer, that it meets the tier thresholds. That rules out launching with: no agreed definition of domain accuracy; no labelled data or subject matter experts to judge outputs; a suite below the tier size; an eval set that overlaps the data used to tune prompts; or an uncalibrated LLM judge.
 
-**Why.** Every tier has thresholds, and they are enforced ([threshold definitions](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)). Domain accuracy is use-case specific and defined in the risk assessment; if nobody can say what a right answer is, nothing can be measured. Suite sizes are floors, and at tight thresholds they leave little room. The T1 hallucination cap of ≤ 1% on a 200-case suite allows at most two failing responses. Even a clean run on a suite that size leaves real uncertainty about the true rate. Results from a contaminated eval set are invalid (EV-006). An LLM judge must be calibrated against human evaluators (EV-007) and is never the sole evaluator for T1 hallucination or PII leakage ([LLM-as-judge calibration](../llm-lifecycle/evaluation-governance.md#llm-as-judge-calibration)).
+**Why.** Every tier has thresholds, and they are enforced ([threshold definitions](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)). Domain accuracy is use-case specific and defined in the risk assessment; if nobody can say what a right answer is, nothing can be measured. At T1 and T2 a metric passes on its one-sided 95% confidence bound, not on the point estimate ([statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule)). For the T1 hallucination cap of 1%, a 300-case suite passes only with zero failing responses, 500 cases allow one and 1,000 allow four. A 200-case suite cannot show the cap at all: even a clean run leaves an upper bound of 1.49%. Results from a contaminated eval set are invalid (EV-006). An LLM judge must be calibrated against human evaluators (EV-007) and is never the sole evaluator for T1 hallucination or PII leakage ([LLM-as-judge calibration](../llm-lifecycle/evaluation-governance.md#llm-as-judge-calibration)).
 
 **Instead.**
 - Build the evaluation set first, before the prompts, with the people who own the answers.
-- Size the suite so that the upper confidence bound on the measured rate, and not only the point estimate, sits inside the threshold.
+- Size the suite for the rate you expect, not the floor, using the [maximum failures table](../llm-lifecycle/evaluation-governance.md#maximum-failures-allowed). At the minimum size, one failure fails the gate.
 - If that is out of reach, narrow the scope to something you can measure.
 
 **Relation to exceptions.** A system that misses a threshold can proceed under an approved [exception](governance-workflow.md#exceptions-and-risk-acceptance) with compensating controls. An exception is for a known, measured gap. A system that cannot be measured has no known gap to accept, so this standard asks approvers not to grant one in that case.
 
-**Enforced by.** EV-001 to EV-007; [release criteria by tier](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier); the AI lead's certification at Stage 5; independent validation at T1 and T2.
+**Enforced by.** EV-001 to EV-009; the [statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule) and [release criteria by tier](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier); the AI lead's certification at Stage 5; independent validation at T1 and T2.
 
 ## 6. Prohibited Practices Are Rejected at Step 0
 

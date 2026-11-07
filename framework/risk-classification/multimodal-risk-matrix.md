@@ -98,7 +98,7 @@ Inferring emotions from written text, such as sentiment analysis, does not use b
 | Biometric compliance | GDPR Article 9 (special categories), explicit consent, DPIA completed |
 | Deepfake detection | Deploy detection capability on all video/image inputs for systems processing identity |
 | Cross-modal validation | Automated consistency checking between modalities |
-| Evaluation | Modality-specific eval suites: 200+ test cases per modality, demographic parity testing |
+| Evaluation | Modality-specific eval suites: 300+ test cases per modality (T1 is judged on the 95% bound; see [statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule)), demographic parity testing |
 | Red-teaming | Modality-specific adversarial testing (adversarial images, audio perturbation, video manipulation) |
 
 ### T2 — High Multimodal Use Cases

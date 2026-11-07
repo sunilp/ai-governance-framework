@@ -116,21 +116,37 @@ evaluation:
       threshold: 0.80
       method: "human-eval"
     - name: "hallucination_rate"
-      value: 0.04
+      value: 0.04                       # 2 of 50. T3 passes on the point estimate (evaluation-governance.md#statistical-pass-rule)
       threshold: 0.05
       method: "human-eval"
+      n: 50
+      failures: 2
     - name: "source_attribution_accuracy"
       value: 0.94
       threshold: 0.90
       method: "automated"
-    - name: "safety_pass_rate"          # 50-case safety suite
+    - name: "safety_pass_rate"          # 50-case safety suite; 2 failures
       value: 0.96
       threshold: 0.95
       method: "automated"
+      n: 50
+      failures: 2
     - name: "retrieval_precision_at_5"  # 50-query retrieval set
       value: 0.80
       threshold: 0.75
       method: "automated"
+    - name: "guardrail_false_negative_rate"   # 50 labelled out-of-scope and injection queries; 1 passed (EV-009)
+      value: 0.02
+      threshold: 0.05
+      method: "automated"
+      n: 50
+      failures: 1
+    - name: "guardrail_false_positive_rate"   # 50 legitimate queries; 3 blocked; internal default ceiling 10%
+      value: 0.06
+      threshold: 0.10
+      method: "automated"
+      n: 50
+      failures: 3
   # Red-team (T3): automated adversarial scan of 200 generated prompts plus 50 manual cases.
   adversarial_testing:
     test_type: "red-team"

@@ -15,7 +15,7 @@ Before any open-source model enters production, complete these evaluations.
 | Evaluation Area | Requirement | T1 | T2 | T3 | T4 |
 |----------------|-------------|:---:|:---:|:---:|:---:|
 | Safety benchmarks | Run standard safety evals (ToxiGen, BBQ, TruthfulQA or equivalent) | Required | Required | Required | Recommended |
-| Domain-specific evaluation | Run your domain eval suite (same standard as commercial model evaluation) | 200+ cases | 100+ cases | 50+ cases | 20+ cases |
+| Domain-specific evaluation | Run your domain eval suite (same standard as commercial model evaluation) | 300+ cases | 100+ cases | 50+ cases | 20+ cases |
 | Commercial comparison | Benchmark against leading commercial API for your use case | Required | Required | Recommended | Optional |
 | Adversarial testing | Red-team testing per [red-teaming protocol](../ai-security/red-teaming-protocol.md#tiered-testing-depth) | Full red-team, 200+ cases | Internal red-team, 100+ cases | Automated scan + 50 manual cases | Automated scan, 20+ cases (recommended) |
 | Infrastructure validation | Confirm hosting capability: GPU requirements, latency, throughput, scaling | Required | Required | Required | Required |

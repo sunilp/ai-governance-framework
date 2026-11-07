@@ -6,6 +6,8 @@ Multi-agent systems — where multiple AI agents collaborate, coordinate, or are
 
 This document defines governance standards for multi-agent systems. It extends the single-agent risk taxonomy in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md) and should be used alongside it.
 
+Every agent in a multi-agent system also meets [agent identity and tool governance](agent-identity-and-tool-governance.md): its own identity, delegation that only narrows at each hop, a tool allowlist with scopes, approval gates, memory controls, authenticated inter-agent messages, a sandbox for code execution, the kill switch and the agent action audit record (AR-006, PM-006, PM-007). This document adds what is specific to agents working together.
+
 All multi-agent systems are classified as **minimum T2 (High)**. A multi-agent system is automatically **T1 (Critical)** when any agent has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access, or when any other automatic T1 override applies. See the [canonical override list](../risk-classification/genai-risk-matrix.md#tier-override-rules) (items 4 and 6) and the tier rule in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md#mandatory-risk-tier-classification).
 
 ---
@@ -40,16 +42,16 @@ All multi-agent systems are classified as **minimum T2 (High)**. A multi-agent s
 - Log retention follows the system's tier-based retention policy; apply data minimization — log message metadata and content hashes at minimum, full content only where required by tier
 - Messages must conform to a defined schema — free-form text between agents creates untraceable accountability
 - No agent may inject instructions to another agent's system prompt — inter-agent communication is data, not instructions
+- Authentication, integrity protection and replay protection for messages are set in [inter-agent messages](agent-identity-and-tool-governance.md#6-inter-agent-messages-owasp-asi07); each message is also an entry in the [agent action audit record](../compliance/prompt-audit-trail.md#agent-action-audit-record)
 
 ### Privilege Boundaries
 
+Per-agent identity, no shared credentials, least privilege, tool access fixed at deployment and delegation that never widens are set in [agent identity](agent-identity-and-tool-governance.md#1-agent-identity), [delegation](agent-identity-and-tool-governance.md#2-delegation) and [tools](agent-identity-and-tool-governance.md#3-tools-mcp-servers-and-a2a-peers). Two rules apply to the system as a whole:
+
 | Rule | Description |
 |------|-------------|
-| No privilege escalation | Agent A cannot grant Agent B permissions that Agent B does not already have |
-| No credential sharing | Each agent uses its own service account and authentication |
-| Principle of least privilege | Each agent has only the permissions required for its specific task |
-| Explicit permission grants | An agent's tool access is defined at deployment, not at runtime |
-| Cross-agent action validation | If Agent A requests Agent B to take an action, Agent B independently validates the request against its own policy |
+| Aggregate privilege analysis | Assess the combined permissions of agents that pass work to each other. Agents A and B together must not reach what neither is approved to reach alone |
+| Cross-agent action validation | If Agent A requests Agent B to take an action, Agent B independently validates the request against its own policy and allowlist |
 
 ### Information Flow Controls
 
@@ -65,14 +67,7 @@ All multi-agent systems are classified as **minimum T2 (High)**. A multi-agent s
 
 ### Persistent Memory Governance
 
-| Requirement | Description |
-|-------------|-------------|
-| Memory scope | Define what each agent is permitted to store in persistent memory |
-| TTL enforcement | All stored context must have a defined expiration (default: session-scoped) |
-| PII scanning | Scan persistent memory for PII; enforce redaction policy |
-| Memory audit trail | All writes to persistent memory logged with agent ID, timestamp, content hash |
-| Memory versioning | Support rollback to previous memory state for incident investigation |
-| Cross-session isolation | Agent memory from one session must not contaminate another session unless explicitly designed |
+Memory scope, time to live (default: session-scoped), PII scanning, provenance, audit, versioning, isolation between users and sessions, and erasure are set for every agent in [memory](agent-identity-and-tool-governance.md#5-memory-owasp-asi06). In a multi-agent system, also record which agents may read another agent's memory; by default none can.
 
 ### Context Window Management
 
@@ -143,6 +138,7 @@ Define degraded operation modes:
 - Irreversible actions require human confirmation, regardless of which agent initiates them
 - High-impact actions (financial, customer-facing, data-modifying) require human approval even if the individual agent has permission
 - Configure approval gates at the system level, not per-agent — the orchestrator manages human checkpoints
+- What the approver sees and how the gate is enforced: [human approval gates](agent-identity-and-tool-governance.md#4-human-approval-gates)
 
 ### Visibility
 
@@ -157,6 +153,8 @@ Define degraded operation modes:
 | Pause single agent | Halt one agent without stopping others | Operator |
 | Pause all agents | Halt entire multi-agent system | Operator |
 | Kill switch | Immediately terminate all agents and roll back in-progress actions | Operator + on-call |
+
+The kill switch stops or degrades every agent in the system within 15 minutes, revokes their credentials and delegated tokens, and is tested quarterly; it is non-waivable ([kill switch](agent-identity-and-tool-governance.md#8-kill-switch), PM-006).
 | Override agent decision | Human overrides a specific agent's output or action | System owner |
 
 ---
@@ -168,13 +166,14 @@ For all multi-agent systems (in addition to single-agent requirements in [agenti
 | Requirement | Description |
 |-------------|-------------|
 | Architecture review | Full review including inter-agent communication, privilege boundaries, failure modes |
+| Agent identity and tool review | AR-006 completed for every agent in the system, including the delegation limits between them |
 | Blast radius analysis | Document maximum impact of cascading failures |
 | Inter-agent testing | Test agent interactions specifically — not just individual agents in isolation |
 | Emergent behavior assessment | Test for behaviors that emerge from agent interaction but are absent in individual testing |
 | Depth/breadth limits | Define and enforce maximum nesting depth and maximum concurrent agents |
 | Human checkpoint design | Document where and how humans oversee the multi-agent system |
 | Circuit breaker testing | Verify all circuit breakers function correctly |
-| Kill switch testing | Verify kill switch halts all agents within acceptable timeframe |
+| Kill switch testing | Verify the kill switch halts all agents within 15 minutes and revokes their credentials (PM-006) |
 
 ---
 

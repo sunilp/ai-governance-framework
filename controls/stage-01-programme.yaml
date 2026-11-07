@@ -1,0 +1,139 @@
+# Stage 1 file: programme-level controls.
+# These controls apply to the AI programme as a whole, not to one system. They carry
+# stage 1 so they sort first, and group "Programme" so they render in their own table,
+# separate from Stage 1 (Idea Intake), which has no system-level register controls.
+# Source of truth for the Programme-level table in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 1
+name: Programme
+controls:
+
+- id: GV-001
+  title: Board-approved AI policy, reviewed annually
+  stage: 1
+  group: Programme
+  applies_to:
+    text: Programme-wide (all tiers)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-risk-committee
+  evidence: AI policy approved by the board or the Board Risk Committee, with the approval minute, version history, annual review record and evidence that the policy was communicated to staff
+  frequency: Annual review; on a material change in regulation, strategy or risk appetite
+  on_fail: Escalate to Board Risk Committee
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Inspect the current AI policy and the board or Board Risk Committee minute that approved it. Confirm approval within the last 12 months, that the policy covers every section of the AI policy template (scope, principles, risk appetite, roles, tiering, controls, exceptions, reporting, review), and that it was published to staff after approval.
+  sources:
+  - templates/ai-policy.md
+  - framework/operating-model/board-reporting.md
+
+- id: GV-002
+  title: AI literacy measures in place by role, with completion tracked
+  stage: 1
+  group: Programme
+  applies_to:
+    text: 'Programme-wide: board, executives, all staff, AI builders, human oversight reviewers, second line, and contractors who operate or use AI systems'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [head-of-ai, ai-risk]
+  owner_text: Head of AI (programme and content) / AI Risk (completion tracking and reporting)
+  evidence: Role-based curriculum mapped to each audience; completion and attendance records by audience; training date for each named human oversight reviewer before first review; annual refresh log
+  frequency: On joining, on role change and before acting as a reviewer; refreshed annually; completion reported quarterly
+  on_fail: Completion below the governance training target reported to AI Risk Committee. A reviewer or approver without current training does not act in the role until trained
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Take the staff population and the lists of AI builders, approvers and named human oversight reviewers at period end. Recalculate completion by audience against the governance training completion target. Sample 25 named reviewers on T1 and T2 systems (or all, if fewer) and confirm their training was current before the first output they reviewed.
+  sources:
+  - framework/operating-model/ai-literacy.md
+  - framework/operating-model/governance-metrics.md
+  - framework/responsible-ai/human-in-loop-patterns.md
+
+- id: GV-003
+  title: Acceptable use policy for employee use of AI tools, with shadow AI detection
+  stage: 1
+  group: Programme
+  applies_to:
+    text: 'Programme-wide: all staff and contractors, and every AI tool used for work (public chatbots, enterprise assistants, AI coding assistants, AI features embedded in SaaS)'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [ciso, security]
+  owner_text: CISO (policy and approved tools list) / Security (shadow AI detection)
+  evidence: Approved acceptable use policy and approved tools list with permitted data classes; staff attestation records; monthly shadow AI detection reports with the outcome of each finding
+  frequency: Policy reviewed annually; approved tools list updated on change; detection continuous, reported monthly
+  on_fail: Unapproved tool blocked or routed to intake; data sent to an unapproved tool handled as an incident per severity
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Inspect the policy, its approval date and the approved tools list, and confirm every listed tool has an inventory entry. For one month in the period, take the shadow AI detection report and trace 25 findings (or all, if fewer) to a recorded outcome (blocked, routed to intake, or approved). Confirm every finding involving Confidential, personal, MNPI or regulated data was raised as an incident.
+  sources:
+  - framework/operating-model/acceptable-use.md
+  - framework/compliance/third-party-model-risk.md
+  - framework/risk-classification/genai-risk-matrix.md
+
+- id: GV-004
+  title: Exception register maintained and reviewed monthly by the AI Risk Committee
+  stage: 1
+  group: Programme
+  applies_to:
+    text: T1-T4 (every approved exception)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [ai-risk, ai-risk-committee]
+  owner_text: AI Risk (maintains the register) / AI Risk Committee (monthly review)
+  evidence: Exception register holding every field required by the governance workflow for every exception at every tier; monthly AI Risk Committee minutes recording review of open, expiring and expired exceptions
+  frequency: Updated on every exception decision; reviewed monthly
+  on_fail: An expired or unrecorded exception means the control it covers is failed; escalate to the tier approver and the AI Risk Committee
+  type: detective
+  automation: manual
+  key_control: true
+  test: Trace every exception reference (EXC-YYYY-NNN) found in model cards, deployment approvals and committee minutes for the period to the register. Confirm each entry has every register field, an approver that matches the tier, an expiry no more than 90 days after the start date and at most one renewal, and that no entry covers a non-waivable control. Inspect the monthly committee minutes for evidence of the register review.
+  sources:
+  - templates/exception-register.md
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/review-cadence.md
+
+- id: GV-005
+  title: AI Risk Committee charter approved and reviewed annually
+  stage: 1
+  group: Programme
+  applies_to:
+    text: Programme-wide (all tiers)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-risk-committee
+  evidence: Charter approved by the Board Risk Committee setting purpose, membership, quorum, decision rights, delegation, escalation to the board, and minutes; annual review record
+  frequency: Annual review; on a change to membership or decision rights
+  on_fail: Escalate to Board Risk Committee. A decision taken without quorum is retaken at a quorate meeting
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Inspect the charter and its approval. Sample 6 committee meetings from the period (or all, if fewer) and confirm quorum was met, decisions stayed within the charter's decision rights, delegated decisions were reported at the next meeting, conflicts were declared, and minutes were distributed within 5 business days.
+  sources:
+  - templates/ai-risk-committee-charter.md
+  - framework/operating-model/review-cadence.md
+  - framework/operating-model/roles-responsibilities.md
+
+- id: GV-006
+  title: AI inventory complete and reconciled quarterly, including shadow AI discovery
+  stage: 1
+  group: Programme
+  applies_to:
+    text: 'Programme-wide: every AI system and material AI feature, built, bought or embedded in vendor products'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-risk
+  evidence: AI inventory with every required field for each entry; quarterly reconciliation record against procurement, cloud spend, SaaS admin consoles, network telemetry, code repositories and the model risk inventory, listing unmatched items and their resolution; inventory summary presented to the quarterly AI Risk Committee portfolio meeting
+  frequency: Maintained continuously; reconciled quarterly
+  on_fail: Unregistered item registered and routed to intake, or switched off, within 30 days; an item that meets an automatic T1 override is reported to the AI Risk Committee chair at once
+  type: detective
+  automation: semi-automated
+  key_control: true
+  test: Re-perform one quarter's reconciliation. From AI-related purchases, cloud AI service spend, SaaS tenants with AI features enabled and AI service endpoints in proxy or network logs, trace 25 items (or all, if fewer) to an inventory entry or a recorded resolution. Inspect 25 inventory entries (or all, if fewer) for every required field and a next review date that matches the tier cadence.
+  sources:
+  - framework/governance-operations/ai-inventory.md
+  - templates/ai-inventory-entry.yaml
+  - framework/responsible-ai/transparency-standards.md

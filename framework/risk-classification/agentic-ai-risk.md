@@ -13,6 +13,8 @@ Unlike conversational AI or content generation, agentic systems can:
 
 These capabilities compound the standard GenAI risks (hallucination, prompt injection, data leakage) with autonomous execution risk.
 
+This document holds the risk taxonomy, the tier rule and the incident examples. The requirements for agent identity, delegation, tool allowlists and scopes, approval gates, memory, inter-agent messages, code execution, the kill switch and the agent action audit record are in [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md), reviewed under AR-006 and operated under PM-006 and PM-007.
+
 ---
 
 ## Agentic AI Risk Taxonomy
@@ -35,6 +37,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Blast radius limits: cap the scope of any single action (e.g., max records affected)
 - Confirmation gates: require human approval for irreversible or high-impact actions
 - Dry-run mode: preview actions before execution
+- Allowlists, scopes, caps and approval gates are specified in [tools](../llm-lifecycle/agent-identity-and-tool-governance.md#3-tools-mcp-servers-and-a2a-peers) and [human approval gates](../llm-lifecycle/agent-identity-and-tool-governance.md#4-human-approval-gates)
 
 ### 2. Prompt Injection via Tool Outputs
 
@@ -62,11 +65,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Unbounded context accumulation that dilutes safety instructions
 - State inconsistency across agent sessions
 
-**Controls:**
-- Memory audit trails: log all state changes with provenance
-- Memory expiration: enforce TTL on stored context
-- Session boundaries: define clear state reset points
-- Memory validation: periodic integrity checks against expected behavioral baselines
+**Controls:** memory scope, retention, provenance, poisoning defences, audit and rollback are set in [memory](../llm-lifecycle/agent-identity-and-tool-governance.md#5-memory-owasp-asi06) (OWASP ASI06) and reviewed under AR-006.
 
 ### 4. Privilege Escalation
 
@@ -77,11 +76,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Credential exposure through prompt context
 - Agent requesting additional permissions from users or systems
 
-**Controls:**
-- Principle of least privilege: agents receive minimum necessary permissions
-- Credential isolation: never expose credentials in agent context; use service-level auth
-- Capability boundaries: hard-coded limits on what tools an agent can access
-- No self-modification: agents cannot modify their own tool definitions or permissions
+**Controls:** own non-human identity per agent, credentials kept out of the model's reach, least-privilege tool scopes, delegation that only narrows, and tool access fixed at deployment are set in [agent identity](../llm-lifecycle/agent-identity-and-tool-governance.md#1-agent-identity), [delegation](../llm-lifecycle/agent-identity-and-tool-governance.md#2-delegation) and [tools](../llm-lifecycle/agent-identity-and-tool-governance.md#3-tools-mcp-servers-and-a2a-peers) (OWASP ASI02, ASI03), and reviewed under AR-006.
 
 ### 5. Cascading Failure and Feedback Loops
 
@@ -127,12 +122,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Stale context influencing current decisions (outdated information treated as current)
 - PII accumulation in memory (agent memory becomes a data privacy liability)
 
-**Controls:**
-- Memory TTL enforcement: all stored context must expire
-- Periodic memory audit: review stored context for accuracy and appropriateness
-- PII scanning of stored context: enforce redaction policy on persistent memory
-- Memory versioning with rollback: ability to revert to known-good state
-- See state management section in [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md)
+**Controls:** time to live, PII scanning, periodic review, versioning and rollback, and erasure are set in [memory](../llm-lifecycle/agent-identity-and-tool-governance.md#5-memory-owasp-asi06). Shared state between agents is covered in [multi-agent governance](../llm-lifecycle/multi-agent-governance.md#shared-state).
 
 ### 8. Complex Tool Chain Risk
 
@@ -188,6 +178,8 @@ This is the canonical override list, also used in [genai-risk-matrix.md](genai-r
 | Requirement | Description |
 |------------|-------------|
 | Architecture review | Mandatory for every agent: architecture review board sign-off (T1) or a recorded design review approved by the Head of AI or delegate (T2); document all tools, permissions, data flows |
+| Agent identity and tool review | Agent identity record, tool allowlist with scopes, delegation limits and approvals per [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md) (AR-006) |
+| Agent evaluation | Task success, tool-call accuracy, unsafe action rate (zero tolerated at T1/T2) and trajectory review per [evaluation governance](../llm-lifecycle/evaluation-governance.md#agent-evaluation) (EV-008) |
 | Action inventory | Complete catalog of every action the agent can take, with blast radius assessment |
 | Adversarial testing | Red-team testing for prompt injection, privilege escalation, goal manipulation |
 | Failure mode analysis | Document every known failure mode with mitigation and fallback |
@@ -198,12 +190,12 @@ This is the canonical override list, also used in [genai-risk-matrix.md](genai-r
 
 | Control | Description |
 |---------|-------------|
-| Action logging | Every tool call, parameter, result, and decision logged with full trace |
-| Confirmation gates | Irreversible or high-impact actions require human confirmation |
+| Action logging | Every tool call, delegation, memory write and inter-agent message logged in the [agent action audit record](../compliance/prompt-audit-trail.md#agent-action-audit-record) (PM-007) |
+| Confirmation gates | Irreversible or high-value actions require human approval before execution ([human approval gates](../llm-lifecycle/agent-identity-and-tool-governance.md#4-human-approval-gates)) |
 | Budget limits | Token, cost, and action-count budgets per session |
 | Time limits | Maximum execution time per task; automatic timeout with graceful shutdown |
 | Anomaly detection | Real-time monitoring for unusual action patterns, error rates, or output characteristics |
-| Kill switch | Immediate shutdown capability accessible to on-call operators |
+| Kill switch | Stop or degrade within 15 minutes, with the agent's credentials revoked; tested quarterly; non-waivable ([kill switch](../llm-lifecycle/agent-identity-and-tool-governance.md#8-kill-switch), PM-006) |
 
 ### Post-Deployment Monitoring
 

@@ -47,6 +47,32 @@ This is not application logging. This is regulatory-grade audit trail designed t
 | `escalation` | Whether the session was escalated to a human |
 | `outcome` | Session outcome (resolved, abandoned, escalated) |
 
+### Agent Action Audit Record
+
+Required for every agentic system, alongside the per-request record. One record per tool call, delegation, memory write and inter-agent message. The fields support the [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md#9-agent-action-audit-record) standard.
+
+| Field | Description |
+|-------|-------------|
+| `action_id` | Unique identifier for the action |
+| `request_id` | The per-request record that led to the action |
+| `correlation_id` | Identifier that persists across every agent in a multi-agent chain |
+| `action_type` | Tool call, delegation, memory write or inter-agent message |
+| `agent_id` | Identity of the acting agent, as in its agent identity record |
+| `principal_id` | The original principal: the user or system on whose behalf the agent acts, or the agent itself when it acts on its own authority |
+| `delegation_chain` | Every agent between the principal and this action, in order, with the grant or token reference and the scope held at each hop |
+| `tool` | Tool name, type (function or API, MCP server, A2A peer, code execution), version and definition hash |
+| `arguments_hash` | Hash of the full arguments |
+| `arguments_redacted` | Arguments with personal data and secrets redacted. For T1 and T2, the full values must be recoverable under the PII controls below where decision reconstruction needs them |
+| `authorisation_decision` | Allowed or denied, the policy or rule that decided, and the result of cap and rate limit checks |
+| `approval_reference` | Approval record ID and approver where a human approval gate applied |
+| `result` | Success, failure or blocked; a summary or hash of the output; records affected or value moved |
+| `timestamp_requested` | When the agent requested the action (ISO 8601, UTC) |
+| `timestamp_decided` | When authorisation or approval was decided |
+| `timestamp_completed` | When the action completed or failed |
+| `error_details` | Error information if the action failed |
+
+PM-007 checks that per-request records and agent action records are complete and kept for the tier's retention period.
+
 ---
 
 ## Logging Architecture
@@ -113,6 +139,7 @@ Given a `request_id`, you must be able to reproduce:
 5. The raw model output
 6. The guardrail actions applied
 7. The final output delivered to the user
+8. For agentic systems, every action taken, with its delegation chain, authorisation decision and any human approval ([agent action audit record](#agent-action-audit-record))
 
 This requires:
 - **Prompt versioning:** System prompts stored with version history; audit record references the version, not the content (but content must be recoverable from the version)

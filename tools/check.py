@@ -7,7 +7,9 @@ Checks:
      to roles, source paths exist, and cross-file values agree.
   3. Relative links and heading anchors in all Markdown outside docs/ (GitHub slug rules).
   4. Generated Markdown blocks are up to date (same as python tools/build.py --check).
-  5. Example GenAI model cards conform to policy/thresholds.yaml for their tier.
+  5. Example GenAI model cards conform to policy/thresholds.yaml for their tier, including the
+     statistical pass rule at T1/T2 (confidence bounds from n and failures, or n and a lower
+     bound), segment results, and the human evaluation protocol.
   6. "Status as of <Month YYYY>" lines in framework/ are no older than 90 days
      (warning) or 180 days (error).
 
@@ -257,6 +259,8 @@ def check_cross_file(data: dict, controls: dict, rep: Report) -> None:
         if rt and s_required != rt.get("required"):
             rep.error(area, f"{t} red-team required flag differs between policy/tiers.yaml and policy/thresholds.yaml")
 
+    check_pass_rule(data, rep)
+
     rv = controls.get("RV-001")
     if rv:
         freq = rv.get("frequency", "").lower()
@@ -264,6 +268,44 @@ def check_cross_file(data: dict, controls: dict, rep: Report) -> None:
             cadence = ((tiers.get(t) or {}).get("review_cadence") or {}).get("text", "")
             if f"{cadence.lower()} ({t.lower()})" not in freq:
                 rep.error(area, f"RV-001 frequency does not state '{cadence} ({t})' from policy/tiers.yaml")
+
+
+def check_pass_rule(data: dict, rep: Report) -> None:
+    """thresholds.yaml: every metric names a known eval type, every metric with a threshold
+    states its kind, and every T1/T2 suite minimum is large enough for zero failures to
+    demonstrate the failure-rate cap of each proportion metric judged on it."""
+    area = "consistency"
+    th = data["thresholds"] or {}
+    rule = th.get("pass_rule") or {}
+    conf = rule.get("confidence", 0.95)
+    tier_rules = rule.get("tiers") or {}
+    eval_types = {e.get("id"): e for e in th.get("eval_types") or []}
+    metrics = {m.get("id"): m for m in th.get("metrics") or []}
+    for m in th.get("metrics") or []:
+        mid, et = m.get("id"), m.get("eval_type")
+        if et and et not in eval_types:
+            rep.error(area, f"policy/thresholds.yaml: metric {mid} names unknown eval type {et}")
+        numeric = any(v is not None for v in (m.get("thresholds") or {}).values()) or m.get("default_ceiling")
+        if numeric and not m.get("kind"):
+            rep.error(area, f"policy/thresholds.yaml: metric {mid} has a threshold but no kind (proportion or mean)")
+        if m.get("kind") != "proportion" or not et:
+            continue
+        for t in TIERS:
+            if tier_rules.get(t) != "confidence-bound":
+                continue
+            cap = build.failure_cap(m, t)
+            if cap is None or cap <= 0:
+                continue
+            need = build.min_n_zero_failures(cap, conf)
+            s_min, _ = suite_min(eval_types.get(et), t)
+            if s_min is None:
+                rep.error(area, f"policy/thresholds.yaml: {t} {et} suite has no minimum, so {mid} cannot be judged on its confidence bound")
+            elif s_min < need:
+                rep.error(area, f"policy/thresholds.yaml: the {t} {et} minimum of {s_min} cannot demonstrate {mid} within {cap * 100:g}% even with zero failures; it needs {need}")
+    for group in rule.get("max_failures_table") or []:
+        for mid in group.get("metrics") or []:
+            if mid not in metrics:
+                rep.error(area, f"policy/thresholds.yaml: max_failures_table names unknown metric {mid}")
 
 
 def check_control_tokens(known: set[str], rep: Report) -> None:
@@ -421,6 +463,51 @@ def suite_min(eval_type: dict | None, tier: str):
     return s.get("min"), s.get("required", True)
 
 
+def card_has_guardrails(card: dict) -> bool:
+    components = ((card.get("system_architecture") or {}).get("components")) or []
+    if any(isinstance(c, dict) and c.get("type") == "guardrail" for c in components):
+        return True
+    guardrails = ((card.get("prompt_governance") or {}).get("guardrails")) or {}
+    return any(v is True for v in guardrails.values()) or bool(guardrails.get("custom_rules"))
+
+
+def check_bound(where: str, name: str, value: float, effective: float, direction: str, kind: str,
+                src: dict, rule: dict, tier: str, area: str, rep: Report):
+    """Apply the confidence-bound pass rule to one metric. Returns (passed, detail), or None
+    when the card does not record what the rule needs (an error is reported)."""
+    conf = rule.get("confidence", 0.95)
+    if kind == "proportion":
+        n, f = src.get("n"), src.get("failures")
+        if not (isinstance(n, int) and n > 0 and isinstance(f, int) and 0 <= f <= n):
+            hint = " per attribute in attribute_results" if where == "evaluation.bias_evaluation" else ""
+            rep.error(area, f"{where} {name}: record n and failures{hint}; the {tier} pass rule judges the confidence bound")
+            return None
+        recorded = (1 - value) if direction == "min" else value
+        if abs(f / n - recorded) > 0.005 + 1e-9:
+            rep.error(area, f"{where} {name} value {value:g} does not match {f} failures in {n}")
+        cap = (1 - effective) if direction == "min" else effective
+        if cap <= 1e-12:
+            return f == 0, f"{name} {f} failures in {n} (any failure fails)"
+        ub = build.cp_upper(f, n, conf)
+        return ub <= cap + 1e-9, f"{name} upper bound {ub * 100:.2f}% ({f} failures in {n}) exceeds the {cap * 100:g}% failure cap"
+    n, lb, method = src.get("n"), src.get("lower_bound"), src.get("interval_method")
+    if not (isinstance(n, int) and n > 0 and isinstance(lb, (int, float))):
+        rep.error(area, f"{where} {name}: record n and lower_bound; the {tier} pass rule judges the confidence bound")
+        return None
+    methods = rule.get("mean_methods") or {}
+    t_min = (methods.get("t-interval") or {}).get("min_n", 100)
+    if method not in methods:
+        rep.error(area, f"{where} {name}: interval_method must be one of {', '.join(methods)}")
+    elif method == "t-interval" and n < t_min:
+        rep.error(area, f"{where} {name}: a t-interval needs n of at least {t_min}; use the bootstrap")
+    if direction != "min":
+        rep.error(area, f"{where} {name}: a lower bound applies only to higher-is-better mean metrics")
+        return None
+    if lb > value + 1e-9:
+        rep.error(area, f"{where} {name} lower_bound {lb:g} is above the value {value:g}")
+    return passes(lb, effective, direction), f"{name} lower bound {lb:g} is below the threshold {effective:g}"
+
+
 def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report) -> None:
     area = path_str
     details = card.get("model_details") or {}
@@ -430,30 +517,56 @@ def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report)
         return
     metrics_fw = {m["id"]: m for m in thresholds.get("metrics") or []}
     eval_types = {e["id"]: e for e in thresholds.get("eval_types") or []}
+    rule = thresholds.get("pass_rule") or {}
+    tier_rule = (rule.get("tiers") or {}).get(tier, "point-estimate")
     exc_ids = sorted(set(EXC_RE.findall(" ".join(iter_strings(card)))))
     rag_cfg = ((card.get("system_architecture") or {}).get("rag_configuration")) or {}
     is_rag = rag_cfg.get("enabled") is True
+    applies = {"rag": is_rag, "agent": details.get("type") == "agent", "guardrails": card_has_guardrails(card)}
+    customer_facing = (card.get("intended_use") or {}).get("customer_facing") is True
 
     evaluation = card.get("evaluation")
     if not isinstance(evaluation, dict):
         rep.warn(area, "no evaluation block; threshold and suite-size checks could not run")
         return
 
-    # Collect metrics: evaluation.metrics plus bias_evaluation.counterfactual_consistency.
+    # Collect metrics: evaluation.metrics plus bias_evaluation (one row per attribute when
+    # attribute_results is recorded). Each row: where, name, value, card threshold, card direction, source.
     metric_rows = []
     for i, m in enumerate(evaluation.get("metrics") or []):
         if isinstance(m, dict):
-            metric_rows.append((f"evaluation.metrics[{i}]", m.get("name"), m.get("value"), m.get("threshold"), m.get("direction")))
+            metric_rows.append((f"evaluation.metrics[{i}]", m.get("name"), m.get("value"), m.get("threshold"), m.get("direction"), m))
     bias = evaluation.get("bias_evaluation") or {}
     names_seen = {row[1] for row in metric_rows}
     if "counterfactual_consistency" in bias and "counterfactual_consistency" not in names_seen:
-        metric_rows.append(("evaluation.bias_evaluation", "counterfactual_consistency", bias.get("counterfactual_consistency"), None, None))
+        attrs = [a for a in bias.get("attribute_results") or [] if isinstance(a, dict)]
+        if attrs:
+            total_n = sum(a["n"] for a in attrs if isinstance(a.get("n"), int))
+            total_f = sum(a["failures"] for a in attrs if isinstance(a.get("failures"), int))
+            pooled = bias.get("counterfactual_consistency")
+            if pooled is not None and total_n and abs((1 - total_f / total_n) - pooled) > 0.005 + 1e-9:
+                rep.error(area, f"evaluation.bias_evaluation.counterfactual_consistency {pooled:g} does not match attribute_results ({total_f} inconsistent pairs in {total_n})")
+            for i, a in enumerate(attrs):
+                n, f = a.get("n"), a.get("failures")
+                value = 1 - f / n if isinstance(n, int) and n > 0 and isinstance(f, int) else None
+                metric_rows.append((f"evaluation.bias_evaluation.attribute_results[{i}] ({a.get('attribute')})", "counterfactual_consistency", value, None, None, a))
+        else:
+            metric_rows.append(("evaluation.bias_evaluation", "counterfactual_consistency", bias.get("counterfactual_consistency"), None, None, bias))
 
     failing = []
-    for where, name, value, card_thr, card_dir in metric_rows:
+    card_thresholds: dict = {}
+    for where, name, value, card_thr, card_dir, src in metric_rows:
         fw = metrics_fw.get(name)
         direction = fw["direction"] if fw else (card_dir or "min")
         fw_thr = as_fraction(fw, tier) if fw else None
+        ceiling = (fw or {}).get("default_ceiling")
+        if fw_thr is None and ceiling and tier in (ceiling.get("tiers") or []):
+            limit = ceiling["customer_facing" if customer_facing else "internal"] / 100
+            audience = "customer-facing" if customer_facing else "internal"
+            if card_thr is None:
+                fw_thr = limit
+            elif not passes(card_thr, limit, direction):
+                rep.error(area, f"{where} {name} threshold {card_thr:g} is looser than the framework default ceiling {limit:g} for {audience} systems")
         if fw and fw_thr is not None:
             if card_thr is None:
                 if where.startswith("evaluation.metrics"):
@@ -461,6 +574,16 @@ def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report)
             elif not passes(card_thr, fw_thr, direction):
                 rep.error(area, f"{where} {name} threshold {card_thr:g} is looser than the {tier} threshold {fw_thr:g} in policy/thresholds.yaml")
         effective = card_thr if card_thr is not None else fw_thr
+        if effective is not None:
+            card_thresholds.setdefault(name, effective)
+
+        # Suite size behind this metric.
+        n = src.get("n") if isinstance(src, dict) else None
+        if fw and isinstance(n, int) and fw.get("eval_type"):
+            s_min, _ = suite_min(eval_types.get(fw["eval_type"]), tier)
+            if s_min is not None and n < s_min:
+                rep.error(area, f"{where} {name} n {n} is below the {tier} {fw['eval_type']} minimum of {s_min}")
+
         if value is None:
             rep.warn(area, f"{where} {name} has no value; its threshold could not be tested")
             continue
@@ -468,8 +591,37 @@ def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report)
             if fw is None:
                 rep.warn(area, f"{where} {name} has no threshold to test its value against")
             continue
-        if not passes(value, effective, direction):
+        kind = (fw or {}).get("kind")
+        if tier_rule == "confidence-bound" and kind in ("proportion", "mean"):
+            result = check_bound(where, name, value, effective, direction, kind, src, rule, tier, area, rep)
+            if result is not None and not result[0]:
+                failing.append(result[1])
+        elif not passes(value, effective, direction):
             failing.append(f"{name} {value:g} vs threshold {effective:g}")
+
+    # Segment results (T1/T2): segments of at least min_cases are gated on the point estimate;
+    # smaller segments are reported, not gated.
+    seg_cfg = rule.get("segments") or {}
+    if tier in (seg_cfg.get("tiers") or []):
+        segments = evaluation.get("segment_results")
+        if not segments:
+            rep.warn(area, f"no evaluation.segment_results; {tier} reports results for the segments named in the risk assessment")
+        for i, seg in enumerate(segments or []):
+            if not isinstance(seg, dict):
+                continue
+            n = seg.get("n")
+            if not isinstance(n, int):
+                rep.error(area, f"evaluation.segment_results[{i}] has no case count n")
+                continue
+            if n < seg_cfg.get("min_cases", 100):
+                continue
+            for key, val in (seg.get("results") or {}).items():
+                fw = metrics_fw.get(key)
+                thr = card_thresholds.get(key, as_fraction(fw, tier) if fw else None)
+                if fw is None or val is None or thr is None:
+                    continue
+                if not passes(val, thr, fw["direction"]):
+                    failing.append(f"segment '{seg.get('segment')}' (n {n}) {key} {val:g} vs threshold {thr:g}")
 
     if failing:
         if exc_ids:
@@ -482,9 +634,26 @@ def conform_genai_card(path_str: str, card: dict, thresholds: dict, rep: Report)
     for mid, fw in metrics_fw.items():
         if as_fraction(fw, tier) is None or mid in present:
             continue
-        if fw.get("applies_to") == "rag" and not is_rag:
+        if fw.get("applies_to") and not applies.get(fw["applies_to"], False):
             continue
         rep.warn(area, f"{mid} is not recorded in the card; the {tier} threshold for it could not be checked")
+
+    # Human evaluation protocol (T1/T2): double-rating share and inter-rater agreement.
+    he_cfg = rule.get("human_evaluation") or {}
+    if tier in (he_cfg.get("tiers") or []):
+        human = any(isinstance(m, dict) and m.get("method") in ("human-eval", "hybrid") for m in evaluation.get("metrics") or [])
+        he = evaluation.get("human_evaluation")
+        if human and not isinstance(he, dict):
+            rep.warn(area, "human-eval or hybrid metrics but no evaluation.human_evaluation block; double-rating share and inter-rater agreement could not be checked")
+        if isinstance(he, dict):
+            share, agreement = he.get("double_rated_share"), he.get("agreement")
+            if not isinstance(share, (int, float)) or not isinstance(agreement, (int, float)):
+                rep.error(area, "evaluation.human_evaluation needs double_rated_share and agreement")
+            else:
+                if share * 100 < he_cfg.get("double_rated_share", 20) - 1e-9:
+                    rep.error(area, f"evaluation.human_evaluation.double_rated_share {share:g} is below the {tier} minimum of {he_cfg.get('double_rated_share', 20) / 100:g}")
+                if agreement < he_cfg.get("min_agreement", 0.6) - 1e-9:
+                    rep.error(area, f"evaluation.human_evaluation.agreement {agreement:g} is below {he_cfg.get('min_agreement', 0.6):g}; human-rated results are not accepted")
 
     # Use-case hallucination tolerance must not exceed the tier cap.
     tolerance = (card.get("safety") or {}).get("hallucination_tolerance")

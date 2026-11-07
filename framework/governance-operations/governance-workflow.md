@@ -31,7 +31,7 @@ This document defines the end-to-end governance process for AI systems — from 
 
 **What happens:** The Product owner prepares a full risk assessment using the framework matrices. Each risk dimension is scored Critical (4), High (3), Medium (2) or Low (1), and the highest-scoring dimension sets the tier. Override rules are then applied. Overrides can raise the tier, never lower it. The approver may raise a tier with a recorded rationale (for example, a pilot with an unusual exposure profile). Nobody can lower a tier below what the scoring and overrides give. The aggregate score is recorded for context and comparison only; it does not set the tier.
 
-**Prohibited-use screen first:** before scoring, run the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) against EU AI Act Art. 5 and the internal prohibited-use policy. A prohibited use is rejected, not tiered.
+**Prohibited-use screen first:** before scoring, run the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) against EU AI Act Art. 5 and the internal prohibited-use policy. A prohibited use is rejected, not tiered (RA-007).
 
 **Gate criteria:** All dimensions scored, tier determination documented, override list checked, assessment approved by the appropriate authority.
 
@@ -41,6 +41,10 @@ This document defines the end-to-end governance process for AI systems — from 
 - Completed impact assessment (Control ID: RA-003)
 - Risk assessment approval record with sign-off (Control ID: RA-004)
 - DPIA screening for any system processing personal data; full DPIA for T1/T2 and wherever screening indicates high risk (Control ID: RA-005)
+- AI inventory entry created before development (Control ID: RA-006)
+- Step 0 prohibited-use screen result (Control ID: RA-007)
+- EU AI Act role determination, including the Art. 25 provider check (Control ID: RA-008)
+- Fundamental rights impact assessment, where Art. 27 applies (Control ID: RA-009)
 
 ### Tier Determination Decision Flowchart
 
@@ -114,6 +118,8 @@ START: New AI system proposed
 - Data residency confirmation per jurisdiction (Control ID: AR-003)
 - Model selection document with evaluation rationale and approval (Control ID: AR-004)
 - Third-party model risk assessment (Control ID: AR-005)
+- Agent identity, tool allowlist and permission review for tool-using agents (Control ID: AR-006)
+- Vendor contract checked against the [AI procurement clauses](../compliance/ai-procurement-clauses.md) and recorded in the register of information (Control ID: AR-007)
 
 **Tier scaling:**
 
@@ -145,6 +151,10 @@ START: New AI system proposed
 - Signed prompt review checklist (Control ID: DE-003)
 - Guardrail configuration and test results (Control ID: DE-004)
 - Data governance checklist for training data (Control ID: DE-005)
+- AI interaction disclosure (Control ID: DE-006)
+- Marking and labelling of AI-generated content (Control ID: DE-007)
+- Retrieval permission tests for RAG systems (Control ID: DE-008)
+- Notices to people subject to AI-assisted decisions (Control ID: DE-009)
 
 **Tier scaling:**
 
@@ -168,7 +178,7 @@ START: New AI system proposed
 
 **What happens:** Eval suites executed per evaluation governance standard — safety benchmarks, domain accuracy, RAG retrieval quality, bias evaluation, and regression testing. Eval dataset integrity verified to prevent contamination.
 
-**Gate criteria:** All required evals pass tier thresholds, safety eval passed, regression shows no degradation (T1/T2), dataset integrity verified.
+**Gate criteria:** All required evals pass tier thresholds under the [statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule) (T1/T2 judged on the 95% confidence bound), safety eval passed, regression shows no degradation (T1/T2), dataset integrity verified.
 
 **Evidence produced:**
 - Pre-release evaluation report with pass/fail per metric (Control ID: EV-001)
@@ -178,9 +188,11 @@ START: New AI system proposed
 - Bias evaluation with counterfactual test results (Control ID: EV-005)
 - Eval dataset integrity confirmation (Control ID: EV-006)
 - LLM-as-judge calibration report (Control ID: EV-007)
+- Agent evaluation report for agentic systems: task success, tool-call accuracy, unsafe actions, trajectory review (Control ID: EV-008)
+- Guardrail evaluation with false negative and false positive rates (Control ID: EV-009)
 - Validation report: independent validation per tier (no separate control ID; see [validation](../model-lifecycle/validation.md))
 
-Suite sizes, thresholds and release criteria are set in [evaluation governance](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier). Release criteria: T1 all eval types pass; T2 pre-release, safety, regression, bias, RAG retrieval (if RAG) and red-team; T3 pre-release, safety, RAG retrieval (if RAG) and red-team (automated scan + 50 manual cases); T4 pre-release and safety (automated, 20+ cases each), with RAG retrieval evaluation and a red-team scan recommended.
+Suite sizes, thresholds and release criteria are set in [evaluation governance](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier). Release criteria: T1 all eval types pass, including agent evaluation (agentic systems) and guardrail evaluation; T2 pre-release, safety, regression, bias, RAG retrieval (if RAG), agent evaluation (if agentic), guardrail evaluation and red-team; T3 pre-release, safety, RAG retrieval (if RAG), guardrail evaluation (if guardrails are used) and red-team (automated scan + 50 manual cases); T4 pre-release and safety (automated, 20+ cases each), with RAG retrieval evaluation and a red-team scan recommended.
 
 **Tier scaling:**
 
@@ -261,7 +273,7 @@ Each row lists what the pack must contain at each tier. "Not required" means the
 | 7 | Model card and prompt version history | DE-001, DE-002 | Required | Required | Required | Required |
 | 8 | Prompt review record (GenAI) | DE-003 | Required | Required | Peer review record | Not required |
 | 9 | Guardrail configuration and test results (GenAI) | DE-004 | Required | Required | Not required | Not required |
-| 10 | Evaluation report | EV-001 to EV-007 | All eval types | Pre-release, safety, regression, bias, RAG retrieval (if RAG), dataset integrity, judge calibration | Pre-release, safety, RAG retrieval (if RAG), dataset integrity | Pre-release, safety (automated, 20+ cases), dataset integrity |
+| 10 | Evaluation report | EV-001 to EV-009 | All eval types | Pre-release, safety, regression, bias, RAG retrieval (if RAG), dataset integrity, judge calibration | Pre-release, safety, RAG retrieval (if RAG), dataset integrity | Pre-release, safety (automated, 20+ cases), dataset integrity |
 | 11 | Validation report | (see Stage 5) | Full independent validation (MRM) | Reduced-scope independent validation | Peer review | Self-test |
 | 12 | Red-team report (GenAI) | SR-001, SR-002 | 200+ cases | 100+ cases | Automated scan + 50 manual cases | Not required (scan recommended) |
 | 13 | Security assessment: adversarial defense configuration; application security review and penetration test (customer-facing or internet-exposed); supply chain verification (open-source models) | SR-003, SR-004, DA-003 | Required | Required | Supply chain verification if open-source models | Not required |
@@ -269,6 +281,8 @@ Each row lists what the pack must contain at each tier. "Not required" means the
 | 15 | Incident response playbook and on-call rotation | IR-001, IR-002 | Required | Required | Not required | Not required |
 | 16 | Rollback plan with test evidence | DA-004 | Required | Required | Not required | Not required |
 | 17 | Evidence checklist, deployment gate evidence and signed deployment approval | DA-001, DA-002, DA-003 | Required | Required | Required | Required |
+
+The pack also includes evidence for every other control whose Applies To in the [control register](control-register.md) covers the system: the inventory entry and prohibited-use screen (RA-006, RA-007, all tiers), EU AI Act role and fundamental rights impact assessment where in scope (RA-008, RA-009), agent identity and tool review (AR-006, agentic systems), vendor contract check (AR-007, external models), disclosure, marking, retrieval permissions and decision notices (DE-006 to DE-009, where they apply), agent and guardrail evaluations (EV-008, EV-009), kill switch test (PM-006, T1 customer-facing and agentic) and audit logging (PM-007, all tiers).
 
 ### Data Classification Note
 
@@ -300,6 +314,8 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 - Human oversight process document with staffing confirmation (Control ID: PM-003)
 - Production evaluation schedule and latest results (Control ID: PM-004)
 - Cost dashboard with alert configuration (Control ID: PM-005)
+- Kill switch test record (Control ID: PM-006)
+- Audit logging configuration and retention check (Control ID: PM-007)
 
 **Production evaluation** ([evaluation governance](../llm-lifecycle/evaluation-governance.md#production-evaluation) owns the cadences restated below):
 1. Online automated scoring of live traffic.
@@ -331,6 +347,7 @@ Severity (S1-S4), response SLAs and notifications are defined in [escalation pat
 - Incident report per template, with root cause: S1/S2 within 48 hours, S3 within 10 business days (Control ID: IR-003)
 - Post-mortem report: S1 within 1 week, S2 within 2 weeks (Control ID: IR-004)
 - Remediation tracker with status; S4 items tracked in the backlog (Control ID: IR-005)
+- Regulatory notification assessment for every S1/S2 and suspected serious incident (Control ID: IR-006)
 
 **Tier scaling:**
 
@@ -360,6 +377,7 @@ Response SLAs depend on severity, not tier. Any incident on a T1 system that rea
 - Updated model card (Control ID: RV-002)
 - Revalidation assessment with evaluation results (Control ID: RV-003)
 - Regulatory change impact assessment (Control ID: RV-004)
+- Log of explanations and human reviews provided for adverse outcomes (Control ID: RV-005)
 
 **Tier scaling:**
 
@@ -485,10 +503,10 @@ This is the only process for proceeding without meeting a control. An exception 
 
 **Non-waivable.** These cannot be excepted at any tier:
 - A DPIA where it is legally required
-- Checks against prohibited uses
+- Checks against prohibited uses (RA-007)
 - Zero unresolved Critical red-team findings (the Critical part of SR-002)
-- A kill switch for T1 customer-facing systems and for all agentic systems
-- Audit logging
+- A kill switch for T1 customer-facing systems and for all agentic systems (PM-006)
+- Audit logging (PM-007)
 
 Any other control can be excepted through this process.
 

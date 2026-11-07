@@ -105,6 +105,47 @@ controls:
   - framework/governance-operations/governance-workflow.md
   - framework/operating-model/cost-governance.md
 
+- id: PM-006
+  title: Kill switch tested
+  stage: 8
+  applies_to:
+    text: T1 customer-facing systems and all agentic systems (T1-T2)
+    tiers: [T1, T2]
+    systems: [customer-facing, agentic]
+  owner: ai-operations
+  evidence: 'Kill switch runbook; quarterly test record showing the decision time, the time stop or degrade was confirmed (within 15 minutes) and, for agentic systems, that revoked credentials were refused'
+  frequency: Before traffic enabled; at least quarterly; after any change to the runtime or agent identity set-up
+  on_fail: Block go-live; a live system is restricted or switched off until a test passes. Cannot be excepted (non-waivable)
+  type: corrective
+  automation: semi-automated
+  key_control: true
+  test: For every T1 customer-facing and every agentic system, inspect the test records for the last four quarters. Confirm a test ran in each quarter, the time from decision to confirmed stop or degrade was 15 minutes or less, and agentic tests show credentials revoked. Observe one test where the schedule allows.
+  sources:
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/responsible-ai/human-in-loop-patterns.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: PM-007
+  title: Audit logging complete and retained
+  stage: 8
+  applies_to:
+    text: T1-T4 (agent action records for agentic systems)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-operations
+  evidence: 'Audit log configuration covering the per-request record and, for agentic systems, the agent action audit record; retention set to the tier period; completeness and integrity check results'
+  frequency: Before traffic enabled; completeness checked in real time, integrity daily
+  on_fail: Block go-live; a gap in a live system is raised as an incident and fixed. Cannot be excepted (non-waivable)
+  type: detective
+  automation: automated
+  key_control: true
+  test: Sample 25 production systems (or all, if fewer), including every agentic system. For each, trace 10 requests from a sampled day to complete audit records with the fields required for the tier, and for agentic systems trace each tool call to an agent action record. Confirm retention matches the tier period and review the completeness and integrity check results for the period.
+  sources:
+  - framework/compliance/prompt-audit-trail.md
+  - framework/compliance/audit-trail-requirements.md
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/governance-operations/governance-workflow.md
+
 - id: IR-001
   title: Incident response playbook documented
   stage: 8
@@ -205,3 +246,23 @@ controls:
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/operating-model/escalation-paths.md
+
+- id: IR-006
+  title: Regulatory incident notification assessed
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T4 (every S1 and S2 incident, and any suspected serious incident under the EU AI Act)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: compliance
+  evidence: 'Notification assessment per incident: regimes considered (EU AI Act Art. 73 and Art. 26(5), DORA major ICT-related incident, GDPR Arts. 33 and 34, other applicable regimes), decision and rationale, Legal review, and each notification made with its deadline and time sent'
+  frequency: 'Per incident: started when the incident is declared, completed within 24 hours of an S1 and before the earliest legal deadline that could apply'
+  on_fail: Escalate immediately to Legal and the AI Risk Committee chair
+  type: corrective
+  automation: manual
+  key_control: true
+  test: For every S1 and S2 incident in the period, and every incident flagged as a possible serious incident, inspect the notification assessment. Confirm each applicable regime was considered, the decision was recorded before the earliest deadline, and every notification was sent within its legal time limit.
+  sources:
+  - framework/operating-model/escalation-paths.md
+  - framework/compliance/eu-ai-act-mapping.md

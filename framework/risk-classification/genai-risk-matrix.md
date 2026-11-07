@@ -71,7 +71,7 @@ The degree of reliance on foundation models controlled by external vendors.
 
 ## Step 0: Prohibited-Use Screen
 
-Before scoring, screen the use case against EU AI Act Art. 5 (prohibited AI practices) and the organisation's internal prohibited-use policy. Prohibited uses are not tiered. They are rejected at Stage 2 and do not proceed. Record the result in the risk assessment (RA-001). The check is non-waivable (see [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance)).
+Before scoring, screen the use case against EU AI Act Art. 5 (prohibited AI practices) and the organisation's internal prohibited-use policy. Prohibited uses are not tiered. They are rejected at Stage 2 and do not proceed. Record the result in the risk assessment (RA-007). The check is non-waivable (see [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance)).
 
 Art. 5 prohibits, among other practices:
 - manipulative or deceptive techniques, or exploiting vulnerabilities, in ways that cause significant harm;
@@ -170,7 +170,7 @@ This is the canonical override list. [risk-matrix.md](risk-matrix.md), [multimod
 |-------------|-------------|
 | Model selection | Any approved vendor |
 | Prompt governance | Documented |
-| Guardrails | Standard acceptable use policy |
+| Guardrails | Standard [acceptable use policy](../operating-model/acceptable-use.md) (GV-003) |
 | Evaluation | Pre-deployment and safety eval (automated, 20+ cases each) |
 | Monitoring | Quarterly metrics review |
 | Audit trail | Usage logging; 1-year retention |

@@ -134,19 +134,26 @@ prompt_governance:
 evaluation:
   evaluation_date: "2026-01-08"           # v1.2.0 revalidation (RV-003). Pre-release results for v1.0.0 (2025-09-01) are in the case file.
   evaluation_dataset_size: 500
+  # T1 statistical pass rule (evaluation-governance.md#statistical-pass-rule): proportion metrics pass on the
+  # one-sided 95% Clopper-Pearson upper bound of the failure rate, mean metrics on the one-sided 95% lower bound.
   metrics:
     - name: "faithfulness"
       value: 0.94
       threshold: 0.90
       method: "llm-as-judge"
+      n: 500
+      lower_bound: 0.933
+      interval_method: "t-interval"
     - name: "relevance"
       value: 0.91
       threshold: 0.85
       method: "llm-as-judge"
     - name: "hallucination_rate"
-      value: 0.008
+      value: 0.002                        # 1 of 500; upper bound 0.95%, within the 1% cap
       threshold: 0.01
       method: "hybrid"                    # LLM-as-judge + human eval
+      n: 500
+      failures: 1
     - name: "correctness"
       value: 0.96
       threshold: 0.95
@@ -159,6 +166,56 @@ evaluation:
       value: 0.93
       threshold: 0.90
       method: "human-eval"
+    - name: "safety_pass_rate"            # 500-case safety suite; 1 failure, failure-rate upper bound 0.95%
+      value: 0.998
+      threshold: 0.99
+      method: "automated"
+      n: 500
+      failures: 1
+    - name: "retrieval_precision_at_5"    # 200-query RAG retrieval set
+      value: 0.88
+      threshold: 0.85
+      method: "automated"
+      n: 200
+      lower_bound: 0.861
+      interval_method: "t-interval"
+    - name: "guardrail_false_negative_rate"   # 300 labelled harmful or out-of-scope items; upper bound 0.99%
+      value: 0.0
+      threshold: 0.01
+      method: "automated"
+      n: 300
+      failures: 0
+    - name: "guardrail_false_positive_rate"   # 300 legitimate requests; upper bound 3.91%; customer-facing default ceiling 5%
+      value: 0.02
+      threshold: 0.05
+      method: "automated"
+      n: 300
+      failures: 6
+  segment_results:                        # Channel, language and vulnerability segments. 100+ cases gated on the point estimate; smaller segments reported, not gated
+    - segment: "channel: mobile app"
+      n: 310
+      results: {hallucination_rate: 0.003, faithfulness: 0.94}
+    - segment: "channel: online banking"
+      n: 190
+      results: {hallucination_rate: 0.0, faithfulness: 0.94}
+    - segment: "language: English"
+      n: 340
+      results: {hallucination_rate: 0.003, faithfulness: 0.96}
+    - segment: "language: German"         # 80 cases: reported, not gated (see Q1 2026 review finding 1 in the case file)
+      n: 80
+      results: {hallucination_rate: 0.0, faithfulness: 0.89}
+    - segment: "language: French and Spanish"
+      n: 80
+      results: {hallucination_rate: 0.0, faithfulness: 0.91}
+    - segment: "vulnerability indicator present"
+      n: 60
+      results: {hallucination_rate: 0.0, faithfulness: 0.93}
+  human_evaluation:
+    raters: "Customer service quality reviewers, qualified on a known-answer set; written rubric and a calibration session before the evaluation"
+    double_rated_share: 0.20              # 100 of 500 cases
+    agreement_statistic: "cohen-kappa"
+    agreement: 0.84
+    adjudication: "A senior quality reviewer resolves disagreements; the adjudicated label is recorded"
   adversarial_testing:                    # Prompt-change adversarial regression set re-run for v1.2.0, not the quarterly red-team
     test_type: "prompt-change-regression"
     prompt_injection_resistance: 0.98
@@ -170,7 +227,12 @@ evaluation:
       - "age_group"
       - "nationality"
       - "language_preference"
-    counterfactual_consistency: 0.95
+    counterfactual_consistency: 0.95      # 40 inconsistent pairs in 800
+    attribute_results:                    # T1 allows at most 12 inconsistent pairs in 200 per attribute
+      - {attribute: "gender", n: 200, failures: 9}
+      - {attribute: "age_group", n: 200, failures: 10}
+      - {attribute: "nationality", n: 200, failures: 11}   # upper bound 8.94%, within the 10% cap
+      - {attribute: "language_preference", n: 200, failures: 10}
     sentiment_parity: 0.97
     methodology: "Counterfactual testing with 200 pairs per attribute. Formal evaluation quarterly; production counterfactual spot-checks weekly since v1.2.0"
   production_evaluations:

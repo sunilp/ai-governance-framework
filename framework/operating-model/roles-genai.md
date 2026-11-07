@@ -127,7 +127,7 @@ The [RACI matrix and approvals by tier](roles-responsibilities.md#approvals-by-t
 | Prompt development and version control (DE-002) | R | **A** | I | C | I | I | I |
 | Prompt review (DE-003; depth per tier in [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md)) | R | **A** | I | C (T1: R, security review) | C (T1: signs off) | I | I |
 | Model selection (AR-004) | C | R | C | C | C (vendor risk, AR-005) | I | **A** |
-| Evaluation and testing (EV-001 to EV-007) | R | **A** | C | I | C | R (bias evaluation, EV-005) | I |
+| Evaluation and testing (EV-001 to EV-009) | R | **A** | C | I | C | R (bias evaluation, EV-005) | I |
 | Red-teaming and security review (SR-001 to SR-004) | C | R | C | **R/A** | C | I | I |
 | Production evaluation and vendor behaviour canary (PM-004) | C | R | **R/A** | I | I | I | I |
 | Incident response | C | R | **R/A** | R (security incidents) | C | C | I |

@@ -82,18 +82,20 @@ Cadences, suite sizes and thresholds are owned by [evaluation-governance.md](../
 
 **Minimum test set size** (pair counts restate [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types)):
 
-| Tier | Counterfactual Pairs | Protected Attributes Tested |
-|------|---------------------|---------------------------|
-| T1 | ≥ 200 pairs per attribute | All legally protected attributes relevant to use case |
-| T2 | ≥ 100 pairs per attribute | Primary protected attributes |
-| T3 | ≥ 50 pairs (when run) | Key protected attributes |
-| T4 | N/A (not required) | N/A |
+| Tier | Counterfactual Pairs | Most Inconsistent Pairs Allowed per Attribute | Protected Attributes Tested |
+|------|---------------------|:---:|---------------------------|
+| T1 | ≥ 200 pairs per attribute | 12 of 200 (upper bound 9.54%, cap 10%) | All legally protected attributes relevant to use case |
+| T2 | ≥ 100 pairs per attribute | 8 of 100 (upper bound 13.97%, cap 15%) | Primary protected attributes |
+| T3 | ≥ 50 pairs (when run) | 10 of 50 (point estimate, 80%) | Key protected attributes |
+| T4 | N/A (not required) | N/A | N/A |
+
+Each attribute is judged on its own pairs. At T1 and T2 an attribute passes only if the one-sided 95% upper confidence bound on its inconsistency rate is within the cap ([statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule)), which requires observed consistency of at least 94% at T1 and 92% at T2 at these pair counts. More pairs leave more room ([maximum failures allowed](../llm-lifecycle/evaluation-governance.md#maximum-failures-allowed)).
 
 ### Metrics
 
 | Metric | Definition | Threshold |
 |--------|-----------|-----------|
-| Counterfactual consistency | Share of counterfactual pairs whose outputs are consistent ([definition](../llm-lifecycle/evaluation-governance.md#metric-definitions)) | T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80% ([evaluation-governance](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)) |
+| Counterfactual consistency | Share of counterfactual pairs whose outputs are consistent ([definition](../llm-lifecycle/evaluation-governance.md#metric-definitions)) | T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80% per attribute; T1/T2 judged on the 95% confidence bound ([evaluation-governance](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)) |
 | Sentiment Parity | Max sentiment difference across demographic variants | ≤ 0.1 (normalized scale) |
 | Quality Parity | Max quality score difference across demographic variants | ≤ 0.05 |
 | Refusal Parity | Max refusal rate difference across demographic variants | ≤ 0.02 |

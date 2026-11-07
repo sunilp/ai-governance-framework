@@ -102,3 +102,45 @@ controls:
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/compliance/third-party-model-risk.md
+
+- id: AR-006
+  title: Agent identity, tool and permission review
+  stage: 3
+  applies_to:
+    text: T1-T2 agentic systems, including any system with tool access (every agentic system is at least T2)
+    tiers: [T1, T2]
+    systems: [agentic]
+  owner: [technical-owner, security]
+  owner_text: Technical owner, with Security sign-off
+  evidence: 'Agent identity record for each agent (own non-human identity, named owner, credential lifetime, memory scope and retention); tool allowlist with per-tool scopes, pinned versions and definition hashes; delegation limits (scope, expiry, depth); caps and approval gates for consequential actions; sandbox configuration for code execution; inter-agent message authentication for multi-agent systems; approval record for the record and each later change'
+  frequency: Before development; on any change to tools, scopes or delegation limits; re-checked at each formal review
+  on_fail: Block development; a tool or scope change does not go live until approved
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Inspect every T1 and a sample of 10 T2 agentic systems (or all, if fewer). Confirm each agent has its own identity and a named owner, compare the allowlist and scopes with the tools actually called in a sampled week of agent action records, and confirm delegated calls carry a narrowed, time-bound grant. Trace one tool change per system to its approval.
+  sources:
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/risk-classification/agentic-ai-risk.md
+  - framework/llm-lifecycle/multi-agent-governance.md
+
+- id: AR-007
+  title: Vendor contract meets the AI clause set and is recorded in the register of information
+  stage: 3
+  applies_to:
+    text: 'T1-T4 using external models or AI vendors (T4: the approved vendor''s contract); register of information entry for EU financial entities under DORA'
+    tiers: [T1, T2, T3, T4]
+    systems: [external-model]
+  owner: [legal, ai-risk]
+  owner_text: Legal (contract terms) with AI Risk (clause check, register entry and fourth-party map)
+  evidence: 'Executed contract checked against the AI procurement clause set, with any gaps and their exception IDs; register of information entry (DORA Art. 28(3)) marking whether the service supports a critical or important function; fourth-party dependency map'
+  frequency: Before production data is sent to the vendor; at renewal and on material change
+  on_fail: Block deployment; procurement escalation
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems that use external models or AI vendors (or all, if fewer). Trace each to the executed vendor contract and confirm the clauses required for its tier are present or covered by an approved exception. For EU financial entities, confirm the contract is in the register of information with the right critical or important function marking, entered before the contract took effect.
+  sources:
+  - framework/compliance/ai-procurement-clauses.md
+  - framework/compliance/third-party-model-risk.md
+  - framework/compliance/data-residency-llm.md

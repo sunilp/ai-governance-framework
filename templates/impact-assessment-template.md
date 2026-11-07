@@ -40,6 +40,7 @@ _What happens to a customer when the system produces its output? What are the co
 - Can a customer challenge or appeal a decision made by this system?
 - How is the appeal process communicated to the customer?
 - What is the average resolution time for appeals?
+- Where a right to an explanation or human review applies, how are requests handled and logged (RV-005)?
 
 ### 2.3 Vulnerable Populations
 _Could this system disproportionately affect vulnerable populations (elderly, low-income, non-native speakers, people with disabilities)?_
@@ -48,6 +49,7 @@ _Could this system disproportionately affect vulnerable populations (elderly, lo
 - Are customers informed that AI is involved in the decision?
 - How is this communicated?
 - Can customers opt out of AI-assisted decisions?
+- Which notice duties apply, and where in the journey is each notice given (DE-006 for AI interaction, DE-009 for AI-assisted decisions)?
 
 ## 3. Ethical Considerations
 
@@ -88,7 +90,60 @@ _Are there any supervisory expectations or guidance (beyond formal regulations) 
 ### 4.3 Compliance Gaps
 _Are there any gaps between current system capabilities and regulatory requirements?_
 
-## 5. Risk Summary
+## 5. Fundamental Rights Impact Assessment (EU AI Act Art. 27)
+
+Complete this section when the EU AI Act role record (RA-008) shows the organisation is a deployer in scope of Art. 27. This is control RA-009. Otherwise record "Not applicable" and the reason in 5.1. The duty applies to Annex III systems from 2 December 2027. See the [EU AI Act mapping](../framework/compliance/eu-ai-act-mapping.md#a-deployer-of-high-risk-ai-systems).
+
+### 5.1 Scope
+
+| Question | Answer |
+|----------|--------|
+| Is the system high-risk under Art. 6(2) (listed in Annex III)? Which point? | |
+| Is it used under Annex III point 5(b) (creditworthiness or credit score of natural persons, not fraud detection) or point 5(c) (risk assessment and pricing for natural persons in life and health insurance)? | |
+| If not, is the organisation a body governed by public law or a private entity providing public services, using an Annex III system other than point 2? | |
+| Is this the first use? If a previous assessment for a similar case, or the provider's existing impact assessment, is relied on (Art. 27(2)), give the reference | |
+| Result: assessment required / not applicable (with reason) | |
+
+### 5.2 Assessment (Art. 27(1))
+
+| Art. 27(1) | Element | Response | Related section |
+|:---:|---------|----------|-----------------|
+| (a) | The deployer's processes in which the system will be used, in line with its intended purpose | | 1.1 |
+| (b) | The period of time within which, and the frequency with which, the system is intended to be used | | 1.2 |
+| (c) | The categories of natural persons and groups likely to be affected by its use in this context | | 2.3 |
+| (d) | The specific risks of harm likely to affect the people and groups in (c), taking into account the information the provider gives under Art. 13 | | 3.1, 6 |
+| (e) | How the human oversight measures in the instructions for use are implemented | | 3.4 |
+| (f) | The measures to be taken if those risks materialise, including internal governance arrangements and complaint mechanisms | | 2.2 |
+
+### 5.3 DPIA Cross-Reference (Art. 27(4))
+
+Where the DPIA (RA-005) already meets part of this assessment, the FRIA can cross-refer to the relevant DPIA sections or include the relevant parts (Art. 27(4), as amended by Regulation (EU) 2026/1744).
+
+| Field | Value |
+|-------|-------|
+| DPIA reference | |
+| DPIA sections relied on, and the Art. 27(1) elements they cover | |
+
+### 5.4 Notification to the Market Surveillance Authority (Art. 27(3))
+
+Once the assessment is done, notify the market surveillance authority of the results, submitting the filled-out AI Office template (Art. 27(3) and 27(5)). Check whether the AI Office has published the template before planning the notification. For high-risk systems used by financial institutions in direct connection with financial services, the market surveillance authority is the national financial supervisor, unless the Member State has designated another authority (Art. 74(6) and 74(7)).
+
+| Field | Value |
+|-------|-------|
+| Authority notified | |
+| Date notified | |
+| Notification reference | |
+| Template version used | |
+
+### 5.5 Updates (Art. 27(2))
+
+If any element in 5.2 changes or is no longer up to date during use, update the assessment and consider whether a new notification is needed.
+
+| Date | Element changed | Update made | Notified (Y/N) |
+|------|-----------------|-------------|----------------|
+| | | | |
+
+## 6. Risk Summary
 
 | Risk Category | Assessment | Mitigation |
 |--------------|------------|------------|
@@ -100,7 +155,7 @@ _Are there any gaps between current system capabilities and regulatory requireme
 | Reputational damage | | |
 | Gaming or adversarial manipulation | | |
 
-## 6. Recommendation
+## 7. Recommendation
 
 _Based on this assessment, is the system appropriate for deployment? Under what conditions?_
 

@@ -210,16 +210,40 @@ Next update: {time}
 
 ## Regulatory Notification
 
-For incidents that may require regulatory notification:
+Status as of November 2026. Check the sources at the end of this section before relying on a deadline.
 
-1. **Compliance assesses** whether notification obligations are triggered (within 24 hours of Severity 1)
-2. **Legal reviews** the notification content
-3. **Regulatory affairs** submits the notification through established channels
-4. **AI Risk Committee** is informed of the notification
+Every S1 and S2 incident, and any incident that may be a serious incident under the EU AI Act, gets a recorded notification assessment (IR-006):
+
+1. **Compliance opens the assessment** when the incident is declared. Where DORA may apply, classification starts at once: the initial notification can fall due before the 24-hour window in step 2 ends.
+2. **Compliance assesses** whether notification obligations are triggered, using the table below (within 24 hours of Severity 1, and in every case before the earliest deadline that could apply). The DPO joins when personal data is involved.
+3. **Legal reviews** the notification content.
+4. **Regulatory affairs** submits the notification through established channels.
+5. **AI Risk Committee** is informed of the notification. An incident that requires regulatory notification is material, so the Board Risk Committee is notified within 24 hours ([material incident criteria](board-reporting.md#material-incident-criteria)).
+6. **Preserve the evidence** per [incident forensics](incident-forensics.md#evidence-preservation). A provider of a high-risk AI system must not alter the system in a way that could affect a later evaluation of the incident's causes before informing the authorities (EU AI Act Art. 73(6)).
+
+| Regime | Applies when | Who reports, to whom | Deadline |
+|--------|--------------|----------------------|----------|
+| EU AI Act Art. 73, serious incidents | A high-risk AI system (from the dates in the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#application-dates)) is involved in an incident or malfunction that directly or indirectly leads to a death or serious harm to health; a serious and irreversible disruption of critical infrastructure; an infringement of Union law obligations that protect fundamental rights; or serious harm to property or the environment (Art. 3(49)) | The provider, to the market surveillance authority of the Member State where the incident occurred. For financial institutions this is normally the financial supervisor (Art. 74(6)) | Immediately after a causal link, or its reasonable likelihood, is established, and no later than 15 days after becoming aware. No later than 10 days in the event of a death. No later than 2 days for a widespread infringement or a serious disruption of critical infrastructure. An incomplete initial report may be followed by a complete one (Art. 73(5)) |
+| EU AI Act Art. 26(5), deployer duty | The organisation deploys a high-risk AI system and identifies a serious incident | The deployer informs the provider first, then the importer or distributor and the market surveillance authorities. If the provider cannot be reached, the deployer reports under Art. 73 itself | Immediately. Where the deployer considers the system presents a risk (Art. 79(1)), it informs the provider or distributor and the authority without undue delay and suspends use |
+| DORA major ICT-related incident | An EU financial entity has an ICT-related incident (Art. 3(8)), such as an outage or a data integrity failure in an AI service, that is classified as major under the Art. 18 criteria | The financial entity, to its competent authority (Art. 19(1)); clients are informed without undue delay where their financial interests are affected (Art. 19(3)) | Initial notification within 4 hours of classification as major and no later than 24 hours after becoming aware of the incident; intermediate report within 72 hours of the initial notification; final report no later than one month after the latest intermediate report (Delegated Regulation (EU) 2025/301, Art. 5) |
+| GDPR personal data breach | The incident involves a personal data breach | The controller, to the supervisory authority (Art. 33(1)), and to the people affected where the breach is likely to result in a high risk to them (Art. 34(1)) | Authority: without undue delay and, where feasible, within 72 hours of becoming aware, unless the breach is unlikely to result in a risk. People affected: without undue delay |
+| Other regimes | Sector, national and contractual obligations in the jurisdictions where the system operates | As the regime sets out | See the [multi-jurisdictional guide](../compliance/multi-jurisdictional-guide.md) |
+
+Notes for the assessment:
+- Art. 73(9) limits reporting to fundamental rights infringements for Annex III systems whose providers already have equivalent reporting duties under other Union law. Legal decides whether this applies.
+- For financial institutions, Art. 26(5) deems the deployer's monitoring duty met through internal governance under financial services law ([EU AI Act mapping](../compliance/eu-ai-act-mapping.md#a-deployer-of-high-risk-ai-systems)). The framework still assesses the serious incident duty for every high-risk system.
+- Vendor contracts require the vendor to notify the organisation of incidents in time to meet these deadlines ([AI procurement clauses](../compliance/ai-procurement-clauses.md#clause-set), clause 10).
 
 Regulatory notification triggers include:
 - Material model failure affecting customer outcomes
 - Data breach involving model training or prediction data
 - Discriminatory outcomes identified in production
 - Failure of a model subject to specific supervisory requirements
+- A serious incident involving a high-risk AI system under the EU AI Act
+- A major ICT-related incident under DORA
 
+Sources for this section:
+- Regulation (EU) 2024/1689 (AI Act), Arts. 3(49), 26(5), 73 and 74(6): https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+- Regulation (EU) 2022/2554 (DORA), Arts. 3, 18 and 19: https://eur-lex.europa.eu/eli/reg/2022/2554/oj
+- Commission Delegated Regulation (EU) 2025/301 (DORA incident reporting content and time limits), Art. 5: https://eur-lex.europa.eu/eli/reg_del/2025/301/oj
+- Regulation (EU) 2016/679 (GDPR), Arts. 33 and 34: https://eur-lex.europa.eu/eli/reg/2016/679/oj

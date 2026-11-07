@@ -36,7 +36,7 @@ The other high-risk duties mapped below (Arts. 49, 72, 73 and 86) depend on a sy
 
 ## Working Out the Role
 
-Roles attach to each AI system, not to the organisation as a whole.
+Roles attach to each AI system, not to the organisation as a whole. Record the role for each system at intake and again on material change, including the Art. 25(1) check below (RA-008).
 
 - **Provider:** develops an AI system, or has one developed, and places it on the market or puts it into service under its own name, including for its own use (Art. 3(3), 3(11)). A bank that builds a chatbot or a scoring model on a vendor's foundation model and runs it under its own name is the provider of that AI system. The vendor remains the provider of the general-purpose AI model.
 - **Deployer:** uses an AI system under its own authority (Art. 3(4)). A bank that builds and runs its own system is both provider and deployer.
@@ -57,7 +57,7 @@ Annex III uses most relevant to a bank:
 
 | Act category | Framework treatment |
 |---|---|
-| Prohibited (Art. 5) | Not tiered. Rejected at the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) |
+| Prohibited (Art. 5) | Not tiered. Rejected at the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen), recorded under RA-007 |
 | High-risk (Art. 6, Annexes I and III) | The Annex III uses above match override item 1 (regulated decisions: credit, insurance underwriting or pricing, employment) or item 5 (biometrics) in the [canonical override list](../risk-classification/genai-risk-matrix.md#tier-override-rules), so they are T1. A T1 tier does not by itself make a system high-risk under the Act |
 | Transparency duties (Art. 50) | Apply to any system that meets the conditions in Art. 50, whatever its tier and whether or not it is high-risk |
 | General-purpose AI models (Chapter V) | Duties fall on the model provider. The bank checks them through the vendor assessment (AR-005) |
@@ -77,13 +77,13 @@ Financial-institution provisions:
 | 26(1) | Take technical and organisational measures to use the system in line with the provider's instructions for use | AR-005, DA-003 (no explicit check against the instructions for use: gap) | [Third-party model risk](third-party-model-risk.md), [Deployment gates](../llm-lifecycle/deployment-gates.md) |
 | 26(2) | Assign human oversight to people with the competence, training, authority and support to do it | PM-003 | [Human-in-the-loop patterns](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix) |
 | 26(4) | Where the deployer controls input data, keep it relevant and sufficiently representative for the intended purpose | EV-004 for RAG corpora; otherwise no control yet (gap) | [RAG governance](../llm-lifecycle/rag-governance.md) |
-| 26(5) | Monitor operation against the instructions for use; if the system presents a risk, inform the provider and the market surveillance authority and suspend use; report serious incidents to the provider, then to the authorities | PM-001, PM-002, PM-004, IR-003. The [regulatory notification](../operating-model/escalation-paths.md#regulatory-notification) triggers do not yet name AI Act serious incidents (gap) | [LLM monitoring](../llm-lifecycle/monitoring.md), [Escalation paths](../operating-model/escalation-paths.md) |
-| 26(6) | Keep automatically generated logs under the deployer's control for at least 6 months | DA-003 (audit logging verified at the gates) | [Audit trail](audit-trail-requirements.md#retention-periods), [Prompt audit trail](prompt-audit-trail.md#retention-requirements) |
-| 26(7) | Before using a high-risk system at the workplace, inform workers' representatives and affected workers | No control yet (gap) | |
+| 26(5) | Monitor operation against the instructions for use; if the system presents a risk, inform the provider and the market surveillance authority and suspend use; report serious incidents to the provider, then to the authorities | PM-001, PM-002, PM-004, IR-003, IR-006 (serious incidents assessed under Arts. 26(5) and 73; see [regulatory notification](../operating-model/escalation-paths.md#regulatory-notification)) | [LLM monitoring](../llm-lifecycle/monitoring.md), [Escalation paths](../operating-model/escalation-paths.md) |
+| 26(6) | Keep automatically generated logs under the deployer's control for at least 6 months | DA-003 (audit logging verified at the gates), PM-007 (audit logging complete and retained) | [Audit trail](audit-trail-requirements.md#retention-periods), [Prompt audit trail](prompt-audit-trail.md#retention-requirements) |
+| 26(7) | Before using a high-risk system at the workplace, inform workers' representatives and affected workers | DE-009 (record that workers' representatives and affected workers were informed before use) | [Transparency standards](../responsible-ai/transparency-standards.md#ai-assisted-decision-notices) |
 | 26(9) | Use the provider's Art. 13 information to carry out the DPIA | RA-005 | |
-| 26(11) | Tell natural persons that they are subject to an Annex III system that makes, or assists in making, decisions about them | No control yet (gap) | [Transparency standards](../responsible-ai/transparency-standards.md#user-interaction-disclosure) |
-| 27 | Before first use, carry out a fundamental rights impact assessment and notify the results to the market surveillance authority. Required for deployers of Annex III point 5(b) and 5(c) systems, and for bodies governed by public law or private entities providing public services (any Annex III system except point 2). The assessment may cross-refer to the DPIA (Art. 27(4) as amended) | RA-003, RA-005 (the impact assessment template has no fundamental rights section and no notification step: gap) | [Impact assessment template](../../templates/impact-assessment-template.md) |
-| 86 | Give a person affected by a decision based on an Annex III system's output, with legal or similarly significant effects, a clear and meaningful explanation of the system's role and the main elements of the decision | No control yet (gap) | [Transparency standards: explainability](../responsible-ai/transparency-standards.md#explainability) |
+| 26(11) | Tell natural persons that they are subject to an Annex III system that makes, or assists in making, decisions about them | DE-009 | [Transparency standards](../responsible-ai/transparency-standards.md#ai-assisted-decision-notices) |
+| 27 | Before first use, carry out a fundamental rights impact assessment and notify the results to the market surveillance authority. Required for deployers of Annex III point 5(b) and 5(c) systems, and for bodies governed by public law or private entities providing public services (any Annex III system except point 2). The assessment may cross-refer to the DPIA (Art. 27(4) as amended) | RA-009 (assessment of the Art. 27(1) elements and notification record), drawing on RA-003 and RA-005; RA-008 identifies the systems in scope | [Impact assessment template, section 5](../../templates/impact-assessment-template.md#5-fundamental-rights-impact-assessment-eu-ai-act-art-27) |
+| 86 | Give a person affected by a decision based on an Annex III system's output, with legal or similarly significant effects, a clear and meaningful explanation of the system's role and the main elements of the decision | RV-005 | [Transparency standards: explainability](../responsible-ai/transparency-standards.md#explainability) |
 
 Registration in the EU database by deployers (Arts. 26(8), 49(3)) applies only to public authorities and EU bodies.
 
@@ -96,7 +96,7 @@ The bank is the provider when it develops a high-risk system, such as an in-hous
 - (b) makes a substantial modification to a high-risk system so that it remains high-risk; or
 - (c) changes the intended purpose of a system that is not high-risk, including a general-purpose AI system, so that it becomes high-risk. Example: using a general-purpose chatbot to assess the creditworthiness of applicants.
 
-The initial provider must then cooperate and hand over documentation, unless it clearly specified that its system is not to be changed into a high-risk system (Art. 25(2) as amended). A provider of a high-risk system and any third party supplying an AI system, AI model, tools, services or components used in it must set out by written agreement the information, technical access and assistance the provider needs (Art. 25(4) as amended). Framework hooks: RA-001 re-assessment and RV-003 revalidation on material change. Neither checks explicitly for an Art. 25 role change (gap).
+The initial provider must then cooperate and hand over documentation, unless it clearly specified that its system is not to be changed into a high-risk system (Art. 25(2) as amended). A provider of a high-risk system and any third party supplying an AI system, AI model, tools, services or components used in it must set out by written agreement the information, technical access and assistance the provider needs (Art. 25(4) as amended). Control: RA-008 records the role at intake and repeats the Art. 25(1) check on every material change, which RA-001 re-assessment and RV-003 revalidation trigger. The Art. 25(4) written agreement with suppliers has no control yet (gap).
 
 Financial-institution provisions:
 - **Art. 17(4):** for providers that are financial institutions subject to internal governance requirements under Union financial services law, the quality management system obligation is deemed met by complying with those rules, except for Art. 17(1)(g) risk management, (h) post-market monitoring and (i) serious incident reporting.
@@ -113,7 +113,7 @@ Conformity assessment for Annex III points 2 to 8 uses the internal control proc
 | 12 | Automatic recording of events over the system's lifetime | DA-003 (audit logging verified at the gates) | [Audit trail](audit-trail-requirements.md), [Prompt audit trail](prompt-audit-trail.md) |
 | 13 | Enough transparency for deployers to interpret and use the output; instructions for use | DE-001 | [Transparency standards](../responsible-ai/transparency-standards.md) |
 | 14 | Designed for effective human oversight, including the ability to override or stop the system | PM-003, DA-004 | [Human-in-the-loop patterns](../responsible-ai/human-in-loop-patterns.md), [Deployment](../model-lifecycle/deployment.md) |
-| 15 | Appropriate accuracy, robustness and cybersecurity | EV-001, EV-002, EV-003, SR-001, SR-002, SR-003, SR-004 | [Validation](../model-lifecycle/validation.md), [Red-teaming protocol](../ai-security/red-teaming-protocol.md), [Adversarial robustness](../ai-security/adversarial-robustness.md) |
+| 15 | Appropriate accuracy, robustness and cybersecurity | EV-001, EV-002, EV-003, EV-008, EV-009, SR-001, SR-002, SR-003, SR-004 | [Validation](../model-lifecycle/validation.md), [Red-teaming protocol](../ai-security/red-teaming-protocol.md), [Adversarial robustness](../ai-security/adversarial-robustness.md) |
 | 16 | Provider obligations: meet Section 2, show name and contact on the system, keep documentation and logs, complete conformity assessment, EU declaration of conformity (Art. 47), CE marking (Art. 48), registration (Art. 49), corrective action (Art. 20), accessibility | DA-001, DA-002. Declaration of conformity, CE marking and accessibility: no control yet (gap) | [Governance workflow, Stage 7](../governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) |
 | 17 | Documented quality management system (see Art. 17(4) above) | The control register as a whole; RV-001, RV-004 | [Control register](../governance-operations/control-register.md), [Governance workflow](../governance-operations/governance-workflow.md) |
 | 18 | Keep technical documentation, quality management system records and the declaration of conformity for 10 years | DR-003 | [Audit trail: retention](audit-trail-requirements.md#retention-periods) |
@@ -123,7 +123,7 @@ Conformity assessment for Annex III points 2 to 8 uses the internal control proc
 | 49(1) | Register the provider and the system in the EU database before placing an Annex III system (except point 2) on the market | No control yet (gap) | |
 | 6(3), 6(4), 49(2) | If the provider concludes an Annex III system is not high-risk, document the assessment before placing it on the market and register the system | RA-001 for the assessment; registration: no control yet (gap) | [Assessment template](../../templates/genai-use-case-assessment.md) |
 | 72 | Post-market monitoring system and plan, proportionate to the risk | PM-001, PM-004, RV-001 | [LLM monitoring](../llm-lifecycle/monitoring.md), [Model monitoring](../model-lifecycle/monitoring.md) |
-| 73 | Report serious incidents to the market surveillance authority: immediately after establishing a causal link, and no later than 15 days after becoming aware; 2 days for a widespread infringement or serious disruption of critical infrastructure; 10 days in the event of a death | IR-003. AI Act reporting deadlines are not in the escalation paths (gap) | [Escalation paths: regulatory notification](../operating-model/escalation-paths.md#regulatory-notification) |
+| 73 | Report serious incidents to the market surveillance authority: immediately after establishing a causal link, and no later than 15 days after becoming aware; 2 days for a widespread infringement or serious disruption of critical infrastructure; 10 days in the event of a death | IR-003, IR-006 | [Escalation paths: regulatory notification](../operating-model/escalation-paths.md#regulatory-notification) |
 
 ### GenAI Systems in a High-Risk Use
 
@@ -137,7 +137,7 @@ When a GenAI system is used in an Annex III context, Arts. 9 to 15 apply in full
 | 12 | Prompt and response logging with context documents; prompt, model and guardrail version history | [Prompt audit trail](prompt-audit-trail.md) |
 | 13 | Source attribution, limitation disclosure, guidance on interpreting outputs | [Transparency standards](../responsible-ai/transparency-standards.md) |
 | 14 | Human review before consequential use; ability to override, correct or reject output | [Human-in-the-loop patterns](../responsible-ai/human-in-loop-patterns.md) |
-| 15 | Hallucination rate, faithfulness, adversarial prompt testing, prompt injection defence | [Evaluation governance](../llm-lifecycle/evaluation-governance.md), [Red-teaming protocol](../ai-security/red-teaming-protocol.md) |
+| 15 | Hallucination rate, faithfulness, adversarial prompt testing, prompt injection defence; retrieval that enforces source permissions (DE-008) | [Evaluation governance](../llm-lifecycle/evaluation-governance.md), [Red-teaming protocol](../ai-security/red-teaming-protocol.md) |
 
 ## (c) Downstream User of General-Purpose AI Models
 
@@ -169,11 +169,11 @@ Art. 50 applies from 2 August 2026. It applies to any system that meets its cond
 
 | Paragraph | Who | Duty | Exceptions | Controls | Framework doc |
 |---|---|---|---|---|---|
-| 50(1) | Provider | Design systems that interact directly with people so that the people are told they are interacting with AI | Obvious to a reasonably well-informed, observant and circumspect person (the Commission reads this narrowly); systems authorised by law to detect, prevent, investigate or prosecute criminal offences | No control yet (gap) | [Transparency standards](../responsible-ai/transparency-standards.md#user-interaction-disclosure) |
-| 50(2) | Provider | Mark synthetic audio, image, video or text output in a machine-readable format so it is detectable as AI-generated or manipulated | Assistive function for standard editing; no substantial change to the input or its meaning; law enforcement uses authorised by law. Systems placed on the market before 2 August 2026: by 2 December 2026 (Art. 111(4)) | No control yet (gap) | [Transparency standards](../responsible-ai/transparency-standards.md#content-labeling), [Multimodal governance](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling) |
-| 50(3) | Deployer | Inform people exposed to an emotion recognition or biometric categorisation system, and process their data under the GDPR | Uses permitted by law to detect, prevent or investigate criminal offences | No control yet (gap) | [Multimodal risk matrix](../risk-classification/multimodal-risk-matrix.md#tier-override-rules) |
-| 50(4), first subparagraph | Deployer | Disclose that image, audio or video content forming a deep fake is AI-generated or manipulated | Law enforcement uses; for evidently artistic, creative, satirical or fictional work, disclosure in a way that does not hamper the work | No control yet (gap) | [Multimodal governance](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling) |
-| 50(4), second subparagraph | Deployer | Disclose that text published to inform the public on matters of public interest is AI-generated or manipulated | Content that has undergone human review or editorial control, with a person holding editorial responsibility; law enforcement uses | No control yet (gap) | [Transparency standards](../responsible-ai/transparency-standards.md#labeling-by-content-destination) |
+| 50(1) | Provider | Design systems that interact directly with people so that the people are told they are interacting with AI | Obvious to a reasonably well-informed, observant and circumspect person (the Commission reads this narrowly); systems authorised by law to detect, prevent, investigate or prosecute criminal offences | DE-006 | [Transparency standards](../responsible-ai/transparency-standards.md#user-interaction-disclosure) |
+| 50(2) | Provider | Mark synthetic audio, image, video or text output in a machine-readable format so it is detectable as AI-generated or manipulated | Assistive function for standard editing; no substantial change to the input or its meaning; law enforcement uses authorised by law. Systems placed on the market before 2 August 2026: by 2 December 2026 (Art. 111(4)) | DE-007 | [Transparency standards](../responsible-ai/transparency-standards.md#content-labeling), [Multimodal governance](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling) |
+| 50(3) | Deployer | Inform people exposed to an emotion recognition or biometric categorisation system, and process their data under the GDPR | Uses permitted by law to detect, prevent or investigate criminal offences | DE-006 | [Multimodal risk matrix](../risk-classification/multimodal-risk-matrix.md#tier-override-rules) |
+| 50(4), first subparagraph | Deployer | Disclose that image, audio or video content forming a deep fake is AI-generated or manipulated | Law enforcement uses; for evidently artistic, creative, satirical or fictional work, disclosure in a way that does not hamper the work | DE-007 | [Multimodal governance](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling) |
+| 50(4), second subparagraph | Deployer | Disclose that text published to inform the public on matters of public interest is AI-generated or manipulated | Content that has undergone human review or editorial control, with a person holding editorial responsibility; law enforcement uses | DE-007 | [Transparency standards](../responsible-ai/transparency-standards.md#labeling-by-content-destination) |
 
 A bank that builds a customer chatbot on a vendor model and runs it under its own name is the provider for Art. 50(1) and 50(2). The Commission's Art. 50 guidelines give an in-house chatbot put into service for the organisation's own use as an example of a provider, list customer support chatbots as in scope of Art. 50(1), and list AI-generated summaries of text among the outputs that need Art. 50(2) marking. They also treat an internal assistant used by trained, AI-literate staff as an example where the interaction is obvious.
 
@@ -195,11 +195,11 @@ Providers and deployers must take measures to support the development of AI lite
 
 | Requirement | Controls | Framework doc |
 |---|---|---|
-| Measures to support AI literacy of staff and others acting on the organisation's behalf | No control yet (gap). The governance training completion KPI is tracked, but no register control requires a training programme | [Governance metrics](../operating-model/governance-metrics.md) |
+| Measures to support AI literacy of staff and others acting on the organisation's behalf | GV-002 (literacy measures by role, completion tracked) | [AI literacy](../operating-model/ai-literacy.md), [Governance metrics](../operating-model/governance-metrics.md) |
 
 ### Prohibited Practices (Art. 5)
 
-Prohibited uses are not tiered. They are rejected at the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen), which is part of the risk assessment (RA-001). The Commission's guidelines on prohibited practices (content approved 4 February 2025, adopted as C(2025) 5052 on 29 July 2025) explain each prohibition with examples. They are not binding.
+Prohibited uses are not tiered. They are rejected at the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen), which runs before scoring in the risk assessment (RA-001) and is evidenced by RA-007. The Commission's guidelines on prohibited practices (content approved 4 February 2025, adopted as C(2025) 5052 on 29 July 2025) explain each prohibition with examples. They are not binding.
 
 | Article | Prohibited practice | Relevance to a bank |
 |---|---|---|
@@ -213,7 +213,7 @@ Prohibited uses are not tiered. They are rejected at the [Step 0 prohibited-use 
 | 5(1)(h) | Real-time remote biometric identification in publicly accessible spaces for law enforcement | Not normally relevant |
 | 5(1)(ba), (bb), from 2 December 2026 | Systems that generate or manipulate realistic intimate imagery of an identifiable person without explicit consent, or child sexual abuse material | Image and video generation tools: check the vendor's safeguards |
 
-Control coverage: RA-001 (Step 0 screen in the risk assessment).
+Control coverage: RA-007 (Step 0 screen recorded for every system before scoring; non-waivable), within the RA-001 risk assessment.
 
 ## Penalties
 

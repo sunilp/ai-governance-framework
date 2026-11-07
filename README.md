@@ -51,6 +51,7 @@ Governance standards specific to large language models and generative AI systems
 - [Multi-Agent Governance](framework/llm-lifecycle/multi-agent-governance.md) — orchestration, coordination, and accountability for multi-agent systems
 - [Open-Source Model Governance](framework/llm-lifecycle/open-source-model-governance.md) — evaluation, licensing, and maintenance for open-weight models
 - [Model Deprecation Governance](framework/llm-lifecycle/model-deprecation-governance.md) — sunsetting, migration, and archival
+- [Agent Identity and Tool Governance](framework/llm-lifecycle/agent-identity-and-tool-governance.md): agent identities, delegation, tool and MCP/A2A allowlists, memory, kill switch, agent action audit
 
 ### AI Security
 Standards for securing AI systems against adversarial threats.
@@ -69,6 +70,7 @@ How framework controls map to specific regulatory requirements.
 - [Prompt Audit Trail](framework/compliance/prompt-audit-trail.md) — logging, retention, reconstruction
 - [Data Residency for LLMs](framework/compliance/data-residency-llm.md) — data flows in LLM architectures
 - [Third-Party Model Risk](framework/compliance/third-party-model-risk.md) — vendor assessment and ongoing monitoring
+- [AI Procurement Clauses](framework/compliance/ai-procurement-clauses.md): contract clause set for AI vendors, including EU AI Act value-chain terms and DORA Art. 30
 - [Responsible AI Checklist](framework/compliance/responsible-ai-checklist.md)
 - [Audit Trail Requirements](framework/compliance/audit-trail-requirements.md)
 
@@ -91,18 +93,32 @@ Who does what, when, and how decisions escalate.
 - [Cost Governance](framework/operating-model/cost-governance.md) — budgeting, attribution, optimization governance
 - [GRC Integration](framework/operating-model/grc-integration.md) — COSO, ISO 31000, three lines of defense
 - [Incident Forensics](framework/operating-model/incident-forensics.md) — post-incident investigation and evidence preservation
+- [AI Literacy](framework/operating-model/ai-literacy.md): literacy measures by role (EU AI Act Art. 4)
+- [Acceptable Use of AI Tools](framework/operating-model/acceptable-use.md): employee use of AI, coding assistants, AI embedded in SaaS, shadow AI
 
 ### Governance Operations
 The operational backbone — controls, evidence, and the end-to-end process.
 - [Control Register](framework/governance-operations/control-register.md) — master mapping of every control to its evidence, owner, and escalation
 - [Governance Workflow](framework/governance-operations/governance-workflow.md) — end-to-end process from idea intake to retirement, with gates and evidence packs
+- [AI Inventory](framework/governance-operations/ai-inventory.md): what to register, required fields, quarterly reconciliation
+- [When to Say No](framework/governance-operations/when-to-say-no.md): when not to use GenAI or an agent, and when an external model API is unacceptable
+
+## Machine-Readable Controls and Validation
+
+The control register and the canonical policy tables are generated from YAML, so every rule has one source:
+
+- [`controls/`](controls/): every control with owner, evidence, frequency, escalation, control type, the test an auditor runs, and the docs that define it
+- [`policy/`](policy/): roles, tier parameters (cadences, approvers, retention), evaluation thresholds and pass rules, incident severity
+- [`schemas/`](schemas/): JSON Schemas for controls, policy files, model cards and inventory entries
+
+`python tools/build.py` regenerates the Markdown tables. `python tools/check.py` validates schemas, control references, links, generated-table drift, example conformance and the age of regulatory status lines. CI runs both on every push and pull request. See [tools/README.md](tools/README.md).
 
 ## Templates
 Ready-to-use templates for immediate adoption:
 
 **Traditional ML:**
 - [Model Card Template](templates/model-card-template.yaml)
-- [Impact Assessment Template](templates/impact-assessment-template.md)
+- [Impact Assessment Template](templates/impact-assessment-template.md) (includes the EU AI Act Art. 27 fundamental rights impact assessment)
 - [Incident Report Template](templates/incident-report-template.md)
 
 **GenAI / LLM:**
@@ -112,6 +128,12 @@ Ready-to-use templates for immediate adoption:
 - [GenAI Incident Report](templates/incident-report-genai.md) — GenAI-specific incident template
 - [Board AI Risk Report](templates/board-ai-risk-report.md) — quarterly board reporting template
 - [Red-Team Report](templates/red-team-report.md) — adversarial testing findings template
+
+**Programme:**
+- [AI Policy](templates/ai-policy.md): board-approved AI policy skeleton
+- [AI Risk Committee Charter](templates/ai-risk-committee-charter.md)
+- [Exception Register](templates/exception-register.md)
+- [AI Inventory Entry](templates/ai-inventory-entry.yaml)
 
 ## Worked Examples
 See the framework applied to real-world use cases:
@@ -150,13 +172,13 @@ The framework maps to these instruments. "Reference only" means the repo cites t
 | **NIST AI RMF** | Category-level mapping of all 19 AI RMF 1.0 Core categories to framework docs and control IDs, with gaps marked (subcategories not mapped); NIST AI 600-1 Generative AI Profile risk mapping |
 | **ISO/IEC 42001** | Clauses 4 to 10 and Annex A (A.2 to A.10) mapped to framework docs and control IDs; lists what a certification audit needs that the framework lacks (AI policy, Statement of Applicability, AIMS scope, AI Risk Committee charter) |
 | **SR 26-2 (Federal Reserve, OCC, FDIC; replaced SR 11-7 in April 2026)** | Model risk management for traditional and non-generative AI models: development, validation, monitoring and vendor models. GenAI and agentic AI are outside SR 26-2's scope; the framework's GenAI and agentic controls stand on their own |
-| **MAS Guidelines on AI Risk Management (issued 7 October 2026)** | Document-level mapping in the Singapore profile and third-party hooks; AI inventory is a gap; phase dates in the regulatory change monitoring deadlines table |
+| **MAS Guidelines on AI Risk Management (issued 7 October 2026)** | Document-level mapping in the Singapore profile and third-party hooks; AI inventory via RA-006 and GV-006; phase dates in the regulatory change monitoring deadlines table |
 | **MAS FEAT Principles** | Reference only: Singapore profile maps FEAT at document level to the bias, transparency and human oversight standards |
 | **IMDA/PDPC Model AI Governance Framework (incl. Agentic AI)** | Reference only: Singapore profile; the agentic framework points to the agentic risk and multi-agent standards |
 | **DORA** | ICT third-party risk for AI vendors: Arts. 28 to 30 contract terms, data locations, exit strategies, concentration risk and CTPP status (third-party model risk, data residency). No register-of-information control yet; ICT risk management and incident reporting articles are not mapped |
 | **GDPR** | Data protection, automated decision-making (Art. 22), DPIAs (RA-005), right to explanation |
 | **PRA SS1/23** | Reference only: UK profile maps it at document level to model lifecycle standards and vendor assessment (AR-005) |
-| **OSFI Guideline E-23 (effective 1 May 2027)** | Reference only: Canada profile maps it to tiering, lifecycle and review controls; model inventory is a gap |
+| **OSFI Guideline E-23 (effective 1 May 2027)** | Reference only: Canada profile maps it to tiering, lifecycle and review controls; model inventory via RA-006 and GV-006 |
 | **Consumer Duty (FCA)** | Reference only: cited in transparency standards, the human oversight table and the UK profile |
 | **Colorado SB 26-189 (from 1 January 2027)** | Reference only: US profile and deadline table; human review maps to PM-003; notice and adverse-outcome explanation are gaps |
 | **BCBS 239** | Reference only: data lineage expectations cited in risk classification and data residency |

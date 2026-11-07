@@ -162,9 +162,11 @@ prompts/
 
 ### Minimum Evaluation Suite Size
 
+T1 and T2 pass or fail on the 95% confidence bound, so suite sizes follow the [statistical pass rule](evaluation-governance.md#statistical-pass-rule).
+
 | Tier | Test Cases | Prompt-Change Adversarial Regression Set |
 |------|-----------|-------------------|
-| T1 | ≥ 200 | ≥ 50 |
+| T1 | ≥ 300 | ≥ 50 |
 | T2 | ≥ 100 | ≥ 50 |
 | T3 | ≥ 50 | ≥ 10 |
 | T4 | ≥ 20 | ≥ 5 |

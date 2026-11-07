@@ -22,7 +22,7 @@ This policy defines organizational tolerance for hallucination, measurement stan
 
 ## Hallucination Tolerance by Tier and Use Case
 
-Tier caps restate [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier), which owns them. Hallucination rate is a response-level metric, defined in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#metric-definitions); it is measured separately from faithfulness.
+Tier caps restate [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier), which owns them. Hallucination rate is a response-level metric, defined in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#metric-definitions); it is measured separately from faithfulness. At T1 and T2 the cap is judged on the one-sided 95% upper confidence bound of the measured rate, not on the point estimate ([statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule)).
 
 | Tier | Maximum Hallucination Rate (tier cap) | Rationale |
 |------|---------------------------|-----------|
@@ -60,7 +60,7 @@ Tier caps restate [evaluation-governance.md](../llm-lifecycle/evaluation-governa
 
 ### Evaluation Protocol
 
-1. **Baseline measurement:** Before deployment, measure hallucination rate on a representative test set, sized per the pre-release suite in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types) (200+ queries for T1, 100+ for T2, 50+ for T3, 20+ for T4)
+1. **Baseline measurement:** Before deployment, measure hallucination rate on a representative test set, sized per the pre-release suite in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types) (300+ queries for T1, 100+ for T2, 50+ for T3, 20+ for T4). At those T1 and T2 minimums only a run with zero hallucinations passes; a 500-query T1 suite allows one and a 1,000-query suite allows four ([maximum failures allowed](../llm-lifecycle/evaluation-governance.md#maximum-failures-allowed))
 2. **Production monitoring:** Ongoing automated evaluation of production traffic per [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation)
 3. **Periodic human evaluation:** Scheduled human review to calibrate automated metrics
 4. **Trend tracking:** Monitor hallucination rate over time; alert on degradation
@@ -94,7 +94,7 @@ For systems using RAG to reduce hallucination:
 
 | Requirement | Standard |
 |-------------|---------|
-| Retrieval quality | Faithfulness and retrieval precision@5 meet the tier thresholds in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier) (faithfulness: T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80%, T4 ≥ 75%) |
+| Retrieval quality | Faithfulness and retrieval precision@5 meet the tier thresholds in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier) (faithfulness: T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80%, T4 ≥ 75%), at T1 and T2 on the 95% lower confidence bound |
 | Source currency | Retrieved documents must meet freshness requirements |
 | Context sufficiency | System must detect when retrieved context is insufficient and decline to answer |
 | Attribution | Every claim in the output should be traceable to a retrieved source |

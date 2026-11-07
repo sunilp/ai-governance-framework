@@ -25,6 +25,8 @@ Who performs validation at each tier is set in [validation.md](../model-lifecycl
 
 The AI Risk Committee meets monthly. One meeting each quarter is the full-portfolio meeting, which also reviews the quarterly board report (see [board-reporting.md](board-reporting.md)).
 
+The committee's authority, quorum, decision rights, delegation and escalation to the Board Risk Committee are set in its charter ([charter template](../../templates/ai-risk-committee-charter.md), GV-005). The charter also gives it the monthly review of the [exception register](../../templates/exception-register.md) (GV-004) and the quarterly review of the [AI inventory](../governance-operations/ai-inventory.md) and its reconciliation (GV-006).
+
 **Attendees:** CRO (chair), CTO, Head of MRM, Head of Compliance, Head of Data Science, Business Line Heads (as needed). The CISO attends for T1 deployment and model selection approvals, and the DPO when the system processes personal data.
 
 **T1 approvals:** T1 risk assessments, model selections, deployments and exceptions are approved at the monthly meeting. If a decision cannot wait, the chair convenes an out-of-cycle session within 10 business days of the request.

@@ -30,6 +30,13 @@ A RAG system is only as trustworthy as its retrieval pipeline. This document def
 - Post-retrieval access validation before documents enter the LLM context
 - Access control testing: verify that restricted documents are not retrievable by unauthorized users
 
+**Requirement (DE-008):** at every tier, where sources carry access restrictions, retrieval enforces the requesting user's source permissions at query time.
+- Document-level access control lists are carried from each source system into the index with every chunk, and kept in step when source permissions change.
+- The retrieval layer filters on the requesting user's identity and entitlements before any document enters the model's context. Filtering the answer afterwards is not enough.
+- No cross-tenant or cross-entitlement retrieval: a user never receives content from a document they could not open in the source system.
+- When an agent retrieves on a user's behalf, the user's permissions apply, narrowed by the agent's own ([delegation](agent-identity-and-tool-governance.md#2-delegation)). The agent's service identity does not widen what the user can see.
+- Test before deployment with identities that hold different entitlements, and re-test on any change to sources, the index, retrieval logic or the identity integration.
+
 ### 3. Data Poisoning
 
 **Risk:** Adversarial or low-quality content is ingested into the document store, manipulating RAG outputs.

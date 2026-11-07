@@ -137,4 +137,4 @@ Recorded in the exception register per [exceptions and risk acceptance](../../fr
 | Approver | AI Risk Committee (signed by the Chair) |
 | Start date | 2026-01-25 |
 | Expiry date | 2026-03-26 (60 days) |
-| Status | Closed 2026-03-01. The full suite re-run on prompt v0.9.1 (2026-02-28) measured 0.7% (2 of 300), within the T1 cap. |
+| Status | Closed 2026-03-01. The full suite re-run on prompt v0.9.1 (2026-02-28) measured 0.0% (0 of 300; one-sided 95% upper bound 0.99%), within the T1 cap under the statistical pass rule. |

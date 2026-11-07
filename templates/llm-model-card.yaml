@@ -71,17 +71,59 @@ prompt_governance:
 
 evaluation:
   evaluation_date: ""                   # YYYY-MM-DD
-  evaluation_dataset_size: null         # Number of test cases
+  evaluation_dataset_size: null         # Number of distinct pre-release test cases (T1 300+, T2 100+)
+  # Statistical pass rule (evaluation-governance.md#statistical-pass-rule). At T1/T2 record, for each
+  # framework metric:
+  #   proportion metrics: n (cases) and failures (failing cases). The one-sided 95% Clopper-Pearson
+  #     upper bound on the failure rate must be within the cap. For pass-rate metrics
+  #     (safety_pass_rate) failures are the cases that did not pass.
+  #   mean metrics (faithfulness, retrieval_precision_at_5, tool_call_accuracy): n, lower_bound
+  #     (one-sided 95%) and interval_method: bootstrap | t-interval (t-interval only when n >= 100).
+  # At T3/T4 the point estimate passes on at least the minimum suite size; n is optional.
   metrics:
-    - name: "faithfulness"
+    - name: "faithfulness"              # RAG systems
       value: null
       threshold: null
       method: ""                        # llm-as-judge | human-eval | automated | hybrid
-    - name: "relevance"
+      n: null
+      lower_bound: null
+      interval_method: ""               # bootstrap | t-interval
+    - name: "hallucination_rate"
       value: null
       threshold: null
       method: ""
-    - name: "hallucination_rate"
+      n: null
+      failures: null
+    - name: "safety_pass_rate"          # Safety suite (T1 300+, T2 100+)
+      value: null
+      threshold: null
+      method: ""
+      n: null
+      failures: null
+    - name: "retrieval_precision_at_5"  # RAG systems; RAG retrieval set (T1 100+ queries)
+      value: null
+      threshold: null
+      method: ""
+      n: null
+      lower_bound: null
+      interval_method: ""
+    - name: "guardrail_false_negative_rate"   # Systems with guardrails (EV-009); labelled harmful or out-of-scope set
+      value: null
+      threshold: null
+      method: ""
+      n: null
+      failures: null
+    - name: "guardrail_false_positive_rate"   # Labelled legitimate set; threshold from the risk assessment (default ceiling 5% customer-facing, 10% internal)
+      value: null
+      threshold: null
+      method: ""
+      n: null
+      failures: null
+    # Agentic systems only (EV-008), on the task suite (T1 300+, T2 100+ tasks):
+    # - name: "task_success_rate"       # threshold from the risk assessment; n, failures (failed tasks)
+    # - name: "tool_call_accuracy"      # threshold from the risk assessment; n (tasks), lower_bound, interval_method
+    # - name: "unsafe_action_rate"      # threshold 0; n (tasks), failures. Any occurrence blocks release
+    - name: "relevance"
       value: null
       threshold: null
       method: ""
@@ -93,6 +135,16 @@ evaluation:
       value: null
       threshold: null
       method: ""
+  segment_results:                      # T1/T2: segments named in the risk assessment. Segments of 100+ cases must meet the threshold on the point estimate; smaller ones are reported, not gated
+    - segment: ""                       # e.g., "channel: mobile app", "language: German"
+      n: null
+      results: {}                       # metric name: value
+  human_evaluation:                     # T1/T2 when any metric uses human-eval or hybrid (evaluation-governance.md#human-evaluation-protocol)
+    raters: ""                          # Who rated, and how they were qualified and trained
+    double_rated_share: null            # At least 0.20
+    agreement_statistic: ""             # cohen-kappa | krippendorff-alpha
+    agreement: null                     # At least 0.6 before results are accepted
+    adjudication: ""
   adversarial_testing:
     test_type: ""                       # red-team | prompt-change-regression (which suite test_suite_size counts)
     prompt_injection_resistance: null    # Pass rate against injection test suite
@@ -100,7 +152,11 @@ evaluation:
     test_suite_size: null
   bias_evaluation:
     tested_attributes: []               # e.g., ["gender", "ethnicity", "age"]
-    counterfactual_consistency: null     # Score
+    counterfactual_consistency: null     # Pooled share of consistent pairs
+    attribute_results:                  # T1/T2: one entry per attribute (T1 200+ pairs, T2 100+); failures = inconsistent pairs
+      - attribute: ""
+        n: null
+        failures: null
     sentiment_parity: null              # Score
     methodology: ""
   production_evaluations:               # Post-deployment results (PM-004). Keep separate from the pre-release results above.

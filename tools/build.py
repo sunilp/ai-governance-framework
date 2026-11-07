@@ -14,6 +14,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import math
 import os
 import re
 import sys
@@ -127,12 +128,86 @@ def suite_cell(value) -> str:
 
 def threshold_cell(metric: dict, tier: str) -> str:
     value = (metric.get("thresholds") or {}).get(tier)
+    text = (metric.get("tier_text") or {}).get(tier)
+    if text:
+        return text
     if value is None:
-        return (metric.get("tier_text") or {}).get(tier, "N/A")
+        return "N/A"
     sign = "≥" if metric["direction"] == "min" else "≤"
     unit = "%" if metric.get("unit", "percent") == "percent" else ""
     number = f"{value:g}"
     return f"{sign} {number}{unit}"
+
+
+# ---------------------------------------------------------------------------
+# Statistical pass rule (evaluation-governance.md "Statistical Pass Rule").
+# Pure Python, so check.py needs no extra dependency.
+# ---------------------------------------------------------------------------
+
+def binom_cdf(x: int, n: int, p: float) -> float:
+    """P(X <= x) for X ~ Binomial(n, p)."""
+    if x < 0:
+        return 0.0
+    if x >= n or p <= 0.0:
+        return 1.0
+    if p >= 1.0:
+        return 0.0
+    lp, lq = math.log(p), math.log1p(-p)
+    base = math.lgamma(n + 1)
+    total = 0.0
+    for k in range(x + 1):
+        total += math.exp(base - math.lgamma(k + 1) - math.lgamma(n - k + 1) + k * lp + (n - k) * lq)
+    return min(total, 1.0)
+
+
+def cp_upper(failures: int, n: int, confidence: float = 0.95) -> float:
+    """One-sided Clopper-Pearson upper confidence bound on a failure rate."""
+    if n <= 0 or failures < 0 or failures > n:
+        raise ValueError(f"invalid count: {failures} failures in {n}")
+    alpha = 1.0 - confidence
+    if failures == n:
+        return 1.0
+    if failures == 0:
+        return 1.0 - alpha ** (1.0 / n)
+    lo, hi = 0.0, 1.0
+    for _ in range(100):
+        mid = (lo + hi) / 2
+        if binom_cdf(failures, n, mid) > alpha:
+            lo = mid
+        else:
+            hi = mid
+    return hi
+
+
+def failure_cap(metric: dict, tier: str):
+    """Failure-rate cap (a fraction) for a proportion metric at a tier, or None."""
+    value = (metric.get("thresholds") or {}).get(tier)
+    if value is None:
+        return None
+    return (100 - value) / 100 if metric["direction"] == "min" else value / 100
+
+
+def max_failures(n: int, cap: float, confidence: float = 0.95):
+    """Largest failure count in n cases whose upper bound is within cap, or None if even zero fails."""
+    best = None
+    for x in range(n + 1):
+        if cp_upper(x, n, confidence) <= cap + 1e-12:
+            best = x
+        else:
+            break
+    return best
+
+
+def min_n_zero_failures(cap: float, confidence: float = 0.95) -> int:
+    """Smallest suite in which zero failures demonstrates the cap: n >= ln(1 - confidence) / ln(1 - cap)."""
+    n = max(1, math.ceil(math.log(1.0 - confidence) / math.log(1.0 - cap)))
+    while cp_upper(0, n, confidence) > cap + 1e-12:
+        n += 1
+    return n
+
+
+def percent(fraction: float) -> str:
+    return f"{fraction * 100:.2f}%"
 
 
 # ---------------------------------------------------------------------------
@@ -262,6 +337,45 @@ def render_metric_definitions() -> str:
     return table(["Metric", "Definition"], ["--------", "-----------"], rows)
 
 
+def render_max_failures() -> str:
+    doc = load_yaml("policy/thresholds.yaml")
+    rule = doc["pass_rule"]
+    conf = rule["confidence"]
+    metrics = {m["id"]: m for m in doc["metrics"]}
+    rows = []
+    for group in rule.get("max_failures_table") or []:
+        tier = group["tier"]
+        caps, labels = set(), []
+        for mid in group["metrics"]:
+            m = metrics.get(mid)
+            if m is None:
+                raise BuildError(f"max_failures_table names unknown metric {mid}")
+            if m.get("kind") != "proportion":
+                raise BuildError(f"max_failures_table metric {mid} is not a proportion metric")
+            cap = failure_cap(m, tier)
+            if cap is None or cap <= 0:
+                raise BuildError(f"max_failures_table metric {mid} has no positive failure-rate cap at {tier}")
+            caps.add(round(cap, 9))
+            labels.append(m.get("failure_label", m["name"]))
+        if len(caps) != 1:
+            raise BuildError(f"max_failures_table row for {tier} mixes metrics with different caps: {', '.join(group['metrics'])}")
+        cap = caps.pop()
+        applies = labels[0] + "".join(", " + lab[0].lower() + lab[1:] for lab in labels[1:])
+        unit = f" {group['unit']}" if group.get("unit") else ""
+        for i, n in enumerate(group["sizes"]):
+            most = max_failures(n, cap, conf)
+            if most is None:
+                at_max, one_more = "n/a", f"{percent(cp_upper(0, n, conf))} at zero failures"
+            else:
+                at_max = percent(cp_upper(most, n, conf))
+                one_more = percent(cp_upper(most + 1, n, conf)) if most < n else "n/a"
+            first = i == 0
+            rows.append([tier if first else "", f"{cap * 100:g}%" if first else "", applies if first else "",
+                         f"{n:,}{unit}", "none" if most is None else most, at_max, one_more])
+    return table(["Tier", "Failure-rate cap", "Metrics", "Suite size", "Maximum failures", "Upper bound at the maximum", "Upper bound with one more failure"],
+                 ["------", ":---:", "---------", ":---:", ":---:", ":---:", ":---:"], rows)
+
+
 def render_severity() -> str:
     rows = [[f"{s['id']} {s['name']}", s["definition"], s["response_sla"]] for s in load_yaml("policy/severity.yaml")["severities"]]
     return table(["Severity", "Definition", "Response SLA"], ["----------", "------------", "--------------"], rows)
@@ -298,7 +412,7 @@ STAGE_FILES = {
     10: "controls/stage-10-retirement.yaml",
 }
 
-BLOCKS = []
+BLOCKS = [(REGISTER, "controls-stage-01-programme", "controls/stage-01-programme.yaml", render_stage(1, "Programme"))]
 for _stage, _src in STAGE_FILES.items():
     BLOCKS.append((REGISTER, f"controls-stage-{_stage:02d}", _src, render_stage(_stage, None)))
     if _stage == 8:
@@ -312,6 +426,7 @@ BLOCKS += [
     (EVAL_DOC, "evaluation-types", "policy/thresholds.yaml", render_eval_types),
     (EVAL_DOC, "threshold-definitions", "policy/thresholds.yaml", render_thresholds),
     (EVAL_DOC, "metric-definitions", "policy/thresholds.yaml", render_metric_definitions),
+    (EVAL_DOC, "max-failures", "policy/thresholds.yaml", render_max_failures),
     (ESCALATION_DOC, "severity-classification", "policy/severity.yaml", render_severity),
     (ESCALATION_DOC, "severity-follow-up", "policy/severity.yaml", render_follow_up),
     (ESCALATION_DOC, "alert-priority-mapping", "policy/severity.yaml", render_alert_mapping),

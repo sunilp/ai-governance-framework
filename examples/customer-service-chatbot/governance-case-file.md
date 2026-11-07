@@ -17,7 +17,7 @@ Controls are from the [control register](../../framework/governance-operations/c
 | 2. Risk Assessment & Tiering | RA-001, RA-002, RA-003, RA-004, RA-005 | 2 |
 | 3. Architecture & Design Review | AR-001, AR-002, AR-003, AR-004, AR-005 | 3 |
 | 4. Development & Prompt Engineering | DE-001, DE-002, DE-003, DE-004 | 4, 5 |
-| 5. Evaluation & Testing | EV-001 to EV-007, independent validation | 6, 8 |
+| 5. Evaluation & Testing | EV-001 to EV-007, EV-009, independent validation | 6, 8 |
 | 6. Security Review & Red-Teaming | SR-001, SR-002, SR-003 | 7 |
 | 7. Deployment Approval | DA-001, DA-002, DA-003, DA-004 | 9 |
 | 8. Production Operations | PM-001 to PM-005, IR-001 to IR-005 | 10, 14, 15 |
@@ -225,7 +225,7 @@ The prompt was updated to address both findings and to incorporate the red-team 
 
 ## 6. Evaluation Report (Stage 5)
 
-*Control IDs: EV-001, EV-002, EV-003, EV-004, EV-005, EV-006, EV-007*
+*Control IDs: EV-001, EV-002, EV-003, EV-004, EV-005, EV-006, EV-007, EV-009*
 
 ### Evaluation Parameters
 
@@ -242,13 +242,17 @@ The prompt was updated to address both findings and to incorporate the red-team 
 
 | Metric | Result | Threshold | Status | Eval Method |
 |--------|--------|-----------|--------|-------------|
-| Faithfulness | 0.94 | ≥ 0.90 | **PASS** | LLM-as-judge (calibrated) |
-| Hallucination rate | 0.008 (0.8%) | ≤ 0.01 (1%) | **PASS** | Hybrid (LLM-as-judge + human eval) |
+| Faithfulness | 0.94 (95% lower bound 0.933, 500 cases) | ≥ 0.90 | **PASS** | LLM-as-judge (calibrated) |
+| Hallucination rate | 0.002 (1 of 500; 95% upper bound 0.95%) | ≤ 0.01 (1%) | **PASS** | Hybrid (LLM-as-judge + human eval) |
 | Correctness | 0.96 | ≥ 0.95 | **PASS** | Human eval |
-| Safety pass rate | 0.99 | ≥ 0.99 | **PASS** | Automated (200-case safety eval suite — distinct from adversarial robustness testing) |
-| Retrieval precision@5 | 0.87 | ≥ 0.85 | **PASS** | Automated |
-| Counterfactual consistency | 0.95 | ≥ 0.90 | **PASS** | Automated (200 pairs x 4 attributes) |
+| Safety pass rate | 0.998 (1 failure in 500; failure-rate upper bound 0.95%) | ≥ 0.99 | **PASS** | Automated (500-case safety eval suite, distinct from adversarial robustness testing) |
+| Retrieval precision@5 | 0.87 (95% lower bound 0.851, 200 queries) | ≥ 0.85 | **PASS** | Automated |
+| Counterfactual consistency | 0.95 (most inconsistent attribute: 11 of 200 pairs, upper bound 8.94%) | ≥ 0.90 | **PASS** | Automated (200 pairs x 4 attributes) |
 | Escalation appropriateness | 0.93 | ≥ 0.90 | **PASS** | Human eval |
+| Guardrail false negative rate | 0.0 (0 of 300; 95% upper bound 0.99%) | ≤ 0.01 (1%) | **PASS** | Automated (labelled harmful or out-of-scope set) |
+| Guardrail false positive rate | 0.023 (7 of 300; 95% upper bound 4.34%) | ≤ 0.05 (customer-facing default ceiling) | **PASS** | Automated (labelled legitimate set) |
+
+Status applies the T1 [statistical pass rule](../../framework/llm-lifecycle/evaluation-governance.md#statistical-pass-rule): proportions on the one-sided 95% upper bound, means on the one-sided 95% lower bound. Results by channel and for customers with vulnerability indicators were reported; every segment of 100 or more cases met the thresholds.
 
 ### Regression and Fallback
 
@@ -357,7 +361,7 @@ Matches the T1 [minimum evidence pack](../../framework/governance-operations/gov
 | 7 | Model card and prompt version history | DE-001, DE-002 | Complete | [model-card.yaml](model-card.yaml); prompt repository |
 | 8 | Prompt review record | DE-003 | Complete | Section 5 |
 | 9 | Guardrail configuration and test results | DE-004 | Complete | Section 4 |
-| 10 | Evaluation report | EV-001 to EV-007 | Complete | Section 6 |
+| 10 | Evaluation report | EV-001 to EV-007, EV-009 | Complete | Section 6 |
 | 11 | Independent validation report | (Stage 5) | Complete | MRM-2025-CS-001; Section 8 |
 | 12 | Red-team report | SR-001, SR-002 | Complete | RT-2025-CS-001; Section 7 |
 | 13 | Security assessment: adversarial defenses, application security review, penetration test | SR-003, DA-003 | Complete | SEC-2025-CS-001 (SR-004 not applicable) |
@@ -503,9 +507,10 @@ Formal governance reviews are quarterly for T1. Each review includes a risk re-a
 | Prompt-change adversarial regression set (150 cases) | EV-003 | 2026-01-07 | Injection resistance 0.98, jailbreak resistance 0.97; no Critical or High findings |
 | DPIA review (DPO condition 1) | RA-005 | 2026-01-07 | No change to data processing: same vendor terms, zero retention and endpoint |
 | Regression suite: v1.2.0 against v1.1.0 on the identical 500-case suite | EV-003 | 2026-01-08 | No metric degraded |
-| Safety evaluation re-run (200-case suite) | EV-002 | 2026-01-08 | Met T1 threshold |
-| RAG retrieval evaluation re-run | EV-004 | 2026-01-08 | Met T1 threshold |
-| Formal bias evaluation re-run | EV-005 | 2026-01-08 | Counterfactual consistency 0.95 (200 pairs per attribute, 4 attributes) |
+| Safety evaluation re-run (500-case suite) | EV-002 | 2026-01-08 | 1 failure in 500 (failure-rate upper bound 0.95%); met T1 threshold |
+| RAG retrieval evaluation re-run | EV-004 | 2026-01-08 | Precision@5 0.88 (95% lower bound 0.861, 200 queries); met T1 threshold |
+| Guardrail evaluation re-run on the updated hallucination detection guardrails | EV-009 | 2026-01-08 | False negatives 0 of 300 (upper bound 0.99%); false positives 6 of 300 (upper bound 3.91%, against the 5% ceiling) |
+| Formal bias evaluation re-run | EV-005 | 2026-01-08 | Counterfactual consistency 0.95 (200 pairs per attribute, 4 attributes; most inconsistent attribute 11 of 200, within the T1 maximum of 12) |
 | Fallback re-validation with prompt v2.0.0 | EV-001 | 2026-01-08 | Met T1 thresholds |
 | Independent revalidation by MRM | (Stage 5) | 2026-01-09 | Addendum MRM-2025-CS-001-A1: approved |
 | Rollback to v1.1.0 (previous release) tested | DA-004 | 2026-01-09 | Passed |
@@ -551,7 +556,7 @@ Full results are in the model card evaluation block ([model-card.yaml](model-car
 
 | # | Finding | Severity | Action | Status |
 |---|---------|----------|--------|--------|
-| 1 | German language accuracy lower than English (faithfulness 0.88 vs. 0.94) | Low | Schedule targeted German eval expansion (100 additional cases) | Due 2026-05-15 |
+| 1 | German language accuracy lower than English (faithfulness 0.88 vs. 0.94). The German segment of the offline suite has 80 cases, below the 100-case gating size, so it is reported, not gated | Low | Schedule targeted German eval expansion (100 additional cases) | Due 2026-05-15 |
 | 2 | Cost per request trending 8% above baseline (€0.032 vs. €0.03) | Low | Investigate prompt optimization | Due 2026-05-01 |
 
 ### Review Decision

@@ -83,3 +83,24 @@ controls:
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/compliance/regulatory-change-monitoring.md
+
+- id: RV-005
+  title: Explanation and human review provided for adverse outcomes
+  stage: 9
+  applies_to:
+    text: 'T1-T4 systems that make or support decisions with legal or similarly significant effects on people (EU AI Act Art. 86, GDPR Art. 22(3), Colorado SB 26-189, CPPA ADMT rules, Quebec Law 25 s. 12.1); usually T1 through override item 1'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: system-owner
+  evidence: 'Request log per system: date received, request type (explanation, human review, contest, access), decision reference, date answered against the deadline that applies, the explanation sent, and the human review outcome (upheld or changed) with the reviewer''s name. The log also records explanations the law requires without a request (Colorado: within 30 days of an adverse outcome). Deadline: the shortest statutory period that applies (for example one month under GDPR Art. 12(3)); framework default 30 days where none applies'
+  frequency: On each request or adverse outcome that triggers a duty; log reviewed at each formal review (RV-001)
+  on_fail: Escalate to Compliance; a missed statutory deadline is recorded as a compliance breach
+  type: corrective
+  automation: manual
+  key_control: true
+  test: Sample 25 requests from the period across in-scope systems (or all, if fewer). Confirm each was answered within its deadline, the explanation names the system's role and the main elements of the decision, and every human review was done by a reviewer with authority to change the decision. Compare the share of changed decisions with the prior period and confirm any rise was raised at the RV-001 review.
+  sources:
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/compliance/multi-jurisdictional-guide.md
+  - framework/responsible-ai/transparency-standards.md
+  - framework/responsible-ai/human-in-loop-patterns.md
