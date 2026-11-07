@@ -41,7 +41,7 @@ risk_assessment:
   regulatory_exposure:
     score: ""
     justification: ""
-    applicable_regulations: []      # e.g., ["SR 11-7", "EU AI Act Art. 6", "ECOA"]
+    applicable_regulations: []      # e.g., ["SR 26-2", "EU AI Act Art. 6", "ECOA"]
   reversibility:
     score: ""
     justification: ""

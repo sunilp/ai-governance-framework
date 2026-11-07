@@ -301,7 +301,7 @@ Calibration was performed on a 100-case subset with dual human annotation. Inter
 
 ### Gate Decision
 
-**Conditional pass** — High finding remediated and retested. Medium findings (1) and (2) remediated; medium finding (3) accepted as low impact (model identity is not a protected secret, and transparency obligations under EU AI Act Article 50 require disclosure of AI interaction).
+**Conditional pass.** High finding remediated and retested. Medium findings (1) and (2) remediated; medium finding (3) accepted as low impact (model identity is not a protected secret, and the framework's [transparency standards](../../framework/responsible-ai/transparency-standards.md#user-interaction-disclosure) already require the assistant to disclose that customers are interacting with AI. This disclosure was adopted ahead of EU AI Act Art. 50, which applies from 2 August 2026).
 
 Adversarial defense configuration (SR-003): context isolation for retrieved content, input normalization, per-turn safety classification, injection pattern detection. Documented in the security assessment SEC-2025-CS-001, which also records the application security review and penetration test (deployment gate criteria).
 

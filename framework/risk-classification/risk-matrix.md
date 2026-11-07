@@ -49,7 +49,7 @@ Is the system subject to specific regulatory requirements?
 
 | Score | Description |
 |-------|-------------|
-| Critical | Directly in scope for SR 11-7, EU AI Act high-risk, BCBS 239, anti-discrimination laws |
+| Critical | Directly in scope for SR 26-2 model risk guidance (replaced SR 11-7; traditional and non-generative AI models), EU AI Act high-risk, BCBS 239, anti-discrimination laws |
 | High | Subject to general supervisory expectations, data protection regulations |
 | Medium | Indirectly supports regulated processes |
 | Low | No regulatory nexus |

@@ -37,7 +37,7 @@ intended_use:
   human_oversight_pattern: "human-in-the-loop"
   customer_facing: false
   regulatory_context:
-    - "EU AI Act (internal tool, high-risk context due to compliance workflow)"
+    - "EU AI Act: internal summaries for compliance analysts are not an Annex III high-risk use. Art. 50(2) applies from 2 August 2026: as provider of this in-house system, mark generated summaries in a machine-readable format"
     - "GDPR (may process documents referencing personal data)"
 
 system_architecture:

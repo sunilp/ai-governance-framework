@@ -31,7 +31,7 @@ The model supports fraud prevention obligations but is not itself subject to spe
 - **PCI-DSS** — Transaction data handling requirements
 - **General supervisory expectations** for fraud prevention effectiveness
 
-The model is not directly subject to SR 11-7 unless the regulator specifically designates it, though best practice suggests applying similar standards.
+SR 26-2, which replaced SR 11-7 in April 2026, covers non-generative AI models such as this one. Its approach is risk-based: the bank scales model risk management to the model's materiality (exposure and purpose).
 
 **Score: Medium**
 

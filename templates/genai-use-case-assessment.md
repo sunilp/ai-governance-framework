@@ -174,7 +174,7 @@ If any of items 1 to 5 is checked, the use case is **T1**. If any of items 6 to 
 |-----------|------------|-------|
 | EU AI Act | Yes / No | |
 | GDPR | Yes / No | |
-| SR 11-7 | Yes / No | |
+| SR 26-2 (US model risk guidance, replaced SR 11-7 in April 2026; covers traditional and non-generative AI model components only, GenAI and agentic AI are out of scope) | Yes / No | |
 | Consumer Duty (FCA) | Yes / No | |
 | BCBS 239 | Yes / No | |
 | DORA | Yes / No | |

@@ -29,7 +29,7 @@ All data is classified as Highly Restricted under the organization's data classi
 ### 3. Regulatory Exposure — Critical
 
 The model is directly in scope for:
-- **SR 11-7** — Federal Reserve / OCC model risk management guidance
+- **SR 26-2**: model risk management guidance issued jointly by the Federal Reserve, OCC and FDIC on 17 April 2026, replacing SR 11-7
 - **EU AI Act** — Classified as high-risk AI system (Annex III, paragraph 5(b): creditworthiness assessment)
 - **ECOA / Regulation B** — Fair lending requirements, adverse action notice obligations
 - **GDPR** — Automated decision-making provisions (Article 22)

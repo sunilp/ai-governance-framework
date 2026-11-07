@@ -160,7 +160,7 @@ limitations:
     - "Secured lending products"
     - "Markets without established credit bureau infrastructure"
   regulatory_constraints:
-    - "Subject to SR 11-7 model risk management requirements"
+    - "Subject to SR 26-2 model risk management guidance (replaced SR 11-7 in April 2026)"
     - "Adverse action notices required under ECOA/Regulation B"
     - "EU AI Act high-risk classification (Annex III, paragraph 5(b))"
 

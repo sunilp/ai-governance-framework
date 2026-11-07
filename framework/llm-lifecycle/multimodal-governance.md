@@ -59,6 +59,8 @@ This document defines lifecycle governance standards for multimodal systems. For
 | Generated video | Disclosure of AI generation (EU AI Act Art. 50 where applicable); machine-readable metadata | C2PA | T1/T2 |
 | Modified images/video | Disclosure of AI modification; original preserved for audit | C2PA | T1/T2 |
 
+EU AI Act Art. 50 applies whatever the tier. Where the organisation provides a system that generates synthetic audio, images, video or text, Art. 50(2) requires machine-readable marking of its outputs from 2 August 2026 (2 December 2026 for systems placed on the market before that date). Apply the provenance metadata requirement above to T3 and T4 systems as well when Art. 50(2) applies. Deployers must also disclose deep fakes (Art. 50(4)). See the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
+
 ### Content Safety on Outputs
 
 | Check | Description | Tier |

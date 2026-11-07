@@ -6,6 +6,8 @@ LLM architectures introduce data residency complexities that traditional ML depl
 
 This document maps data flows in common LLM architectures and defines residency controls.
 
+Status as of November 2026. Regulatory positions change; check the sources below before relying on dates.
+
 ---
 
 ## Data Flow Stages in LLM Systems
@@ -146,5 +148,10 @@ Before using an external LLM API:
 | BCBS 239 | Data governance and aggregation standards | LLM outputs used in risk reporting must have traceable data lineage |
 | Banking secrecy (varies) | Customer data may not leave jurisdiction | External LLM APIs may be prohibited for customer data processing |
 | MiFID II | Transaction and communication recording | AI-assisted communications with clients must be recorded |
-| DORA | ICT risk management for financial entities | LLM vendor assessed as critical ICT third-party provider |
+| DORA (Regulation (EU) 2022/2554, applies from 17 January 2025) | ICT risk management and ICT third-party risk for EU financial entities (Arts. 28-30) | Every LLM API contract is an ICT service: record it in the register of information (Art. 28(3)) and state in the contract the regions or countries where the service is provided and data is processed and stored, with advance notice of changes (Art. 30(2)(b)). Assess before contracting whether the service supports a critical or important function (Art. 28(4)); if it does, the extra terms in Art. 30(3) and an exit strategy (Art. 28(8)) apply. Critical ICT third-party provider status is a designation made by the ESAs (Art. 31), not something the firm assesses |
 | PSD2 | Payment data security | Transaction data in LLM prompts subject to PSD2 security requirements |
+
+## Sources
+
+- Regulation (EU) 2022/2554 (DORA), Arts. 28, 30, 31 and 64: https://eur-lex.europa.eu/eli/reg/2022/2554/oj
+- ESAs, "European Supervisory Authorities designate critical ICT third-party providers" (18 November 2025): https://www.esma.europa.eu/press-news/esma-news/european-supervisory-authorities-designate-critical-ict-third-party-providers

@@ -39,7 +39,7 @@ intended_use:
   regulatory_context:
     - "EU AI Act"
     - "MiFID II (investment research requirements)"
-    - "SR 11-7 (model risk management)"
+    - "SR 26-2 (model risk management): agentic AI is out of its scope, so the framework's agentic controls apply"
     - "MAR (Market Abuse Regulation — MNPI controls)"
 
 system_architecture:

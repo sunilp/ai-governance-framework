@@ -6,6 +6,8 @@ Every AI system depends on components the organization did not build: foundation
 
 AI supply chain security extends traditional software supply chain practices to cover model provenance, training data risk, and the unique legal and safety considerations of AI components.
 
+In public taxonomies this is OWASP [LLM03:2025 Supply Chain](https://genai.owasp.org/llmrisk/llm032025-supply-chain/), OWASP ASI04 Agentic Supply Chain Vulnerabilities for agent tools, and MITRE ATLAS AML.T0010 Supply Chain Compromise. See the [threat taxonomy mapping](adversarial-robustness.md#threat-taxonomy-mapping). Control SR-004 in the [control register](../governance-operations/control-register.md) requires the AI-BOM and provenance verification described here for systems using open-source models.
+
 ---
 
 ## Model Provenance
@@ -113,6 +115,18 @@ Every AI system should maintain an AI Bill of Materials documenting its supply c
 | Inference framework | Name, version, deployment configuration |
 | Key dependencies | Framework versions, critical libraries, container base image |
 | Guardrail components | Safety classifiers, content filters, PII detectors — versions and sources |
+| Agent tools and integrations | For agentic systems: each tool or tool server the agent can call, its version, source, and the permissions granted to the agent |
+
+### Formats
+
+Use a machine-readable format so the AI-BOM can be generated in CI and checked at the deployment gate. Two open formats cover AI components:
+
+| Format | AI coverage |
+|--------|-------------|
+| CycloneDX ML-BOM | Represents models, datasets and their dependencies alongside software components. CycloneDX v1.7 is also published as ECMA-424 (2nd edition, December 2025) |
+| SPDX 3.0 AI and Dataset profiles | The AI profile's AIPackage class records model type, autonomy type, safety risk assessment, limitations and energy consumption; the Dataset profile describes datasets |
+
+OWASP LLM03:2025 recommends a signed, up-to-date SBOM and suggests starting with OWASP CycloneDX when evaluating AI BOM options. A format does not replace the review: the contents table above sets what must be recorded.
 
 ### Maintenance
 
@@ -136,3 +150,16 @@ Every AI system should maintain an AI Bill of Materials documenting its supply c
 | Compliance | Full audit access; self-attested | Vendor certifications (SOC 2, ISO 27001) | Depends on regulatory expectations |
 
 Use this framework during model selection; document the decision rationale in the risk assessment.
+
+---
+
+## Sources
+
+- OWASP, LLM03:2025 Supply Chain: https://genai.owasp.org/llmrisk/llm032025-supply-chain/
+- OWASP GenAI Security Project, OWASP Top 10 for Agentic Applications 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+- CycloneDX, Machine Learning Bill of Materials (ML-BOM): https://cyclonedx.org/capabilities/mlbom/
+- CycloneDX v1.5 JSON reference (machine-learning-model component type): https://cyclonedx.org/docs/1.5/json/
+- Ecma International, ECMA-424 CycloneDX Bill of materials specification: https://ecma-international.org/publications-and-standards/standards/ecma-424/
+- SPDX 3.0.1 specification, AI profile: https://spdx.github.io/spdx-spec/v3.0.1/model/AI/AI/
+- SPDX 3.0.1 specification, Dataset profile: https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Dataset/
+- MITRE ATLAS data, release 2026.10: https://github.com/mitre-atlas/atlas-data/blob/main/dist/v6/ATLAS-2026.10.yaml

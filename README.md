@@ -58,11 +58,10 @@ Standards for securing AI systems against adversarial threats.
 
 ### Compliance Mapping
 How framework controls map to specific regulatory requirements.
-- [EU AI Act Mapping](framework/compliance/eu-ai-act-mapping.md) — traditional AI system requirements (with enforcement status)
-- [EU AI Act — GenAI Mapping](framework/compliance/eu-ai-act-genai-mapping.md) — GPAI model obligations, Article 50 transparency
-- [NIST AI RMF Mapping](framework/compliance/nist-ai-rmf-mapping.md) — Govern, Map, Measure, Manage function alignment
-- [ISO/IEC 42001 Mapping](framework/compliance/iso-42001-mapping.md) — AI management system certification backbone
-- [Multi-Jurisdictional Guide](framework/compliance/multi-jurisdictional-guide.md) — EU, US, Singapore, UAE, Brazil, Canada, Australia, Japan
+- [EU AI Act Mapping](framework/compliance/eu-ai-act-mapping.md): obligations by role (deployer, provider, GPAI downstream user), Art. 50 transparency, Arts. 4 and 5, application dates as amended in 2026
+- [NIST AI RMF Mapping](framework/compliance/nist-ai-rmf-mapping.md): all 19 Core categories mapped to docs and control IDs, plus the Generative AI Profile (NIST AI 600-1)
+- [ISO/IEC 42001 Mapping](framework/compliance/iso-42001-mapping.md): clauses 4 to 10 and Annex A mapped to docs and controls, with the gaps a certification audit will find
+- [Multi-Jurisdictional Guide](framework/compliance/multi-jurisdictional-guide.md): EU, US, UK, Singapore, Canada, Australia, Japan, Brazil, UAE, South Korea, China, India
 - [Cross-Border Data Governance](framework/compliance/cross-border-data-governance.md) — data flows, sovereignty, conflict resolution
 - [Regulatory Change Monitoring](framework/compliance/regulatory-change-monitoring.md) — horizon scanning and impact assessment
 - [Prompt Audit Trail](framework/compliance/prompt-audit-trail.md) — logging, retention, reconstruction
@@ -141,22 +140,26 @@ Start where the risk is highest. Expand as the organization builds muscle memory
 
 ## Regulatory Alignment
 
-This framework has been designed with explicit alignment to:
+The framework maps to these instruments. "Reference only" means the repo cites the instrument and points to the relevant docs, without a clause-level mapping.
 
 | Regulation | Coverage |
 |---|---|
-| **EU AI Act** | High-risk system requirements (Articles 6–15), GPAI model obligations (Articles 53–55), transparency (Article 50), enforcement status tracking |
-| **NIST AI RMF** | Govern, Map, Measure, Manage functions — full category-level mapping |
-| **ISO/IEC 42001** | AI management system — clause-by-clause implementation mapping for certification |
-| **SR 11-7 (Fed/OCC)** | Model risk management — development, validation, governance |
-| **MAS FEAT** | Fairness, Ethics, Accountability, Transparency principles for AI in financial services |
-| **MAS Model Governance Framework** | Singapore AI governance — model risk, fairness, explainability |
-| **BCBS 239** | Risk data aggregation and reporting — data lineage, quality, timeliness |
-| **DORA** | Digital operational resilience — ICT risk management for AI systems |
-| **GDPR** | Data protection, automated decision-making (Article 22), right to explanation |
-| **LGPD (Brazil)** | Data protection for AI systems — consent, data subject rights |
-| **MiFID II** | Investment research requirements, communication recording |
-| **Consumer Duty (FCA)** | Fair customer outcomes, clear AI communications |
+| **EU AI Act** | Deployer and provider obligations for high-risk systems, GPAI downstream checks (Arts. 53 to 55), transparency (Art. 50), AI literacy and prohibited practices (Arts. 4 and 5), application dates as amended by Regulation (EU) 2026/1744 |
+| **NIST AI RMF** | Category-level mapping of all 19 AI RMF 1.0 Core categories to framework docs and control IDs, with gaps marked (subcategories not mapped); NIST AI 600-1 Generative AI Profile risk mapping |
+| **ISO/IEC 42001** | Clauses 4 to 10 and Annex A (A.2 to A.10) mapped to framework docs and control IDs; lists what a certification audit needs that the framework lacks (AI policy, Statement of Applicability, AIMS scope, AI Risk Committee charter) |
+| **SR 26-2 (Federal Reserve, OCC, FDIC; replaced SR 11-7 in April 2026)** | Model risk management for traditional and non-generative AI models: development, validation, monitoring and vendor models. GenAI and agentic AI are outside SR 26-2's scope; the framework's GenAI and agentic controls stand on their own |
+| **MAS Guidelines on AI Risk Management (issued 7 October 2026)** | Document-level mapping in the Singapore profile and third-party hooks; AI inventory is a gap; phase dates in the regulatory change monitoring deadlines table |
+| **MAS FEAT Principles** | Reference only: Singapore profile maps FEAT at document level to the bias, transparency and human oversight standards |
+| **IMDA/PDPC Model AI Governance Framework (incl. Agentic AI)** | Reference only: Singapore profile; the agentic framework points to the agentic risk and multi-agent standards |
+| **DORA** | ICT third-party risk for AI vendors: Arts. 28 to 30 contract terms, data locations, exit strategies, concentration risk and CTPP status (third-party model risk, data residency). No register-of-information control yet; ICT risk management and incident reporting articles are not mapped |
+| **GDPR** | Data protection, automated decision-making (Art. 22), DPIAs (RA-005), right to explanation |
+| **PRA SS1/23** | Reference only: UK profile maps it at document level to model lifecycle standards and vendor assessment (AR-005) |
+| **OSFI Guideline E-23 (effective 1 May 2027)** | Reference only: Canada profile maps it to tiering, lifecycle and review controls; model inventory is a gap |
+| **Consumer Duty (FCA)** | Reference only: cited in transparency standards, the human oversight table and the UK profile |
+| **Colorado SB 26-189 (from 1 January 2027)** | Reference only: US profile and deadline table; human review maps to PM-003; notice and adverse-outcome explanation are gaps |
+| **BCBS 239** | Reference only: data lineage expectations cited in risk classification and data residency |
+| **MiFID II** | Reference only: record-keeping reference for interaction-log retention (Art. 16(7)) |
+| **LGPD (Brazil)** | Reference only: Brazil profile |
 
 ## Contributing
 

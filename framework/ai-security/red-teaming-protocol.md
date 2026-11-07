@@ -14,16 +14,23 @@ This protocol defines scope, methodology, severity classification, and cadence. 
 
 ### Test Categories
 
-| Category | Description | Applicable Systems |
-|----------|-------------|-------------------|
-| Prompt injection (direct) | Adversarial user input containing instructions to manipulate model behavior | All GenAI systems |
-| Prompt injection (indirect) | Adversarial content injected via RAG documents, tool outputs, or file uploads | RAG systems, agentic systems |
-| Jailbreaking | Attempting to bypass model safety alignment and content policies | All GenAI systems |
-| Information extraction | Attempting to extract system prompts, PII, training data, or confidential context | All GenAI systems |
-| Harmful content generation | Eliciting toxic, biased, discriminatory, or dangerous content | All customer-facing systems |
-| Tool misuse | Manipulating agentic systems into taking unauthorized actions | Agentic systems |
-| Social engineering | Using conversational techniques to manipulate model behavior | Customer-facing systems |
-| Multimodal attacks | Adversarial images, audio, or cross-modal manipulation | Multimodal systems |
+Each category lists its OWASP references. The full mapping, with MITRE ATLAS techniques and control IDs, is in [adversarial-robustness.md](adversarial-robustness.md#threat-taxonomy-mapping). LLMxx entries are from the OWASP Top 10 for LLM Applications 2025; ASIxx entries are from the OWASP Top 10 for Agentic Applications 2026.
+
+| Category | Description | Applicable Systems | OWASP Reference |
+|----------|-------------|-------------------|-----------------|
+| Prompt injection (direct) | Adversarial user input containing instructions to manipulate model behavior | All GenAI systems | LLM01:2025 |
+| Prompt injection (indirect) | Adversarial content injected via RAG documents, tool outputs, or file uploads | RAG systems, agentic systems | LLM01:2025, LLM04:2025, LLM08:2025, ASI01 |
+| Jailbreaking | Attempting to bypass model safety alignment and content policies | All GenAI systems | LLM01:2025 |
+| Information extraction | Attempting to extract system prompts, PII, training data, or confidential context | All GenAI systems | LLM02:2025, LLM07:2025 |
+| Harmful content generation | Eliciting toxic, biased, discriminatory, or dangerous content | All customer-facing systems | No OWASP entry; see NIST AI 600-1 in [nist-ai-rmf-mapping.md](../compliance/nist-ai-rmf-mapping.md#generative-ai-profile-nist-ai-600-1) |
+| Tool misuse | Manipulating agentic systems into taking unauthorized actions or running unintended code | Agentic systems | LLM05:2025, LLM06:2025, ASI02, ASI05 |
+| Excessive agency | Testing whether the agent acts beyond its assigned task or authorized scope, including actions its permissions allow but its task does not need | Agentic systems | LLM06:2025, ASI10 |
+| Privilege escalation and delegation abuse | Attempting to expand the agent's access, reuse inherited or cached credentials, or route a task through another agent to gain permissions the requester lacks | Agentic and multi-agent systems | ASI03, ASI07 |
+| Memory poisoning | Seeding persistent memory, conversation context or shared state with adversarial content that changes later behavior | Agentic systems with persistent memory or shared state | LLM04:2025, LLM08:2025, ASI06 |
+| Cascading failure | Triggering errors that propagate through multi-agent systems | Multi-agent systems | ASI08 |
+| Approval manipulation | Steering the agent to present misleading rationales so that a human approver signs off a harmful action | Agentic systems with human approval gates | ASI09 |
+| Social engineering | Using conversational techniques to manipulate model behavior | Customer-facing systems | LLM01:2025 |
+| Multimodal attacks | Adversarial images, audio, or cross-modal manipulation | Multimodal systems | LLM01:2025 |
 
 ---
 
@@ -74,6 +81,9 @@ This protocol defines scope, methodology, severity classification, and cadence. 
 | Action chain manipulation | Craft inputs that cause harmful action sequences |
 | Memory poisoning | Inject adversarial content into agent's persistent memory |
 | Cascading failure | Trigger errors that propagate through multi-agent systems |
+| Excessive agency | Give the agent a narrow task and check whether it takes actions outside that task that its permissions allow |
+| Delegation abuse | Ask one agent to have another agent perform an action the first agent is not permitted to perform; check that the second agent validates the request against its own policy |
+| Approval manipulation | Craft inputs that lead the agent to present a confident but misleading justification to a human approver |
 
 ---
 
@@ -121,6 +131,7 @@ Complete the [red-team report template](../../templates/red-team-report.md) with
 - Detailed findings with reproduction steps
 - Evidence (sanitized — redact any sensitive content)
 - Severity ratings using the classification above
+- Taxonomy reference for each finding: the OWASP entry, and the MITRE ATLAS technique where one applies ([mapping](adversarial-robustness.md#threat-taxonomy-mapping))
 - Remediation recommendations with priority
 - Retest requirements and timeline
 

@@ -69,6 +69,22 @@ The degree of reliance on foundation models controlled by external vendors.
 
 ---
 
+## Step 0: Prohibited-Use Screen
+
+Before scoring, screen the use case against EU AI Act Art. 5 (prohibited AI practices) and the organisation's internal prohibited-use policy. Prohibited uses are not tiered. They are rejected at Stage 2 and do not proceed. Record the result in the risk assessment (RA-001). The check is non-waivable (see [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance)).
+
+Art. 5 prohibits, among other practices:
+- manipulative or deceptive techniques, or exploiting vulnerabilities, in ways that cause significant harm;
+- social scoring;
+- predicting that a person will commit a crime based solely on profiling or personality traits;
+- untargeted scraping of facial images to build facial recognition databases;
+- emotion recognition in the workplace and in education;
+- biometric categorisation to infer sensitive characteristics.
+
+From 2 December 2026 it also prohibits AI systems that generate non-consensual intimate imagery of identifiable people or child sexual abuse material. The full list, with notes for banking, is in the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#prohibited-practices-art-5).
+
+---
+
 ## Risk Tier Determination for GenAI
 
 Score each dimension as Critical (4), High (3), Medium (2), or Low (1). **The highest-scoring dimension sets the tier.** Then apply the override rules below. Overrides can raise the tier, never lower it. The approver may raise a tier with a recorded rationale (for example, a pilot with an unusual exposure profile). Nobody can lower a tier below what the scoring and overrides give.

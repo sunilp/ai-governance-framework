@@ -191,7 +191,7 @@ Agentic AI systems require special HITL considerations due to their autonomous, 
 |-----------|-------------|-----------------|
 | EU AI Act (Article 14) | High-risk systems must have human oversight measures | Pattern 1 or 2 for high-risk; specific requirements vary |
 | GDPR (Article 22) | Right not to be subject to solely automated decisions with legal effects | Pattern 1 for adverse or non-standard outcomes of decisions with legal or similarly significant effects; route to human review on request for automated favourable outcomes |
-| SR 11-7 | Model outputs used in consequential decisions require appropriate oversight | Pattern 1 or 2 based on model risk tier |
+| SR 26-2 (US model risk guidance, replaced SR 11-7 in April 2026) | Oversight of model use scaled to model materiality, for traditional and non-generative AI models. GenAI and agentic AI are out of its scope | Pattern 1 or 2 based on model risk tier for in-scope models; GenAI and agentic systems follow the [pattern selection matrix](#pattern-selection-matrix) on its own |
 | Consumer Duty (FCA) | Fair outcomes for consumers | Pattern appropriate to consumer impact |
 | EBA Guidelines on ML | Human judgment in credit decisions | Pattern 1 for adverse or non-standard credit outcomes |
 

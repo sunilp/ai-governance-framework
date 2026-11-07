@@ -79,6 +79,12 @@ This is the canonical override list, also used in [genai-risk-matrix.md](genai-r
 8. Customer personal data through an external LLM API with all four safeguards in place.
 9. Personal data in visual content.
 
+**Emotion recognition** (inferring emotions or intentions from biometric data such as facial expressions, voice or keystrokes):
+- **Workplace and education:** prohibited under EU AI Act Art. 5(1)(f), except for medical or safety reasons. Reject it at the [Step 0 prohibited-use screen](genai-risk-matrix.md#step-0-prohibited-use-screen). For example, call-centre voice analytics that infer the emotions of staff fall under the prohibition.
+- **Other contexts**, such as inferring customers' emotions: treat it as biometric categorisation under item 5 (automatic T1). It is high-risk under Annex III point 1(c), and deployers must inform the people exposed to it (Art. 50(3)).
+
+Inferring emotions from written text, such as sentiment analysis, does not use biometric data and is not emotion recognition under the Act. See the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
+
 ---
 
 ## Governance Requirements by Tier (Multimodal-Specific)

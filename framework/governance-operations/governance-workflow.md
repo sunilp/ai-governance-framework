@@ -31,6 +31,8 @@ This document defines the end-to-end governance process for AI systems — from 
 
 **What happens:** The Product owner prepares a full risk assessment using the framework matrices. Each risk dimension is scored Critical (4), High (3), Medium (2) or Low (1), and the highest-scoring dimension sets the tier. Override rules are then applied. Overrides can raise the tier, never lower it. The approver may raise a tier with a recorded rationale (for example, a pilot with an unusual exposure profile). Nobody can lower a tier below what the scoring and overrides give. The aggregate score is recorded for context and comparison only; it does not set the tier.
 
+**Prohibited-use screen first:** before scoring, run the [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) against EU AI Act Art. 5 and the internal prohibited-use policy. A prohibited use is rejected, not tiered.
+
 **Gate criteria:** All dimensions scored, tier determination documented, override list checked, assessment approved by the appropriate authority.
 
 **Evidence produced:**

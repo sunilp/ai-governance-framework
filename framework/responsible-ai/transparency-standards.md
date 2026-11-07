@@ -1,5 +1,7 @@
 # Transparency Standards for AI-Generated Content
 
+Status as of November 2026. Regulatory positions change; check the sources below before relying on dates.
+
 ## Overview
 
 Transparency is a foundational requirement for responsible AI deployment. Users, stakeholders, and regulators must be able to understand when they are interacting with AI, how AI-generated content was produced, and what limitations apply.
@@ -28,6 +30,8 @@ Any system where a user interacts with AI — directly or indirectly — must di
 - Spell-check, grammar correction, and similar embedded AI features
 - Systems where AI involvement is obvious from context
 
+These exemptions are framework policy. For systems in scope of the EU AI Act, Art. 50(1) exempts only interactions that are obvious to a reasonably well-informed, observant and circumspect person, and the Commission's Art. 50 guidelines read that exception restrictively. The guidelines give code assistants for professional developers and internal assistants for trained, AI-literate staff as examples of obvious interaction. Art. 50(2) marking of generated content still applies unless one of its exceptions does, such as grammar correction and spell-checking that do not change the meaning.
+
 ### Disclosure Format
 
 Disclosures must be:
@@ -54,6 +58,10 @@ All AI-generated content that enters organizational workflows or reaches externa
 | `reviewer_id` | Identifier of the human reviewer (if applicable) |
 | `confidence_level` | System's confidence in the output (if available) |
 | `source_attribution` | References to source material used (if RAG) |
+
+### Machine-Readable Marking
+
+Where the organisation is the provider of a system that generates synthetic audio, images, video or text (including a system built in-house on a vendor model), EU AI Act Art. 50(2) requires its outputs to be marked in a machine-readable format and detectable as AI-generated, whatever the system's tier. This applies from 2 August 2026; systems placed on the market before that date have until 2 December 2026. The Commission's guidelines list AI-generated summaries of text among the outputs that need marking. The metadata fields above support this; for media formats, see [multimodal governance](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling).
 
 ### Labeling by Content Destination
 
@@ -122,11 +130,24 @@ Maintain a public (or regulator-accessible) inventory of AI systems in use:
 
 ## Regulatory Alignment
 
+EU AI Act Art. 50 applies from 2 August 2026 to any AI system that meets its conditions, whatever its tier and whether or not it is high-risk. When the organisation builds a system on a vendor model and runs it under its own name, it is the provider for Art. 50(1) and 50(2). Detail and control mapping: [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
+
 | Regulation | Transparency Requirement | Framework Control |
 |-----------|------------------------|-------------------|
-| EU AI Act (Article 50) | Inform users of AI interaction; label AI-generated content | User disclosure; content labeling |
-| EU AI Act (Article 13) | Transparency for high-risk systems | Explainability mechanisms; system documentation |
+| EU AI Act Art. 50(1), providers | Design systems that interact directly with people so they are told they are interacting with AI, unless that is obvious | User interaction disclosure |
+| EU AI Act Art. 50(2), providers | Mark synthetic audio, image, video and text output in a machine-readable format (2 December 2026 for systems on the market before 2 August 2026) | Content labeling metadata; machine-readable marking |
+| EU AI Act Art. 50(3), deployers | Inform people exposed to emotion recognition or biometric categorisation | Disclosure before exposure; see [multimodal risk matrix](../risk-classification/multimodal-risk-matrix.md#tier-override-rules) |
+| EU AI Act Art. 50(4), deployers | Disclose deep fakes; disclose AI-generated text published to inform the public on matters of public interest, unless it has had human review or editorial control under someone's editorial responsibility | Labeling by content destination |
+| EU AI Act Art. 13 | Information and instructions for use for deployers of high-risk systems (Annex III systems from 2 December 2027) | Explainability mechanisms; system documentation |
+| EU AI Act Art. 26(11) and Art. 86 | Tell people they are subject to an Annex III high-risk system that makes or assists decisions about them; explain the system's role in a decision on request | AI-assisted decision disclosure; explainability mechanisms |
 | GDPR (Articles 13-14) | Inform data subjects of automated decision-making | Decision disclosure; right to explanation |
 | GDPR (Article 22) | Right not to be subject to solely automated decisions | Human oversight; opt-out mechanism |
-| SR 11-7 | Model documentation and validation transparency | Model cards; validation reports |
+| SR 26-2 (Federal Reserve, April 2026; superseded SR 11-7) | Model documentation and validation for models in its scope. Generative and agentic AI models are outside that scope | Model cards; validation reports. The framework's GenAI transparency controls stand on their own until the agencies issue AI guidance |
 | Consumer Duty (FCA) | Clear communications; consumer understanding | Plain-language AI disclosures |
+
+## Sources
+
+- Regulation (EU) 2024/1689 (Artificial Intelligence Act), Official Journal: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
+- Regulation (EU) 2026/1744 (Digital Omnibus on AI), Official Journal: https://eur-lex.europa.eu/eli/reg/2026/1744/oj
+- European Commission, Guidelines on transparency obligations for providers and deployers of AI systems: https://digital-strategy.ec.europa.eu/en/library/guidelines-transparency-obligations-providers-and-deployers-ai-systems
+- Federal Reserve, SR 26-2, Revised Guidance on Model Risk Management: https://www.federalreserve.gov/supervisionreg/srletters/SR2602.htm
