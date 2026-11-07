@@ -4,3 +4,6 @@
 *~
 .idea/
 .vscode/
+
+# Local planning artifacts (never publish)
+docs/superpowers/
