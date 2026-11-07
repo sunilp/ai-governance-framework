@@ -41,7 +41,7 @@ Staff request a new tool through intake. Until it is approved, the answer is no.
 
 ## Data Rules
 
-Data classes are those in the [residency standard](../compliance/data-residency-llm.md#residency-requirements-by-data-classification).
+Data classes are those in the [residency standard](../compliance/cross-border-data-governance.md#residency-requirements-by-data-classification).
 
 | Data | Approved tool | Unapproved or consumer tool |
 |---|---|---|

@@ -62,22 +62,11 @@ Score each dimension Critical (4), High (3), Medium (2) or Low (1). The highest-
 
 ### Tier Override Rules
 
-This is the canonical override list, also used in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules) and [agentic-ai-risk.md](agentic-ai-risk.md). Overrides can raise the tier, never lower it.
+The canonical override list is in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules), and the same list applies here and in [agentic-ai-risk.md](agentic-ai-risk.md). Check every item. Overrides can raise the tier, never lower it. The items that most often apply to multimodal systems:
 
-**Automatic T1:**
-
-1. Makes or directly influences regulated decisions (credit, insurance underwriting or pricing, AML/sanctions, employment).
-2. Generates customer-facing content delivered without per-output human review.
-3. Processes customer personal data through an external LLM API without **all** of these safeguards: zero data retention by the vendor, a regional endpoint that meets data residency requirements, a signed DPA, and PII redaction or minimisation before the call. (With all four safeguards in place: minimum T2, and normal scoring decides.)
-4. Agentic behaviour with write access to production systems or data stores, or with authority to move money, communicate with customers, or change identity and access.
-5. Biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
-
-**Minimum T2:**
-
-6. Any agentic system, including read-only tool use, and any multi-agent system.
-7. Synthetic media generation not covered by item 5.
-8. Customer personal data through an external LLM API with all four safeguards in place.
-9. Personal data in visual content.
+- **Item 5 (automatic T1):** biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
+- **Item 7 (minimum T2):** synthetic media generation not covered by item 5.
+- **Item 9 (minimum T2):** personal data in visual content.
 
 **Emotion recognition** (inferring emotions or intentions from biometric data such as facial expressions, voice or keystrokes):
 - **Workplace and education:** prohibited under EU AI Act Art. 5(1)(f), except for medical or safety reasons. Reject it at the [Step 0 prohibited-use screen](genai-risk-matrix.md#step-0-prohibited-use-screen). For example, call-centre voice analytics that infer the emotions of staff fall under the prohibition.
@@ -87,57 +76,9 @@ Inferring emotions from written text, such as sentiment analysis, does not use b
 
 ---
 
-## Governance Requirements by Tier (Multimodal-Specific)
+## Governance Requirements by Tier
 
-### T1 — Critical Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Mandatory classifiers for CSAM, violence, explicit content on all image/video inputs and outputs |
-| Synthetic media labeling | C2PA/Content Credentials metadata on all generated media; visible watermarking for external distribution |
-| Biometric compliance | GDPR Article 9 (special categories), explicit consent, DPIA completed |
-| Deepfake detection | Deploy detection capability on all video/image inputs for systems processing identity |
-| Cross-modal validation | Automated consistency checking between modalities |
-| Evaluation | Modality-specific eval suites: 300+ test cases per modality (T1 is judged on the 95% bound; see [statistical pass rule](../llm-lifecycle/evaluation-governance.md#statistical-pass-rule)), demographic parity testing |
-| Red-teaming | Modality-specific adversarial testing (adversarial images, audio perturbation, video manipulation) |
-
-### T2 — High Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Content classifiers on inputs and outputs |
-| Synthetic media labeling | Machine-readable provenance metadata on all generated media |
-| Evaluation | 100+ test cases per modality |
-| Bias testing | Demographic parity testing for vision systems (race, gender, age) |
-
-### T3/T4 — Medium/Low Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Basic content filtering |
-| Synthetic media labeling | Internal labeling of AI-generated content |
-| Evaluation | 50 test cases (T3), pre-deployment validation (T4) |
-
----
-
-## Responsible AI for Multimodal Systems
-
-### Fairness Across Modalities
-
-| Modality | Fairness Concern | Required Testing |
-|----------|-----------------|-----------------|
-| Vision | Recognition accuracy varies by skin tone, gender, age | Demographic parity analysis; test across skin tone scales (Monk, Fitzpatrick) |
-| Audio | Recognition accuracy varies by accent, dialect, gender, age | Accuracy testing across accent groups, languages, genders |
-| Video | Activity recognition bias (cultural, demographic) | Diverse scenario testing across demographics |
-| Generated imagery | Representation bias in generated content | Audit generated output diversity; test for stereotypical associations |
-| Generated audio | Voice quality and naturalness varies by language | Quality testing across target languages |
-
-### Accessibility
-
-- Vision systems: provide text alternatives for visual outputs
-- Audio systems: provide transcription and visual alternatives
-- Video systems: provide captions, audio descriptions, and text summaries
-- All systems: test with assistive technologies where user-facing
+Controls for each tier are in [multimodal governance](../llm-lifecycle/multimodal-governance.md): content safety on inputs and outputs, biometric consent, deepfake detection, [synthetic media labeling](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling), [evaluation suite sizes and red-teaming](../llm-lifecycle/multimodal-governance.md#evaluation-standards), [demographic parity testing](../llm-lifecycle/multimodal-governance.md#demographic-parity-testing), and [fairness and accessibility](../llm-lifecycle/multimodal-governance.md#responsible-ai-for-multimodal-systems).
 
 ---
 

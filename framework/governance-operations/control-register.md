@@ -216,11 +216,11 @@ For each control: the framework documents that define the requirement (the `sour
 | RA-009 | [eu-ai-act-mapping.md](../compliance/eu-ai-act-mapping.md), [impact-assessment-template.md](../../templates/impact-assessment-template.md) | Yes |  |  | Yes |
 | AR-001 | [governance-workflow.md](governance-workflow.md) | Yes | Yes | Yes |  |
 | AR-002 | [governance-workflow.md](governance-workflow.md), [roles-responsibilities.md](../operating-model/roles-responsibilities.md) |  | Yes |  |  |
-| AR-003 | [governance-workflow.md](governance-workflow.md), [data-residency-llm.md](../compliance/data-residency-llm.md), [cross-border-data-governance.md](../compliance/cross-border-data-governance.md) |  | Yes | Yes | Yes |
+| AR-003 | [governance-workflow.md](governance-workflow.md), [cross-border-data-governance.md](../compliance/cross-border-data-governance.md) |  | Yes | Yes | Yes |
 | AR-004 | [governance-workflow.md](governance-workflow.md), [model-selection.md](../llm-lifecycle/model-selection.md) | Yes | Yes | Yes | Yes |
 | AR-005 | [governance-workflow.md](governance-workflow.md), [third-party-model-risk.md](../compliance/third-party-model-risk.md) | Yes | Yes | Yes | Yes |
 | AR-006 | [agent-identity-and-tool-governance.md](../llm-lifecycle/agent-identity-and-tool-governance.md), [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md), [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md) |  | Yes |  |  |
-| AR-007 | [ai-procurement-clauses.md](../compliance/ai-procurement-clauses.md), [third-party-model-risk.md](../compliance/third-party-model-risk.md), [data-residency-llm.md](../compliance/data-residency-llm.md) |  |  |  | Yes |
+| AR-007 | [ai-procurement-clauses.md](../compliance/ai-procurement-clauses.md), [third-party-model-risk.md](../compliance/third-party-model-risk.md), [cross-border-data-governance.md](../compliance/cross-border-data-governance.md) |  |  |  | Yes |
 | DE-001 | [governance-workflow.md](governance-workflow.md), [development.md](../model-lifecycle/development.md) | Yes | Yes | Yes |  |
 | DE-002 | [governance-workflow.md](governance-workflow.md), [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md) |  |  |  |  |
 | DE-003 | [governance-workflow.md](governance-workflow.md), [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md) |  |  |  | Yes |

@@ -49,7 +49,7 @@ The policy is drafted by AI Risk, endorsed by the AI Risk Committee, and approve
 | Fairness | [commitment] | [Bias detection](../framework/responsible-ai/bias-detection-llm.md) |
 | Transparency | [commitment] | [Transparency standards](../framework/responsible-ai/transparency-standards.md) |
 | Reliability and safety | [commitment] | [Evaluation governance](../framework/llm-lifecycle/evaluation-governance.md) |
-| Security and privacy | [commitment] | [AI security](../framework/ai-security/adversarial-robustness.md), [data residency](../framework/compliance/data-residency-llm.md) |
+| Security and privacy | [commitment] | [AI security](../framework/ai-security/adversarial-robustness.md), [data residency](../framework/compliance/cross-border-data-governance.md) |
 | Lawful use | The organisation meets the legal and regulatory requirements that apply to each AI system in each jurisdiction where it operates | [Multi-jurisdictional guide](../framework/compliance/multi-jurisdictional-guide.md) |
 | Continual improvement | Incidents, reviews and audit findings change the framework, not only the system | [Review cadence](../framework/operating-model/review-cadence.md) |
 

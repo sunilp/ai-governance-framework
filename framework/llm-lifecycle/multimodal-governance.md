@@ -19,6 +19,7 @@ This document defines lifecycle governance standards for multimodal systems. For
 | PII in images (faces, documents, license plates) | PII detection and redaction before processing; consent verification | T1/T2 |
 | Biometric data (faces for identification) | Explicit consent; GDPR Article 9 DPIA; legal basis documented | T1 mandatory |
 | Medical / diagnostic imagery | Clinical validation requirements; regulatory compliance (MDR, FDA) | T1 mandatory |
+| Manipulated or synthetic images in identity verification | Deepfake detection on all image inputs for systems processing identity | T1 mandatory |
 
 ### Audio Inputs
 
@@ -37,11 +38,12 @@ This document defines lifecycle governance standards for multimodal systems. For
 | Behavioral analysis | Explicit purpose limitation; no repurposing without re-assessment | T1/T2 |
 | PII in video (faces, vehicle plates, locations) | PII detection; anonymization where identity is not required | T1/T2 |
 | Content moderation (violence, explicit material) | Content safety classification; block or flag per policy | All |
+| Deepfake video in identity verification | Deepfake detection on all video inputs for systems processing identity | T1 mandatory |
 
 ### All Modalities
 
 - Classify input data per existing data classification policy before processing
-- Apply data residency requirements per [data-residency-llm.md](../compliance/data-residency-llm.md) — biometric data has additional residency restrictions under GDPR
+- Apply data residency requirements per [cross-border data and LLM data residency](../compliance/cross-border-data-governance.md); biometric data has additional residency restrictions under GDPR
 - Document which modalities each system processes in the model card
 
 ---
@@ -59,7 +61,7 @@ This document defines lifecycle governance standards for multimodal systems. For
 | Generated video | Disclosure of AI generation (EU AI Act Art. 50 where applicable); machine-readable metadata | C2PA | T1/T2 |
 | Modified images/video | Disclosure of AI modification; original preserved for audit | C2PA | T1/T2 |
 
-EU AI Act Art. 50 applies whatever the tier. Where the organisation provides a system that generates synthetic audio, images, video or text, Art. 50(2) requires machine-readable marking of its outputs from 2 August 2026 (2 December 2026 for systems placed on the market before that date). Apply the provenance metadata requirement above to T3 and T4 systems as well when Art. 50(2) applies. Deployers must also disclose deep fakes (Art. 50(4)). See the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
+T3/T4 systems label AI-generated content internally at minimum. EU AI Act Art. 50 applies whatever the tier. Where the organisation provides a system that generates synthetic audio, images, video or text, Art. 50(2) requires machine-readable marking of its outputs from 2 August 2026 (2 December 2026 for systems placed on the market before that date). Apply the provenance metadata requirement above to T3 and T4 systems as well when Art. 50(2) applies. Deployers must also disclose deep fakes (Art. 50(4)). See the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
 
 ### Content Safety on Outputs
 
@@ -92,6 +94,8 @@ EU AI Act Art. 50 applies whatever the tier. Where the organisation provides a s
 | Video: understanding | Action recognition, temporal understanding, scene consistency | T1: 300, T2: 100, T3: 50, T4: 20 |
 | Cross-modal consistency | Text-image alignment, audio-visual sync, multimodal reasoning | T1: 100, T2: 50, T3: 25 |
 
+T1 suites are judged on the 95% confidence bound; see the [statistical pass rule](evaluation-governance.md#statistical-pass-rule). T1 systems also need modality-specific adversarial testing (adversarial images, audio perturbation, video manipulation) as part of [red-teaming](../ai-security/red-teaming-protocol.md).
+
 ### Demographic Parity Testing
 
 For vision and audio systems at T1/T2:
@@ -110,9 +114,10 @@ For vision and audio systems at T1/T2:
 
 ### Fairness
 
-- **Image recognition bias**: test across Monk Skin Tone Scale (10 categories); report performance per category
+- **Image recognition bias**: test across skin tone scales (Monk Skin Tone Scale, 10 categories; Fitzpatrick); report performance per category
 - **Generated imagery bias**: audit for stereotypical associations (e.g., profession + gender, activity + ethnicity); test with counterfactual prompts
-- **Voice bias**: test speech recognition and generation quality across accents, genders, and age groups
+- **Voice bias**: test speech recognition and generation quality across accents, genders, and age groups; test generated voice quality and naturalness across target languages
+- **Video bias**: test activity recognition with diverse scenarios across demographics and cultures
 - **Representation**: generated content should reflect demographic diversity unless explicitly constrained by use case
 
 ### Accessibility
@@ -120,7 +125,7 @@ For vision and audio systems at T1/T2:
 | Requirement | Description | Tier |
 |------------|-------------|:---:|
 | Alt-text generation | Vision systems generating descriptions must produce accurate alt-text | T1/T2 |
-| Caption generation | Audio/video systems must support captioning for hearing-impaired users | All customer-facing |
+| Caption generation | Audio/video systems must support captioning or transcripts for hearing-impaired users | All customer-facing |
 | Audio descriptions | Video systems should support audio descriptions for vision-impaired users | T1 |
 | Assistive technology testing | Test with screen readers and other assistive technologies | All customer-facing |
 

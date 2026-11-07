@@ -73,13 +73,7 @@ Models from Hugging Face, GitHub, or other community platforms require additiona
 
 ### Ongoing Monitoring
 
-| Activity | Frequency | Owner |
-|----------|-----------|-------|
-| Community health check (contributor activity, issue resolution) | Quarterly | AI Operations |
-| CVE and vulnerability scan (model, framework, dependencies) | Weekly (automated) | Security |
-| License change monitoring | Quarterly | Legal |
-| Safety benchmark re-evaluation | Semi-annually | AI Risk |
-| Performance regression testing (full offline suite re-run) | Monthly (T1), Quarterly (T2), Semi-annual (T3/T4), per [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation) | AI Operations |
+Self-hosted community and open-source models follow the maintenance schedule in [open-source model governance](../llm-lifecycle/open-source-model-governance.md#ongoing-maintenance): weekly CVE scans, quarterly community health and license checks, semi-annual safety re-evaluation, performance re-evaluation by tier, and the security patch SLA.
 
 ---
 
@@ -139,17 +133,7 @@ OWASP LLM03:2025 recommends a signed, up-to-date SBOM and suggests starting with
 
 ## Decision Framework: Open-Source vs. Commercial API
 
-| Factor | Open-Source Advantage | Commercial API Advantage | Decision Guidance |
-|--------|----------------------|-------------------------|-------------------|
-| Cost at scale | Lower marginal cost after infrastructure investment | Lower upfront cost; pay-per-use | Open-source at >$10K/month API spend |
-| Control | Full control over model, data, infrastructure | Limited to API parameters | Open-source when data residency is non-negotiable |
-| Data residency | Complete; all processing on your infrastructure | Depends on vendor's regional endpoints | Open-source for MNPI or strict residency |
-| Capability | Varies; may lag frontier models | Frontier performance; regular updates | API for state-of-the-art requirements |
-| Support | Community only; no SLA | Vendor SLA; dedicated support | API for T1 systems requiring guaranteed uptime |
-| Security patching | Self-managed; may lag | Vendor-managed; typically faster | API unless you have dedicated ML security team |
-| Compliance | Full audit access; self-attested | Vendor certifications (SOC 2, ISO 27001) | Depends on regulatory expectations |
-
-Use this framework during model selection; document the decision rationale in the risk assessment.
+The decision framework, including security patching and support, is in [open-source model governance](../llm-lifecycle/open-source-model-governance.md#decision-framework-open-source-vs-commercial-api).
 
 ---
 

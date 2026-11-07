@@ -31,7 +31,7 @@ Complete this checklist before deploying any prompt to production. All items mar
 | 4 | Prompt handles missing or malformed input gracefully | T1, T2 | [ ] |
 | 5 | Prompt works with the designated fallback model | T1, T2 | [ ] |
 | 6 | Few-shot examples (if used) are diverse and representative | All tiers | [ ] |
-| 7 | Token usage is within budget (system + expected input + output) | All tiers | [ ] |
+| 7 | Token usage is within budget (system + expected input + output) and latency is acceptable for the use case | All tiers | [ ] |
 
 ---
 
@@ -103,14 +103,7 @@ Complete this checklist before deploying any prompt to production. All items mar
 
 ### Sign-off by Tier
 
-Prompt review is control DE-003 (owner: AI lead). Required sign-offs per [prompt-engineering-standards.md](../framework/llm-lifecycle/prompt-engineering-standards.md#review-authority):
-
-| Tier | Required sign-offs |
-|------|-------------------|
-| T1 | Peer reviewer + prompt engineering lead + security reviewer + AI Risk |
-| T2 | Peer reviewer + prompt engineering lead |
-| T3 | Peer reviewer |
-| T4 | Self-review by the author, with documentation |
+Prompt review is control DE-003 (owner: AI lead). Required sign-offs per tier are set in [prompt-engineering-standards.md](../framework/llm-lifecycle/prompt-engineering-standards.md#review-authority); the "Required For" column below follows them.
 
 | Role | Required For | Name | Date | Sign-off |
 |------|-------------|------|------|:---:|

@@ -65,10 +65,9 @@ How framework controls map to specific regulatory requirements.
 - [NIST AI RMF Mapping](framework/compliance/nist-ai-rmf-mapping.md): all 19 Core categories mapped to docs and control IDs, plus the Generative AI Profile (NIST AI 600-1)
 - [ISO/IEC 42001 Mapping](framework/compliance/iso-42001-mapping.md): clauses 4 to 10 and Annex A mapped to docs and controls, with the gaps a certification audit will find
 - [Multi-Jurisdictional Guide](framework/compliance/multi-jurisdictional-guide.md): EU, US, UK, Singapore, Canada, Australia, Japan, Brazil, UAE, South Korea, China, India
-- [Cross-Border Data Governance](framework/compliance/cross-border-data-governance.md) — data flows, sovereignty, conflict resolution
+- [Cross-Border Data and LLM Data Residency](framework/compliance/cross-border-data-governance.md): data flows across jurisdictions and LLM architectures, residency by data class, sovereignty, conflict resolution
 - [Regulatory Change Monitoring](framework/compliance/regulatory-change-monitoring.md) — horizon scanning and impact assessment
 - [Prompt Audit Trail](framework/compliance/prompt-audit-trail.md) — logging, retention, reconstruction
-- [Data Residency for LLMs](framework/compliance/data-residency-llm.md) — data flows in LLM architectures
 - [Third-Party Model Risk](framework/compliance/third-party-model-risk.md) — vendor assessment and ongoing monitoring
 - [AI Procurement Clauses](framework/compliance/ai-procurement-clauses.md): contract clause set for AI vendors, including EU AI Act value-chain terms and DORA Art. 30
 - [Responsible AI Checklist](framework/compliance/responsible-ai-checklist.md)

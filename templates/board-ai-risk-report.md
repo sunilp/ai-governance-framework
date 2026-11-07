@@ -63,6 +63,10 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 | | | | |
 | | | | |
 
+**Tier and business unit concentration** (are T1 systems accumulating faster than governance investment? is governance capacity proportional in each business unit?):
+
+>
+
 ---
 
 ## 4. Material Incidents
@@ -143,7 +147,7 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 
 ## 9. Recommendations
 
-| # | Recommendation | Rationale | Decision Required |
+| # | Recommendation | Rationale (and consequence of not acting) | Decision Required |
 |---|---------------|-----------|-------------------|
 | 1 | | | Approve / Note / Defer |
 | 2 | | | Approve / Note / Defer |

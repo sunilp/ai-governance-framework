@@ -9,7 +9,7 @@ The risk taxonomy stays in [agentic-ai-risk.md](../risk-classification/agentic-a
 ## How It Fits the Workflow
 
 - **Scope:** every agentic system, including read-only tool use, and every multi-agent system. A "tool" is anything the model can invoke: a function or API, an MCP server, an A2A peer, a browser, a code interpreter or another agent.
-- **Tier:** every agentic system is at least T2 (override item 6), and T1 when it has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access (override item 4). See the [canonical override list](../risk-classification/agentic-ai-risk.md#tier-override-rules). A T3 or T4 system that gains tool access is re-tiered before the change goes live.
+- **Tier:** every agentic system is at least T2 (override item 6), and T1 when it has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access (override item 4). See the [canonical override list](../risk-classification/genai-risk-matrix.md#tier-override-rules). A T3 or T4 system that gains tool access is re-tiered before the change goes live.
 - **Stage 3:** AR-006 reviews the agent identity record, tool allowlist, delegation limits and approvals in this document. AR-007 covers the contract for any external tool, MCP server or A2A peer run by a vendor.
 - **Stage 6:** SR-001 tests tool misuse, privilege escalation, delegation abuse and memory poisoning against the limits recorded here.
 - **Stage 8:** PM-006 tests the kill switch. PM-007 checks the agent action audit record is complete.

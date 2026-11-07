@@ -44,11 +44,7 @@ Monitor the distribution of model outputs to detect shifts that may not be captu
 - Alert on sudden distribution shifts even if input data appears stable
 
 ### 4. Operational Health
-- **Latency:** p50, p95, p99 response times against SLA thresholds
-- **Error rate:** Failed predictions, timeouts, malformed inputs
-- **Throughput:** Requests per second against capacity planning estimates
-- **Availability:** Uptime tracking against SLA targets
-- **Resource utilization:** CPU, memory, GPU utilization for cost and capacity management
+Use the common operational health metrics in [LLM monitoring](../llm-lifecycle/monitoring.md#3-operational-health) that fit the serving pattern: latency (p50, p95, p99), error rate (failed predictions, timeouts, malformed inputs), throughput and availability, each measured against the system's SLA and capacity plan. Token, rate limit and retrieval metrics apply only to LLM systems. For ML systems, also track resource utilization (CPU, memory, GPU) for cost and capacity management.
 
 ### 5. Fairness Monitoring (T1, T2)
 Continue fairness assessments in production:
@@ -59,21 +55,18 @@ Continue fairness assessments in production:
 
 ## Alert Configuration
 
+Response SLAs by priority, alert routing and the note on alert priority versus incident severity are the common base in [LLM monitoring](../llm-lifecycle/monitoring.md#alerting-and-escalation); the mapping to incident severity is in [escalation-paths.md](../operating-model/escalation-paths.md#alert-priority-to-incident-severity). Once an incident is declared, follow-ups and notifications are set by its severity.
+
 ### Alert Priorities
 
-| Priority | Description | Response Time | Escalation |
-|----------|-------------|---------------|------------|
-| P1 — Critical | Model producing incorrect outputs at scale, or complete system failure | 15 minutes | On-call → Engineering Lead → AI Risk Committee |
-| P2 — High | Significant performance degradation or drift detected | 4 hours | On-call → Engineering Lead |
-| P3 — Medium | Moderate drift or minor performance decline | 24 hours | Assigned to model owner |
-| P4 — Low | Informational anomaly, no immediate action needed | Next business day | Logged for review |
+Criteria and escalation for traditional ML models:
 
-P1 to P4 are alert priorities, not incident severities. Acknowledgement targets (P1 within 15 minutes, P2 within 1 hour) and the mapping from alert priority to incident severity (S1 to S4) are in [escalation-paths.md](../operating-model/escalation-paths.md#alert-priority-to-incident-severity). Once an incident is declared, follow-ups and notifications are set by its severity.
-
-### Alert Routing
-- P1/P2 alerts must page the on-call engineer and notify the model owner simultaneously
-- P3 alerts create tickets in the team's tracking system
-- P4 alerts are logged to the monitoring dashboard for periodic review
+| Priority | Description | Escalation |
+|----------|-------------|------------|
+| P1 Critical | Model producing incorrect outputs at scale, or complete system failure | On-call → Engineering Lead → AI Risk Committee; the model owner is notified at the same time |
+| P2 High | Significant performance degradation or drift detected | On-call → Engineering Lead; the model owner is notified at the same time |
+| P3 Medium | Moderate drift or minor performance decline | Assigned to model owner |
+| P4 Low | Informational anomaly, no immediate action needed | Logged for review |
 
 ## Retraining Triggers
 

@@ -136,7 +136,7 @@ START: New AI system proposed
 
 **Framework references:**
 - [Deployment gates](../llm-lifecycle/deployment-gates.md)
-- [Data residency for LLMs](../compliance/data-residency-llm.md)
+- [Cross-border data and LLM data residency](../compliance/cross-border-data-governance.md)
 - [Third-party model risk](../compliance/third-party-model-risk.md)
 
 ## Stage 4: Development & Prompt Engineering

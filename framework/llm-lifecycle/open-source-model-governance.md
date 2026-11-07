@@ -134,8 +134,9 @@ When fine-tuning open-source models, follow all standards in [fine-tuning govern
 | Cost at scale | >$10K/month API spend; infrastructure team available | Low-to-moderate volume; infrastructure team unavailable |
 | Control | Need to inspect model behavior, modify safety filters, customize inference | Standard API behavior is sufficient |
 | Capability | Open-source model meets performance requirements | Frontier model capability is required (state-of-the-art reasoning, etc.) |
-| Support requirements | Have internal ML engineering team; can manage operations | Need vendor SLA, support, and managed operations |
+| Support requirements | Have internal ML engineering team; can manage operations | Need vendor SLA, support, and managed operations; T1 systems requiring guaranteed uptime |
+| Security patching | Have a dedicated ML security team to patch models and inference frameworks within the [patch SLA](#ongoing-maintenance) | No dedicated ML security team; vendor-managed patching is needed |
 | Time to deployment | Have inference infrastructure ready; team experienced with deployment | Need to move fast; infrastructure not available |
 | Compliance | Need full audit access; self-attested controls acceptable | Vendor certifications (SOC 2, ISO 27001) sufficient for your regulators |
 
-Document the decision rationale in the risk assessment. For T1 systems, this decision requires AI Risk Committee review.
+Use this framework during [model selection](model-selection.md). Document the decision rationale in the risk assessment. For T1 systems, this decision requires AI Risk Committee review.

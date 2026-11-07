@@ -88,10 +88,10 @@ This document holds the risk taxonomy, the tier rule and the incident examples. 
 - Error correction attempts by the agent make the situation worse
 
 **Controls:**
-- Circuit breakers: automatic shutdown after N consecutive errors or anomalous outputs
+- Circuit breakers: automatic shutdown after N consecutive errors or anomalous outputs; trigger levels are set in [circuit breakers](../llm-lifecycle/multi-agent-governance.md#circuit-breakers), where the per-agent level also applies to a single agent
 - Rate limiting: cap the number of actions per time window
 - Rollback capability: every action must have a defined undo path
-- Multi-agent isolation: agents in a pipeline should not share mutable state without validation gates
+- Multi-agent isolation: no shared mutable state between agents without validation gates ([shared state](../llm-lifecycle/multi-agent-governance.md#shared-state))
 
 ### 6. Multi-Agent Coordination Risk
 
@@ -105,20 +105,13 @@ This document holds the risk taxonomy, the tier rule and the incident examples. 
 
 **Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing) — adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
 
-**Controls:**
-- Message validation at each agent boundary
-- Aggregate privilege analysis (verify combined permissions don't exceed intended scope)
-- Cross-agent monitoring for emergent behavioral patterns
-- System-wide circuit breakers (not just per-agent)
-- See [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md) for detailed governance standards
+**Controls:** message validation at each agent boundary, aggregate privilege analysis, information flow controls, system-wide circuit breakers and emergent behaviour testing are set in [multi-agent governance](../llm-lifecycle/multi-agent-governance.md).
 
 ### 7. Persistent Memory and Long-Term State Risk
 
-**Risk:** Agents with long-term memory accumulate context that can be manipulated, become stale, or create privacy obligations.
+**Risk:** Beyond the manipulation covered in risk 3, long-term memory goes stale and creates privacy obligations.
 
 **Contributing factors:**
-- Memory poisoning over time (adversarial interactions gradually corrupt stored context)
-- Unbounded memory growth (agent stores everything, diluting relevant context)
 - Stale context influencing current decisions (outdated information treated as current)
 - PII accumulation in memory (agent memory becomes a data privacy liability)
 
@@ -152,22 +145,7 @@ Score the agent's GenAI dimensions in [genai-risk-matrix.md](genai-risk-matrix.m
 
 ### Tier Override Rules
 
-This is the canonical override list, also used in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules) and [multimodal-risk-matrix.md](multimodal-risk-matrix.md). Overrides can raise the tier, never lower it.
-
-**Automatic T1:**
-
-1. Makes or directly influences regulated decisions (credit, insurance underwriting or pricing, AML/sanctions, employment).
-2. Generates customer-facing content delivered without per-output human review.
-3. Processes customer personal data through an external LLM API without **all** of these safeguards: zero data retention by the vendor, a regional endpoint that meets data residency requirements, a signed DPA, and PII redaction or minimisation before the call. (With all four safeguards in place: minimum T2, and normal scoring decides.)
-4. Agentic behaviour with write access to production systems or data stores, or with authority to move money, communicate with customers, or change identity and access.
-5. Biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
-
-**Minimum T2:**
-
-6. Any agentic system, including read-only tool use, and any multi-agent system.
-7. Synthetic media generation not covered by item 5.
-8. Customer personal data through an external LLM API with all four safeguards in place.
-9. Personal data in visual content.
+The canonical override list is in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules), and the same list applies here and in [multimodal-risk-matrix.md](multimodal-risk-matrix.md). Overrides can raise the tier, never lower it. Items 4 (automatic T1) and 6 (minimum T2) set the agentic floor described above. Check every other item too: for example, an agent that influences regulated decisions is T1 under item 1, and one that sends customer personal data to an external LLM API is T1 under item 3 unless all four safeguards are in place.
 
 ---
 
@@ -195,7 +173,7 @@ This is the canonical override list, also used in [genai-risk-matrix.md](genai-r
 | Budget limits | Token, cost, and action-count budgets per session |
 | Time limits | Maximum execution time per task; automatic timeout with graceful shutdown |
 | Anomaly detection | Real-time monitoring for unusual action patterns, error rates, or output characteristics |
-| Kill switch | Stop or degrade within 15 minutes, with the agent's credentials revoked; tested quarterly; non-waivable ([kill switch](../llm-lifecycle/agent-identity-and-tool-governance.md#8-kill-switch), PM-006) |
+| Kill switch | Required for every agentic system and non-waivable; time to effect, credential revocation and testing are set in [kill switch](../llm-lifecycle/agent-identity-and-tool-governance.md#8-kill-switch) (PM-006) |
 
 ### Post-Deployment Monitoring
 

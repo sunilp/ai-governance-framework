@@ -8,7 +8,7 @@ This document defines governance standards for multi-agent systems. It extends t
 
 Every agent in a multi-agent system also meets [agent identity and tool governance](agent-identity-and-tool-governance.md): its own identity, delegation that only narrows at each hop, a tool allowlist with scopes, approval gates, memory controls, authenticated inter-agent messages, a sandbox for code execution, the kill switch and the agent action audit record (AR-006, PM-006, PM-007). This document adds what is specific to agents working together.
 
-All multi-agent systems are classified as **minimum T2 (High)**. A multi-agent system is automatically **T1 (Critical)** when any agent has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access, or when any other automatic T1 override applies. See the [canonical override list](../risk-classification/genai-risk-matrix.md#tier-override-rules) (items 4 and 6) and the tier rule in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md#mandatory-risk-tier-classification).
+All multi-agent systems are **minimum T2 (High)**, and T1 when any agent meets an automatic T1 condition. The tier rule is in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md#mandatory-risk-tier-classification).
 
 ---
 
@@ -152,9 +152,7 @@ Define degraded operation modes:
 |---------|-------|--------|
 | Pause single agent | Halt one agent without stopping others | Operator |
 | Pause all agents | Halt entire multi-agent system | Operator |
-| Kill switch | Immediately terminate all agents and roll back in-progress actions | Operator + on-call |
-
-The kill switch stops or degrades every agent in the system within 15 minutes, revokes their credentials and delegated tokens, and is tested quarterly; it is non-waivable ([kill switch](agent-identity-and-tool-governance.md#8-kill-switch), PM-006).
+| Kill switch | Stop or degrade every agent in the system and revoke their credentials and delegated tokens; non-waivable | Per [kill switch](agent-identity-and-tool-governance.md#8-kill-switch) (PM-006), which also sets time to effect and testing |
 | Override agent decision | Human overrides a specific agent's output or action | System owner |
 
 ---
@@ -173,7 +171,7 @@ For all multi-agent systems (in addition to single-agent requirements in [agenti
 | Depth/breadth limits | Define and enforce maximum nesting depth and maximum concurrent agents |
 | Human checkpoint design | Document where and how humans oversee the multi-agent system |
 | Circuit breaker testing | Verify all circuit breakers function correctly |
-| Kill switch testing | Verify the kill switch halts all agents within 15 minutes and revokes their credentials (PM-006) |
+| Kill switch testing | Verify the kill switch stops every agent and revokes their credentials within the time set in [kill switch](agent-identity-and-tool-governance.md#8-kill-switch) (PM-006) |
 
 ---
 

@@ -74,33 +74,7 @@ Each prompt must include:
 
 ## Prompt Review Process
 
-### Review Checklist
-
-Before a prompt enters production, it must pass the following review:
-
-**Functional Review:**
-- [ ] Prompt produces correct outputs for representative test cases
-- [ ] Edge cases are tested and documented
-- [ ] Output format is consistent and parseable (if structured)
-- [ ] Prompt handles missing or malformed input gracefully
-
-**Safety Review:**
-- [ ] No prompt injection vulnerabilities (tested with standard injection payloads)
-- [ ] No PII leakage — prompt does not instruct model to reveal training data or context
-- [ ] Guardrails are explicit — not relying on model's default safety behavior
-- [ ] Toxicity constraints are defined where applicable
-- [ ] Hallucination mitigation is appropriate (e.g., "only answer based on provided context")
-
-**Compliance Review:**
-- [ ] Output cannot be mistaken for regulated advice (financial, legal, medical) unless appropriately qualified
-- [ ] Disclosure requirements are met (if output is customer-facing)
-- [ ] Prompt does not violate model provider's usage policy
-- [ ] Data handling in prompt context complies with data classification policy
-
-**Operational Review:**
-- [ ] Token usage is within budget (system prompt + expected input + output)
-- [ ] Latency is acceptable for the use case
-- [ ] Prompt works with the fallback model (if T1/T2)
+Before a prompt enters production, it passes the [prompt review checklist](../../templates/prompt-review-checklist.md): functional, safety, compliance, bias and documentation checks, each marked with the tiers that require it. Submit the completed checklist with the prompt's pull request.
 
 ### Review Authority
 

@@ -58,7 +58,7 @@ This is quality evaluation. Human oversight sampling for T1 systems running Patt
 | Model availability | Upstream model API availability | < 99.9% (or SLA-defined) |
 | Retrieval latency (RAG) | Time to retrieve context documents | SLA breach |
 
-Retrieval empty-result rate and other RAG pipeline checks are in [RAG Pipeline Health](#rag-pipeline-health).
+Latency, error rate, throughput and availability are the common operational health metrics for every production AI system; [model monitoring](../model-lifecycle/monitoring.md#4-operational-health) applies them to traditional ML models. Retrieval empty-result rate and other RAG pipeline checks are in [RAG Pipeline Health](#rag-pipeline-health).
 
 ### 4. Cost
 
@@ -123,6 +123,14 @@ Always re-run the full offline suite on a model, provider or prompt change.
 | P4 | Informational, cosmetic, minor anomalies | Next business day | Logged for review |
 
 P1 to P4 are alert priorities, not incident severities. Acknowledgement targets (P1 within 15 minutes, P2 within 1 hour) and the mapping from alert priority to incident severity (S1 to S4) are in [escalation-paths.md](../operating-model/escalation-paths.md#alert-priority-to-incident-severity).
+
+The response SLAs above and the routing rules below are the common base for every production AI system. [Model monitoring](../model-lifecycle/monitoring.md#alert-configuration) sets the alert criteria and escalation for traditional ML models.
+
+### Alert Routing
+
+- P1 and P2 alerts page the on-call engineer; notification then follows the Notification column above, or for ML models the escalation in model monitoring
+- P3 alerts create a ticket in the team's tracking system
+- P4 alerts are logged to the monitoring dashboard for periodic review
 
 ### Escalation Path
 

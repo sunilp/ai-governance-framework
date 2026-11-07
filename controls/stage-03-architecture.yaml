@@ -62,7 +62,6 @@ controls:
   test: Sample 25 systems with external data flows (or all, if fewer). Compare the data flow map with the residency confirmation for each jurisdiction and with the data residency recorded in the model card.
   sources:
   - framework/governance-operations/governance-workflow.md
-  - framework/compliance/data-residency-llm.md
   - framework/compliance/cross-border-data-governance.md
 
 - id: AR-004
@@ -143,4 +142,4 @@ controls:
   sources:
   - framework/compliance/ai-procurement-clauses.md
   - framework/compliance/third-party-model-risk.md
-  - framework/compliance/data-residency-llm.md
+  - framework/compliance/cross-border-data-governance.md

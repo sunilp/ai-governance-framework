@@ -141,7 +141,7 @@ The response SLA is the time to acknowledge the incident and start containment.
 
 ## Alert Priority to Incident Severity
 
-Monitoring raises alerts at priority P1 to P4. Incident severity S1 to S4 is a separate classification, made when an incident is declared. Use P-levels only for alerts and S-levels only for incidents. Alert criteria and response SLAs are defined in [LLM monitoring](../llm-lifecycle/monitoring.md#alerting-and-escalation) and [model monitoring](../model-lifecycle/monitoring.md#alert-configuration).
+Monitoring raises alerts at priority P1 to P4. Incident severity S1 to S4 is a separate classification, made when an incident is declared. Use P-levels only for alerts and S-levels only for incidents. Alert criteria and response SLAs are defined in [LLM monitoring](../llm-lifecycle/monitoring.md#alerting-and-escalation), which is the common base; [model monitoring](../model-lifecycle/monitoring.md#alert-configuration) adds the ML-specific alert criteria.
 
 <!-- BEGIN GENERATED: alert-priority-mapping. Edit policy/severity.yaml, then run python tools/build.py -->
 

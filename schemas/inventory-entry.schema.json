@@ -46,7 +46,7 @@
           "type": "array",
           "minItems": 1,
           "uniqueItems": true,
-          "description": "Classes from the residency standard (framework/compliance/data-residency-llm.md).",
+          "description": "Classes from the residency standard (framework/compliance/cross-border-data-governance.md).",
           "items": {"enum": ["public", "internal", "confidential", "personal-data", "mnpi", "regulated"]}
         },
         "processing_regions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}

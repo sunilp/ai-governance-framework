@@ -32,7 +32,7 @@ Where a model is also in the model risk inventory, keep one inventory entry per 
 
 An AI capability inside a product the organisation already uses (a productivity suite, CRM, HR platform, service desk, developer tool or other SaaS) is registered as a **material AI feature** when any of these is true:
 
-1. It processes Confidential data, personal data, MNPI or regulated data ([data classes](../compliance/data-residency-llm.md#residency-requirements-by-data-classification)).
+1. It processes Confidential data, personal data, MNPI or regulated data ([data classes](../compliance/cross-border-data-governance.md#residency-requirements-by-data-classification)).
 2. Its output reaches customers or other external parties.
 3. It makes or directly influences a regulated decision or a decision about an employee (recruitment, promotion, performance, termination).
 4. It can take actions in other systems, such as sending messages, changing records or calling tools.
@@ -149,8 +149,8 @@ The inventory is the single source for the portfolio numbers the committee and t
 
 | Output | Fields used | Where it goes |
 |---|---|---|
-| System count by tier, new deployments, retirements | `risk_tier`, `deployment_status`, `dates` | [Portfolio KPIs](../operating-model/governance-metrics.md#portfolio-kpis); [board report section 2](../operating-model/board-reporting.md#2-portfolio-overview) |
-| Vendor concentration | `vendor_and_model` for T1 and T2 systems | [Board report section 3](../operating-model/board-reporting.md#3-risk-concentration) |
+| System count by tier, new deployments, retirements | `risk_tier`, `deployment_status`, `dates` | [Portfolio KPIs](../operating-model/governance-metrics.md#portfolio-kpis); [board report section 2](../../templates/board-ai-risk-report.md#2-portfolio-overview) |
+| Vendor concentration | `vendor_and_model` for T1 and T2 systems | [Board report section 3](../../templates/board-ai-risk-report.md#3-risk-concentration) |
 | Risk assessment coverage and overdue reviews | `linked_controls`, `dates.next_review` | [Governance Health KPIs](../operating-model/governance-metrics.md#governance-health-kpis) |
 | Active exceptions by tier | `exceptions` | Policy exception count KPI |
 | Current inventory summary by tier, and the reconciliation result | All | [Quarterly full-portfolio meeting](../operating-model/review-cadence.md#monthly-ai-risk-committee) |
