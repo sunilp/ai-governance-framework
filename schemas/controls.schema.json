@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Control file (controls/stage-NN-*.yaml)",
+  "description": "One file per governance workflow stage. Each control renders as one row of the stage table in framework/governance-operations/control-register.md.",
+  "type": "object",
+  "required": ["stage", "name", "controls"],
+  "additionalProperties": false,
+  "properties": {
+    "stage": {"type": "integer", "minimum": 1, "maximum": 10},
+    "name": {"type": "string", "minLength": 1},
+    "controls": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/control"}}
+  },
+  "$defs": {
+    "tier": {"enum": ["T1", "T2", "T3", "T4"]},
+    "tierList": {"type": "array", "items": {"$ref": "#/$defs/tier"}, "uniqueItems": true},
+    "roleId": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "text": {"type": "string", "minLength": 1},
+    "control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "stage", "applies_to", "owner", "evidence", "frequency", "on_fail",
+                   "type", "automation", "key_control", "test", "sources"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]{2}-[0-9]{3}$"},
+        "title": {"$ref": "#/$defs/text"},
+        "stage": {"type": "integer", "minimum": 1, "maximum": 10},
+        "group": {"$ref": "#/$defs/text"},
+        "applies_to": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text", "tiers", "systems"],
+          "properties": {
+            "text": {"$ref": "#/$defs/text"},
+            "tiers": {"allOf": [{"$ref": "#/$defs/tierList"}, {"minItems": 1}]},
+            "recommended": {"$ref": "#/$defs/tierList"},
+            "systems": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"enum": ["all", "ml", "genai", "rag", "agentic", "fine-tuned", "external-model", "open-source",
+                                 "personal-data", "external-data-flow", "customer-facing", "replaced", "retired"]}
+            }
+          }
+        },
+        "owner": {
+          "oneOf": [
+            {"$ref": "#/$defs/roleId"},
+            {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"$ref": "#/$defs/roleId"}}
+          ]
+        },
+        "owner_text": {"$ref": "#/$defs/text"},
+        "evidence": {"$ref": "#/$defs/text"},
+        "frequency": {"$ref": "#/$defs/text"},
+        "on_fail": {"$ref": "#/$defs/text"},
+        "type": {"enum": ["preventive", "detective", "corrective"]},
+        "automation": {"enum": ["manual", "semi-automated", "automated"]},
+        "key_control": {"type": "boolean"},
+        "test": {"$ref": "#/$defs/text"},
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9._/-]+\\.(md|yaml)$"}
+        }
+      }
+    }
+  }
+}

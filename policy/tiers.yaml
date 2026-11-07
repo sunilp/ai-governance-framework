@@ -1,0 +1,138 @@
+# Tier policy. Source of truth for these generated tables:
+#   framework/operating-model/roles-responsibilities.md  "Approvals by Tier"
+#   framework/operating-model/review-cadence.md          "Cadence by Tier"
+#   framework/compliance/prompt-audit-trail.md            "Retention Requirements"
+# The other values (production evaluation, red-team depth, governance record retention,
+# prompt review) restate the documents named in the comments below. tools/check.py
+# cross-checks red_team against policy/thresholds.yaml and review_cadence against RV-001.
+#
+# Approver entries: text is the rendered table cell. accountable and co_sign are role ids
+# from policy/roles.yaml (where more than one role signs, the first named is Accountable).
+# months: the interval as a number, null when there is no scheduled interval.
+# After editing, run: python tools/build.py && python tools/check.py
+
+approval_decisions:
+  - id: risk_assessment
+    label: Risk assessment (prepared by the Product owner)
+  - id: architecture
+    label: Architecture
+  - id: validation
+    label: Independent validation
+  - id: model_selection
+    label: Model selection
+  - id: deployment
+    label: Deployment
+  - id: exception
+    label: Exception
+  - id: prompt_review
+    label: Prompt review
+    in_approvals_table: false   # governance-workflow.md Stage 4 and control DE-003
+
+tiers:
+  T1:
+    name: Critical
+    review_cadence: {text: Quarterly, months: 3}
+    metrics_review: Daily dashboard check by AI Operations, plus a monthly system-owner review
+    independent_revalidation: {text: "Annual, and on material change", months: 12}
+    risk_reassessment: At every formal governance review, and on material change
+    approvers:
+      risk_assessment: {text: AI Risk Committee, accountable: ai-risk-committee}
+      architecture: {text: Architecture review board, accountable: architecture-review-board}
+      validation: {text: MRM (full scope), accountable: mrm}
+      prompt_review: {text: Peer review + prompt engineering lead + security review + AI Risk sign-off}
+      model_selection: {text: "AI Risk Committee; CISO co-signs", accountable: ai-risk-committee, co_sign: [ciso]}
+      deployment: {text: "AI Risk Committee; CISO co-signs, and the DPO if personal data is processed", accountable: ai-risk-committee, co_sign: [ciso, dpo]}
+      exception: {text: AI Risk Committee, accountable: ai-risk-committee}
+    interaction_log_retention_years: 7          # prompt-audit-trail.md
+    governance_record_retention:                # audit-trail-requirements.md
+      rule: Life of the system plus the tier period after retirement
+      years_after_retirement: 7
+    online_scoring_rate: {text: Every response (async), fraction: 1.0}   # evaluation-governance.md
+    offline_rerun_cadence: {text: Monthly, months: 1}                    # evaluation-governance.md
+    red_team:                                   # red-teaming-protocol.md "Tiered Testing Depth"
+      depth: 200+, including manual testing (external testers recommended)
+      min_cases: 200
+      required: true
+      pre_deployment: Full adversarial red-team
+      ongoing: Quarterly
+
+  T2:
+    name: High
+    review_cadence: {text: Semi-annual, months: 6}
+    metrics_review: Weekly
+    independent_revalidation: {text: "Every 24 months, and on material change", months: 24}
+    risk_reassessment: At every formal governance review, and on material change
+    approvers:
+      risk_assessment: {text: AI Risk (second line), accountable: ai-risk}
+      architecture: {text: Head of AI or delegate (recorded team-level design review), accountable: head-of-ai}
+      validation: {text: MRM or another second-line reviewer outside the development team (reduced scope), accountable: mrm}
+      prompt_review: {text: Peer review + prompt engineering lead}
+      model_selection: {text: Head of AI, accountable: head-of-ai}
+      deployment: {text: "Head of AI; Business Unit Head co-signs", accountable: head-of-ai, co_sign: [business-unit-head]}
+      exception: {text: Head of AI Risk, accountable: ai-risk}
+    interaction_log_retention_years: 5
+    governance_record_retention:
+      rule: Life of the system plus the tier period after retirement
+      years_after_retirement: 5
+    online_scoring_rate: {text: 20% sample, fraction: 0.2}
+    offline_rerun_cadence: {text: Quarterly, months: 3}
+    red_team:
+      depth: 100+
+      min_cases: 100
+      required: true
+      pre_deployment: Internal red-team
+      ongoing: Semi-annually
+
+  T3:
+    name: Medium
+    review_cadence: {text: Annual, months: 12}
+    metrics_review: Monthly
+    independent_revalidation: {text: On material change (peer re-review), months: null}
+    risk_reassessment: At every formal governance review, and on material change
+    approvers:
+      risk_assessment: {text: Team lead, accountable: team-lead}
+      architecture: {text: Documented by the technical owner, accountable: technical-owner}
+      validation: {text: Peer review, accountable: ai-lead}
+      prompt_review: {text: Peer review}
+      model_selection: {text: Team lead (approved vendor list), accountable: team-lead}
+      deployment: {text: "Team lead; business owner co-signs", accountable: team-lead, co_sign: [business-owner]}
+      exception: {text: Head of AI, accountable: head-of-ai}
+    interaction_log_retention_years: 3
+    governance_record_retention:
+      rule: Life of the system plus the tier period after retirement
+      years_after_retirement: 3
+    online_scoring_rate: {text: 5% sample, fraction: 0.05}
+    offline_rerun_cadence: {text: Semi-annual, months: 6}
+    red_team:
+      depth: Automated adversarial scan + 50 manual cases
+      min_cases: 50
+      required: true
+      pre_deployment: Automated adversarial scan + manual cases
+      ongoing: Annually
+
+  T4:
+    name: Low
+    review_cadence: {text: Annual self-assessment, months: 12}
+    metrics_review: Quarterly
+    independent_revalidation: {text: On material change (peer re-review), months: null}
+    risk_reassessment: At every formal governance review, and on material change
+    approvers:
+      risk_assessment: {text: Team lead (self-assessment acknowledged), accountable: team-lead}
+      architecture: {text: Documented by the technical owner, accountable: technical-owner}
+      validation: {text: Self-test, accountable: ai-lead}
+      prompt_review: {text: Self-review}
+      model_selection: {text: Team lead (approved vendor list), accountable: team-lead}
+      deployment: {text: Team lead, accountable: team-lead}
+      exception: {text: Team lead, accountable: team-lead}
+    interaction_log_retention_years: 1
+    governance_record_retention:
+      rule: Life of the system plus the tier period after retirement
+      years_after_retirement: 1
+    online_scoring_rate: {text: Weekly batch sample, fraction: null}
+    offline_rerun_cadence: {text: Semi-annual, months: 6}
+    red_team:
+      depth: Automated scan, 20+ cases (recommended)
+      min_cases: 20
+      required: false
+      pre_deployment: Automated scan (recommended)
+      ongoing: Annually (recommended)

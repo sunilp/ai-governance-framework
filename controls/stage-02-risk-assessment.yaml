@@ -1,0 +1,105 @@
+# Stage 2 controls: Risk Assessment & Tiering.
+# Source of truth for the Stage 2 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 2
+name: Risk Assessment & Tiering
+controls:
+
+- id: RA-001
+  title: Risk assessment completed using framework matrices
+  stage: 2
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: Signed risk assessment with dimension scoring + tier determination
+  frequency: Before development begins
+  on_fail: Cannot proceed to development
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Sample 25 systems that entered development in the period (or all, if fewer), including every T1 system. Inspect each signed risk assessment for a score on every dimension and a tier that matches the highest-scoring dimension, dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/risk-classification/risk-matrix.md
+  - framework/risk-classification/genai-risk-matrix.md
+
+- id: RA-002
+  title: Tier override review against the canonical override list
+  stage: 2
+  applies_to:
+    text: T1-T4 (any system matching an override trigger, automatic T1 or minimum T2)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-risk
+  evidence: Override decision document
+  frequency: At assessment
+  on_fail: Escalate to AI Risk Committee
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the RA-001 sample, re-perform the check against the canonical override list in the GenAI risk matrix. Confirm every system that matches a trigger has an override decision document and a tier at or above the override.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/risk-classification/genai-risk-matrix.md
+
+- id: RA-003
+  title: Impact assessment completed
+  stage: 2
+  applies_to:
+    text: 'T1-T2 (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [all]
+  owner: product-owner
+  evidence: Completed impact assessment template
+  frequency: Before development
+  on_fail: Cannot proceed to development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 T1 and T2 systems that entered development in the period (or all, if fewer). Inspect the completed impact assessment and confirm it is dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: RA-004
+  title: Risk assessment approved by appropriate authority
+  stage: 2
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [ai-risk-committee, ai-risk, team-lead]
+  owner_text: 'AI Risk Committee (T1) / AI Risk, second line (T2) / Team lead (T3, T4: acknowledges self-assessment)'
+  evidence: Approval record with sign-off
+  frequency: Before development
+  on_fail: Block progression
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the RA-001 sample, inspect the approval record. Confirm the approver matches Approvals by Tier for the assigned tier and signed before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/roles-responsibilities.md
+
+- id: RA-005
+  title: DPIA screening and, where required, full DPIA
+  stage: 2
+  applies_to:
+    text: 'T1-T4 processing personal data: screening for all; full DPIA always for T1-T2 and wherever screening indicates high risk'
+    tiers: [T1, T2, T3, T4]
+    systems: [personal-data]
+  owner: dpo
+  evidence: DPIA screening record; filed DPIA with DPO sign-off where required
+  frequency: Before development
+  on_fail: Cannot proceed; escalate to DPO
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Sample 25 systems that process personal data (or all, if fewer). Inspect the DPIA screening record and, for T1/T2 systems and high-risk screenings, confirm a full DPIA with DPO sign-off dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/responsible-ai-checklist.md

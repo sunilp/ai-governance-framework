@@ -160,6 +160,7 @@ evaluation:
       threshold: 0.90
       method: "human-eval"
   adversarial_testing:                    # Prompt-change adversarial regression set re-run for v1.2.0, not the quarterly red-team
+    test_type: "prompt-change-regression"
     prompt_injection_resistance: 0.98
     jailbreak_resistance: 0.97
     test_suite_size: 150

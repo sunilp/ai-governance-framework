@@ -26,6 +26,13 @@ intended_use:
   out_of_scope_uses: []                 # What this system should NOT be used for
   decision_type: ""                     # informational | recommendation | automated
   human_oversight_pattern: ""           # human-in-the-loop | human-on-the-loop | human-over-the-loop | human-out-of-the-loop
+  human_oversight_safeguards:           # Required for T1 customer-facing systems using human-over-the-loop (Pattern 3 safeguards a-e, human-in-loop-patterns.md#pattern-selection-matrix)
+    sampled_review: ""                  # a) Daily review of at least 1% of outputs (minimum 50 per day)
+    risk_based_routing: []              # b) Topics and conditions routed to a human
+    scope_guardrails: ""                # c) Output scope guardrails
+    kill_switch: ""                     # d) Stops or degrades the AI channel within 15 minutes; tested at least quarterly
+    kill_switch_last_tested: ""         # YYYY-MM-DD
+    hallucination_monitoring: ""        # e) Monitoring against the tier hallucination threshold
   customer_facing: false                # true | false
   regulatory_context: []               # Applicable regulations
 
@@ -87,6 +94,7 @@ evaluation:
       threshold: null
       method: ""
   adversarial_testing:
+    test_type: ""                       # red-team | prompt-change-regression (which suite test_suite_size counts)
     prompt_injection_resistance: null    # Pass rate against injection test suite
     jailbreak_resistance: null
     test_suite_size: null

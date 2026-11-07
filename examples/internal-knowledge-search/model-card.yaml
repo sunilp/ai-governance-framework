@@ -133,6 +133,7 @@ evaluation:
       method: "automated"
   # Red-team (T3): automated adversarial scan of 200 generated prompts plus 50 manual cases.
   adversarial_testing:
+    test_type: "red-team"
     prompt_injection_resistance: 0.90
     jailbreak_resistance: 0.92
     test_suite_size: 250

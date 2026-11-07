@@ -8,6 +8,8 @@ Evaluation is the primary mechanism for proving an AI system works as intended. 
 
 ## Evaluation Types
 
+<!-- BEGIN GENERATED: evaluation-types. Edit policy/thresholds.yaml, then run python tools/build.py -->
+
 | Eval Type | What It Tests | When | T1 Suite Size | T2 | T3 | T4 |
 |-----------|--------------|------|:---:|:---:|:---:|:---:|
 | Pre-release | Domain accuracy, faithfulness, format compliance | Before every deployment | 200+ | 100+ | 50+ | 20+ |
@@ -18,11 +20,15 @@ Evaluation is the primary mechanism for proving an AI system works as intended. 
 | Bias | Counterfactual fairness, demographic parity | Formal bias evaluation before deployment, then quarterly (T1), semi-annual (T2) | 200 pairs | 100 pairs | 50 pairs | N/A |
 | Production | Ongoing output quality on live traffic | Continuous: three activities, see [Production Evaluation](#production-evaluation) | Every response scored (async) | 20% sample | 5% sample | Weekly batch sample |
 
+<!-- END GENERATED: evaluation-types -->
+
 Suite sizes apply whenever an eval type is run. Which eval types must pass before release at each tier is set in [Release Criteria by Tier](#release-criteria-by-tier).
 
 ---
 
 ## Threshold Definitions by Tier
+
+<!-- BEGIN GENERATED: threshold-definitions. Edit policy/thresholds.yaml, then run python tools/build.py -->
 
 | Metric | T1 | T2 | T3 | T4 |
 |--------|:---:|:---:|:---:|:---:|
@@ -33,6 +39,8 @@ Suite sizes apply whenever an eval type is run. Which eval types must pass befor
 | Counterfactual consistency | ≥ 90% | ≥ 85% | ≥ 80% | N/A |
 | Domain accuracy | Use-case specific (defined in risk assessment) | Same | Same | Same |
 
+<!-- END GENERATED: threshold-definitions -->
+
 These are opinionated defaults. Organizations should calibrate to their domain and risk appetite. The principle is non-negotiable: every tier has thresholds, and thresholds are enforced.
 
 This document is the single source for these thresholds and for suite sizes. Other documents link here rather than restating different values. Use-case tolerances (for example in [hallucination-policy.md](../responsible-ai/hallucination-policy.md)) apply only when they are stricter than the tier threshold.
@@ -41,6 +49,8 @@ This document is the single source for these thresholds and for suite sizes. Oth
 
 ## Metric Definitions
 
+<!-- BEGIN GENERATED: metric-definitions. Edit policy/thresholds.yaml, then run python tools/build.py -->
+
 | Metric | Definition |
 |--------|-----------|
 | Hallucination rate | Share of evaluated responses that contain at least one material unsupported or false claim. Measured at response level. A claim is material if a user could act on it: facts, figures, policy terms, fees, dates, eligibility. |
@@ -48,6 +58,8 @@ This document is the single source for these thresholds and for suite sizes. Oth
 | Safety pass rate | Share of safety test cases where the system responds acceptably. Each test case defines the acceptable response (for example, a refusal, a safe completion, or no PII in the output). |
 | Retrieval precision@5 | Share of the top 5 retrieved chunks that are relevant to the query, averaged across evaluation queries. Relevance is judged against labelled references or by a calibrated LLM-as-judge. |
 | Counterfactual consistency | Share of counterfactual pairs (prompts identical except for a demographic attribute) whose outputs are consistent: same substance and conclusion, comparable sentiment and level of detail. Test protocol: [bias-detection-llm.md](../responsible-ai/bias-detection-llm.md). |
+
+<!-- END GENERATED: metric-definitions -->
 
 ---
 

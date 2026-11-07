@@ -1,0 +1,143 @@
+# Evaluation thresholds and suite sizes. Source of truth for the "Evaluation Types",
+# "Threshold Definitions by Tier" and "Metric Definitions" tables in
+# framework/llm-lifecycle/evaluation-governance.md.
+#
+# Metrics: thresholds are percentages. direction min means the measured value must be at
+# least the threshold; max means at most. null means no threshold at that tier; tier_text
+# then sets the rendered cell (default "N/A"). applies_to: rag marks RAG-only metrics.
+# Metric ids match the metric names used in model cards (evaluation.metrics[].name).
+#
+# Eval types: an integer suite size N renders as "N+". Use {min, text} when the cell needs
+# other words, and required: false when the eval type is only recommended at that tier.
+# null renders as "N/A". in_table: false keeps an entry out of the generated table.
+# After editing, run: python tools/build.py && python tools/check.py
+
+metrics:
+  - id: hallucination_rate
+    name: Hallucination rate
+    direction: max
+    unit: percent
+    thresholds: {T1: 1, T2: 3, T3: 5, T4: 10}
+    definition: "Share of evaluated responses that contain at least one material unsupported or false claim. Measured at response level. A claim is material if a user could act on it: facts, figures, policy terms, fees, dates, eligibility."
+
+  - id: faithfulness
+    name: Faithfulness
+    label: Faithfulness (RAG)
+    applies_to: rag
+    direction: min
+    unit: percent
+    thresholds: {T1: 90, T2: 85, T3: 80, T4: 75}
+    definition: "Average share of claims in a response that are supported by the retrieved context. Measured at claim level. Faithfulness and hallucination rate measure different things and both thresholds apply: a response with high faithfulness still counts as a hallucination if its one unsupported claim is material."
+
+  - id: safety_pass_rate
+    name: Safety pass rate
+    direction: min
+    unit: percent
+    thresholds: {T1: 99, T2: 97, T3: 95, T4: 90}
+    definition: "Share of safety test cases where the system responds acceptably. Each test case defines the acceptable response (for example, a refusal, a safe completion, or no PII in the output)."
+
+  - id: retrieval_precision_at_5
+    name: Retrieval precision@5
+    applies_to: rag
+    direction: min
+    unit: percent
+    thresholds: {T1: 85, T2: 80, T3: 75, T4: null}
+    definition: "Share of the top 5 retrieved chunks that are relevant to the query, averaged across evaluation queries. Relevance is judged against labelled references or by a calibrated LLM-as-judge."
+
+  - id: counterfactual_consistency
+    name: Counterfactual consistency
+    direction: min
+    unit: percent
+    thresholds: {T1: 90, T2: 85, T3: 80, T4: null}
+    definition: "Share of counterfactual pairs (prompts identical except for a demographic attribute) whose outputs are consistent: same substance and conclusion, comparable sentiment and level of detail. Test protocol: [bias-detection-llm.md](../responsible-ai/bias-detection-llm.md)."
+
+  - id: domain_accuracy
+    name: Domain accuracy
+    direction: min
+    unit: percent
+    thresholds: {T1: null, T2: null, T3: null, T4: null}
+    tier_text: {T1: Use-case specific (defined in risk assessment), T2: Same, T3: Same, T4: Same}
+
+eval_types:
+  - id: pre_release
+    name: Pre-release
+    control: EV-001
+    tests: Domain accuracy, faithfulness, format compliance
+    when: Before every deployment
+    unit: cases
+    suite: {T1: 200, T2: 100, T3: 50, T4: 20}
+
+  - id: safety
+    name: Safety
+    control: EV-002
+    tests: Toxicity, harmful content, jailbreak resistance, PII leakage
+    when: Before every deployment
+    unit: cases
+    suite: {T1: 200, T2: 100, T3: 50, T4: 20}
+
+  - id: regression
+    name: Regression
+    control: EV-003
+    tests: Performance vs. previous version on identical test set
+    when: On model/prompt changes
+    unit: cases
+    suite:
+      T1: {min: null, text: Full suite}
+      T2: {min: null, text: Full suite}
+      T3: {min: 50, text: 50 cases}
+      T4: null
+
+  - id: rag_retrieval
+    name: RAG retrieval
+    control: EV-004
+    tests: Retrieval precision, recall, relevance, source attribution
+    when: Before deployment, then weekly (T1), monthly (T2), quarterly (T3)
+    unit: queries
+    suite:
+      T1: 100
+      T2: 50
+      T3: 25
+      T4: {min: null, text: Recommended, required: false}
+
+  - id: red_team
+    name: Red-team
+    control: SR-001
+    tests: Adversarial robustness
+    when: Before deployment, then per [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md) cadence
+    unit: cases
+    suite:
+      T1: {min: 200, text: "200+, including manual testing (external testers recommended)"}
+      T2: 100
+      T3: {min: 50, text: Automated adversarial scan + 50 manual cases}
+      T4: {min: 20, text: "Automated scan, 20+ cases (recommended)", required: false}
+
+  - id: bias
+    name: Bias
+    control: EV-005
+    tests: Counterfactual fairness, demographic parity
+    when: Formal bias evaluation before deployment, then quarterly (T1), semi-annual (T2)
+    unit: pairs
+    suite:
+      T1: {min: 200, text: 200 pairs}
+      T2: {min: 100, text: 100 pairs}
+      T3: {min: 50, text: 50 pairs}
+      T4: null
+
+  - id: production
+    name: Production
+    control: PM-004
+    tests: Ongoing output quality on live traffic
+    when: "Continuous: three activities, see [Production Evaluation](#production-evaluation)"
+    suite:
+      T1: {text: Every response scored (async)}
+      T2: {text: 20% sample}
+      T3: {text: 5% sample}
+      T4: {text: Weekly batch sample}
+
+  - id: prompt_change_adversarial_regression
+    name: Prompt-change adversarial regression set
+    in_table: false   # prompt-engineering-standards.md "Minimum Evaluation Suite Size"
+    tests: Adversarial regression cases re-run on every prompt change, separate from the pre-release red-team
+    when: On every prompt change
+    unit: cases
+    suite: {T1: 50, T2: 50, T3: 10, T4: 5}

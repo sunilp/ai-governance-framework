@@ -8,6 +8,8 @@ When something goes wrong with an AI system — or when a governance control ide
 
 This section is the single definition of incident severity for every AI system: traditional ML, GenAI and agentic. Other documents may list domain examples per severity, but they do not redefine the levels. The response SLA depends on severity, not on tier.
 
+<!-- BEGIN GENERATED: severity-classification. Edit policy/severity.yaml, then run python tools/build.py -->
+
 | Severity | Definition | Response SLA |
 |----------|------------|--------------|
 | S1 Critical | Harm to customers, financial loss, a regulatory breach or a data exposure has occurred or is occurring. | 15 minutes |
@@ -15,11 +17,15 @@ This section is the single definition of incident severity for every AI system: 
 | S3 Medium | A problem detected internally before it reached anyone outside, or quality degraded but still within tolerance on a T1/T2 system. | 24 hours |
 | S4 Low | Minor issue, no external exposure, no control failure. | Next business day |
 
+<!-- END GENERATED: severity-classification -->
+
 The response SLA is the time to acknowledge the incident and start containment.
 
 **Tier floor:** any incident on a T1 system that reached customers is at least S2.
 
 ### Follow-Up by Severity
+
+<!-- BEGIN GENERATED: severity-follow-up. Edit policy/severity.yaml, then run python tools/build.py -->
 
 | Severity | Root cause | Post-mortem |
 |----------|-----------|-------------|
@@ -27,6 +33,8 @@ The response SLA is the time to acknowledge the incident and start containment.
 | S2 | Identified within 48 hours | Report within 2 weeks (IR-004) |
 | S3 | Documented within 10 business days | Not required |
 | S4 | Tracked in the team backlog | Not required |
+
+<!-- END GENERATED: severity-follow-up -->
 
 ### Notifications
 
@@ -135,11 +143,15 @@ The response SLA is the time to acknowledge the incident and start containment.
 
 Monitoring raises alerts at priority P1 to P4. Incident severity S1 to S4 is a separate classification, made when an incident is declared. Use P-levels only for alerts and S-levels only for incidents. Alert criteria and response SLAs are defined in [LLM monitoring](../llm-lifecycle/monitoring.md#alerting-and-escalation) and [model monitoring](../model-lifecycle/monitoring.md#alert-configuration).
 
+<!-- BEGIN GENERATED: alert-priority-mapping. Edit policy/severity.yaml, then run python tools/build.py -->
+
 | Alert priority | Acknowledgement | Incident severity if one is declared |
 |----------------|-----------------|--------------------------------------|
 | P1 | Within 15 minutes, then triaged | S1 or S2 if external impact is confirmed |
 | P2 | Within 1 hour | Usually S2 or S3 |
 | P3, P4 | Within the monitoring standard's response SLA | S3 or S4, or no incident |
+
+<!-- END GENERATED: alert-priority-mapping -->
 
 If triage does not confirm external impact, classify against the definitions in [Severity Classification](#severity-classification). Once an incident is declared, its severity sets the response SLA, follow-ups and notifications. Incidents can also be declared without an alert, for example from a customer complaint, an internal review or an audit finding.
 

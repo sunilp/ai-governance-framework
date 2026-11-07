@@ -159,6 +159,7 @@ evaluation:
       threshold: 0.85
       method: "automated"
   adversarial_testing:
+    test_type: "red-team"
     prompt_injection_resistance: 0.95
     jailbreak_resistance: 0.96
     test_suite_size: 220                # T1 minimum 200, including manual testing

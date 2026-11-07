@@ -1,0 +1,104 @@
+# Stage 3 controls: Architecture & Design Review.
+# Source of truth for the Stage 3 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 3
+name: Architecture & Design Review
+controls:
+
+- id: AR-001
+  title: System architecture documented
+  stage: 3
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: technical-owner
+  evidence: Architecture document with component diagram and data flows
+  frequency: Before development
+  on_fail: Block development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems (or all, if fewer). Inspect the architecture document for a component diagram and data flows that match the deployed system, dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: AR-002
+  title: Architecture review sign-off
+  stage: 3
+  applies_to:
+    text: T1 (review board); T2 (team-level design review)
+    tiers: [T1, T2]
+    systems: [all]
+  owner: [architecture-review-board, head-of-ai]
+  owner_text: Architecture review board (T1) / Head of AI or delegate (T2)
+  evidence: 'T1: review board meeting record with decision and conditions. T2: recorded team-level design review approved by the Head of AI or delegate'
+  frequency: Before development
+  on_fail: Cannot proceed without sign-off
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Inspect every T1 review board record and a sample of 10 T2 design reviews (or all, if fewer) from the period. Confirm a recorded decision by the right approver before development started, and that any conditions were closed.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/roles-responsibilities.md
+
+- id: AR-003
+  title: Data residency confirmed
+  stage: 3
+  applies_to:
+    text: T1-T4 with external data flows
+    tiers: [T1, T2, T3, T4]
+    systems: [external-data-flow]
+  owner: technical-owner
+  evidence: Data flow map with residency confirmation per jurisdiction
+  frequency: Before development
+  on_fail: Escalate to compliance
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems with external data flows (or all, if fewer). Compare the data flow map with the residency confirmation for each jurisdiction and with the data residency recorded in the model card.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/data-residency-llm.md
+  - framework/compliance/cross-border-data-governance.md
+
+- id: AR-004
+  title: Vendor/model selection justified and approved
+  stage: 3
+  applies_to:
+    text: T1-T4 using external models
+    tiers: [T1, T2, T3, T4]
+    systems: [external-model]
+  owner: ai-lead
+  evidence: Model selection document with evaluation results and rationale; approval by AI Risk Committee + CISO (T1), Head of AI (T2), team lead from the approved vendor list (T3/T4)
+  frequency: Before development
+  on_fail: Block development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems that use external models (or all, if fewer). Inspect the model selection document for evaluation results and rationale, and confirm the approver matches the tier.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-selection.md
+
+- id: AR-005
+  title: Third-party model risk assessment completed
+  stage: 3
+  applies_to:
+    text: 'T1-T3 using external vendor APIs (T4: approved vendors only, no separate assessment)'
+    tiers: [T1, T2, T3]
+    systems: [external-model]
+  owner: ai-risk
+  evidence: Completed vendor risk assessment
+  frequency: Before development; annually thereafter
+  on_fail: Block deployment; procurement escalation
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 T1-T3 systems that call external vendor APIs (or all, if fewer). Confirm a vendor risk assessment was completed before development and repeated within the last 12 months.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/third-party-model-risk.md

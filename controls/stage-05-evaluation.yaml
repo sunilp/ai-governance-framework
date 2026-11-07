@@ -1,0 +1,146 @@
+# Stage 5 controls: Evaluation & Testing.
+# Source of truth for the Stage 5 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 5
+name: Evaluation & Testing
+controls:
+
+- id: EV-001
+  title: Pre-release evaluation suite executed
+  stage: 5
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-lead
+  evidence: Evaluation report with pass/fail per metric
+  frequency: Before every deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Sample 25 deployments from the period (or all, if fewer), including every T1 deployment. Compare each required metric in the evaluation report with the tier threshold, confirm the report predates deployment, and confirm every failure has an approved exception.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+
+- id: EV-002
+  title: Safety evaluation passed
+  stage: 5
+  applies_to:
+    text: 'T1-T4 GenAI (T4: automated, 20+ cases)'
+    tiers: [T1, T2, T3, T4]
+    systems: [genai]
+  owner: ai-lead
+  evidence: Safety eval results meeting tier thresholds
+  frequency: Before every deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: For the GenAI deployments in the EV-001 sample, inspect the safety evaluation results. Confirm the suite size meets the tier minimum and the pass rate meets the tier threshold.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+
+- id: EV-003
+  title: Regression evaluation passed
+  stage: 5
+  applies_to:
+    text: 'T1-T2 on model/prompt change (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [all]
+  owner: ai-lead
+  evidence: Regression report comparing current vs. previous version
+  frequency: On change
+  on_fail: Block deployment if regression detected
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Sample 25 T1/T2 model or prompt changes (or all, if fewer). Confirm a regression report compares the new and previous versions on the same test set, and that any detected regression blocked deployment.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+
+- id: EV-004
+  title: RAG retrieval quality evaluated
+  stage: 5
+  applies_to:
+    text: 'T1-T3 RAG systems (T4: recommended)'
+    tiers: [T1, T2, T3]
+    recommended: [T4]
+    systems: [rag]
+  owner: ai-lead
+  evidence: Retrieval precision/recall/relevance metrics
+  frequency: Before deployment; then weekly (T1), monthly (T2), quarterly (T3)
+  on_fail: Block deployment (pre-release); investigate (production)
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Sample 10 RAG systems (or all, if fewer). Inspect pre-release retrieval metrics and confirm production retrieval evaluations ran at the tier cadence in the last two periods.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+  - framework/llm-lifecycle/rag-governance.md
+
+- id: EV-005
+  title: Bias evaluation completed
+  stage: 5
+  applies_to:
+    text: 'T1-T2 (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [all]
+  owner: responsible-ai-lead
+  evidence: Counterfactual test results with demographic parity metrics
+  frequency: Formal evaluation before deployment, then quarterly (T1) or semi-annual (T2); production counterfactual spot-checks weekly (T1) or monthly (T2)
+  on_fail: Block deployment; escalate to Responsible AI
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Sample 10 T1/T2 systems (or all, if fewer). Inspect counterfactual results for pair count and thresholds, and confirm the formal evaluation and the production spot-checks ran at the tier cadence.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+  - framework/responsible-ai/bias-detection-llm.md
+
+- id: EV-006
+  title: Eval dataset integrity verified
+  stage: 5
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-lead
+  evidence: Confirmation of no overlap with training data; dataset version recorded
+  frequency: Before each eval run
+  on_fail: Invalidate eval results; re-run
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: For the EV-001 sample, inspect the dataset version in each evaluation report and the overlap check against training or fine-tuning data. Re-perform the overlap check for one dataset.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+
+- id: EV-007
+  title: LLM-as-judge calibrated against human evaluators
+  stage: 5
+  applies_to:
+    text: T1-T2 using automated eval
+    tiers: [T1, T2]
+    systems: [genai]
+  owner: ai-lead
+  evidence: Calibration report with correlation scores
+  frequency: Quarterly (T1); semi-annually (T2)
+  on_fail: Pause automated eval; revert to human eval
+  type: detective
+  automation: semi-automated
+  key_control: false
+  test: For every T1/T2 system that uses LLM-as-judge, inspect the latest calibration report. Confirm it is within the tier cadence and that any correlation below 0.85 led to a pause and a return to human evaluation.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md

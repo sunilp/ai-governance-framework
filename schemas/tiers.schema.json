@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tier policy (policy/tiers.yaml)",
+  "type": "object",
+  "required": ["approval_decisions", "tiers"],
+  "additionalProperties": false,
+  "properties": {
+    "approval_decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": {"$ref": "#/$defs/decisionId"},
+          "label": {"type": "string", "minLength": 1},
+          "in_approvals_table": {"type": "boolean"}
+        }
+      }
+    },
+    "tiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["T1", "T2", "T3", "T4"],
+      "properties": {
+        "T1": {"$ref": "#/$defs/tier"},
+        "T2": {"$ref": "#/$defs/tier"},
+        "T3": {"$ref": "#/$defs/tier"},
+        "T4": {"$ref": "#/$defs/tier"}
+      }
+    }
+  },
+  "$defs": {
+    "decisionId": {"enum": ["risk_assessment", "architecture", "validation", "prompt_review", "model_selection", "deployment", "exception"]},
+    "roleId": {"type": "string", "pattern": "^[a-z][a-z0-9-]*$"},
+    "text": {"type": "string", "minLength": 1},
+    "interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "months"],
+      "properties": {
+        "text": {"$ref": "#/$defs/text"},
+        "months": {"type": ["integer", "null"], "minimum": 1}
+      }
+    },
+    "approver": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": {"$ref": "#/$defs/text"},
+        "accountable": {"$ref": "#/$defs/roleId"},
+        "co_sign": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/roleId"}}
+      }
+    },
+    "tier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "review_cadence", "metrics_review", "independent_revalidation", "risk_reassessment",
+                   "approvers", "interaction_log_retention_years", "governance_record_retention",
+                   "online_scoring_rate", "offline_rerun_cadence", "red_team"],
+      "properties": {
+        "name": {"enum": ["Critical", "High", "Medium", "Low"]},
+        "review_cadence": {"$ref": "#/$defs/interval"},
+        "metrics_review": {"$ref": "#/$defs/text"},
+        "independent_revalidation": {"$ref": "#/$defs/interval"},
+        "risk_reassessment": {"$ref": "#/$defs/text"},
+        "approvers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["risk_assessment", "architecture", "validation", "prompt_review", "model_selection", "deployment", "exception"],
+          "properties": {
+            "risk_assessment": {"$ref": "#/$defs/approver"},
+            "architecture": {"$ref": "#/$defs/approver"},
+            "validation": {"$ref": "#/$defs/approver"},
+            "prompt_review": {"$ref": "#/$defs/approver"},
+            "model_selection": {"$ref": "#/$defs/approver"},
+            "deployment": {"$ref": "#/$defs/approver"},
+            "exception": {"$ref": "#/$defs/approver"}
+          }
+        },
+        "interaction_log_retention_years": {"type": "integer", "minimum": 1},
+        "governance_record_retention": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rule", "years_after_retirement"],
+          "properties": {
+            "rule": {"$ref": "#/$defs/text"},
+            "years_after_retirement": {"type": "integer", "minimum": 1}
+          }
+        },
+        "online_scoring_rate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text", "fraction"],
+          "properties": {
+            "text": {"$ref": "#/$defs/text"},
+            "fraction": {"type": ["number", "null"], "exclusiveMinimum": 0, "maximum": 1}
+          }
+        },
+        "offline_rerun_cadence": {"$ref": "#/$defs/interval"},
+        "red_team": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["depth", "min_cases", "required", "pre_deployment", "ongoing"],
+          "properties": {
+            "depth": {"$ref": "#/$defs/text"},
+            "min_cases": {"type": "integer", "minimum": 1},
+            "required": {"type": "boolean"},
+            "pre_deployment": {"$ref": "#/$defs/text"},
+            "ongoing": {"$ref": "#/$defs/text"}
+          }
+        }
+      }
+    }
+  }
+}

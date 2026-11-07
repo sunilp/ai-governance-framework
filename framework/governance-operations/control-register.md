@@ -6,11 +6,15 @@ A control can only be bypassed through an approved exception: see [Exceptions an
 
 For the end-to-end process connecting these stages, see [governance-workflow.md](governance-workflow.md). For a worked example, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md#control-coverage). It shows the evidence for every control that applies to that T1 GenAI RAG system and lists the controls that do not apply, with reasons.
 
+The stage tables and the [Traceability](#traceability) section are generated from the YAML files in [controls/](../../controls/), which also record each control's type, automation level, key-control flag, test procedure and source documents. Do not edit the tables by hand. To change a control, edit its YAML file, run `python tools/build.py`, then run `python tools/check.py`. CI fails if a table no longer matches the YAML. See [tools/README.md](../../tools/README.md).
+
 ## Stage 1: Idea Intake
 
 No register controls. Intake produces pre-register artifacts only (intake form and initial risk screening); see workflow Stage 1.
 
 ## Stage 2: Risk Assessment & Tiering
+
+<!-- BEGIN GENERATED: controls-stage-02. Edit controls/stage-02-risk-assessment.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -20,7 +24,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | RA-004 | Risk assessment approved by appropriate authority | T1-T4 | AI Risk Committee (T1) / AI Risk, second line (T2) / Team lead (T3, T4: acknowledges self-assessment) | Approval record with sign-off | Before development | Block progression |
 | RA-005 | DPIA screening and, where required, full DPIA | T1-T4 processing personal data: screening for all; full DPIA always for T1-T2 and wherever screening indicates high risk | DPO | DPIA screening record; filed DPIA with DPO sign-off where required | Before development | Cannot proceed; escalate to DPO |
 
+<!-- END GENERATED: controls-stage-02 -->
+
 ## Stage 3: Architecture & Design Review
+
+<!-- BEGIN GENERATED: controls-stage-03. Edit controls/stage-03-architecture.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -30,7 +38,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | AR-004 | Vendor/model selection justified and approved | T1-T4 using external models | AI lead | Model selection document with evaluation results and rationale; approval by AI Risk Committee + CISO (T1), Head of AI (T2), team lead from the approved vendor list (T3/T4) | Before development | Block development |
 | AR-005 | Third-party model risk assessment completed | T1-T3 using external vendor APIs (T4: approved vendors only, no separate assessment) | AI Risk | Completed vendor risk assessment | Before development; annually thereafter | Block deployment; procurement escalation |
 
+<!-- END GENERATED: controls-stage-03 -->
+
 ## Stage 4: Development & Prompt Engineering
+
+<!-- BEGIN GENERATED: controls-stage-04. Edit controls/stage-04-development.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -40,7 +52,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | DE-004 | Guardrails implemented and configured | T1-T2 GenAI (T3: recommended) | Technical owner | Guardrail configuration document + test results | Before deployment | Block deployment |
 | DE-005 | Data governance controls applied to training/fine-tuning data | T1-T3 using fine-tuned models (T4: recommended) | AI lead | Data governance checklist with provenance documentation | Before training | Block training |
 
+<!-- END GENERATED: controls-stage-04 -->
+
 ## Stage 5: Evaluation & Testing
+
+<!-- BEGIN GENERATED: controls-stage-05. Edit controls/stage-05-evaluation.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -52,7 +68,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | EV-006 | Eval dataset integrity verified | T1-T4 | AI lead | Confirmation of no overlap with training data; dataset version recorded | Before each eval run | Invalidate eval results; re-run |
 | EV-007 | LLM-as-judge calibrated against human evaluators | T1-T2 using automated eval | AI lead | Calibration report with correlation scores | Quarterly (T1); semi-annually (T2) | Pause automated eval; revert to human eval |
 
+<!-- END GENERATED: controls-stage-05 -->
+
 ## Stage 6: Security Review & Red-Teaming
+
+<!-- BEGIN GENERATED: controls-stage-06. Edit controls/stage-06-security.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -61,7 +81,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | SR-003 | Adversarial robustness defenses implemented | T1-T2 GenAI (T3: recommended) | Technical owner | Defense configuration documentation | Before deployment | Block deployment |
 | SR-004 | Supply chain security verified | T1-T3 using open-source models (T4: recommended) | Security | AI-BOM + provenance verification | Before deployment; on model change | Block deployment |
 
+<!-- END GENERATED: controls-stage-06 -->
+
 ## Stage 7: Deployment Approval
+
+<!-- BEGIN GENERATED: controls-stage-07. Edit controls/stage-07-deployment.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -70,7 +94,11 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | DA-003 | Deployment gates passed | T1-T4 | AI Operations | Gate evidence package | Before deployment | Block deployment |
 | DA-004 | Rollback plan documented and tested | T1-T2 | Technical owner | Rollback procedure + test evidence | Before deployment | Block deployment |
 
+<!-- END GENERATED: controls-stage-07 -->
+
 ## Stage 8: Production Operations
+
+<!-- BEGIN GENERATED: controls-stage-08. Edit controls/stage-08-operations.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -80,9 +108,13 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | PM-004 | Production evaluation running per cadence | T1-T4 | AI Operations | Schedule and latest results for online automated scoring, metrics review and full offline suite re-run | Per tier cadence (workflow Stage 8) | Escalate to AI Risk; increase monitoring |
 | PM-005 | Cost monitoring active | T1-T3 (T4: covered by platform-level budget alerts) | AI Operations | Cost dashboard + alert configuration | Before traffic enabled | Block go-live |
 
+<!-- END GENERATED: controls-stage-08 -->
+
 ### Stage 8 sub-group: Incident Response
 
 Severity, response SLAs and notifications: [escalation paths](../operating-model/escalation-paths.md#severity-classification).
+
+<!-- BEGIN GENERATED: controls-stage-08-incident-response. Edit controls/stage-08-operations.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -92,7 +124,11 @@ Severity, response SLAs and notifications: [escalation paths](../operating-model
 | IR-004 | Post-mortem completed for S1/S2 incidents | T1-T4 (S1 and S2 incidents) | Incident commander | Post-mortem report | Within 1 week (S1) / 2 weeks (S2) | Escalate to AI Risk Committee |
 | IR-005 | Remediation actions tracked to completion | T1-T4 (incidents with remediation actions) | System owner | Remediation tracker with status; S4 items tracked in the backlog | Until complete | Escalate to AI Risk |
 
+<!-- END GENERATED: controls-stage-08-incident-response -->
+
 ## Stage 9: Ongoing Governance
+
+<!-- BEGIN GENERATED: controls-stage-09. Edit controls/stage-09-review.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -101,7 +137,11 @@ Severity, response SLAs and notifications: [escalation paths](../operating-model
 | RV-003 | Revalidation on material change | T1-T4 | AI lead | Revalidation assessment + eval results | On model change, provider update, prompt change, or regulatory change. Independent revalidation also annual (T1) and every 24 months (T2) | Re-enter deployment gates |
 | RV-004 | Regulatory change impact assessed | T1-T3 (T4: recommended) | Compliance | Regulatory change impact assessment | On regulatory change | Escalate to AI Risk Committee |
 
+<!-- END GENERATED: controls-stage-09 -->
+
 ## Stage 10: Deprecation & Retirement
+
+<!-- BEGIN GENERATED: controls-stage-10. Edit controls/stage-10-retirement.yaml, then run python tools/build.py -->
 
 | Control ID | Control | Applies To | Owner | Evidence | Frequency | Escalation if Failed |
 |---|---|---|---|---|---|---|
@@ -110,8 +150,71 @@ Severity, response SLAs and notifications: [escalation paths](../operating-model
 | DR-003 | Evidence archived per retention policy | T1-T4 deprecated systems | AI Operations | Archival confirmation with artifact inventory | At retirement | Compliance escalation |
 | DR-004 | System decommissioned cleanly | T1-T3 retired systems (T4: recommended) | Technical owner | Decommission record (monitoring removed, access revoked, documentation archived) | At retirement | Track until complete |
 
+<!-- END GENERATED: controls-stage-10 -->
+
 ---
 
 ## Summary
 
 This register contains 48 controls, grouped under the 10 stages of the governance workflow (Stage 1, Idea Intake, has no register controls). For the full governance workflow describing how systems progress through these stages, see [governance-workflow.md](governance-workflow.md). For a worked example, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md#control-coverage): it shows the evidence for every control that applies to that T1 GenAI RAG system and lists the controls that do not apply, with reasons.
+
+## Traceability
+
+For each control: the framework documents that define the requirement (the `sources` field in its YAML file), and which regulatory mapping documents cite its ID. The table is rebuilt from a scan of those four documents, so it changes when a mapping adds or drops a control.
+
+<!-- BEGIN GENERATED: traceability. Edit controls/*.yaml, then run python tools/build.py -->
+
+| Control | Source documents | [EU AI Act](../compliance/eu-ai-act-mapping.md) | [NIST AI RMF](../compliance/nist-ai-rmf-mapping.md) | [ISO/IEC 42001](../compliance/iso-42001-mapping.md) | [Multi-jurisdictional](../compliance/multi-jurisdictional-guide.md) |
+|---|---|---|---|---|---|
+| RA-001 | [governance-workflow.md](governance-workflow.md), [risk-matrix.md](../risk-classification/risk-matrix.md), [genai-risk-matrix.md](../risk-classification/genai-risk-matrix.md) | Yes | Yes | Yes | Yes |
+| RA-002 | [governance-workflow.md](governance-workflow.md), [genai-risk-matrix.md](../risk-classification/genai-risk-matrix.md) |  | Yes | Yes | Yes |
+| RA-003 | [governance-workflow.md](governance-workflow.md) | Yes | Yes | Yes | Yes |
+| RA-004 | [governance-workflow.md](governance-workflow.md), [roles-responsibilities.md](../operating-model/roles-responsibilities.md) |  | Yes | Yes | Yes |
+| RA-005 | [governance-workflow.md](governance-workflow.md), [responsible-ai-checklist.md](../compliance/responsible-ai-checklist.md) | Yes | Yes | Yes | Yes |
+| AR-001 | [governance-workflow.md](governance-workflow.md) | Yes | Yes | Yes |  |
+| AR-002 | [governance-workflow.md](governance-workflow.md), [roles-responsibilities.md](../operating-model/roles-responsibilities.md) |  | Yes |  |  |
+| AR-003 | [governance-workflow.md](governance-workflow.md), [data-residency-llm.md](../compliance/data-residency-llm.md), [cross-border-data-governance.md](../compliance/cross-border-data-governance.md) |  | Yes | Yes | Yes |
+| AR-004 | [governance-workflow.md](governance-workflow.md), [model-selection.md](../llm-lifecycle/model-selection.md) | Yes | Yes | Yes | Yes |
+| AR-005 | [governance-workflow.md](governance-workflow.md), [third-party-model-risk.md](../compliance/third-party-model-risk.md) | Yes | Yes | Yes | Yes |
+| DE-001 | [governance-workflow.md](governance-workflow.md), [development.md](../model-lifecycle/development.md) | Yes | Yes | Yes |  |
+| DE-002 | [governance-workflow.md](governance-workflow.md), [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md) |  |  |  |  |
+| DE-003 | [governance-workflow.md](governance-workflow.md), [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md) |  |  |  | Yes |
+| DE-004 | [governance-workflow.md](governance-workflow.md), [adversarial-robustness.md](../ai-security/adversarial-robustness.md) |  | Yes | Yes | Yes |
+| DE-005 | [governance-workflow.md](governance-workflow.md), [fine-tuning-governance.md](../llm-lifecycle/fine-tuning-governance.md) | Yes | Yes | Yes |  |
+| EV-001 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) | Yes | Yes | Yes | Yes |
+| EV-002 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) | Yes | Yes |  |  |
+| EV-003 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) | Yes |  |  |  |
+| EV-004 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md), [rag-governance.md](../llm-lifecycle/rag-governance.md) | Yes | Yes | Yes |  |
+| EV-005 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md), [bias-detection-llm.md](../responsible-ai/bias-detection-llm.md) | Yes | Yes | Yes | Yes |
+| EV-006 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) | Yes | Yes | Yes |  |
+| EV-007 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) |  | Yes | Yes | Yes |
+| SR-001 | [governance-workflow.md](governance-workflow.md), [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md) | Yes | Yes | Yes | Yes |
+| SR-002 | [governance-workflow.md](governance-workflow.md), [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md) | Yes | Yes |  |  |
+| SR-003 | [governance-workflow.md](governance-workflow.md), [adversarial-robustness.md](../ai-security/adversarial-robustness.md) | Yes | Yes | Yes | Yes |
+| SR-004 | [governance-workflow.md](governance-workflow.md), [supply-chain-security.md](../ai-security/supply-chain-security.md), [open-source-model-governance.md](../llm-lifecycle/open-source-model-governance.md) | Yes | Yes | Yes | Yes |
+| DA-001 | [governance-workflow.md](governance-workflow.md) | Yes | Yes | Yes |  |
+| DA-002 | [governance-workflow.md](governance-workflow.md), [roles-responsibilities.md](../operating-model/roles-responsibilities.md), [deployment-gates.md](../llm-lifecycle/deployment-gates.md) | Yes | Yes | Yes |  |
+| DA-003 | [governance-workflow.md](governance-workflow.md), [deployment-gates.md](../llm-lifecycle/deployment-gates.md), [deployment.md](../model-lifecycle/deployment.md) | Yes | Yes | Yes |  |
+| DA-004 | [governance-workflow.md](governance-workflow.md), [deployment.md](../model-lifecycle/deployment.md) | Yes | Yes | Yes |  |
+| PM-001 | [governance-workflow.md](governance-workflow.md), [llm-lifecycle/monitoring.md](../llm-lifecycle/monitoring.md), [model-lifecycle/monitoring.md](../model-lifecycle/monitoring.md) | Yes | Yes | Yes |  |
+| PM-002 | [governance-workflow.md](governance-workflow.md), [llm-lifecycle/monitoring.md](../llm-lifecycle/monitoring.md), [model-lifecycle/monitoring.md](../model-lifecycle/monitoring.md) | Yes | Yes | Yes |  |
+| PM-003 | [governance-workflow.md](governance-workflow.md), [human-in-loop-patterns.md](../responsible-ai/human-in-loop-patterns.md) | Yes | Yes | Yes | Yes |
+| PM-004 | [governance-workflow.md](governance-workflow.md), [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md), [llm-lifecycle/monitoring.md](../llm-lifecycle/monitoring.md) | Yes | Yes | Yes |  |
+| PM-005 | [governance-workflow.md](governance-workflow.md), [cost-governance.md](../operating-model/cost-governance.md) |  | Yes | Yes |  |
+| IR-001 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) |  | Yes |  |  |
+| IR-002 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) |  |  |  |  |
+| IR-003 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) | Yes |  | Yes |  |
+| IR-004 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md), [incident-forensics.md](../operating-model/incident-forensics.md) |  | Yes | Yes |  |
+| IR-005 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) | Yes | Yes | Yes |  |
+| RV-001 | [governance-workflow.md](governance-workflow.md), [review-cadence.md](../operating-model/review-cadence.md) | Yes | Yes | Yes | Yes |
+| RV-002 | [governance-workflow.md](governance-workflow.md) | Yes |  |  |  |
+| RV-003 | [governance-workflow.md](governance-workflow.md), [validation.md](../model-lifecycle/validation.md), [review-cadence.md](../operating-model/review-cadence.md) | Yes | Yes | Yes | Yes |
+| RV-004 | [governance-workflow.md](governance-workflow.md), [regulatory-change-monitoring.md](../compliance/regulatory-change-monitoring.md) | Yes | Yes | Yes |  |
+| DR-001 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md) |  | Yes | Yes |  |
+| DR-002 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md) |  | Yes |  |  |
+| DR-003 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md), [audit-trail-requirements.md](../compliance/audit-trail-requirements.md) | Yes |  | Yes |  |
+| DR-004 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md) |  | Yes | Yes |  |
+
+Controls cited by no regulatory mapping: DE-002, IR-002.
+
+<!-- END GENERATED: traceability -->

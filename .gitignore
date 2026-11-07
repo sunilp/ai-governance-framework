@@ -7,3 +7,6 @@
 
 # Local planning artifacts (never publish)
 docs/superpowers/
+
+# Python bytecode from tools/
+__pycache__/

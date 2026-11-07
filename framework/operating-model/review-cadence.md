@@ -6,12 +6,16 @@ Governance is not a one-time activity. It requires a rhythm of reviews, escalati
 
 ## Cadence by Tier
 
+<!-- BEGIN GENERATED: cadence-by-tier. Edit policy/tiers.yaml, then run python tools/build.py -->
+
 | Activity | T1 | T2 | T3 | T4 |
 |----------|----|----|----|----|
 | Formal governance review (RV-001) | Quarterly | Semi-annual | Annual | Annual self-assessment |
 | Metrics review (operational) | Daily dashboard check by AI Operations, plus a monthly system-owner review | Weekly | Monthly | Quarterly |
 | Revalidation (independent for T1/T2) | Annual, and on material change | Every 24 months, and on material change | On material change (peer re-review) | On material change (peer re-review) |
 | Risk re-assessment (re-tiering check) | At every formal governance review, and on material change | Same | Same | Same |
+
+<!-- END GENERATED: cadence-by-tier -->
 
 Who performs validation at each tier is set in [validation.md](../model-lifecycle/validation.md#validation-independence). Production evaluation cadences for GenAI systems are in [LLM monitoring](../llm-lifecycle/monitoring.md#production-evaluation).
 

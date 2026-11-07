@@ -1,0 +1,85 @@
+# Stage 9 controls: Ongoing Governance.
+# Source of truth for the Stage 9 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 9
+name: Ongoing Governance
+controls:
+
+- id: RV-001
+  title: Formal governance review completed
+  stage: 9
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: system-owner
+  evidence: Review record with findings, actions and risk re-assessment (re-tiering check)
+  frequency: Quarterly (T1); semi-annual (T2); annual (T3); annual self-assessment (T4)
+  on_fail: Overdue review flagged in governance metrics; escalate after 30 days
+  type: detective
+  automation: manual
+  key_control: true
+  test: Take the full inventory of production systems with their last formal review date and recalculate overdue reviews against the tier cadence. Confirm every review overdue by more than 30 days was escalated and shown in governance metrics.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/review-cadence.md
+
+- id: RV-002
+  title: Model card updated
+  stage: 9
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-lead
+  evidence: Updated model card with current information
+  frequency: At each review
+  on_fail: Block until updated
+  type: detective
+  automation: manual
+  key_control: false
+  test: Sample 25 completed formal reviews from the period (or all, if fewer). Confirm the model card was updated on or after the review date and matches the deployed version.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: RV-003
+  title: Revalidation on material change
+  stage: 9
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-lead
+  evidence: Revalidation assessment + eval results
+  frequency: On model change, provider update, prompt change, or regulatory change. Independent revalidation also annual (T1) and every 24 months (T2)
+  on_fail: Re-enter deployment gates
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Sample 25 model, provider, prompt or regulatory changes from the change log (or all, if fewer). Confirm each material change was revalidated before release, and that no T1/T2 scheduled independent revalidation is overdue.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/model-lifecycle/validation.md
+  - framework/operating-model/review-cadence.md
+
+- id: RV-004
+  title: Regulatory change impact assessed
+  stage: 9
+  applies_to:
+    text: 'T1-T3 (T4: recommended)'
+    tiers: [T1, T2, T3]
+    recommended: [T4]
+    systems: [all]
+  owner: compliance
+  evidence: Regulatory change impact assessment
+  frequency: On regulatory change
+  on_fail: Escalate to AI Risk Committee
+  type: detective
+  automation: manual
+  key_control: false
+  test: Sample 5 regulatory changes logged in the period (or all, if fewer). Confirm each has an impact assessment that names the affected systems, and that the resulting actions were tracked.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/regulatory-change-monitoring.md

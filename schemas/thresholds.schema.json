@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evaluation thresholds and suite sizes (policy/thresholds.yaml)",
+  "type": "object",
+  "required": ["metrics", "eval_types"],
+  "additionalProperties": false,
+  "properties": {
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "direction", "unit", "thresholds"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "applies_to": {"enum": ["rag"]},
+          "direction": {"enum": ["min", "max"]},
+          "unit": {"enum": ["percent"]},
+          "thresholds": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["T1", "T2", "T3", "T4"],
+            "patternProperties": {"^T[1-4]$": {"type": ["number", "null"], "minimum": 0, "maximum": 100}}
+          },
+          "tier_text": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {"^T[1-4]$": {"type": "string", "minLength": 1}}
+          },
+          "definition": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "eval_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "tests", "when", "suite"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "control": {"type": "string", "pattern": "^[A-Z]{2}-[0-9]{3}$"},
+          "tests": {"type": "string", "minLength": 1},
+          "when": {"type": "string", "minLength": 1},
+          "unit": {"enum": ["cases", "pairs", "queries"]},
+          "in_table": {"type": "boolean"},
+          "suite": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["T1", "T2", "T3", "T4"],
+            "patternProperties": {"^T[1-4]$": {"$ref": "#/$defs/suiteSize"}}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "suiteSize": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "integer", "minimum": 1},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "min": {"type": ["integer", "null"], "minimum": 1},
+            "text": {"type": "string", "minLength": 1},
+            "required": {"type": "boolean"}
+          }
+        }
+      ]
+    }
+  }
+}

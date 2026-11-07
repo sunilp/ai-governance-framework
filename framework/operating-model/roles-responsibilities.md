@@ -8,6 +8,8 @@ Clear accountability is the foundation of effective AI governance. This document
 
 These are the owner labels used in the [control register](../governance-operations/control-register.md) and the [governance workflow](../governance-operations/governance-workflow.md). In the register, "Owner" is the role that produces and maintains the evidence. It is not always the Accountable role in the RACI below: for example, the Product owner owns the deployment approval record (DA-002), but the tier approver is accountable for the decision.
 
+<!-- BEGIN GENERATED: role-definitions. Edit policy/roles.yaml, then run python tools/build.py -->
+
 | Role | Definition | Line of defence |
 |------|------------|-----------------|
 | **Business owner** | Senior business stakeholder who owns the use case and its outcomes and accepts the residual risk. Exactly one per system. Co-signs T3 deployments. | First |
@@ -32,9 +34,13 @@ These are the owner labels used in the [control register](../governance-operatio
 | **Incident commander** | Named for each incident. Leads the response, files the incident report (IR-003) and runs the post-mortem (IR-004). | First |
 | **Internal Audit** | Independent assurance over the governance framework. | Third |
 
+<!-- END GENERATED: role-definitions -->
+
 ## Approvals by Tier
 
 Each decision has exactly one Accountable approver per tier. Where more than one role signs, the first named is Accountable and the others co-sign. The process and evidence for each decision are in the [governance workflow](../governance-operations/governance-workflow.md).
+
+<!-- BEGIN GENERATED: approvals-by-tier. Edit policy/tiers.yaml, then run python tools/build.py -->
 
 | Decision | T1 | T2 | T3 | T4 |
 |----------|----|----|----|----|
@@ -44,6 +50,8 @@ Each decision has exactly one Accountable approver per tier. Where more than one
 | Model selection | AI Risk Committee; CISO co-signs | Head of AI | Team lead (approved vendor list) | Team lead (approved vendor list) |
 | Deployment | AI Risk Committee; CISO co-signs, and the DPO if personal data is processed | Head of AI; Business Unit Head co-signs | Team lead; business owner co-signs | Team lead |
 | Exception | AI Risk Committee | Head of AI Risk | Head of AI | Team lead |
+
+<!-- END GENERATED: approvals-by-tier -->
 
 Open-source and model licences are approved by Legal at every tier. Exceptions follow [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance).
 
