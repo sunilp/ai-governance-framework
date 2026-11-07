@@ -2,16 +2,16 @@
 
 ## Purpose
 
-Model validation provides independent assurance that a model is fit for purpose, performs as expected, and meets regulatory and organizational standards. For T1 systems, validation must be performed by a function independent of the development team.
+Model validation provides independent assurance that a model is fit for purpose, performs as expected, and meets regulatory and organizational standards. For T1 and T2 systems, validation is performed by someone outside the development team: the team that builds a T1/T2 model never validates it.
 
 ## Validation Independence
 
 | Tier | Validator | Independence Requirement |
 |------|-----------|------------------------|
-| T1 | Model Risk Management (2nd line) | Fully independent — no involvement in development |
-| T2 | Senior data scientist + MRM review | Reviewer must not have contributed to development |
+| T1 | Model Risk Management (2nd line) | Fully independent: no involvement in development |
+| T2 | Qualified reviewer outside the development team (MRM or another second-line reviewer) | Independent validation with reduced scope; reviewer must not have contributed to development |
 | T3 | Peer review within the team | Different individual from the developer |
-| T4 | Standard code review | No additional validation required |
+| T4 | Self-test by the developer | No independent validation required |
 
 ## Validation Scope
 
@@ -70,15 +70,15 @@ A challenger or benchmark comparison is recommended but not mandated. At minimum
 
 The validation report must include:
 
-1. **Executive summary** — Pass/fail recommendation with key findings
-2. **Scope and methodology** — What was validated and how
-3. **Findings** — Categorized as:
+1. **Executive summary:** Pass/fail recommendation with key findings
+2. **Scope and methodology:** What was validated and how
+3. **Findings:** Categorized as:
    - **Critical:** Must be resolved before production deployment
    - **Major:** Must be resolved within 90 days of deployment
    - **Minor:** Tracked for future improvement
-4. **Performance results** — All metrics with benchmarks
-5. **Limitations and conditions** — Under what conditions is the model approved?
-6. **Recommendations** — Specific monitoring requirements, revalidation triggers
+4. **Performance results:** All metrics with benchmarks
+5. **Limitations and conditions:** Under what conditions is the model approved?
+6. **Recommendations:** Specific monitoring requirements, revalidation triggers
 
 ## Revalidation Triggers
 
@@ -87,4 +87,6 @@ A model must be revalidated when:
 - Performance degradation beyond defined thresholds
 - Change in business use or scope expansion
 - Regulatory requirement or audit finding
-- Annual cycle (T1) or biannual cycle (T2)
+- Scheduled cycle: T1 annually, T2 every 24 months
+
+T1 and T2 models are revalidated on the scheduled cycle and whenever another trigger above occurs. T3 and T4 models have no scheduled cycle: they are revalidated by peer re-review when a trigger above occurs.

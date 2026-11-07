@@ -2,7 +2,7 @@
 
 ## Overview
 
-Agentic AI systems — where an LLM autonomously plans, executes multi-step tasks, uses tools, and takes actions with limited human intervention — represent the highest-risk category of generative AI deployment in enterprise environments.
+Agentic AI systems, where an LLM autonomously plans, executes multi-step tasks, uses tools, and takes actions with limited human intervention, represent the highest-risk category of generative AI deployment in enterprise environments.
 
 Unlike conversational AI or content generation, agentic systems can:
 - Execute actions with real-world consequences (API calls, database writes, transactions)
@@ -12,6 +12,8 @@ Unlike conversational AI or content generation, agentic systems can:
 - Adapt behavior based on environmental feedback
 
 These capabilities compound the standard GenAI risks (hallucination, prompt injection, data leakage) with autonomous execution risk.
+
+This document holds the risk taxonomy, the tier rule and the incident examples. The requirements for agent identity, delegation, tool allowlists and scopes, approval gates, memory, inter-agent messages, code execution, the kill switch and the agent action audit record are in [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md), reviewed under AR-006 and operated under PM-006 and PM-007.
 
 ---
 
@@ -35,6 +37,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Blast radius limits: cap the scope of any single action (e.g., max records affected)
 - Confirmation gates: require human approval for irreversible or high-impact actions
 - Dry-run mode: preview actions before execution
+- Allowlists, scopes, caps and approval gates are specified in [tools](../llm-lifecycle/agent-identity-and-tool-governance.md#3-tools-mcp-servers-and-a2a-peers) and [human approval gates](../llm-lifecycle/agent-identity-and-tool-governance.md#4-human-approval-gates)
 
 ### 2. Prompt Injection via Tool Outputs
 
@@ -62,11 +65,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Unbounded context accumulation that dilutes safety instructions
 - State inconsistency across agent sessions
 
-**Controls:**
-- Memory audit trails: log all state changes with provenance
-- Memory expiration: enforce TTL on stored context
-- Session boundaries: define clear state reset points
-- Memory validation: periodic integrity checks against expected behavioral baselines
+**Controls:** memory scope, retention, provenance, poisoning defences, audit and rollback are set in [memory](../llm-lifecycle/agent-identity-and-tool-governance.md#5-memory-owasp-asi06) (OWASP ASI06) and reviewed under AR-006.
 
 ### 4. Privilege Escalation
 
@@ -77,11 +76,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Credential exposure through prompt context
 - Agent requesting additional permissions from users or systems
 
-**Controls:**
-- Principle of least privilege: agents receive minimum necessary permissions
-- Credential isolation: never expose credentials in agent context; use service-level auth
-- Capability boundaries: hard-coded limits on what tools an agent can access
-- No self-modification: agents cannot modify their own tool definitions or permissions
+**Controls:** own non-human identity per agent, credentials kept out of the model's reach, least-privilege tool scopes, delegation that only narrows, and tool access fixed at deployment are set in [agent identity](../llm-lifecycle/agent-identity-and-tool-governance.md#1-agent-identity), [delegation](../llm-lifecycle/agent-identity-and-tool-governance.md#2-delegation) and [tools](../llm-lifecycle/agent-identity-and-tool-governance.md#3-tools-mcp-servers-and-a2a-peers) (OWASP ASI02, ASI03), and reviewed under AR-006.
 
 ### 5. Cascading Failure and Feedback Loops
 
@@ -93,10 +88,10 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Error correction attempts by the agent make the situation worse
 
 **Controls:**
-- Circuit breakers: automatic shutdown after N consecutive errors or anomalous outputs
+- Circuit breakers: automatic shutdown after N consecutive errors or anomalous outputs; trigger levels are set in [circuit breakers](../llm-lifecycle/multi-agent-governance.md#circuit-breakers), where the per-agent level also applies to a single agent
 - Rate limiting: cap the number of actions per time window
 - Rollback capability: every action must have a defined undo path
-- Multi-agent isolation: agents in a pipeline should not share mutable state without validation gates
+- Multi-agent isolation: no shared mutable state between agents without validation gates ([shared state](../llm-lifecycle/multi-agent-governance.md#shared-state))
 
 ### 6. Multi-Agent Coordination Risk
 
@@ -108,31 +103,19 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Information leakage between agent contexts (Agent A reveals data to Agent B that Agent B should not have)
 - Emergent goal misalignment (agents collectively pursue an objective none was individually instructed to pursue)
 
-**Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing) — adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
+**Example:** Agent A (research) passes data to Agent B (writing) which passes to Agent C (publishing). Adversarial content in research data propagates through the entire chain without any individual agent detecting it as harmful.
 
-**Controls:**
-- Message validation at each agent boundary
-- Aggregate privilege analysis (verify combined permissions don't exceed intended scope)
-- Cross-agent monitoring for emergent behavioral patterns
-- System-wide circuit breakers (not just per-agent)
-- See [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md) for detailed governance standards
+**Controls:** message validation at each agent boundary, aggregate privilege analysis, information flow controls, system-wide circuit breakers and emergent behaviour testing are set in [multi-agent governance](../llm-lifecycle/multi-agent-governance.md).
 
 ### 7. Persistent Memory and Long-Term State Risk
 
-**Risk:** Agents with long-term memory accumulate context that can be manipulated, become stale, or create privacy obligations.
+**Risk:** Beyond the manipulation covered in risk 3, long-term memory goes stale and creates privacy obligations.
 
 **Contributing factors:**
-- Memory poisoning over time (adversarial interactions gradually corrupt stored context)
-- Unbounded memory growth (agent stores everything, diluting relevant context)
 - Stale context influencing current decisions (outdated information treated as current)
 - PII accumulation in memory (agent memory becomes a data privacy liability)
 
-**Controls:**
-- Memory TTL enforcement: all stored context must expire
-- Periodic memory audit: review stored context for accuracy and appropriateness
-- PII scanning of stored context: enforce redaction policy on persistent memory
-- Memory versioning with rollback: ability to revert to known-good state
-- See state management section in [multi-agent-governance.md](../llm-lifecycle/multi-agent-governance.md)
+**Controls:** time to live, PII scanning, periodic review, versioning and rollback, and erasure are set in [memory](../llm-lifecycle/agent-identity-and-tool-governance.md#5-memory-owasp-asi06). Shared state between agents is covered in [multi-agent governance](../llm-lifecycle/multi-agent-governance.md#shared-state).
 
 ### 8. Complex Tool Chain Risk
 
@@ -144,7 +127,7 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 - Chained tool calls accumulating side effects beyond any single tool's blast radius
 - Tool output reinterpretation (output intended as data is treated as instruction by next tool)
 
-**Example:** An agent with read access to a database and write access to an email system chains these to extract customer data and email it externally — neither permission alone enables this, but the combination does.
+**Example:** An agent with read access to a database and write access to an email system chains these to extract customer data and email it externally. Neither permission alone enables this, but the combination does.
 
 **Controls:**
 - Tool composition analysis at deployment: enumerate all possible tool chains and assess combined impact
@@ -156,14 +139,13 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 
 ## Mandatory Risk Tier Classification
 
-All agentic AI systems are classified as **minimum T2 (High)**.
+All agentic AI systems are **minimum T2 (High)** (override item 6). An agentic system is automatically **T1 (Critical)** when it has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access (item 4), or when any other automatic T1 item applies.
 
-Any agentic system with the following characteristics is automatically **T1 (Critical)**:
-- Access to production databases or transaction systems
-- Ability to communicate with customers or external parties
-- Processing of PII, MNPI, or regulated data
-- Financial transaction authority of any amount
-- Access to identity or authentication systems
+Score the agent's GenAI dimensions in [genai-risk-matrix.md](genai-risk-matrix.md#risk-tier-determination-for-genai). The highest-scoring dimension sets the tier, and the aggregate score is recorded for context only. An agent that processes PII, MNPI or regulated data scores Critical on Data Exposure Risk, so it is T1 under that rule even with read-only tools.
+
+### Tier Override Rules
+
+The canonical override list is in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules), and the same list applies here and in [multimodal-risk-matrix.md](multimodal-risk-matrix.md). Overrides can raise the tier, never lower it. Items 4 (automatic T1) and 6 (minimum T2) set the agentic floor described above. Check every other item too: for example, an agent that influences regulated decisions is T1 under item 1, and one that sends customer personal data to an external LLM API is T1 under item 3 unless all four safeguards are in place.
 
 ---
 
@@ -173,7 +155,9 @@ Any agentic system with the following characteristics is automatically **T1 (Cri
 
 | Requirement | Description |
 |------------|-------------|
-| Architecture review | Mandatory review by AI Risk Committee; document all tools, permissions, data flows |
+| Architecture review | Mandatory for every agent: architecture review board sign-off (T1) or a recorded design review approved by the Head of AI or delegate (T2); document all tools, permissions, data flows |
+| Agent identity and tool review | Agent identity record, tool allowlist with scopes, delegation limits and approvals per [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md) (AR-006) |
+| Agent evaluation | Task success, tool-call accuracy, unsafe action rate (zero tolerated at T1/T2) and trajectory review per [evaluation governance](../llm-lifecycle/evaluation-governance.md#agent-evaluation) (EV-008) |
 | Action inventory | Complete catalog of every action the agent can take, with blast radius assessment |
 | Adversarial testing | Red-team testing for prompt injection, privilege escalation, goal manipulation |
 | Failure mode analysis | Document every known failure mode with mitigation and fallback |
@@ -184,12 +168,12 @@ Any agentic system with the following characteristics is automatically **T1 (Cri
 
 | Control | Description |
 |---------|-------------|
-| Action logging | Every tool call, parameter, result, and decision logged with full trace |
-| Confirmation gates | Irreversible or high-impact actions require human confirmation |
+| Action logging | Every tool call, delegation, memory write and inter-agent message logged in the [agent action audit record](../compliance/prompt-audit-trail.md#agent-action-audit-record) (PM-007) |
+| Confirmation gates | Irreversible or high-value actions require human approval before execution ([human approval gates](../llm-lifecycle/agent-identity-and-tool-governance.md#4-human-approval-gates)) |
 | Budget limits | Token, cost, and action-count budgets per session |
 | Time limits | Maximum execution time per task; automatic timeout with graceful shutdown |
 | Anomaly detection | Real-time monitoring for unusual action patterns, error rates, or output characteristics |
-| Kill switch | Immediate shutdown capability accessible to on-call operators |
+| Kill switch | Required for every agentic system and non-waivable; time to effect, credential revocation and testing are set in [kill switch](../llm-lifecycle/agent-identity-and-tool-governance.md#8-kill-switch) (PM-006) |
 
 ### Post-Deployment Monitoring
 
@@ -200,18 +184,22 @@ Any agentic system with the following characteristics is automatically **T1 (Cri
 | Tool error rate | Real-time | > 5% triggers circuit breaker |
 | Cost per session | Daily | Budget ceiling with automatic alerts |
 | Adversarial input detection rate | Weekly | Trend analysis |
-| Hallucination rate in reasoning traces | Weekly | Per use case threshold |
+| Hallucination rate in reasoning traces | Weekly | Tier cap from [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier); a use-case threshold applies only when stricter |
 
 ---
 
 ## Agentic AI Incident Classification
 
-| Severity | Criteria | Response |
-|----------|----------|----------|
-| S1 — Critical | Agent takes unauthorized action with customer/financial impact | Immediate shutdown; 15-minute response; board notification |
-| S2 — High | Agent takes incorrect action caught before external impact | Pause agent; 4-hour response; root cause analysis |
-| S3 — Medium | Agent reasoning error without downstream action | Flag for review; 24-hour assessment |
-| S4 — Low | Agent performance degradation within acceptable bounds | Log; next scheduled review |
+Severity definitions and response SLAs are set in escalation-paths.md. This table gives agentic examples only.
+
+### Examples by severity (definitions: [escalation-paths.md#severity-classification](../operating-model/escalation-paths.md#severity-classification))
+
+| Severity | Agentic examples | Agent-specific first action |
+|----------|------------------|-----------------------------|
+| S1 Critical | Agent takes an unauthorized or incorrect action that causes customer harm, financial loss, a regulatory breach or a data exposure | Kill switch; roll back the action where possible; notify the AI Risk Committee chair within 1 hour; notify the Board Risk Committee within 24 hours per [material incident criteria](../operating-model/board-reporting.md#material-incident-criteria) |
+| S2 High | Agent output or action reaches customers or external parties with no confirmed harm yet; or a key control fails (a confirmation gate, action allowlist or blast radius limit does not stop an action), even if the action is caught before external impact | Pause the agent; preserve the full action trace; root cause identified within 48 hours; notify the Board Risk Committee if the [material incident criteria](../operating-model/board-reporting.md#material-incident-criteria) are met |
+| S3 Medium | Reasoning error or wrong tool call stopped by a control before any action took effect; or quality degraded but still within tolerance | Flag for review; root cause documented within 10 business days |
+| S4 Low | Minor performance degradation within acceptable bounds, no external exposure, no control failure | Log; track in backlog |
 
 ---
 

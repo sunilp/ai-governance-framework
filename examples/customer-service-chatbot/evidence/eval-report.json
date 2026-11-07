@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "system_id": "cs-assistant-retail-v1.2",
+  "tier": "T1",
+  "release": "1.2.0",
+  "evaluation_date": "2026-01-08",
+  "source": "Model card evaluation block (../model-card.yaml), v1.2.0 revalidation. Fractions: 0.01 means 1%.",
+  "metrics": [
+    {
+      "id": "hallucination_rate",
+      "value": 0.002,
+      "n": 500,
+      "failures": 1,
+      "threshold": 0.01,
+      "method": "hybrid"
+    },
+    {
+      "id": "faithfulness",
+      "value": 0.94,
+      "n": 500,
+      "lower_bound": 0.933,
+      "interval_method": "t-interval",
+      "threshold": 0.9,
+      "method": "llm-as-judge"
+    },
+    {
+      "id": "safety_pass_rate",
+      "value": 0.998,
+      "n": 500,
+      "failures": 1,
+      "threshold": 0.99,
+      "method": "automated"
+    },
+    {
+      "id": "retrieval_precision_at_5",
+      "value": 0.88,
+      "n": 200,
+      "lower_bound": 0.861,
+      "interval_method": "t-interval",
+      "threshold": 0.85,
+      "method": "automated"
+    },
+    {
+      "id": "guardrail_false_negative_rate",
+      "value": 0.0,
+      "n": 300,
+      "failures": 0,
+      "threshold": 0.01,
+      "method": "automated"
+    },
+    {
+      "id": "guardrail_false_positive_rate",
+      "value": 0.02,
+      "n": 300,
+      "failures": 6,
+      "threshold": 0.05,
+      "method": "automated"
+    },
+    {
+      "id": "counterfactual_consistency",
+      "attribute": "gender",
+      "n": 200,
+      "failures": 9
+    },
+    {
+      "id": "counterfactual_consistency",
+      "attribute": "age_group",
+      "n": 200,
+      "failures": 10
+    },
+    {
+      "id": "counterfactual_consistency",
+      "attribute": "nationality",
+      "n": 200,
+      "failures": 11
+    },
+    {
+      "id": "counterfactual_consistency",
+      "attribute": "language_preference",
+      "n": 200,
+      "failures": 10
+    },
+    {
+      "id": "relevance",
+      "value": 0.91,
+      "threshold": 0.85,
+      "method": "llm-as-judge"
+    },
+    {
+      "id": "correctness",
+      "value": 0.96,
+      "threshold": 0.95,
+      "method": "human-eval"
+    },
+    {
+      "id": "format_compliance",
+      "value": 0.99,
+      "threshold": 0.95,
+      "method": "automated"
+    },
+    {
+      "id": "escalation_appropriateness",
+      "value": 0.93,
+      "threshold": 0.9,
+      "method": "human-eval"
+    }
+  ],
+  "segments": [
+    {
+      "segment": "channel: mobile app",
+      "n": 310,
+      "results": {
+        "hallucination_rate": 0.003,
+        "faithfulness": 0.94
+      }
+    },
+    {
+      "segment": "channel: online banking",
+      "n": 190,
+      "results": {
+        "hallucination_rate": 0.0,
+        "faithfulness": 0.94
+      }
+    },
+    {
+      "segment": "language: English",
+      "n": 340,
+      "results": {
+        "hallucination_rate": 0.003,
+        "faithfulness": 0.96
+      }
+    },
+    {
+      "segment": "language: German",
+      "n": 80,
+      "results": {
+        "hallucination_rate": 0.0,
+        "faithfulness": 0.89
+      }
+    },
+    {
+      "segment": "language: French and Spanish",
+      "n": 80,
+      "results": {
+        "hallucination_rate": 0.0,
+        "faithfulness": 0.91
+      }
+    },
+    {
+      "segment": "vulnerability indicator present",
+      "n": 60,
+      "results": {
+        "hallucination_rate": 0.0,
+        "faithfulness": 0.93
+      }
+    }
+  ],
+  "human_evaluation": {
+    "double_rated_share": 0.2,
+    "agreement_statistic": "cohen-kappa",
+    "agreement": 0.84
+  },
+  "red_team": {
+    "report": "RT-2025-CS-001",
+    "dates": "2025-08-11 to 2025-08-14",
+    "cases": 200,
+    "manual_testing": true,
+    "note": "Pre-deployment red-team with external testers. Quarterly red-teams RT-2025-CS-002 (2025-11-12) and RT-2026-CS-001 (2026-02-11) each ran 200 cases with no Critical or High findings."
+  },
+  "security_findings": {
+    "critical_open": 0,
+    "high_open": 0,
+    "sources": "RT-2025-CS-001 (1 High, remediated and retested on prompt v1.2.3), RT-2025-CS-002 and the v1.2.0 prompt-change adversarial regression set (no Critical or High findings)"
+  }
+}

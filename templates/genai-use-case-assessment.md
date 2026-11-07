@@ -2,7 +2,30 @@
 
 ## Instructions
 
-Complete this assessment before initiating development of any GenAI use case. Submit to the appropriate approver based on the resulting risk tier.
+Complete this assessment before initiating development of any GenAI use case. The product owner prepares it and submits it to the approver for the resulting risk tier (see section 8). Start with section 0: if the use case fails it, stop before spending time on the rest.
+
+---
+
+## 0. Should This Use GenAI at All?
+
+Answer these before scoring anything. Each question maps to a position in [when to say no](../framework/governance-operations/when-to-say-no.md). A "Yes" means stop or redesign, and the approver reviews these answers with the rest of the assessment.
+
+| # | Question | Yes / No | If yes |
+|---|----------|----------|--------|
+| 0.1 | Does the use case fall under EU AI Act Art. 5 or the internal prohibited-use policy? Run the [Step 0 prohibited-use screen](../framework/risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) | | Rejected. Not tiered, cannot be excepted ([position 6](../framework/governance-operations/when-to-say-no.md#6-prohibited-practices-are-rejected-at-step-0)) |
+| 0.2 | Would the model generate a fee, rate, balance, limit, eligibility outcome or regulatory figure, instead of taking it from a system of record? | | Redesign ([position 1](../framework/governance-operations/when-to-say-no.md#1-figures-with-legal-or-contractual-effect-come-from-a-system-of-record)) |
+| 0.3 | Would GenAI make an adverse regulated decision without a qualified human deciding? | | Redesign ([position 2](../framework/governance-operations/when-to-say-no.md#2-genai-never-makes-an-adverse-regulated-decision-on-its-own)) |
+| 0.4 | Would an agent take a write action that cannot be reversed, or cannot be rate-limited and capped, without human confirmation? | | Redesign ([position 3](../framework/governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped)) |
+| 0.5 | Would customer personal data, MNPI or regulated data go to an external model API without evidenced residency, zero retention and a signed DPA? | | Redesign ([position 4](../framework/governance-operations/when-to-say-no.md#4-no-external-model-api-without-evidenced-residency-and-zero-retention)) |
+| 0.6 | Is there no agreed definition of a correct answer, or no way to build evaluation suites of the tier size? | | Not ready ([position 5](../framework/governance-operations/when-to-say-no.md#5-no-launch-when-the-evaluation-cannot-show-the-threshold-is-met)) |
+| 0.7 | Would search, a rules engine or a conventional model meet the need? | | Use the simpler method ([position 7](../framework/governance-operations/when-to-say-no.md#7-no-genai-where-a-simpler-method-meets-the-need)) |
+| 0.8 | Would a business-critical process depend on one vendor model with no validated fallback? | | Redesign ([position 8](../framework/governance-operations/when-to-say-no.md#8-no-business-critical-process-on-a-model-you-cannot-replace)) |
+
+| Field | Response |
+|-------|----------|
+| Step 0 prohibited-use screen result (recorded under RA-001) | Pass / Rejected |
+| Positions triggered and redesign made | |
+| If proceeding despite a "Yes" (not possible for 0.1): reasoning, and the approver's recorded decision | |
 
 ---
 
@@ -89,7 +112,9 @@ Complete this assessment before initiating development of any GenAI use case. Su
 
 ### GenAI Risk Dimensions
 
-Score each dimension: Critical (4), High (3), Medium (2), Low (1). Refer to [genai-risk-matrix.md](../framework/risk-classification/genai-risk-matrix.md) for definitions.
+Score each dimension: Critical (4), High (3), Medium (2), Low (1). Refer to [genai-risk-matrix.md](../framework/risk-classification/genai-risk-matrix.md#risk-tier-determination-for-genai) for definitions.
+
+The highest-scoring dimension sets the tier: any Critical gives T1; otherwise any High gives T2; otherwise any Medium gives T3; all Low gives T4. The aggregate score is recorded for context only and does not set the tier.
 
 | Dimension | Score | Justification |
 |-----------|-------|---------------|
@@ -98,19 +123,35 @@ Score each dimension: Critical (4), High (3), Medium (2), Low (1). Refer to [gen
 | Prompt injection susceptibility | | |
 | Output controllability | | |
 | Third-party model dependency | | |
-| **Aggregate score** | | |
-| **Resulting risk tier** | | |
+| **Highest dimension score** | | |
+| **Aggregate score** (informational only) | | |
+| **Tier from scoring** | | |
 
 ### Tier Override Check
 
-Does this use case meet any automatic T1 criteria?
+Check every item in the [canonical override list](../framework/risk-classification/genai-risk-matrix.md#tier-override-rules). Overrides can raise the tier, never lower it.
 
-- [ ] Processes customer PII through external LLM API
-- [ ] Generates customer-facing content without human review
-- [ ] Makes or influences regulated decisions
-- [ ] Involves agentic behavior with production system access
+**Automatic T1:**
 
-If any box is checked → **automatic T1 classification**.
+- [ ] 1. Makes or directly influences regulated decisions (credit, insurance underwriting or pricing, AML/sanctions, employment)
+- [ ] 2. Generates customer-facing content delivered without per-output human review
+- [ ] 3. Processes customer personal data through an external LLM API without all four safeguards (zero vendor data retention, a regional endpoint that meets data residency requirements, a signed DPA, PII redaction or minimisation before the call)
+- [ ] 4. Agentic behaviour with write access to production systems or data stores, or with authority to move money, communicate with customers, or change identity and access
+- [ ] 5. Biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery
+
+**Minimum T2:**
+
+- [ ] 6. Any agentic system, including read-only tool use, and any multi-agent system
+- [ ] 7. Synthetic media generation not covered by item 5
+- [ ] 8. Customer personal data through an external LLM API with all four safeguards in place
+- [ ] 9. Personal data in visual content
+
+If any of items 1 to 5 is checked, the use case is **T1**. If any of items 6 to 9 is checked, it is **at least T2**.
+
+| Field | Response |
+|-------|----------|
+| Override items applied | |
+| **Resulting risk tier** | |
 
 ---
 
@@ -144,7 +185,8 @@ If any box is checked → **automatic T1 classification**.
 
 | Question | Response |
 |----------|----------|
-| What HITL pattern applies? | Full review / Sampling / Exception / Autonomous |
+| What HITL pattern applies? | Pattern 1 human-in-the-loop / Pattern 2 human-on-the-loop / Pattern 3 human-over-the-loop / Pattern 4 human-out-of-the-loop |
+| T1 customer-facing using Pattern 3: are all five safeguards in place and evidenced? (see [pattern selection matrix](../framework/responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix)) | Yes / No / N/A |
 | Who reviews AI outputs? | |
 | What is the review process? | |
 | Can the user override or reject AI output? | Yes / No |
@@ -155,7 +197,7 @@ If any box is checked → **automatic T1 classification**.
 |-----------|------------|-------|
 | EU AI Act | Yes / No | |
 | GDPR | Yes / No | |
-| SR 11-7 | Yes / No | |
+| SR 26-2 (US model risk guidance, replaced SR 11-7 in April 2026; covers traditional and non-generative AI model components only, GenAI and agentic AI are out of scope) | Yes / No | |
 | Consumer Duty (FCA) | Yes / No | |
 | BCBS 239 | Yes / No | |
 | DORA | Yes / No | |
@@ -212,12 +254,14 @@ If any box is checked → **automatic T1 classification**.
 
 ### Required Approvals by Tier
 
-| Tier | Required Approvals |
+| Tier | Risk assessment approver |
 |------|-------------------|
-| T1 | AI Risk Committee + CISO + Business Unit Head |
-| T2 | Head of AI + Security Review |
-| T3 | Team Lead + Business Owner |
-| T4 | Team Lead |
+| T1 | AI Risk Committee |
+| T2 | AI Risk (second line) |
+| T3 | Team lead |
+| T4 | Team lead (acknowledges the self-assessment) |
+
+Deployment approval is a separate step: see [Stage 7 of the governance workflow](../framework/governance-operations/governance-workflow.md#stage-7-deployment-approval).
 
 ---
 

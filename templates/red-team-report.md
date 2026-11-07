@@ -4,7 +4,7 @@
 
 Complete this template after conducting adversarial testing of an AI system. For the testing methodology, see [red-teaming-protocol.md](../framework/ai-security/red-teaming-protocol.md). Submit to the system owner and AI Risk within 5 business days of assessment completion.
 
-Sanitize all examples — redact any PII, confidential data, or content that could enable attacks if the report is shared.
+Sanitize all examples: redact any PII, confidential data, or content that could enable attacks if the report is shared.
 
 ---
 
@@ -21,6 +21,8 @@ Sanitize all examples — redact any PII, confidential data, or content that cou
 | Assessor(s) | |
 | Assessment Type | Internal / External / Automated / Combined |
 | Total Test Cases Executed | |
+| Required Depth for Tier | T1: 200+ including manual testing (external testers recommended) / T2: 100+ / T3: automated scan + 50 manual cases / T4: automated scan, 20+ cases (recommended). See [red-teaming-protocol.md](../framework/ai-security/red-teaming-protocol.md#tiered-testing-depth) |
+| Required Depth Met | Yes / No |
 | Model Version(s) Tested | |
 | Prompt Version(s) Tested | |
 
@@ -124,7 +126,7 @@ Sanitize all examples — redact any PII, confidential data, or content that cou
 
 ## 6. Positive Findings
 
-*Document defenses that worked well — what attacks were successfully blocked.*
+*Document defenses that worked well: what attacks were successfully blocked.*
 
 | Category | Finding |
 |----------|---------|
@@ -155,9 +157,9 @@ Sanitize all examples — redact any PII, confidential data, or content that cou
 
 Based on this assessment:
 
-- [ ] **Pass** — no Critical or High findings; system may proceed to deployment
-- [ ] **Conditional pass** — no Critical findings; High findings have documented remediation plan with timeline; remediated High/Critical findings must pass retest before production approval
-- [ ] **Fail** — Critical or unaddressed High findings; system must not proceed to deployment
+- [ ] **Pass**: no Critical or High findings; system may proceed to deployment
+- [ ] **Conditional pass**: no Critical findings; High findings have documented remediation plan with timeline; remediated High/Critical findings must pass retest before production approval
+- [ ] **Fail**: Critical or unaddressed High findings; system must not proceed to deployment
 
 **Rationale:**
 

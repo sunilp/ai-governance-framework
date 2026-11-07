@@ -32,7 +32,7 @@ intended_use:
   primary_users: ""                     # Who consumes the model's output?
   out_of_scope_uses: []                 # Uses the model is explicitly NOT designed for
   decision_type: ""                     # "automated" | "recommendation" | "informational"
-  human_oversight: ""                   # "in_the_loop" | "on_the_loop" | "out_of_the_loop"
+  human_oversight: ""                   # "human-in-the-loop" | "human-on-the-loop" | "human-over-the-loop" | "human-out-of-the-loop"
 
 training_data:
   description: ""                       # What data was the model trained on?
@@ -40,7 +40,7 @@ training_data:
   size: ""                              # Number of records, time range
   features_count: 0                     # Number of input features
   target_variable: ""                   # What is the model predicting?
-  class_distribution: ""                # For classification — balance of classes
+  class_distribution: ""                # For classification: balance of classes
   known_limitations: ""                 # Known gaps or biases in the training data
   preprocessing: ""                     # Key preprocessing steps
   data_version: ""                      # Dataset version identifier

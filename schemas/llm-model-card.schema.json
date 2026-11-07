@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LLM model card (templates/llm-model-card.yaml)",
+  "description": "Required core fields and the enumerations declared in the template. Fields not listed here are allowed.",
+  "type": "object",
+  "required": ["model_details", "intended_use", "evaluation"],
+  "properties": {
+    "model_details": {
+      "type": "object",
+      "required": ["name", "model_id", "version", "type", "risk_tier"],
+      "properties": {
+        "name": {"$ref": "#/$defs/text"},
+        "model_id": {"$ref": "#/$defs/text"},
+        "version": {"$ref": "#/$defs/text"},
+        "type": {"enum": ["foundation", "fine-tuned", "rag-system", "agent"]},
+        "hosting": {"enum": ["vendor-api", "self-hosted", "vpc-hosted"]},
+        "risk_tier": {"$ref": "#/$defs/tier"},
+        "date_deployed": {"$ref": "#/$defs/date"},
+        "last_reviewed": {"$ref": "#/$defs/date"},
+        "next_review": {"$ref": "#/$defs/date"},
+        "owners": {"type": "object"}
+      }
+    },
+    "intended_use": {
+      "type": "object",
+      "required": ["primary_use_case", "decision_type", "human_oversight_pattern", "customer_facing"],
+      "properties": {
+        "primary_use_case": {"$ref": "#/$defs/text"},
+        "target_users": {"$ref": "#/$defs/stringList"},
+        "out_of_scope_uses": {"$ref": "#/$defs/stringList"},
+        "decision_type": {"$ref": "#/$defs/decisionType"},
+        "human_oversight_pattern": {"$ref": "#/$defs/oversightPattern"},
+        "human_oversight_safeguards": {
+          "description": "Pattern 3 safeguards a to e (human-in-loop-patterns.md#pattern-selection-matrix). Required by tools/check.py for T1 customer-facing systems using human-over-the-loop.",
+          "type": "object",
+          "properties": {
+            "sampled_review": {"$ref": "#/$defs/text"},
+            "risk_based_routing": {"oneOf": [{"$ref": "#/$defs/text"}, {"$ref": "#/$defs/stringList"}]},
+            "scope_guardrails": {"$ref": "#/$defs/text"},
+            "kill_switch": {"$ref": "#/$defs/text"},
+            "kill_switch_last_tested": {"$ref": "#/$defs/date"},
+            "hallucination_monitoring": {"$ref": "#/$defs/text"}
+          }
+        },
+        "customer_facing": {"type": "boolean"},
+        "regulatory_context": {"$ref": "#/$defs/stringList"}
+      }
+    },
+    "system_architecture": {
+      "type": "object",
+      "properties": {
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {"type": {"enum": ["prompt", "retrieval", "guardrail", "orchestration", "evaluation"]}}
+          }
+        },
+        "data_flows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {"data_classification": {"enum": ["public", "internal", "confidential", "pii", "regulated"]}}
+          }
+        },
+        "rag_configuration": {
+          "type": "object",
+          "required": ["enabled"],
+          "properties": {"enabled": {"type": "boolean"}}
+        }
+      }
+    },
+    "prompt_governance": {
+      "type": "object",
+      "properties": {
+        "last_prompt_review": {"$ref": "#/$defs/date"},
+        "adversarial_testing_date": {"$ref": "#/$defs/date"},
+        "guardrails": {
+          "type": "object",
+          "properties": {
+            "input_validation": {"type": "boolean"},
+            "output_filtering": {"type": "boolean"},
+            "pii_redaction": {"type": "boolean"},
+            "toxicity_gate": {"type": "boolean"},
+            "hallucination_detection": {"type": "boolean"},
+            "custom_rules": {"$ref": "#/$defs/stringList"}
+          }
+        }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["evaluation_date", "metrics"],
+      "properties": {
+        "evaluation_date": {"$ref": "#/$defs/date"},
+        "evaluation_dataset_size": {"type": ["integer", "null"], "minimum": 1},
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "value", "threshold", "method"],
+            "properties": {
+              "name": {"$ref": "#/$defs/text"},
+              "value": {"type": ["number", "null"]},
+              "threshold": {"type": ["number", "null"]},
+              "method": {"enum": ["llm-as-judge", "human-eval", "automated", "hybrid"]},
+              "direction": {"description": "min (default): higher is better. max: lower is better. Metrics in policy/thresholds.yaml use the direction set there.", "enum": ["min", "max"]}
+            }
+          }
+        },
+        "adversarial_testing": {
+          "type": "object",
+          "properties": {
+            "test_type": {"enum": ["red-team", "prompt-change-regression"]},
+            "prompt_injection_resistance": {"$ref": "#/$defs/rate"},
+            "jailbreak_resistance": {"$ref": "#/$defs/rate"},
+            "test_suite_size": {"type": ["integer", "null"], "minimum": 1}
+          }
+        },
+        "bias_evaluation": {
+          "type": "object",
+          "properties": {
+            "tested_attributes": {"$ref": "#/$defs/stringList"},
+            "counterfactual_consistency": {"$ref": "#/$defs/rate"},
+            "sentiment_parity": {"$ref": "#/$defs/rate"},
+            "methodology": {"type": "string"}
+          }
+        },
+        "production_evaluations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["date", "activity", "results", "outcome"],
+            "properties": {
+              "date": {"$ref": "#/$defs/date"},
+              "activity": {"enum": ["online-scoring", "metrics-review", "offline-suite-rerun"]},
+              "trigger": {"type": "string"},
+              "dataset_size": {"type": ["integer", "null"], "minimum": 1},
+              "results": {"type": "object", "additionalProperties": {"type": ["number", "null"]}},
+              "outcome": {"$ref": "#/$defs/text"}
+            }
+          }
+        }
+      }
+    },
+    "vendor_risk": {
+      "type": "object",
+      "properties": {
+        "dpa_in_place": {"type": "boolean"},
+        "training_data_exclusion": {"type": "boolean"},
+        "exit_strategy_documented": {"type": "boolean"},
+        "fallback_validated": {"type": "boolean"},
+        "last_vendor_assessment": {"$ref": "#/$defs/date"}
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "name", "date", "decision"],
+        "properties": {
+          "role": {"$ref": "#/$defs/text"},
+          "name": {"$ref": "#/$defs/text"},
+          "date": {"$ref": "#/$defs/date"},
+          "decision": {"enum": ["approved", "approved-with-conditions", "rejected"]}
+        }
+      }
+    },
+    "change_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version", "date", "description"],
+        "properties": {
+          "version": {"$ref": "#/$defs/text"},
+          "date": {"$ref": "#/$defs/date"},
+          "description": {"$ref": "#/$defs/text"},
+          "approved_by": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "stringList": {"type": "array", "items": {"type": "string"}},
+    "tier": {"enum": ["T1", "T2", "T3", "T4"]},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+    "rate": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+    "decisionType": {"enum": ["informational", "recommendation", "automated"]},
+    "oversightPattern": {"enum": ["human-in-the-loop", "human-on-the-loop", "human-over-the-loop", "human-out-of-the-loop"]}
+  }
+}

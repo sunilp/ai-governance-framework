@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Incident severity and alert priority (policy/severity.yaml)",
+  "type": "object",
+  "required": ["severities", "alert_priorities"],
+  "additionalProperties": false,
+  "properties": {
+    "response_sla_meaning": {"type": "string", "minLength": 1},
+    "tier_floor": {"type": "string", "minLength": 1},
+    "severities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "definition", "response_sla", "response_sla_minutes", "root_cause", "post_mortem",
+                     "post_mortem_required", "notifications"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^S[1-9]$"},
+          "name": {"type": "string", "minLength": 1},
+          "definition": {"type": "string", "minLength": 1},
+          "response_sla": {"type": "string", "minLength": 1},
+          "response_sla_minutes": {"type": ["integer", "null"], "minimum": 1},
+          "root_cause": {"type": "string", "minLength": 1},
+          "post_mortem": {"type": "string", "minLength": 1},
+          "post_mortem_required": {"type": "boolean"},
+          "notifications": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "alert_priorities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "acknowledgement", "acknowledgement_minutes", "usual_severity", "severities"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^P[1-9]$"},
+          "acknowledgement": {"type": "string", "minLength": 1},
+          "acknowledgement_minutes": {"type": ["integer", "null"], "minimum": 1},
+          "response_time": {"type": "string", "minLength": 1},
+          "usual_severity": {"type": "string", "minLength": 1},
+          "severities": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^S[1-9]$"}}
+        }
+      }
+    }
+  }
+}

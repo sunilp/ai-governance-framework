@@ -1,0 +1,89 @@
+# Stage 6 controls: Security Review & Red-Teaming.
+# Source of truth for the Stage 6 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 6
+name: Security Review & Red-Teaming
+controls:
+
+- id: SR-001
+  title: Red-team testing completed per tier depth
+  stage: 6
+  applies_to:
+    text: 'T1-T3 GenAI (T4: automated scan recommended)'
+    tiers: [T1, T2, T3]
+    recommended: [T4]
+    systems: [genai]
+  owner: [security, ai-risk]
+  evidence: 'Red-team report. Depth: T1 200+ cases including manual testing; T2 100+; T3 automated scan + 50 manual cases'
+  frequency: Pre-deployment; per [red-teaming protocol](../ai-security/red-teaming-protocol.md) cadence
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Sample 25 GenAI deployments from the period (or all, if fewer), including every T1 deployment. Inspect the red-team report for case count and manual testing against the tier depth, dated before deployment.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/ai-security/red-teaming-protocol.md
+  - framework/llm-lifecycle/evaluation-governance.md
+
+- id: SR-002
+  title: No unresolved Critical or High findings
+  stage: 6
+  applies_to:
+    text: 'T1-T2: 0 Critical, 0 unaddressed High. T3-T4: 0 Critical (High needs recorded risk acceptance)'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: system-owner
+  evidence: Red-team report showing 0 Critical and, for T1-T2, 0 unaddressed High
+  frequency: Before deployment
+  on_fail: Block deployment. Unresolved Critical findings cannot be excepted
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the SR-001 sample, trace every Critical and High finding to remediation evidence or, for T3/T4 High findings, a recorded risk acceptance. Confirm no system went live with an open Critical finding.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/ai-security/red-teaming-protocol.md
+
+- id: SR-003
+  title: Adversarial robustness defenses implemented
+  stage: 6
+  applies_to:
+    text: 'T1-T2 GenAI (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [genai]
+  owner: technical-owner
+  evidence: Defense configuration documentation
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: For every T1 and a sample of 10 T2 GenAI systems (or all, if fewer), compare the documented defence configuration with the production configuration.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/ai-security/adversarial-robustness.md
+
+- id: SR-004
+  title: Supply chain security verified
+  stage: 6
+  applies_to:
+    text: 'T1-T3 using open-source models (T4: recommended)'
+    tiers: [T1, T2, T3]
+    recommended: [T4]
+    systems: [open-source]
+  owner: security
+  evidence: AI-BOM + provenance verification
+  frequency: Before deployment; on model change
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: false
+  test: Sample 10 systems that use open-source models (or all, if fewer). Inspect the AI-BOM and re-verify the model checksum or signature against the recorded provenance.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/ai-security/supply-chain-security.md
+  - framework/llm-lifecycle/open-source-model-governance.md

@@ -28,28 +28,13 @@ Assess whether the model can perform the required task at the required quality l
 
 ### 2. Data Residency and Privacy
 
-| Criterion | Assessment |
-|-----------|------------|
-| Data processing location | Where is inference performed? Which jurisdictions does data traverse? |
-| Data retention | Does the vendor retain prompts, completions, or metadata? For how long? |
-| Training data usage | Will the vendor use your data to train or improve models? Can this be contractually excluded? |
-| Sub-processors | Which third parties handle your data? |
-| Encryption | In-transit and at-rest encryption standards |
-| Certifications | SOC 2 Type II, ISO 27001, relevant financial services certifications |
+Assess where inference runs and data is stored, retention, training use, sub-processors, encryption and certifications with the [vendor assessment checklist](../compliance/cross-border-data-governance.md#vendor-assessment-checklist). Check that the data classes the use case sends are permitted for the hosting option ([residency by data classification](../compliance/cross-border-data-governance.md#residency-requirements-by-data-classification)).
 
 **For regulated financial services:** Any model processing customer data, MNPI, or regulated information must have a data processing agreement (DPA) that satisfies GDPR, local data protection laws, and sectoral regulations (e.g., banking secrecy, MiFID II data requirements).
 
 ### 3. Vendor Risk
 
-| Criterion | Assessment |
-|-----------|------------|
-| Financial stability | Vendor viability assessment; runway, revenue, funding |
-| Concentration risk | What percentage of your AI capability depends on this vendor? |
-| Exit strategy | Can you switch to an alternative model with acceptable migration cost? |
-| SLA commitments | Uptime guarantees, latency commitments, support response times |
-| API stability | Change notification policy; breaking change history |
-| Model deprecation policy | How much notice before a model version is retired? |
-| Pricing stability | Contractual pricing terms; history of price changes |
+Score this dimension from the [third-party model risk assessment](../compliance/third-party-model-risk.md) (AR-005), which covers model behaviour changes and deprecation, operational and availability risk (SLAs, API changes, rate limits), vendor viability and pricing, [exit strategy](../compliance/third-party-model-risk.md#exit-strategy-requirements) and [concentration risk](../compliance/third-party-model-risk.md#concentration-risk). Open-weight models are assessed under [open-source model governance](open-source-model-governance.md) instead.
 
 **Vendor lock-in mitigation:** For T1 and T2 use cases, maintain a validated fallback model from a different provider. Document the performance delta and switchover procedure.
 
@@ -110,17 +95,9 @@ Use this matrix to score candidate models. Score each dimension 1–5 (5 = best 
 
 ## Model Categories and Considerations
 
-### Commercial API Models (OpenAI, Anthropic, Google)
+### Commercial API and Open-Weight Models
 
-**Advantages:** Highest capability, managed infrastructure, rapid iteration.
-**Risks:** Data residency, vendor lock-in, pricing changes, model deprecation, limited customization.
-**Best for:** Internal productivity tools, draft generation, analysis assistance (with appropriate guardrails).
-
-### Open-Weight Models (Llama, Mistral, Gemma)
-
-**Advantages:** Self-hostable, customizable, no vendor data access, full control.
-**Risks:** Higher operational overhead, responsible for safety alignment, compute cost, slower capability updates.
-**Best for:** Use cases with strict data residency requirements, fine-tuning needs, or where vendor dependency is unacceptable.
+Choose between a commercial API (OpenAI, Anthropic, Google) and an open-weight model (Llama, Mistral, Gemma) with the [open-source vs. commercial API decision framework](open-source-model-governance.md#decision-framework-open-source-vs-commercial-api).
 
 ### Fine-Tuned Models
 
@@ -134,10 +111,10 @@ Use this matrix to score candidate models. Score each dimension 1–5 (5 = best 
 
 | Tier | Approval Authority |
 |------|-------------------|
-| T1 | AI Risk Committee + CISO + CRO |
-| T2 | Head of AI + Security review |
-| T3 | Team lead + security checklist |
-| T4 | Team lead |
+| T1 | AI Risk Committee + CISO |
+| T2 | Head of AI |
+| T3 | Team lead, choosing from the approved vendor list |
+| T4 | Team lead, choosing from the approved vendor list |
 
 ### Required Documentation for Model Approval
 

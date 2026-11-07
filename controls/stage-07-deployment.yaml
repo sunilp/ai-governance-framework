@@ -1,0 +1,85 @@
+# Stage 7 controls: Deployment Approval.
+# Source of truth for the Stage 7 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 7
+name: Deployment Approval
+controls:
+
+- id: DA-001
+  title: Evidence pack assembled and complete
+  stage: 7
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: Evidence checklist against the [minimum evidence pack](governance-workflow.md#minimum-evidence-pack-by-tier)
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 deployments from the period (or all, if fewer). Check each evidence pack against the minimum evidence pack for its tier; every missing item needs an approved exception.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: DA-002
+  title: Sign-off chain completed per tier
+  stage: 7
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: 'Signed deployment approval record. Approvers: T1 AI Risk Committee + CISO (+ DPO if personal data is processed); T2 Head of AI + Business Unit Head; T3 team lead + business owner; T4 team lead'
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the DA-001 sample, inspect the deployment approval record. Confirm the signers match the tier, including the DPO where personal data is processed, and that every signature predates go-live.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/roles-responsibilities.md
+  - framework/llm-lifecycle/deployment-gates.md
+
+- id: DA-003
+  title: Deployment gates passed
+  stage: 7
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-operations
+  evidence: Gate evidence package
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: For the DA-001 sample, inspect the gate evidence package for each gate criterion. Compare the release date in deployment records with the date the gates were passed.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/deployment-gates.md
+  - framework/model-lifecycle/deployment.md
+
+- id: DA-004
+  title: Rollback plan documented and tested
+  stage: 7
+  applies_to:
+    text: T1-T2
+    tiers: [T1, T2]
+    systems: [all]
+  owner: technical-owner
+  evidence: Rollback procedure + test evidence
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: corrective
+  automation: manual
+  key_control: false
+  test: Sample 10 T1/T2 deployments (or all, if fewer). Inspect the rollback procedure and confirm a rollback test was run and recorded before deployment.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/model-lifecycle/deployment.md

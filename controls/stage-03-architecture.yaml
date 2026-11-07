@@ -1,0 +1,145 @@
+# Stage 3 controls: Architecture & Design Review.
+# Source of truth for the Stage 3 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 3
+name: Architecture & Design Review
+controls:
+
+- id: AR-001
+  title: System architecture documented
+  stage: 3
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: technical-owner
+  evidence: Architecture document with component diagram and data flows
+  frequency: Before development
+  on_fail: Block development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems (or all, if fewer). Inspect the architecture document for a component diagram and data flows that match the deployed system, dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: AR-002
+  title: Architecture review sign-off
+  stage: 3
+  applies_to:
+    text: T1 (review board); T2 (team-level design review)
+    tiers: [T1, T2]
+    systems: [all]
+  owner: [architecture-review-board, head-of-ai]
+  owner_text: Architecture review board (T1) / Head of AI or delegate (T2)
+  evidence: 'T1: review board meeting record with decision and conditions. T2: recorded team-level design review approved by the Head of AI or delegate'
+  frequency: Before development
+  on_fail: Cannot proceed without sign-off
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Inspect every T1 review board record and a sample of 10 T2 design reviews (or all, if fewer) from the period. Confirm a recorded decision by the right approver before development started, and that any conditions were closed.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/roles-responsibilities.md
+
+- id: AR-003
+  title: Data residency confirmed
+  stage: 3
+  applies_to:
+    text: T1-T4 with external data flows
+    tiers: [T1, T2, T3, T4]
+    systems: [external-data-flow]
+  owner: technical-owner
+  evidence: Data flow map with residency confirmation per jurisdiction
+  frequency: Before development
+  on_fail: Escalate to compliance
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems with external data flows (or all, if fewer). Compare the data flow map with the residency confirmation for each jurisdiction and with the data residency recorded in the model card.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/cross-border-data-governance.md
+
+- id: AR-004
+  title: Vendor/model selection justified and approved
+  stage: 3
+  applies_to:
+    text: T1-T4 using external models
+    tiers: [T1, T2, T3, T4]
+    systems: [external-model]
+  owner: ai-lead
+  evidence: Model selection document with evaluation results and rationale; approval by AI Risk Committee + CISO (T1), Head of AI (T2), team lead from the approved vendor list (T3/T4)
+  frequency: Before development
+  on_fail: Block development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems that use external models (or all, if fewer). Inspect the model selection document for evaluation results and rationale, and confirm the approver matches the tier.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-selection.md
+
+- id: AR-005
+  title: Third-party model risk assessment completed
+  stage: 3
+  applies_to:
+    text: 'T1-T3 using external vendor APIs (T4: approved vendors only, no separate assessment)'
+    tiers: [T1, T2, T3]
+    systems: [external-model]
+  owner: ai-risk
+  evidence: Completed vendor risk assessment
+  frequency: Before development; annually thereafter
+  on_fail: Block deployment; procurement escalation
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 T1-T3 systems that call external vendor APIs (or all, if fewer). Confirm a vendor risk assessment was completed before development and repeated within the last 12 months.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/third-party-model-risk.md
+
+- id: AR-006
+  title: Agent identity, tool and permission review
+  stage: 3
+  applies_to:
+    text: T1-T2 agentic systems, including any system with tool access (every agentic system is at least T2)
+    tiers: [T1, T2]
+    systems: [agentic]
+  owner: [technical-owner, security]
+  owner_text: Technical owner, with Security sign-off
+  evidence: 'Agent identity record for each agent (own non-human identity, named owner, credential lifetime, memory scope and retention); tool allowlist with per-tool scopes, pinned versions and definition hashes; delegation limits (scope, expiry, depth); caps and approval gates for consequential actions; sandbox configuration for code execution; inter-agent message authentication for multi-agent systems; approval record for the record and each later change'
+  frequency: Before development; on any change to tools, scopes or delegation limits; re-checked at each formal review
+  on_fail: Block development; a tool or scope change does not go live until approved
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Inspect every T1 and a sample of 10 T2 agentic systems (or all, if fewer). Confirm each agent has its own identity and a named owner, compare the allowlist and scopes with the tools actually called in a sampled week of agent action records, and confirm delegated calls carry a narrowed, time-bound grant. Trace one tool change per system to its approval.
+  sources:
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/risk-classification/agentic-ai-risk.md
+  - framework/llm-lifecycle/multi-agent-governance.md
+
+- id: AR-007
+  title: Vendor contract meets the AI clause set and is recorded in the register of information
+  stage: 3
+  applies_to:
+    text: 'T1-T4 using external models or AI vendors (T4: the approved vendor''s contract); register of information entry for EU financial entities under DORA'
+    tiers: [T1, T2, T3, T4]
+    systems: [external-model]
+  owner: [legal, ai-risk]
+  owner_text: Legal (contract terms) with AI Risk (clause check, register entry and fourth-party map)
+  evidence: 'Executed contract checked against the AI procurement clause set, with any gaps and their exception IDs; register of information entry (DORA Art. 28(3)) marking whether the service supports a critical or important function; fourth-party dependency map'
+  frequency: Before production data is sent to the vendor; at renewal and on material change
+  on_fail: Block deployment; procurement escalation
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 systems that use external models or AI vendors (or all, if fewer). Trace each to the executed vendor contract and confirm the clauses required for its tier are present or covered by an approved exception. For EU financial entities, confirm the contract is in the register of information with the right critical or important function marking, entered before the contract took effect.
+  sources:
+  - framework/compliance/ai-procurement-clauses.md
+  - framework/compliance/third-party-model-risk.md
+  - framework/compliance/cross-border-data-governance.md

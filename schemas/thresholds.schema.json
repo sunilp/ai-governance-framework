@@ -1,0 +1,162 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evaluation thresholds, pass rule and suite sizes (policy/thresholds.yaml)",
+  "type": "object",
+  "required": ["pass_rule", "metrics", "eval_types"],
+  "additionalProperties": false,
+  "properties": {
+    "pass_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confidence", "tiers", "proportion_method", "mean_methods", "segments", "human_evaluation"],
+      "properties": {
+        "confidence": {"type": "number", "exclusiveMinimum": 0.5, "exclusiveMaximum": 1},
+        "tiers": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["T1", "T2", "T3", "T4"],
+          "patternProperties": {"^T[1-4]$": {"enum": ["confidence-bound", "point-estimate"]}}
+        },
+        "proportion_method": {"enum": ["clopper-pearson"]},
+        "mean_methods": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "bootstrap": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["resamples"],
+              "properties": {"resamples": {"type": "integer", "minimum": 1000}}
+            },
+            "t-interval": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["min_n"],
+              "properties": {"min_n": {"type": "integer", "minimum": 2}}
+            }
+          }
+        },
+        "segments": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tiers", "min_cases"],
+          "properties": {
+            "tiers": {"$ref": "#/$defs/tierList"},
+            "min_cases": {"type": "integer", "minimum": 1}
+          }
+        },
+        "human_evaluation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tiers", "double_rated_share", "min_agreement"],
+          "properties": {
+            "tiers": {"$ref": "#/$defs/tierList"},
+            "double_rated_share": {"type": "number", "minimum": 0, "maximum": 100},
+            "min_agreement": {"type": "number", "minimum": 0, "maximum": 1}
+          }
+        },
+        "max_failures_table": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tier", "metrics", "sizes"],
+            "properties": {
+              "tier": {"$ref": "#/$defs/tier"},
+              "metrics": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}},
+              "sizes": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+              "unit": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "direction", "unit", "thresholds"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "label": {"type": "string", "minLength": 1},
+          "failure_label": {"type": "string", "minLength": 1},
+          "applies_to": {"enum": ["rag", "agent", "guardrails"]},
+          "kind": {"enum": ["proportion", "mean"]},
+          "eval_type": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "direction": {"enum": ["min", "max"]},
+          "unit": {"enum": ["percent"]},
+          "thresholds": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["T1", "T2", "T3", "T4"],
+            "patternProperties": {"^T[1-4]$": {"type": ["number", "null"], "minimum": 0, "maximum": 100}}
+          },
+          "default_ceiling": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["tiers", "customer_facing", "internal"],
+            "properties": {
+              "tiers": {"$ref": "#/$defs/tierList"},
+              "customer_facing": {"type": "number", "minimum": 0, "maximum": 100},
+              "internal": {"type": "number", "minimum": 0, "maximum": 100}
+            }
+          },
+          "tier_text": {
+            "type": "object",
+            "additionalProperties": false,
+            "patternProperties": {"^T[1-4]$": {"type": "string", "minLength": 1}}
+          },
+          "definition": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "eval_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "tests", "when", "suite"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+          "name": {"type": "string", "minLength": 1},
+          "control": {"type": "string", "pattern": "^[A-Z]{2}-[0-9]{3}$"},
+          "tests": {"type": "string", "minLength": 1},
+          "when": {"type": "string", "minLength": 1},
+          "unit": {"enum": ["cases", "pairs", "queries", "tasks"]},
+          "in_table": {"type": "boolean"},
+          "suite": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["T1", "T2", "T3", "T4"],
+            "patternProperties": {"^T[1-4]$": {"$ref": "#/$defs/suiteSize"}}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tier": {"enum": ["T1", "T2", "T3", "T4"]},
+    "tierList": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/tier"}},
+    "suiteSize": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "integer", "minimum": 1},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "min": {"type": ["integer", "null"], "minimum": 1},
+            "text": {"type": "string", "minLength": 1},
+            "required": {"type": "boolean"}
+          }
+        }
+      ]
+    }
+  }
+}

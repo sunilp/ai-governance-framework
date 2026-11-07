@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Model card for traditional ML (templates/model-card-template.yaml)",
+  "description": "Required core fields and the enumerations declared in the template. Fields not listed here are allowed.",
+  "type": "object",
+  "required": ["model_details", "intended_use", "evaluation"],
+  "properties": {
+    "model_details": {
+      "type": "object",
+      "required": ["name", "id", "version", "type", "risk_tier"],
+      "properties": {
+        "name": {"$ref": "#/$defs/text"},
+        "id": {"$ref": "#/$defs/text"},
+        "version": {"$ref": "#/$defs/text"},
+        "type": {"$ref": "#/$defs/text"},
+        "risk_tier": {"enum": ["T1", "T2", "T3", "T4"]},
+        "date_created": {"$ref": "#/$defs/date"},
+        "last_updated": {"$ref": "#/$defs/date"},
+        "owners": {"type": "object"},
+        "references": {"type": "object"}
+      }
+    },
+    "intended_use": {
+      "type": "object",
+      "required": ["primary_use", "decision_type", "human_oversight"],
+      "properties": {
+        "primary_use": {"$ref": "#/$defs/text"},
+        "out_of_scope_uses": {"type": "array", "items": {"type": "string"}},
+        "decision_type": {"enum": ["automated", "recommendation", "informational"]},
+        "human_oversight": {"enum": ["human-in-the-loop", "human-on-the-loop", "human-over-the-loop", "human-out-of-the-loop"]}
+      }
+    },
+    "training_data": {
+      "type": "object",
+      "properties": {"features_count": {"type": "integer", "minimum": 0}}
+    },
+    "evaluation": {
+      "type": "object",
+      "required": ["metrics"],
+      "properties": {
+        "datasets": {"type": "array", "items": {"type": "object"}},
+        "metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "value", "threshold"],
+            "properties": {
+              "name": {"$ref": "#/$defs/text"},
+              "value": {"type": "number"},
+              "threshold": {"type": "number"},
+              "confidence_interval": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "fairness": {
+      "type": "object",
+      "properties": {
+        "protected_attributes_evaluated": {"type": "array", "items": {"type": "string"}},
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["attribute", "metric", "value", "threshold", "result"],
+            "properties": {
+              "value": {"type": "number"},
+              "threshold": {"type": "number"},
+              "result": {"enum": ["pass", "fail", "conditional"]}
+            }
+          }
+        }
+      }
+    },
+    "change_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["version", "date", "description"],
+        "properties": {
+          "version": {"$ref": "#/$defs/text"},
+          "date": {"$ref": "#/$defs/date"},
+          "description": {"$ref": "#/$defs/text"},
+          "validated_by": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"}
+  }
+}

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Open-weight and community models (Llama, Mistral, Qwen, Gemma, DeepSeek, Phi, etc.) offer organizations full control over data residency, inference infrastructure, and model customization. They also shift responsibilities that commercial API providers absorb — safety evaluation, security patching, infrastructure operations, and legal risk — entirely to the deploying organization.
+Open-weight and community models (Llama, Mistral, Qwen, Gemma, DeepSeek, Phi, etc.) offer organizations full control over data residency, inference infrastructure, and model customization. They also shift responsibilities that commercial API providers absorb (safety evaluation, security patching, infrastructure operations, and legal risk) entirely to the deploying organization.
 
 This document defines governance standards for evaluating, deploying, and maintaining open-source models. It complements the [third-party model risk assessment](../compliance/third-party-model-risk.md) (which covers commercial API providers) and [fine-tuning governance](fine-tuning-governance.md) (which covers additional considerations when fine-tuning any model).
 
@@ -15,9 +15,9 @@ Before any open-source model enters production, complete these evaluations.
 | Evaluation Area | Requirement | T1 | T2 | T3 | T4 |
 |----------------|-------------|:---:|:---:|:---:|:---:|
 | Safety benchmarks | Run standard safety evals (ToxiGen, BBQ, TruthfulQA or equivalent) | Required | Required | Required | Recommended |
-| Domain-specific evaluation | Run your domain eval suite (same standard as commercial model evaluation) | 200+ cases | 100+ cases | 50+ cases | 20+ cases |
+| Domain-specific evaluation | Run your domain eval suite (same standard as commercial model evaluation) | 300+ cases | 100+ cases | 50+ cases | 20+ cases |
 | Commercial comparison | Benchmark against leading commercial API for your use case | Required | Required | Recommended | Optional |
-| Adversarial testing | Red-team testing per [red-teaming protocol](../ai-security/red-teaming-protocol.md) | Full red-team | Internal red-team | Automated scan | Automated scan |
+| Adversarial testing | Red-team testing per [red-teaming protocol](../ai-security/red-teaming-protocol.md#tiered-testing-depth) | Full red-team, 200+ cases | Internal red-team, 100+ cases | Automated scan + 50 manual cases | Automated scan, 20+ cases (recommended) |
 | Infrastructure validation | Confirm hosting capability: GPU requirements, latency, throughput, scaling | Required | Required | Required | Required |
 | Licensing review | Legal review of license terms and obligations | Required | Required | Required | Required |
 | Total cost of ownership | Compare TCO against commercial API (include infrastructure, operations, security) | Required | Required | Recommended | Optional |
@@ -45,10 +45,16 @@ Do not proceed to deployment if:
 | Llama Community License | Yes | Yes | >700M monthly active users (MAU) threshold triggers additional commercial terms; acceptable use policy; no training competing models | Medium | Yes |
 | Gemma Terms of Use | Yes | Yes | Acceptable use restrictions; no building competing models | Medium | Yes |
 | DeepSeek License | Conditional | Yes | Varies by model; some have commercial restrictions | Medium | Yes |
+| Mistral licenses (vary by model) | Varies | Varies | Some models Apache 2.0; others have commercial restrictions; check per model | Varies by model | Yes |
 | CC BY-NC | No | Yes | Non-commercial only | High | Required |
 | Research-only licenses | No | Limited | Research/academic only | High | Required |
+| Custom community licenses | Varies | Varies | Case-by-case legal review | Varies | Required |
 
-For T1/T2 systems: only deploy models with Low or Medium license risk. High-risk licenses require CRO sign-off and documented risk acceptance.
+This is the canonical license matrix; [supply-chain-security.md](../ai-security/supply-chain-security.md) links here.
+
+**License approval:** Legal approves the license. AI Risk is consulted, and the CISO is consulted on security terms.
+
+For T1/T2 systems: only deploy models with Low or Medium license risk. High-risk licenses require Legal approval and documented risk acceptance through the [exception process](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance).
 
 ### Ongoing License Obligations
 
@@ -89,7 +95,7 @@ When you self-host a model, you own its operational lifecycle.
 | Community health check | Quarterly | AI Operations | Contributors, commit frequency, issue resolution, fork activity |
 | Security patch application | Within SLA per severity | AI Operations | Critical: 48 hours; High: 1 week; Medium: 1 month |
 | Safety re-evaluation | Semi-annually | AI Risk | Re-run safety benchmarks; compare against previous results |
-| Performance re-evaluation | Quarterly | AI Operations | Re-run domain eval suite; detect degradation |
+| Performance re-evaluation | Monthly (T1), Quarterly (T2), Semi-annual (T3/T4) | AI Operations | Full offline suite re-run per [evaluation-governance.md](evaluation-governance.md#production-evaluation); detect degradation |
 | License review | Quarterly | Legal | Check for license changes in new releases |
 | Infrastructure capacity review | Quarterly | AI Operations | GPU utilization, scaling headroom, cost efficiency |
 
@@ -128,8 +134,9 @@ When fine-tuning open-source models, follow all standards in [fine-tuning govern
 | Cost at scale | >$10K/month API spend; infrastructure team available | Low-to-moderate volume; infrastructure team unavailable |
 | Control | Need to inspect model behavior, modify safety filters, customize inference | Standard API behavior is sufficient |
 | Capability | Open-source model meets performance requirements | Frontier model capability is required (state-of-the-art reasoning, etc.) |
-| Support requirements | Have internal ML engineering team; can manage operations | Need vendor SLA, support, and managed operations |
+| Support requirements | Have internal ML engineering team; can manage operations | Need vendor SLA, support, and managed operations; T1 systems requiring guaranteed uptime |
+| Security patching | Have a dedicated ML security team to patch models and inference frameworks within the [patch SLA](#ongoing-maintenance) | No dedicated ML security team; vendor-managed patching is needed |
 | Time to deployment | Have inference infrastructure ready; team experienced with deployment | Need to move fast; infrastructure not available |
 | Compliance | Need full audit access; self-attested controls acceptable | Vendor certifications (SOC 2, ISO 27001) sufficient for your regulators |
 
-Document the decision rationale in the risk assessment. For T1 systems, this decision requires AI Risk Committee review.
+Use this framework during [model selection](model-selection.md). Document the decision rationale in the risk assessment. For T1 systems, this decision requires AI Risk Committee review.

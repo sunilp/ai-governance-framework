@@ -1,8 +1,10 @@
 # GenAI Incident Report Template
 
+This template is for GenAI and agentic systems. For traditional ML systems, use the [AI system incident report](incident-report-template.md).
+
 ## Instructions
 
-Complete this template for any incident involving a GenAI system. Severity classification follows the GenAI incident taxonomy. Submit within 24 hours of incident resolution (or sooner for S1/S2).
+Complete this template for any incident involving a GenAI system. Classify severity using the definitions in [escalation-paths.md](../framework/operating-model/escalation-paths.md#severity-classification); any incident on a T1 system that reached customers is at least S2. Submit within 24 hours of incident resolution. For S1 and S2, record the root cause within 48 hours and complete the post-mortem within 1 week (S1) or 2 weeks (S2), per IR-004.
 
 ---
 
@@ -11,7 +13,8 @@ Complete this template for any incident involving a GenAI system. Severity class
 | Field | Value |
 |-------|-------|
 | Incident ID | GEN-YYYY-NNN |
-| Severity | S1 / S2 / S3 / S4 |
+| Severity | S1 Critical / S2 High / S3 Medium / S4 Low |
+| Triggering alert priority (if any) | P1 / P2 / P3 / P4 / None |
 | Status | Open / Investigating / Mitigated / Resolved / Closed |
 | AI System | |
 | Risk Tier | T1 / T2 / T3 / T4 |
@@ -27,17 +30,17 @@ Complete this template for any incident involving a GenAI system. Severity class
 
 ### Incident Type
 
-- [ ] Hallucination — System generated factually incorrect or fabricated content
-- [ ] Prompt injection — Adversarial input manipulated system behavior
-- [ ] Data leakage — Sensitive data exposed through model outputs
-- [ ] PII exposure — Personally identifiable information in outputs
-- [ ] Bias incident — Discriminatory or biased output detected
-- [ ] Toxicity — Harmful, offensive, or inappropriate content generated
-- [ ] Safety bypass — Model safety controls circumvented
-- [ ] Unauthorized action — Agentic system took unintended action
-- [ ] Service degradation — Quality or performance fell below thresholds
-- [ ] Vendor incident — Issue with external model provider
-- [ ] Cost overrun — Unexpected or unauthorized cost spike
+- [ ] Hallucination: System generated factually incorrect or fabricated content
+- [ ] Prompt injection: Adversarial input manipulated system behavior
+- [ ] Data leakage: Sensitive data exposed through model outputs
+- [ ] PII exposure: Personally identifiable information in outputs
+- [ ] Bias incident: Discriminatory or biased output detected
+- [ ] Toxicity: Harmful, offensive, or inappropriate content generated
+- [ ] Safety bypass: Model safety controls circumvented
+- [ ] Unauthorized action: Agentic system took unintended action
+- [ ] Service degradation: Quality or performance fell below thresholds
+- [ ] Vendor incident: Issue with external model provider
+- [ ] Cost overrun: Unexpected or unauthorized cost spike
 - [ ] Other: _______________
 
 ### Detection Method

@@ -1,0 +1,183 @@
+# Stage 2 controls: Risk Assessment & Tiering.
+# Source of truth for the Stage 2 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 2
+name: Risk Assessment & Tiering
+controls:
+
+- id: RA-001
+  title: Risk assessment completed using framework matrices
+  stage: 2
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: Signed risk assessment with dimension scoring + tier determination
+  frequency: Before development begins
+  on_fail: Cannot proceed to development
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Sample 25 systems that entered development in the period (or all, if fewer), including every T1 system. Inspect each signed risk assessment for a score on every dimension and a tier that matches the highest-scoring dimension, dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/risk-classification/risk-matrix.md
+  - framework/risk-classification/genai-risk-matrix.md
+
+- id: RA-002
+  title: Tier override review against the canonical override list
+  stage: 2
+  applies_to:
+    text: T1-T4 (any system matching an override trigger, automatic T1 or minimum T2)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-risk
+  evidence: Override decision document
+  frequency: At assessment
+  on_fail: Escalate to AI Risk Committee
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the RA-001 sample, re-perform the check against the canonical override list in the GenAI risk matrix. Confirm every system that matches a trigger has an override decision document and a tier at or above the override.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/risk-classification/genai-risk-matrix.md
+
+- id: RA-003
+  title: Impact assessment completed
+  stage: 2
+  applies_to:
+    text: 'T1-T2 (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [all]
+  owner: product-owner
+  evidence: Completed impact assessment template
+  frequency: Before development
+  on_fail: Cannot proceed to development
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 T1 and T2 systems that entered development in the period (or all, if fewer). Inspect the completed impact assessment and confirm it is dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+
+- id: RA-004
+  title: Risk assessment approved by appropriate authority
+  stage: 2
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [ai-risk-committee, ai-risk, team-lead]
+  owner_text: 'AI Risk Committee (T1) / AI Risk, second line (T2) / Team lead (T3, T4: acknowledges self-assessment)'
+  evidence: Approval record with sign-off
+  frequency: Before development
+  on_fail: Block progression
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the RA-001 sample, inspect the approval record. Confirm the approver matches Approvals by Tier for the assigned tier and signed before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/roles-responsibilities.md
+
+- id: RA-005
+  title: DPIA screening and, where required, full DPIA
+  stage: 2
+  applies_to:
+    text: 'T1-T4 processing personal data: screening for all; full DPIA always for T1-T2 and wherever screening indicates high risk'
+    tiers: [T1, T2, T3, T4]
+    systems: [personal-data]
+  owner: dpo
+  evidence: DPIA screening record; filed DPIA with DPO sign-off where required
+  frequency: Before development
+  on_fail: Cannot proceed; escalate to DPO
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Sample 25 systems that process personal data (or all, if fewer). Inspect the DPIA screening record and, for T1/T2 systems and high-risk screenings, confirm a full DPIA with DPO sign-off dated before development started.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/compliance/responsible-ai-checklist.md
+
+- id: RA-006
+  title: System registered in the AI inventory before development
+  stage: 2
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: Inventory entry with the required fields of the AI inventory standard, created before development started and updated at each later stage gate
+  frequency: Before development begins; updated at each stage gate
+  on_fail: Cannot proceed to development
+  type: preventive
+  automation: semi-automated
+  key_control: true
+  test: Take every system that entered development in the period from the delivery tooling or change log. Confirm each has an inventory entry created before its development start date, and that the tier in the entry matches the approved risk assessment (RA-004).
+  sources:
+  - framework/governance-operations/ai-inventory.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: RA-007
+  title: Prohibited-use screen recorded (non-waivable)
+  stage: 2
+  applies_to:
+    text: T1-T4 (every system, before scoring; non-waivable)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: product-owner
+  evidence: 'Completed Step 0 screen in the risk assessment: each EU AI Act Art. 5 practice and each internal prohibited-use criterion answered, with a short rationale and the screen date'
+  frequency: Before risk scoring; repeated on material change
+  on_fail: Use rejected and does not proceed. Doubtful cases go to Compliance and Legal before any further work. Cannot be excepted
+  type: preventive
+  automation: manual
+  key_control: true
+  test: For the RA-001 sample, inspect the Step 0 screen. Confirm every criterion is answered, the screen is dated before scoring, and no system with a positive answer proceeded. Check the exception register for any exception raised against this control; there must be none.
+  sources:
+  - framework/risk-classification/genai-risk-matrix.md
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: RA-008
+  title: EU AI Act role determined and recorded
+  stage: 2
+  applies_to:
+    text: T1-T4 systems in scope of the EU AI Act (Art. 2(1))
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: compliance
+  evidence: 'Role record per system: provider, deployer or both; downstream user of a general-purpose AI model; the Art. 25(1) check (own name or trademark on a high-risk system, substantial modification, change of intended purpose that makes the system high-risk); and the obligation sets that follow from the role'
+  frequency: At intake and on material change (with RV-003)
+  on_fail: Cannot proceed to development; escalate to AI Risk Committee
+  type: preventive
+  automation: manual
+  key_control: false
+  test: Sample 25 in-scope systems (or all, if fewer), including every system tiered T1 through override item 1 or 5. Confirm a role record exists, was dated before development started, and was refreshed for every material change logged under RV-003.
+  sources:
+  - framework/compliance/eu-ai-act-mapping.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: RA-009
+  title: Fundamental rights impact assessment completed and notified
+  stage: 2
+  applies_to:
+    text: 'Deployers in scope of EU AI Act Art. 27: Annex III point 5(b) and 5(c) systems, and any Annex III system except point 2 where the deployer is a body governed by public law or a private entity providing public services (usually T1 through override item 1)'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: [product-owner, compliance]
+  owner_text: Product owner (assessment) / Compliance (notification to the market surveillance authority)
+  evidence: Completed fundamental rights impact assessment section of the impact assessment template, covering Art. 27(1)(a) to (f), with cross-references to the DPIA where used; record of notification of the results to the market surveillance authority
+  frequency: Before first use (Annex III duties apply from 2 December 2027); updated when any Art. 27(1) element changes
+  on_fail: Block deployment
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Take every system in scope of Art. 27 from the RA-008 role records. Confirm each has a completed assessment covering all six Art. 27(1) elements, dated before first use, and a notification record. For systems in use during the period, confirm the assessment was updated after any change to those elements.
+  sources:
+  - framework/compliance/eu-ai-act-mapping.md
+  - templates/impact-assessment-template.md

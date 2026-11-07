@@ -4,7 +4,7 @@
 
 In a regulated environment, every consequential AI output must be reconstructable. For LLM systems, this means logging sufficient information to reproduce what the system was asked, what context it had, what it generated, and what the user did with that output.
 
-This is not application logging. This is regulatory-grade audit trail designed to answer the question: "On this date, for this user, with this query — what did your AI system produce, and why?"
+This is not application logging. This is regulatory-grade audit trail designed to answer the question: "On this date, for this user, with this query, what did your AI system produce, and why?"
 
 ---
 
@@ -47,6 +47,32 @@ This is not application logging. This is regulatory-grade audit trail designed t
 | `escalation` | Whether the session was escalated to a human |
 | `outcome` | Session outcome (resolved, abandoned, escalated) |
 
+### Agent Action Audit Record
+
+Required for every agentic system, alongside the per-request record. One record per tool call, delegation, memory write and inter-agent message. The fields support the [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md#9-agent-action-audit-record) standard.
+
+| Field | Description |
+|-------|-------------|
+| `action_id` | Unique identifier for the action |
+| `request_id` | The per-request record that led to the action |
+| `correlation_id` | Identifier that persists across every agent in a multi-agent chain |
+| `action_type` | Tool call, delegation, memory write or inter-agent message |
+| `agent_id` | Identity of the acting agent, as in its agent identity record |
+| `principal_id` | The original principal: the user or system on whose behalf the agent acts, or the agent itself when it acts on its own authority |
+| `delegation_chain` | Every agent between the principal and this action, in order, with the grant or token reference and the scope held at each hop |
+| `tool` | Tool name, type (function or API, MCP server, A2A peer, code execution), version and definition hash |
+| `arguments_hash` | Hash of the full arguments |
+| `arguments_redacted` | Arguments with personal data and secrets redacted. For T1 and T2, the full values must be recoverable under the PII controls below where decision reconstruction needs them |
+| `authorisation_decision` | Allowed or denied, the policy or rule that decided, and the result of cap and rate limit checks |
+| `approval_reference` | Approval record ID and approver where a human approval gate applied |
+| `result` | Success, failure or blocked; a summary or hash of the output; records affected or value moved |
+| `timestamp_requested` | When the agent requested the action (ISO 8601, UTC) |
+| `timestamp_decided` | When authorisation or approval was decided |
+| `timestamp_completed` | When the action completed or failed |
+| `error_details` | Error information if the action failed |
+
+PM-007 checks that per-request records and agent action records are complete and kept for the tier's retention period.
+
 ---
 
 ## Logging Architecture
@@ -74,19 +100,27 @@ This is not application logging. This is regulatory-grade audit trail designed t
 
 ## Retention Requirements
 
-| Tier | Retention Period | Rationale |
-|------|-----------------|-----------|
-| T1 | 7 years | Aligned with SR 11-7, MiFID II, and general banking record-keeping |
-| T2 | 5 years | Aligned with standard regulatory retention |
-| T3 | 3 years | Aligned with internal audit cycle |
-| T4 | 1 year | Operational purposes |
+This section sets retention for interaction logs: prompts, responses, predictions and agent actions. Governance records (risk assessments, approvals, evaluation and incident reports, model cards, change history) follow [audit-trail-requirements.md](audit-trail-requirements.md#retention-periods).
+
+<!-- BEGIN GENERATED: interaction-log-retention. Edit policy/tiers.yaml, then run python tools/build.py -->
+
+| Tier | Retention Period |
+|------|-----------------|
+| T1 | 7 years |
+| T2 | 5 years |
+| T3 | 3 years |
+| T4 | 1 year |
+
+<!-- END GENERATED: interaction-log-retention -->
+
+Tier periods are framework defaults. Set retention to the longest obligation that applies to you. Reference points: EU AI Act Art. 18 (provider technical documentation, 10 years), Art. 19 (provider-generated logs, at least 6 months), Art. 26(6) (deployer logs, at least 6 months); MiFID II Art. 16(7) (records of client communications, 5 years, up to 7 if the authority requests).
 
 ### PII in Audit Logs
 
 If audit records contain PII (user queries about their own accounts, for example):
 - PII fields must be encrypted at rest with key management per data security policy
 - Access to PII fields requires additional authorization
-- GDPR right-to-erasure requests must be handled — implement pseudonymization at ingestion so that PII can be removed without destroying the audit record's integrity
+- GDPR right-to-erasure requests must be handled; implement pseudonymization at ingestion so that PII can be removed without destroying the audit record's integrity
 - Document the legal basis for PII retention in audit logs (legitimate interest for regulatory compliance)
 
 ---
@@ -100,11 +134,12 @@ For T1 and T2 use cases, the audit trail must support full decision reconstructi
 Given a `request_id`, you must be able to reproduce:
 1. The exact system prompt that was active at that time
 2. The user's input
-3. The retrieved context (if RAG) — the actual documents, not just references
+3. The retrieved context (if RAG): the actual documents, not just references
 4. The model and version used
 5. The raw model output
 6. The guardrail actions applied
 7. The final output delivered to the user
+8. For agentic systems, every action taken, with its delegation chain, authorisation decision and any human approval ([agent action audit record](#agent-action-audit-record))
 
 This requires:
 - **Prompt versioning:** System prompts stored with version history; audit record references the version, not the content (but content must be recoverable from the version)

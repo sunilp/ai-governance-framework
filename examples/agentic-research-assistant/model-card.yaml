@@ -1,19 +1,19 @@
-# Agentic Research Assistant — Model Card
-# Risk Tier: T1 (Critical) — Agentic AI with tool access, processes confidential data
+# Agentic Research Assistant: Model Card
+# Risk Tier: T1 (Critical). Agentic AI with tool access, processes confidential data
 
 model_details:
   name: "Investment Research Assistant Agent"
   model_id: "research-agent-v0.9"
-  version: "0.9.0"
+  version: "0.9.1"
   type: "agent"
-  base_model: "Claude 3.5 Sonnet"
-  base_model_version: "claude-3-5-sonnet-20241022"
+  base_model: "Claude Sonnet 4.5"
+  base_model_version: "claude-sonnet-4-5-20250929"
   base_model_provider: "Anthropic"
   hosting: "vendor-api"
   risk_tier: "T1"
   date_deployed: "2026-02-01"
   last_reviewed: "2026-03-01"
-  next_review: "2026-04-01"
+  next_review: "2026-05-01"           # Quarterly formal governance review (T1)
   owners:
     business_owner: "Head of Investment Research"
     technical_owner: "AI Platform Engineering Lead"
@@ -33,14 +33,14 @@ intended_use:
     - "Executing trades or modifying portfolios"
     - "Accessing material non-public information (MNPI) systems"
     - "Unsupervised operation without analyst oversight"
-  decision_type: "assistive"
+  decision_type: "recommendation"
   human_oversight_pattern: "human-in-the-loop"
   customer_facing: false
   regulatory_context:
     - "EU AI Act"
     - "MiFID II (investment research requirements)"
-    - "SR 11-7 (model risk management)"
-    - "MAR (Market Abuse Regulation — MNPI controls)"
+    - "SR 26-2 (model risk management): agentic AI is out of its scope, so the framework's agentic controls apply"
+    - "MAR (Market Abuse Regulation, MNPI controls)"
 
 system_architecture:
   components:
@@ -106,7 +106,7 @@ prompt_governance:
   system_prompt_version: "v0.9.1"
   prompt_repository: "git://internal/ai-prompts/research-agent"
   last_prompt_review: "2026-02-25"
-  adversarial_testing_date: "2026-02-28"
+  adversarial_testing_date: "2026-02-28"   # Prompt-change adversarial regression set for v0.9.1; pre-release red-team (220 cases) ran 2026-01-19
   guardrails:
     input_validation: true
     output_filtering: true
@@ -123,44 +123,122 @@ prompt_governance:
       - "All financial figures must be sourced; no LLM-generated numbers"
 
 evaluation:
-  evaluation_date: "2026-02-28"
-  evaluation_dataset_size: 150
+  evaluation_date: "2026-01-20"         # Pre-release evaluation of v0.9.0, before deployment on 2026-02-01
+  evaluation_dataset_size: 300
+  # T1 statistical pass rule (evaluation-governance.md#statistical-pass-rule). Agent metrics (EV-008) are
+  # measured on the same 300 multi-step tasks.
   metrics:
     - name: "faithfulness"
       value: 0.93
       threshold: 0.90
       method: "human-eval"
+      n: 300
+      lower_bound: 0.920
+      interval_method: "t-interval"
     - name: "completeness"
       value: 0.85
       threshold: 0.80
       method: "human-eval"
     - name: "hallucination_rate"
-      value: 0.012
+      value: 0.013                      # 4 of 300; upper bound 3.03%, above the T1 cap. Deployed under exception EXC-2026-004 (see risk-assessment.md)
       threshold: 0.01
       method: "human-eval"
+      n: 300
+      failures: 4
     - name: "plan_quality"
       value: 0.88
       threshold: 0.85
       method: "human-eval"
-    - name: "tool_use_accuracy"
-      value: 0.95
+    - name: "task_success_rate"         # 24 of 300 tasks failed; failure-rate upper bound 11.07% against the 15% cap
+      value: 0.92
+      threshold: 0.85
+      method: "hybrid"                  # Automated acceptance checks plus the trajectory review
+      n: 300
+      failures: 24
+    - name: "tool_call_accuracy"        # Averaged per task; lower bound by bootstrap over tasks
+      value: 0.97
       threshold: 0.95
+      method: "automated"
+      n: 300
+      lower_bound: 0.963
+      interval_method: "bootstrap"
+    - name: "unsafe_action_rate"        # 0 of 300 tasks; any occurrence blocks release
+      value: 0.0
+      threshold: 0.0
+      method: "hybrid"                  # Action-policy checks on every call plus the trajectory review
+      n: 300
+      failures: 0
+    - name: "tool_error_recovery"       # 34 tasks with injected tool errors; 32 recovered by retry, fallback or escalation
+      value: 0.94
+      threshold: 0.90
       method: "automated"
     - name: "source_attribution_accuracy"
       value: 0.97
       threshold: 0.95
       method: "automated"
+    - name: "safety_pass_rate"          # 300-case safety suite; 0 failures, failure-rate upper bound 0.99%
+      value: 1.0
+      threshold: 0.99
+      method: "automated"
+      n: 300
+      failures: 0
+    - name: "retrieval_precision_at_5"  # 100-query RAG retrieval set
+      value: 0.88
+      threshold: 0.85
+      method: "automated"
+      n: 100
+      lower_bound: 0.855
+      interval_method: "bootstrap"
+    - name: "guardrail_false_negative_rate"   # 300 labelled MNPI, out-of-scope and injection items; upper bound 0.99%
+      value: 0.0
+      threshold: 0.01
+      method: "automated"
+      n: 300
+      failures: 0
+    - name: "guardrail_false_positive_rate"   # 300 legitimate research requests; upper bound 6.40%; internal default ceiling 10%
+      value: 0.04
+      threshold: 0.10
+      method: "automated"
+      n: 300
+      failures: 12
+  agent_trajectory_review: "Two analysts reviewed the full trajectory of all 24 failed tasks and a random 56 of the 276 passed tasks (20%). No unsafe step was found that the automated action-policy checks had missed."
+  segment_results:                      # Asset-class segments from the risk assessment scope. 100+ cases gated on the point estimate
+    - segment: "asset class: equity"
+      n: 180
+      results: {hallucination_rate: 0.006, faithfulness: 0.94}
+    - segment: "asset class: fixed income"   # 3 of 120 above the cap; covered by EXC-2026-004 with the overall rate
+      n: 120
+      results: {hallucination_rate: 0.025, faithfulness: 0.92}
+  human_evaluation:
+    raters: "Senior research analysts outside the build team, qualified on a known-answer set; written rubric with worked examples"
+    double_rated_share: 0.20            # 60 of 300 tasks
+    agreement_statistic: "krippendorff-alpha"   # Three raters across the double-rated items
+    agreement: 0.71
+    adjudication: "A research compliance reviewer resolves disagreements; the adjudicated label is recorded"
   adversarial_testing:
+    test_type: "red-team"
     prompt_injection_resistance: 0.95
     jailbreak_resistance: 0.96
-    test_suite_size: 100
+    test_suite_size: 220                # T1 minimum 200, including manual testing
   bias_evaluation:
     tested_attributes:
       - "company_sector"
       - "company_geography"
-    counterfactual_consistency: 0.92
+    counterfactual_consistency: 0.95    # 19 inconsistent pairs in 400
+    attribute_results:                  # T1 allows at most 12 inconsistent pairs in 200 per attribute
+      - {attribute: "company_sector", n: 200, failures: 8}
+      - {attribute: "company_geography", n: 200, failures: 11}
     sentiment_parity: 0.94
-    methodology: "Counterfactual testing — same analysis request across sectors/geographies"
+    methodology: "Counterfactual testing, 200 pairs per attribute: the same analysis request across sectors and geographies"
+  production_evaluations:
+    - date: "2026-02-28"
+      activity: "offline-suite-rerun"
+      trigger: "prompt change (v0.9.1)"
+      dataset_size: 300
+      results:
+        hallucination_rate: 0.0         # 0 of 300; upper bound 0.99%, within the T1 cap under the statistical pass rule
+        faithfulness: 0.94
+      outcome: "pass; exception EXC-2026-004 closed 2026-03-01"
 
 safety:
   hallucination_tolerance: "≤ 1%"
@@ -173,17 +251,17 @@ safety:
   known_failure_modes:
     - "May propose overly ambitious plans that exceed tool call budget"
     - "Complex multi-source synthesis may miss nuances in individual sources"
-    - "Confidence calibration is imperfect — may present uncertain analysis with false confidence"
+    - "Confidence calibration is imperfect; may present uncertain analysis with false confidence"
   mitigations:
     - "Tool call budget limit (20 per session) with warning at 15"
-    - "Plan review gate — analyst approves plan before execution"
-    - "All outputs are drafts — analyst reviews and edits before any use"
+    - "Plan review gate: analyst approves plan before execution"
+    - "All outputs are drafts; analyst reviews and edits before any use"
     - "Mandatory source attribution on every claim"
 
 operational:
   infrastructure:
     compute: "GCP europe-west1 (application layer)"
-    data_residency: "EU — all data sources and processing within EU"
+    data_residency: "EU: all data sources and processing within EU"
   performance:
     latency_p50_ms: 45000
     latency_p95_ms: 120000
@@ -195,10 +273,10 @@ operational:
     cost_per_request: "€2.50"
     token_budget_per_request: 100000
   monitoring:
-    quality_monitoring: "Every session reviewed by analyst (implicit)"
+    quality_monitoring: "Automated scoring of every response (async); every output reviewed in full by the analyst (Pattern 1)"
     safety_monitoring: "Real-time action validation; MNPI detection on every output"
     cost_monitoring: "Per-session budget limits; daily cost alerts"
-    drift_detection: "Weekly evaluation on canonical research scenarios"
+    drift_detection: "Vendor behaviour canary on a fixed scenario set daily; RAG retrieval evaluation weekly; full offline suite re-run monthly and on any model, provider or prompt change"
     alerting_configured: true
     dashboard_url: "internal://dashboards/research-agent"
   incident_response:
@@ -213,7 +291,7 @@ vendor_risk:
   training_data_exclusion: true
   sla_uptime: "99.9%"
   exit_strategy_documented: true
-  fallback_model: "Gemini 1.5 Pro (Vertex AI EU)"
+  fallback_model: "Gemini 2.5 Pro (Vertex AI EU)"
   fallback_validated: true
   last_vendor_assessment: "2026-01-15"
 
@@ -231,7 +309,7 @@ limitations:
   ethical_considerations:
     - "Must not replace human analyst judgment"
     - "Outputs are drafts, not finished research"
-    - "Potential for automation bias — analysts must critically evaluate, not rubber-stamp"
+    - "Potential for automation bias; analysts must critically evaluate, not rubber-stamp"
   regulatory_constraints:
     - "No MNPI access or processing"
     - "All research outputs subject to existing compliance review process"
@@ -239,6 +317,10 @@ limitations:
 
 approvals:
   - role: "AI Risk Committee"
+    name: "Chair, AI Risk Committee"
+    date: "2026-01-25"
+    decision: "approved-with-conditions"
+  - role: "AI Risk Committee (exception EXC-2026-004, control EV-001)"
     name: "Chair, AI Risk Committee"
     date: "2026-01-25"
     decision: "approved-with-conditions"
@@ -255,4 +337,8 @@ change_history:
   - version: "0.9.0"
     date: "2026-02-01"
     description: "Limited pilot deployment with 5 senior analysts"
+    approved_by: "AI Risk Committee"
+  - version: "0.9.1"
+    date: "2026-02-28"
+    description: "System prompt v0.9.1: source citation required for every figure. Full suite re-run passed (0 hallucinations in 300 responses; upper bound 0.99%); exception EXC-2026-004 closed 2026-03-01."
     approved_by: "AI Risk Committee"

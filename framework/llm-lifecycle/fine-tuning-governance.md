@@ -92,7 +92,7 @@ Maintain a complete record of:
 | Step | Requirement |
 |------|-------------|
 | Performance evaluation | Full evaluation suite on held-out test set |
-| Safety evaluation | Safety benchmarks compared to base model; no regression permitted |
+| Safety evaluation | Safety benchmarks compared to base model; no regression permitted for T1/T2 |
 | Bias evaluation | Bias testing on protected attributes relevant to the use case |
 | Hallucination evaluation | Hallucination rate compared to base model on domain tasks |
 | Red-team testing | Adversarial testing for prompt injection, jailbreaking, unintended behaviors |
@@ -118,7 +118,7 @@ For all fine-tuned models, regardless of tier:
 1. Compare refusal rates on standard safety benchmarks (base vs. fine-tuned)
 2. Test with standard adversarial prompt suites
 3. Evaluate toxicity scores on open-ended generation tasks
-4. Document any safety regression with risk acceptance sign-off
+4. No safety regression is allowed for T1/T2. For T3/T4, a regression needs a recorded exception under [Exceptions and Risk Acceptance](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance)
 
 ---
 

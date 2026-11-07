@@ -2,7 +2,7 @@
 
 ## Instructions
 
-Complete this template for quarterly board/risk committee reporting on AI systems. Keep it concise — 5 pages maximum. Lead with decisions required, not with data. Reference detailed incident reports, risk assessments, and monitoring dashboards rather than reproducing them here.
+Complete this template for quarterly board/risk committee reporting on AI systems. Keep it concise: 5 pages maximum. Lead with decisions required, not with data. Reference detailed incident reports, risk assessments, and monitoring dashboards rather than reproducing them here.
 
 For the reporting standards behind this template, see [board-reporting.md](../framework/operating-model/board-reporting.md).
 
@@ -63,15 +63,19 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 | | | | |
 | | | | |
 
+**Tier and business unit concentration** (are T1 systems accumulating faster than governance investment? is governance capacity proportional in each business unit?):
+
+>
+
 ---
 
 ## 4. Material Incidents
 
-*Include S1 and S2 incidents only. Reference full incident reports for detail.*
+*Include S1 and S2 incidents only. Reference full incident reports for detail. Severity definitions: [escalation-paths.md](../framework/operating-model/escalation-paths.md#severity-classification). Every S1, and every S2 that meets the [material incident criteria](../framework/operating-model/board-reporting.md#material-incident-criteria), should already have been notified to the Board Risk Committee between quarters (every S1 within 24 hours); record the date.*
 
-| Incident ID | Severity | System | Date | Impact Summary | Root Cause | Remediation Status | Board Action Required |
-|-------------|----------|--------|------|---------------|------------|-------------------|----------------------|
-| | | | | | | | |
+| Incident ID | Severity | System | Date | Impact Summary | Root Cause | Remediation Status | Board Notified (date) | Board Action Required |
+|-------------|----------|--------|------|---------------|------------|-------------------|----------------------|----------------------|
+| | | | | | | | | |
 
 **Systemic issues identified:**
 
@@ -143,7 +147,7 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 
 ## 9. Recommendations
 
-| # | Recommendation | Rationale | Decision Required |
+| # | Recommendation | Rationale (and consequence of not acting) | Decision Required |
 |---|---------------|-----------|-------------------|
 | 1 | | | Approve / Note / Defer |
 | 2 | | | Approve / Note / Defer |
@@ -164,7 +168,7 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 
 ## Appendices
 
-*Reference only — do not include full documents in the board pack.*
+*Reference only; do not include full documents in the board pack.*
 
 | Appendix | Description | Location |
 |----------|-------------|----------|

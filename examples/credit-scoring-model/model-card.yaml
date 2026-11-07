@@ -1,4 +1,4 @@
-# Model Card — Retail Credit Scoring Model v3
+# Model Card: Retail Credit Scoring Model v3
 # This is a worked example demonstrating how to apply the model card template.
 
 model_details:
@@ -28,32 +28,32 @@ model_details:
 
 intended_use:
   primary_use: "Predict the probability of default (PD) for unsecured retail credit applications within a 12-month horizon. Score is used as a primary input to the credit decision engine."
-  primary_users: "Credit decision engine (automated), credit underwriters (manual review for edge cases)"
+  primary_users: "Credit decision engine (automated approvals within policy), credit underwriters (decide every proposed decline or adverse outcome, and boundary cases)"
   out_of_scope_uses:
     - "Secured lending decisions (mortgage, auto loan)"
     - "Business or commercial lending"
     - "Collection prioritization or recovery estimation"
     - "Marketing or cross-selling targeting"
-  decision_type: "automated"
-  human_oversight: "on_the_loop"   # Underwriters review applications near decision boundary
+  decision_type: "automated"       # Approvals within policy are automated; proposed declines and adverse outcomes are recommendations an underwriter decides
+  human_oversight: "human-in-the-loop"   # Pattern 1 for declines and adverse outcomes; automated approvals within policy, with human review on request
 
 training_data:
   description: "Retail unsecured credit applications with 12-month outcome labels (default/non-default). Includes bureau data, application data, and behavioral data for existing customers."
   source: "Internal application database + credit bureau feeds (Experian, CIBIL)"
-  size: "2.4M applications, Jan 2020 — Dec 2023"
+  size: "2.4M applications, Jan 2020 to Dec 2023"
   features_count: 147
-  target_variable: "default_12m — binary indicator of 90+ DPD within 12 months of origination"
+  target_variable: "default_12m: binary indicator of 90+ DPD within 12 months of origination"
   class_distribution: "4.2% default rate (imbalanced)"
   known_limitations: "Training period includes COVID-19 era (2020-2021) which may not represent normal economic conditions. Pandemic-era forbearance programs suppressed observed default rates."
   preprocessing: "Missing value imputation (median for numeric, mode for categorical), WoE binning for key features, feature selection via Boruta"
   data_version: "DS-CREDIT-2024Q1-v2"
-  collection_date_range: "January 2020 — December 2023"
+  collection_date_range: "January 2020 to December 2023"
 
 evaluation:
   datasets:
     - name: "Out-of-time test set"
       size: "320K applications"
-      time_period: "January 2024 — June 2024"
+      time_period: "January 2024 to June 2024"
     - name: "Stratified hold-out"
       size: "480K applications"
       time_period: "Same as training (random 20% hold-out)"
@@ -125,10 +125,10 @@ robustness:
     - "2x increase in default rate (simulating economic downturn)"
     - "30% increase in missing bureau data (simulating data feed interruption)"
     - "Removal of top 3 features (simulating feature unavailability)"
-  adversarial_testing: "Input perturbation testing completed. Model is robust to small perturbations in continuous features. Synthetic adversarial applications tested — model correctly identifies high-risk patterns."
+  adversarial_testing: "Input perturbation testing completed. Model is robust to small perturbations in continuous features. Synthetic adversarial applications tested. Model correctly identifies high-risk patterns."
   known_failure_modes:
-    - "Thin-file applicants (< 6 months credit history) — PD estimates have higher uncertainty"
-    - "Applicants with only secured credit history — model may underestimate risk for unsecured products"
+    - "Thin-file applicants (< 6 months credit history): PD estimates have higher uncertainty"
+    - "Applicants with only secured credit history: model may underestimate risk for unsecured products"
   out_of_distribution_handling: "OOD detection module flags applications where input features fall outside training distribution bounds. Flagged applications are routed to manual underwriting."
 
 operational:
@@ -150,17 +150,17 @@ operational:
 
 limitations:
   known_limitations:
-    - "Model trained on data including COVID-19 period — may not generalize to all economic conditions"
+    - "Model trained on data including COVID-19 period; may not generalize to all economic conditions"
     - "Limited effectiveness for thin-file applicants with less than 6 months credit history"
     - "Does not incorporate alternative data sources (rent payments, utility bills)"
   ethical_considerations:
-    - "Credit decisions directly affect individuals' financial access — false positives deny creditworthy applicants"
+    - "Credit decisions directly affect individuals' financial access; false positives deny creditworthy applicants"
     - "Potential for geographic proxies that correlate with demographic attributes"
   domains_not_suitable:
     - "Secured lending products"
     - "Markets without established credit bureau infrastructure"
   regulatory_constraints:
-    - "Subject to SR 11-7 model risk management requirements"
+    - "Subject to SR 26-2 model risk management guidance (replaced SR 11-7 in April 2026)"
     - "Adverse action notices required under ECOA/Regulation B"
     - "EU AI Act high-risk classification (Annex III, paragraph 5(b))"
 
@@ -168,8 +168,8 @@ change_history:
   - version: "3.1.0"
     date: "2024-11-20"
     description: "Retraining with updated data through Q1 2024. Added 12 new bureau features. Recalibrated."
-    validated_by: "Model Risk Management — Independent Validation Team"
+    validated_by: "Model Risk Management, Independent Validation Team"
   - version: "3.0.0"
     date: "2024-06-15"
-    description: "Major version — migrated from logistic regression to XGBoost. New feature engineering pipeline."
-    validated_by: "Model Risk Management — Independent Validation Team"
+    description: "Major version: migrated from logistic regression to XGBoost. New feature engineering pipeline."
+    validated_by: "Model Risk Management, Independent Validation Team"

@@ -4,13 +4,46 @@
 
 Governance is not a one-time activity. It requires a rhythm of reviews, escalations, and decisions that keep AI systems aligned with organizational risk appetite and regulatory expectations.
 
+## Cadence by Tier
+
+<!-- BEGIN GENERATED: cadence-by-tier. Edit policy/tiers.yaml, then run python tools/build.py -->
+
+| Activity | T1 | T2 | T3 | T4 |
+|----------|----|----|----|----|
+| Formal governance review (RV-001) | Quarterly | Semi-annual | Annual | Annual self-assessment |
+| Metrics review (operational) | Daily dashboard check by AI Operations, plus a monthly system-owner review | Weekly | Monthly | Quarterly |
+| Revalidation (independent for T1/T2) | Annual, and on material change | Every 24 months, and on material change | On material change (peer re-review) | On material change (peer re-review) |
+| Risk re-assessment (re-tiering check) | At every formal governance review, and on material change | Same | Same | Same |
+
+<!-- END GENERATED: cadence-by-tier -->
+
+Who performs validation at each tier is set in [validation.md](../model-lifecycle/validation.md#validation-independence). Production evaluation cadences for GenAI systems are in [LLM monitoring](../llm-lifecycle/monitoring.md#production-evaluation).
+
 ## Meeting Structure
 
-### Quarterly: AI Risk Committee
+### Monthly: AI Risk Committee
 
-**Attendees:** CRO (chair), CTO, Head of MRM, Head of Compliance, Head of Data Science, Business Line Heads (as needed)
+The AI Risk Committee meets monthly. One meeting each quarter is the full-portfolio meeting, which also reviews the quarterly board report (see [board-reporting.md](board-reporting.md)).
 
-**Agenda:**
+The committee's authority, quorum, decision rights, delegation and escalation to the Board Risk Committee are set in its charter ([charter template](../../templates/ai-risk-committee-charter.md), GV-005). The charter also gives it the monthly review of the [exception register](../../templates/exception-register.md) (GV-004) and the quarterly review of the [AI inventory](../governance-operations/ai-inventory.md) and its reconciliation (GV-006).
+
+**Attendees:** CRO (chair), CTO, Head of MRM, Head of Compliance, Head of Data Science, Business Line Heads (as needed). The CISO attends for T1 deployment and model selection approvals, and the DPO when the system processes personal data.
+
+**T1 approvals:** T1 risk assessments, model selections, deployments and exceptions are approved at the monthly meeting. If a decision cannot wait, the chair convenes an out-of-cycle session within 10 business days of the request.
+
+**Monthly agenda:**
+1. **T1 approvals** (as needed)
+   - Risk assessments, model selection, deployments, exceptions
+   - Risk tier changes
+2. **T1 system health** (20 min)
+   - Monthly system-owner metrics reviews
+   - S1 and S2 incidents since the last meeting and their remediation
+3. **Escalations** (15 min)
+   - Items escalated by the Model Review Board, AI Risk or Compliance
+4. **Decisions and actions** (10 min)
+   - Assign actions with owners and deadlines
+
+**Quarterly full-portfolio agenda:**
 1. **AI system portfolio review** (15 min)
    - New systems added to production since last meeting
    - Systems retired or materially changed
@@ -28,9 +61,9 @@ Governance is not a one-time activity. It requires a rhythm of reviews, escalati
    - Review of risk appetite statements for AI
    - Threshold adjustments based on experience
    - Emerging risks or systemic concerns
-5. **Decisions and actions** (15 min)
-   - Approve/reject T1 system deployments
-   - Approve risk tier changes
+5. **Board report and decisions** (15 min)
+   - Approve the quarterly AI risk report for the board
+   - Approve/reject T1 system deployments and risk tier changes
    - Assign actions with owners and deadlines
 
 **Output:** Meeting minutes with decisions, action items, and owners. Distributed within 5 business days.
@@ -43,11 +76,11 @@ Governance is not a one-time activity. It requires a rhythm of reviews, escalati
 
 **Agenda:**
 1. **Pipeline review** (20 min)
-   - Models in development — status, timeline, tier
-   - Models in validation — findings, blockers
-   - Models pending deployment — gate status
+   - Models in development: status, timeline, tier
+   - Models in validation: findings, blockers
+   - Models pending deployment: gate status
 2. **Production model health** (20 min)
-   - Monitoring dashboard review — T1 and T2 systems
+   - Monitoring dashboard review: T1 and T2 systems
    - Models with active alerts or drift warnings
    - Retraining pipeline status
 3. **Validation backlog** (10 min)
@@ -88,10 +121,10 @@ The following conditions require immediate escalation outside the regular cadenc
 
 | Trigger | Escalate To | Timeline |
 |---------|-------------|----------|
-| P1 incident (model failure at scale) | AI Risk Committee chair + CTO | Immediately |
+| S1 incident ([severity definitions](escalation-paths.md#severity-classification)) | AI Risk Committee chair + CTO | Within 1 hour |
 | Regulatory examination notification | Head of Compliance + AI Risk Committee | Same day |
 | Fairness metric breach beyond threshold | MRM + Compliance | Within 24 hours |
-| Data breach affecting model training data | DPO + Security + AI Risk Committee | Immediately |
+| Data breach affecting model training data (S1) | DPO + Security; AI Risk Committee chair | DPO and Security immediately; chair within 1 hour |
 | Model performance below absolute minimum | MRM + Business Owner | Within 4 hours |
 
 ## Annual Activities

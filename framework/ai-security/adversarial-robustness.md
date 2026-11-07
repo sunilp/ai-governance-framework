@@ -6,6 +6,8 @@ AI systems face adversarial threats that differ fundamentally from traditional c
 
 These standards define mandatory defenses by risk tier. They complement the [red-teaming protocol](red-teaming-protocol.md) which covers testing methodology.
 
+The [Threat Taxonomy Mapping](#threat-taxonomy-mapping) at the end of this document maps these defenses and the red-team test categories to the OWASP Top 10 lists and MITRE ATLAS.
+
 ---
 
 ## Jailbreaking Defenses
@@ -27,7 +29,7 @@ Jailbreaking attempts to bypass the model's safety alignment and content policie
 1. Place safety instructions at the beginning AND end of the system prompt (sandwich pattern)
 2. Use explicit boundary markers between instructions and user content
 3. Include explicit refusal instructions for known attack categories
-4. Do not rely on the model's base safety training alone — assume it can be bypassed
+4. Do not rely on the model's base safety training alone; assume it can be bypassed
 5. Test system prompts against adversarial inputs before deployment
 
 ---
@@ -39,7 +41,7 @@ Prompt injection inserts adversarial instructions that the model executes as if 
 | Vector | Description | Mitigation |
 |--------|-------------|------------|
 | Direct injection (user input) | User crafts input containing instructions | Input classification (detect instruction-like content); input/output role separation |
-| Indirect injection (RAG documents) | Retrieved documents contain hidden instructions | Context isolation — process retrieved docs in a separate context; strip formatting from retrieved content |
+| Indirect injection (RAG documents) | Retrieved documents contain hidden instructions | Context isolation: process retrieved docs in a separate context; strip formatting from retrieved content |
 | Indirect injection (tool outputs) | API responses or database results contain embedded instructions | Sanitize all tool outputs before inserting into context; treat tool outputs as untrusted data |
 | Indirect injection (file uploads) | Uploaded documents/images contain adversarial content | Content extraction and sanitization; process in sandboxed context |
 | Multi-stage injection | Benign-looking input that becomes harmful when combined with context | Conversation-level monitoring; output safety classification regardless of input classification |
@@ -137,3 +139,60 @@ For systems using retrieval-augmented generation:
 | Multiple correlated anomalies | Investigate within 24 hours; increase monitoring |
 | Confirmed attack pattern | Escalate per [escalation paths](../operating-model/escalation-paths.md); consider rate limiting or temporary access restriction |
 | Active exploitation | Immediate mitigation (block source, activate circuit breaker); S1/S2 incident response |
+
+---
+
+## Threat Taxonomy Mapping
+
+This section maps the defenses above and the [red-team test categories](red-teaming-protocol.md#test-categories) to three public taxonomies, so findings and controls can be reported in shared terms. Editions checked in November 2026:
+
+- **OWASP Top 10 for LLM Applications 2025**, the current edition on genai.owasp.org.
+- **OWASP Top 10 for Agentic Applications 2026**, released by the OWASP GenAI Security Project in December 2025.
+- **MITRE ATLAS**, data release 2026.10 (28 October 2026). ATLAS renumbers and renames techniques between releases; check the current matrix before citing an ID in a report.
+
+Control IDs refer to the [control register](../governance-operations/control-register.md).
+
+### OWASP Top 10 for LLM Applications 2025
+
+| OWASP Entry | Framework Defenses | Red-Team Category | MITRE ATLAS | Controls |
+|---|---|---|---|---|
+| LLM01:2025 Prompt Injection (OWASP treats jailbreaking as a form of prompt injection) | Jailbreaking defenses; system prompt hardening; prompt injection mitigation; defense-in-depth architecture | Prompt injection (direct); prompt injection (indirect); jailbreaking; social engineering; multimodal attacks | AML.T0051 LLM Prompt Injection (.000 Direct, .001 Indirect); AML.T0054 LLM Jailbreak; AML.T0068 LLM Prompt Obfuscation | DE-004, SR-001, SR-003 |
+| LLM02:2025 Sensitive Information Disclosure | Training data and PII extraction defenses; privacy attack defenses | Information extraction | AML.T0137 Training Data Information from AI Models (.000 Infer Membership, .002 Invert AI Model, .003 Extract Memorized Data); AML.T0024 Exfiltration via AI Inference API | DE-004, SR-003, RA-005 |
+| LLM03:2025 Supply Chain | [Supply chain security](supply-chain-security.md) | None; verified through SR-004 | AML.T0010 Supply Chain Compromise (.003 Model Repository) | SR-004, AR-005 |
+| LLM04:2025 Data and Model Poisoning | Data poisoning defenses; RAG corpus integrity | Prompt injection (indirect) through RAG documents | AML.T0020 Training Data Poisoning; AML.T0018 Manipulate AI Model; AML.T0070 RAG Poisoning | DE-005, EV-006, SR-004 |
+| LLM05:2025 Improper Output Handling | Output safety filter; action validator; payload smuggling defenses | Tool misuse; information extraction | AML.T0077 LLM Response Rendering | DE-004, SR-003 |
+| LLM06:2025 Excessive Agency | Action validator; agentic controls in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md) | Tool misuse; excessive agency | AML.T0053 AI Agent Tool Invocation | DE-004, SR-001, PM-003 |
+| LLM07:2025 System Prompt Leakage | System prompt hardening; extraction of a system prompt is a High red-team finding | Information extraction | AML.T0069 Discover LLM System Information (.002 System Prompt) | SR-001, SR-002 |
+| LLM08:2025 Vector and Embedding Weaknesses | RAG corpus integrity; access control leakage rules in [rag-governance.md](../llm-lifecycle/rag-governance.md) | Prompt injection (indirect) through RAG documents | AML.T0070 RAG Poisoning | EV-004, DE-008 |
+| LLM09:2025 Misinformation | Outside this document: [hallucination-policy.md](../responsible-ai/hallucination-policy.md) | None; covered by evaluation | AML.T0062 Discover LLM Hallucinations; AML.T0060 Publish Hallucinated Entities | EV-001, PM-004 |
+| LLM10:2025 Unbounded Consumption (includes model extraction and denial of wallet) | Model extraction prevention; API abuse controls; cost spike and query pattern monitoring | None; covered by monitoring | AML.T0024 Exfiltration via AI Inference API; AML.T0005 Replicate AI Model Behavior; AML.T0029 Denial of AI Service; AML.T0034 Cost Harvesting | SR-003, PM-002, PM-005 |
+
+Harmful content generation has no LLM Top 10 entry; see the NIST AI 600-1 risks in [nist-ai-rmf-mapping.md](../compliance/nist-ai-rmf-mapping.md#generative-ai-profile-nist-ai-600-1).
+
+### OWASP Top 10 for Agentic Applications 2026
+
+| OWASP Entry | Framework Coverage | Red-Team Category | MITRE ATLAS | Controls |
+|---|---|---|---|---|
+| ASI01: Agent Goal Hijack | Prompt injection mitigation; tool outputs and inter-agent messages treated as data, not instructions | Prompt injection (indirect) | AML.T0051.001 LLM Prompt Injection: Indirect | DE-004, SR-001, SR-003 |
+| ASI02: Tool Misuse and Exploitation | Action validator; tool access fixed at deployment ([privilege boundaries](../llm-lifecycle/multi-agent-governance.md#privilege-boundaries)) | Tool misuse | AML.T0053 AI Agent Tool Invocation; AML.T0086 Exfiltration via AI Agent Tool Invocation; AML.T0101 Data Destruction via AI Agent Tool Invocation | DE-004, SR-001, PM-003, AR-006 |
+| ASI03: Identity and Privilege Abuse | Own service account per agent; least privilege; no privilege grants between agents | Privilege escalation and delegation abuse | AML.T0083 Credentials from AI Agent Configuration; AML.T0012 Valid Accounts | AR-006, SR-001 ([agent identity](../llm-lifecycle/agent-identity-and-tool-governance.md#1-agent-identity), [delegation](../llm-lifecycle/agent-identity-and-tool-governance.md#2-delegation)) |
+| ASI04: Agentic Supply Chain Vulnerabilities | [Supply chain security](supply-chain-security.md), including agent tools in the AI-BOM | None; verified through SR-004 | AML.T0010.005 Supply Chain Compromise: AI Agent Tool | SR-004, AR-005, AR-006 |
+| ASI05: Unexpected Code Execution (RCE) | Output handling and action validation; sandboxing in [code execution](../llm-lifecycle/agent-identity-and-tool-governance.md#7-code-execution-owasp-asi05) | Tool misuse | AML.T0050 Command and Scripting Interpreter | DE-004, AR-006, SR-001 |
+| ASI06: Memory & Context Poisoning | [Persistent memory governance](../llm-lifecycle/multi-agent-governance.md#persistent-memory-governance); RAG corpus integrity | Memory poisoning | AML.T0080 AI Agent Context Poisoning (.000 Memory); AML.T0070 RAG Poisoning | AR-006, PM-007, SR-001 ([memory](../llm-lifecycle/agent-identity-and-tool-governance.md#5-memory-owasp-asi06)) |
+| ASI07: Insecure Inter-Agent Communication | [Message validation](../llm-lifecycle/multi-agent-governance.md#message-validation): schema, logging, no instruction injection | Privilege escalation and delegation abuse | None listed | AR-006, PM-007, SR-001 ([inter-agent messages](../llm-lifecycle/agent-identity-and-tool-governance.md#6-inter-agent-messages-owasp-asi07)) |
+| ASI08: Cascading Failures | Blast radius analysis; circuit breakers; graceful degradation | Cascading failure | None listed | PM-002, DA-004 |
+| ASI09: Human-Agent Trust Exploitation | Human oversight patterns; reviewer override-rate monitoring for rubber-stamping | Approval manipulation | None listed | PM-003 |
+| ASI10: Rogue Agents | Pause and kill switch; monitoring | Excessive agency | None listed | PM-001, PM-003, PM-006 |
+
+Agent identity, delegation, tool scopes, memory, inter-agent messages and code execution are set in [agent identity and tool governance](../llm-lifecycle/agent-identity-and-tool-governance.md) and evidenced through AR-006. In production, PM-006 tests the kill switch and PM-007 checks the agent action audit record.
+
+---
+
+## Sources
+
+- OWASP GenAI Security Project, OWASP Top 10 for LLM Applications 2025: https://genai.owasp.org/llm-top-10/
+- OWASP, LLM01:2025 Prompt Injection: https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- OWASP, LLM10:2025 Unbounded Consumption: https://genai.owasp.org/llmrisk/llm102025-unbounded-consumption/
+- OWASP GenAI Security Project, OWASP Top 10 for Agentic Applications 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+- MITRE ATLAS: https://atlas.mitre.org/
+- MITRE ATLAS data, release 2026.10: https://github.com/mitre-atlas/atlas-data/blob/main/dist/v6/ATLAS-2026.10.yaml

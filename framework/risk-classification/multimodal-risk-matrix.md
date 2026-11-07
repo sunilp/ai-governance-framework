@@ -2,7 +2,7 @@
 
 ## Overview
 
-Multimodal AI systems — those that process or generate images, audio, video, or combinations of modalities — introduce risk categories that text-only GenAI frameworks do not cover. Misidentified medical imagery, cloned voices, and synthetic video each carry distinct harm profiles that require dedicated assessment.
+Multimodal AI systems (those that process or generate images, audio, video, or combinations of modalities) introduce risk categories that text-only GenAI frameworks do not cover. Misidentified medical imagery, cloned voices, and synthetic video each carry distinct harm profiles that require dedicated assessment.
 
 This matrix extends the existing four-tier risk classification (T1–T4) with modality-specific risk dimensions. Use it alongside the existing [risk-matrix.md](risk-matrix.md) and [genai-risk-matrix.md](genai-risk-matrix.md). The highest tier across all applicable matrices applies to the combined system.
 
@@ -56,78 +56,29 @@ Risks arising when AI systems operate across multiple modalities simultaneously.
 
 ---
 
-## Tier Adjustment Rules
+## Tier Determination
 
-Regardless of aggregate score, a system is automatically classified as:
+Score each dimension Critical (4), High (3), Medium (2) or Low (1). The highest-scoring dimension sets the tier, using the same rule as the [GenAI risk matrix](genai-risk-matrix.md#risk-tier-determination-for-genai): any Critical gives T1; otherwise any High gives T2; otherwise any Medium gives T3; all Low gives T4. The aggregate score is recorded for context only and does not set the tier. For example, real-time video analysis in surveillance contexts scores Critical on Video Risk, so it is T1.
 
-### Mandatory T1 (Critical)
+### Tier Override Rules
 
-- Generates synthetic media depicting real people (deepfake-capable)
-- Processes biometric data (facial recognition, voiceprint analysis, gait recognition)
-- Processes medical or diagnostic imagery for clinical decisions
-- Generates synthetic voice of real individuals
-- Real-time video analysis in surveillance contexts
+The canonical override list is in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules), and the same list applies here and in [agentic-ai-risk.md](agentic-ai-risk.md). Check every item. Overrides can raise the tier, never lower it. The items that most often apply to multimodal systems:
 
-### Mandatory Minimum T2 (High)
+- **Item 5 (automatic T1):** biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
+- **Item 7 (minimum T2):** synthetic media generation not covered by item 5.
+- **Item 9 (minimum T2):** personal data in visual content.
 
-- Generates any synthetic media (images, audio, video)
-- Processes visual content containing PII (faces, documents, license plates)
-- Voice cloning or text-to-speech with customized voices
-- Video analysis of human behavior or activity
+**Emotion recognition** (inferring emotions or intentions from biometric data such as facial expressions, voice or keystrokes):
+- **Workplace and education:** prohibited under EU AI Act Art. 5(1)(f), except for medical or safety reasons. Reject it at the [Step 0 prohibited-use screen](genai-risk-matrix.md#step-0-prohibited-use-screen). For example, call-centre voice analytics that infer the emotions of staff fall under the prohibition.
+- **Other contexts**, such as inferring customers' emotions: treat it as biometric categorisation under item 5 (automatic T1). It is high-risk under Annex III point 1(c), and deployers must inform the people exposed to it (Art. 50(3)).
 
----
-
-## Governance Requirements by Tier (Multimodal-Specific)
-
-### T1 — Critical Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Mandatory classifiers for CSAM, violence, explicit content on all image/video inputs and outputs |
-| Synthetic media labeling | C2PA/Content Credentials metadata on all generated media; visible watermarking for external distribution |
-| Biometric compliance | GDPR Article 9 (special categories), explicit consent, DPIA completed |
-| Deepfake detection | Deploy detection capability on all video/image inputs for systems processing identity |
-| Cross-modal validation | Automated consistency checking between modalities |
-| Evaluation | Modality-specific eval suites: 200+ test cases per modality, demographic parity testing |
-| Red-teaming | Modality-specific adversarial testing (adversarial images, audio perturbation, video manipulation) |
-
-### T2 — High Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Content classifiers on inputs and outputs |
-| Synthetic media labeling | Machine-readable provenance metadata on all generated media |
-| Evaluation | 100+ test cases per modality |
-| Bias testing | Demographic parity testing for vision systems (race, gender, age) |
-
-### T3/T4 — Medium/Low Multimodal Use Cases
-
-| Control Area | Requirement |
-|-------------|-------------|
-| Content safety | Basic content filtering |
-| Synthetic media labeling | Internal labeling of AI-generated content |
-| Evaluation | 50 test cases (T3), pre-deployment validation (T4) |
+Inferring emotions from written text, such as sentiment analysis, does not use biometric data and is not emotion recognition under the Act. See the [EU AI Act mapping](../compliance/eu-ai-act-mapping.md#d-transparency-duties-art-50).
 
 ---
 
-## Responsible AI for Multimodal Systems
+## Governance Requirements by Tier
 
-### Fairness Across Modalities
-
-| Modality | Fairness Concern | Required Testing |
-|----------|-----------------|-----------------|
-| Vision | Recognition accuracy varies by skin tone, gender, age | Demographic parity analysis; test across skin tone scales (Monk, Fitzpatrick) |
-| Audio | Recognition accuracy varies by accent, dialect, gender, age | Accuracy testing across accent groups, languages, genders |
-| Video | Activity recognition bias (cultural, demographic) | Diverse scenario testing across demographics |
-| Generated imagery | Representation bias in generated content | Audit generated output diversity; test for stereotypical associations |
-| Generated audio | Voice quality and naturalness varies by language | Quality testing across target languages |
-
-### Accessibility
-
-- Vision systems: provide text alternatives for visual outputs
-- Audio systems: provide transcription and visual alternatives
-- Video systems: provide captions, audio descriptions, and text summaries
-- All systems: test with assistive technologies where user-facing
+Controls for each tier are in [multimodal governance](../llm-lifecycle/multimodal-governance.md): content safety on inputs and outputs, biometric consent, deepfake detection, [synthetic media labeling](../llm-lifecycle/multimodal-governance.md#synthetic-media-labeling), [evaluation suite sizes and red-teaming](../llm-lifecycle/multimodal-governance.md#evaluation-standards), [demographic parity testing](../llm-lifecycle/multimodal-governance.md#demographic-parity-testing), and [fairness and accessibility](../llm-lifecycle/multimodal-governance.md#responsible-ai-for-multimodal-systems).
 
 ---
 

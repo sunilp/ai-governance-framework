@@ -1,0 +1,268 @@
+# Stage 8 controls: Production Operations.
+# Source of truth for the Stage 8 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 8
+name: Production Operations
+controls:
+
+- id: PM-001
+  title: Monitoring configured per tier requirements
+  stage: 8
+  applies_to:
+    text: 'T1-T4 (T4: basic usage and error monitoring)'
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-operations
+  evidence: Monitoring configuration + dashboard reference
+  frequency: Before traffic enabled
+  on_fail: Block go-live
+  type: detective
+  automation: automated
+  key_control: true
+  test: Sample 25 production systems (or all, if fewer). Compare the first monitoring data point with the go-live date, and confirm the monitored metrics match the tier requirements.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/monitoring.md
+  - framework/model-lifecycle/monitoring.md
+
+- id: PM-002
+  title: Alerting active with defined thresholds
+  stage: 8
+  applies_to:
+    text: 'T1-T3 (T4: covered by platform-level budget alerts)'
+    tiers: [T1, T2, T3]
+    systems: [all]
+  owner: ai-operations
+  evidence: Alert configuration evidence
+  frequency: Before traffic enabled
+  on_fail: Block go-live
+  type: detective
+  automation: automated
+  key_control: false
+  test: For the T1-T3 systems in the PM-001 sample, inspect alert thresholds and routing. Trigger or replay one test alert per system and confirm it reached the on-call channel.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/monitoring.md
+  - framework/model-lifecycle/monitoring.md
+
+- id: PM-003
+  title: Human oversight operational
+  stage: 8
+  applies_to:
+    text: T1-T2
+    tiers: [T1, T2]
+    systems: [all]
+  owner: product-owner
+  evidence: Oversight process document per the [pattern selection matrix](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix) + staffing confirmation
+  frequency: Before traffic enabled
+  on_fail: Block go-live
+  type: preventive
+  automation: manual
+  key_control: true
+  test: Inspect every T1 and a sample of 10 T2 systems (or all, if fewer). Confirm the oversight pattern matches the pattern selection matrix, reviewers are staffed, and review logs show oversight operating in a sampled week.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/responsible-ai/human-in-loop-patterns.md
+
+- id: PM-004
+  title: Production evaluation running per cadence
+  stage: 8
+  applies_to:
+    text: T1-T4
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-operations
+  evidence: Schedule and latest results for online automated scoring, metrics review and full offline suite re-run
+  frequency: Per tier cadence (workflow Stage 8)
+  on_fail: Escalate to AI Risk; increase monitoring
+  type: detective
+  automation: semi-automated
+  key_control: false
+  test: Sample 25 production systems (or all, if fewer). Confirm online scoring, metrics reviews and full offline re-runs ran at the tier cadence over the last two periods, and that results below threshold were escalated.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/evaluation-governance.md
+  - framework/llm-lifecycle/monitoring.md
+
+- id: PM-005
+  title: Cost monitoring active
+  stage: 8
+  applies_to:
+    text: 'T1-T3 (T4: covered by platform-level budget alerts)'
+    tiers: [T1, T2, T3]
+    systems: [all]
+  owner: ai-operations
+  evidence: Cost dashboard + alert configuration
+  frequency: Before traffic enabled
+  on_fail: Block go-live
+  type: detective
+  automation: automated
+  key_control: false
+  test: For the T1-T3 systems in the PM-001 sample, inspect the cost dashboard and budget alert configuration. Confirm alerts at 80% and 100% of budget route to the system owner and the budget approver.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/cost-governance.md
+
+- id: PM-006
+  title: Kill switch tested
+  stage: 8
+  applies_to:
+    text: T1 customer-facing systems and all agentic systems (T1-T2)
+    tiers: [T1, T2]
+    systems: [customer-facing, agentic]
+  owner: ai-operations
+  evidence: 'Kill switch runbook; quarterly test record showing the decision time, the time stop or degrade was confirmed (within 15 minutes) and, for agentic systems, that revoked credentials were refused'
+  frequency: Before traffic enabled; at least quarterly; after any change to the runtime or agent identity set-up
+  on_fail: Block go-live; a live system is restricted or switched off until a test passes. Cannot be excepted (non-waivable)
+  type: corrective
+  automation: semi-automated
+  key_control: true
+  test: For every T1 customer-facing and every agentic system, inspect the test records for the last four quarters. Confirm a test ran in each quarter, the time from decision to confirmed stop or degrade was 15 minutes or less, and agentic tests show credentials revoked. Observe one test where the schedule allows.
+  sources:
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/responsible-ai/human-in-loop-patterns.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: PM-007
+  title: Audit logging complete and retained
+  stage: 8
+  applies_to:
+    text: T1-T4 (agent action records for agentic systems)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: ai-operations
+  evidence: 'Audit log configuration covering the per-request record and, for agentic systems, the agent action audit record; retention set to the tier period; completeness and integrity check results'
+  frequency: Before traffic enabled; completeness checked in real time, integrity daily
+  on_fail: Block go-live; a gap in a live system is raised as an incident and fixed. Cannot be excepted (non-waivable)
+  type: detective
+  automation: automated
+  key_control: true
+  test: Sample 25 production systems (or all, if fewer), including every agentic system. For each, trace 10 requests from a sampled day to complete audit records with the fields required for the tier, and for agentic systems trace each tool call to an agent action record. Confirm retention matches the tier period and review the completeness and integrity check results for the period.
+  sources:
+  - framework/compliance/prompt-audit-trail.md
+  - framework/compliance/audit-trail-requirements.md
+  - framework/llm-lifecycle/agent-identity-and-tool-governance.md
+  - framework/governance-operations/governance-workflow.md
+
+- id: IR-001
+  title: Incident response playbook documented
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T2
+    tiers: [T1, T2]
+    systems: [all]
+  owner: ai-operations
+  evidence: Published runbook accessible to on-call
+  frequency: Before deployment
+  on_fail: Block deployment
+  type: corrective
+  automation: manual
+  key_control: false
+  test: For every T1/T2 production system, confirm a published incident response playbook exists and that on-call staff can reach it from their on-call tooling.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/escalation-paths.md
+
+- id: IR-002
+  title: On-call team assigned
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T2
+    tiers: [T1, T2]
+    systems: [all]
+  owner: ai-operations
+  evidence: On-call rotation schedule
+  frequency: Continuous
+  on_fail: Escalate to AI Platform Lead
+  type: corrective
+  automation: manual
+  key_control: false
+  test: For every T1/T2 production system, inspect the on-call rotation for 4 sampled weeks and confirm there were no unstaffed periods.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/escalation-paths.md
+
+- id: IR-003
+  title: Incident reported and handled per severity SLA
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T4 (on incident)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: incident-commander
+  evidence: 'Incident report per template, with root cause: S1/S2 within 48 hours, S3 within 10 business days'
+  frequency: 'Per incident. Response SLA by severity: S1 15 minutes, S2 4 hours, S3 24 hours, S4 next business day'
+  on_fail: Escalate per escalation paths
+  type: corrective
+  automation: manual
+  key_control: true
+  test: Sample 25 incidents from the period (or all, if fewer), including every S1 and S2. Compare acknowledgement and root cause times with the severity SLAs, and confirm the recorded severity matches the definitions.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/escalation-paths.md
+
+- id: IR-004
+  title: Post-mortem completed for S1/S2 incidents
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T4 (S1 and S2 incidents)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: incident-commander
+  evidence: Post-mortem report
+  frequency: Within 1 week (S1) / 2 weeks (S2)
+  on_fail: Escalate to AI Risk Committee
+  type: corrective
+  automation: manual
+  key_control: false
+  test: For every S1 and S2 incident in the period, confirm a post-mortem report exists and was completed within 1 week (S1) or 2 weeks (S2).
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/escalation-paths.md
+  - framework/operating-model/incident-forensics.md
+
+- id: IR-005
+  title: Remediation actions tracked to completion
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T4 (incidents with remediation actions)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: system-owner
+  evidence: Remediation tracker with status; S4 items tracked in the backlog
+  frequency: Until complete
+  on_fail: Escalate to AI Risk
+  type: corrective
+  automation: manual
+  key_control: false
+  test: Sample 25 remediation actions from incidents in the period (or all, if fewer). Trace each to closure evidence or to an open item with an owner and due date, and confirm overdue items were escalated.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/operating-model/escalation-paths.md
+
+- id: IR-006
+  title: Regulatory incident notification assessed
+  stage: 8
+  group: Incident Response
+  applies_to:
+    text: T1-T4 (every S1 and S2 incident, and any suspected serious incident under the EU AI Act)
+    tiers: [T1, T2, T3, T4]
+    systems: [all]
+  owner: compliance
+  evidence: 'Notification assessment per incident: regimes considered (EU AI Act Art. 73 and Art. 26(5), DORA major ICT-related incident, GDPR Arts. 33 and 34, other applicable regimes), decision and rationale, Legal review, and each notification made with its deadline and time sent'
+  frequency: 'Per incident: started when the incident is declared, completed within 24 hours of an S1 and before the earliest legal deadline that could apply'
+  on_fail: Escalate immediately to Legal and the AI Risk Committee chair
+  type: corrective
+  automation: manual
+  key_control: true
+  test: For every S1 and S2 incident in the period, and every incident flagged as a possible serious incident, inspect the notification assessment. Confirm each applicable regime was considered, the decision was recorded before the earliest deadline, and every notification was sent within its legal time limit.
+  sources:
+  - framework/operating-model/escalation-paths.md
+  - framework/compliance/eu-ai-act-mapping.md

@@ -30,6 +30,13 @@ A RAG system is only as trustworthy as its retrieval pipeline. This document def
 - Post-retrieval access validation before documents enter the LLM context
 - Access control testing: verify that restricted documents are not retrievable by unauthorized users
 
+**Requirement (DE-008):** at every tier, where sources carry access restrictions, retrieval enforces the requesting user's source permissions at query time.
+- Document-level access control lists are carried from each source system into the index with every chunk, and kept in step when source permissions change.
+- The retrieval layer filters on the requesting user's identity and entitlements before any document enters the model's context. Filtering the answer afterwards is not enough.
+- No cross-tenant or cross-entitlement retrieval: a user never receives content from a document they could not open in the source system.
+- When an agent retrieves on a user's behalf, the user's permissions apply, narrowed by the agent's own ([delegation](agent-identity-and-tool-governance.md#2-delegation)). The agent's service identity does not widen what the user can see.
+- Test before deployment with identities that hold different entitlements, and re-test on any change to sources, the index, retrieval logic or the identity integration.
+
 ### 3. Data Poisoning
 
 **Risk:** Adversarial or low-quality content is ingested into the document store, manipulating RAG outputs.
@@ -84,19 +91,21 @@ A RAG system is only as trustworthy as its retrieval pipeline. This document def
 
 ### Retrieval Evaluation
 
+Tiered thresholds for precision@5 and faithfulness, their definitions, and RAG suite sizes are set in [evaluation-governance.md](evaluation-governance.md#threshold-definitions-by-tier). The values below restate them; the other metrics are supporting diagnostics.
+
 | Metric | Description | Minimum Threshold |
 |--------|-------------|-------------------|
 | Recall@k | Proportion of relevant documents retrieved in top k | Use case specific; ≥ 0.8 recommended |
-| Precision@k | Proportion of retrieved documents that are relevant | Use case specific; ≥ 0.7 recommended |
+| Precision@5 | Proportion of the top 5 retrieved chunks that are relevant | T1 ≥ 85%, T2 ≥ 80%, T3 ≥ 75% ([evaluation-governance](evaluation-governance.md#threshold-definitions-by-tier)) |
 | MRR | Mean Reciprocal Rank of first relevant document | ≥ 0.7 |
 | Context relevance | LLM-judged relevance of retrieved context to query | ≥ 0.75 |
-| Faithfulness | Generated answer grounded in retrieved context | ≥ 0.9 for T1/T2 |
+| Faithfulness | Average share of claims in the answer supported by retrieved context | T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80%, T4 ≥ 75% ([evaluation-governance](evaluation-governance.md#threshold-definitions-by-tier)) |
 | Answer relevance | Generated answer addresses the user's query | ≥ 0.85 |
 
 Evaluation must be performed:
 - Before initial deployment (on representative test set)
 - After any change to chunking strategy, embedding model, or retrieval parameters
-- On a scheduled basis (monthly for T1/T2, quarterly for T3/T4)
+- On a scheduled basis per [evaluation-governance.md](evaluation-governance.md#production-evaluation): weekly (T1), monthly (T2), quarterly (T3); recommended for T4
 - When monitoring detects quality degradation
 
 ---
@@ -141,8 +150,8 @@ Evaluation must be performed:
 
 | Metric | Frequency | Action |
 |--------|-----------|--------|
-| Retrieval quality (Recall/Precision) | Monthly (T1/T2), Quarterly (T3/T4) | Re-evaluate on updated test set |
-| Faithfulness score | Monthly (T1/T2), Quarterly (T3/T4) | Investigate and remediate degradation |
+| Retrieval quality (Recall/Precision) | Weekly (T1), Monthly (T2), Quarterly (T3); T4 recommended | Re-evaluate on updated test set |
+| Faithfulness score | Per production evaluation cadence in [evaluation-governance.md](evaluation-governance.md#production-evaluation) | Investigate and remediate degradation |
 | Document corpus freshness | Weekly | Flag stale documents for review |
 | Access control compliance | Monthly | Audit retrieval results against user permissions |
 | Index size and growth | Monthly | Capacity planning; prune irrelevant content |

@@ -1,0 +1,87 @@
+# Stage 10 controls: Deprecation & Retirement.
+# Source of truth for the Stage 10 table(s) in framework/governance-operations/control-register.md.
+# After editing, run: python tools/build.py && python tools/check.py
+# Field reference: tools/README.md. Schema: schemas/controls.schema.json
+
+stage: 10
+name: Deprecation & Retirement
+controls:
+
+- id: DR-001
+  title: Deprecation impact assessment completed
+  stage: 10
+  applies_to:
+    text: T1-T4 systems being deprecated
+    tiers: [T1, T2, T3, T4]
+    systems: [retired]
+  owner: system-owner
+  evidence: Impact assessment with affected systems and migration plan
+  frequency: At deprecation trigger
+  on_fail: Block deprecation without assessment
+  type: preventive
+  automation: manual
+  key_control: false
+  test: For every system deprecated in the period, confirm an impact assessment with affected systems and a migration plan predates the deprecation action.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-deprecation-governance.md
+
+- id: DR-002
+  title: Migration governance followed
+  stage: 10
+  applies_to:
+    text: 'T1-T2 systems being replaced (T3: recommended)'
+    tiers: [T1, T2]
+    recommended: [T3]
+    systems: [replaced]
+  owner: ai-lead
+  evidence: Migration assessment + parallel running evidence + cutover approval
+  frequency: During migration
+  on_fail: Block cutover
+  type: preventive
+  automation: manual
+  key_control: false
+  test: For every T1/T2 replacement in the period, inspect the parallel running evidence and the cutover approval, and confirm cutover happened after approval.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-deprecation-governance.md
+
+- id: DR-003
+  title: Evidence archived per retention policy
+  stage: 10
+  applies_to:
+    text: T1-T4 deprecated systems
+    tiers: [T1, T2, T3, T4]
+    systems: [retired]
+  owner: ai-operations
+  evidence: Archival confirmation with artifact inventory
+  frequency: At retirement
+  on_fail: Compliance escalation
+  type: preventive
+  automation: manual
+  key_control: false
+  test: For every system retired in the period, compare the archive inventory with the required governance records and confirm a retention end date is set for the tier.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-deprecation-governance.md
+  - framework/compliance/audit-trail-requirements.md
+
+- id: DR-004
+  title: System decommissioned cleanly
+  stage: 10
+  applies_to:
+    text: 'T1-T3 retired systems (T4: recommended)'
+    tiers: [T1, T2, T3]
+    recommended: [T4]
+    systems: [retired]
+  owner: technical-owner
+  evidence: Decommission record (monitoring removed, access revoked, documentation archived)
+  frequency: At retirement
+  on_fail: Track until complete
+  type: preventive
+  automation: manual
+  key_control: false
+  test: For every system retired in the period, inspect access lists and monitoring configuration to confirm access was revoked, monitoring removed and documentation archived.
+  sources:
+  - framework/governance-operations/governance-workflow.md
+  - framework/llm-lifecycle/model-deprecation-governance.md

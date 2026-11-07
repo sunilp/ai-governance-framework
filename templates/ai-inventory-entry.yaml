@@ -1,0 +1,76 @@
+# AI Inventory Entry Template
+# One entry per AI system or material AI feature. Standard: framework/governance-operations/ai-inventory.md
+# Schema: schemas/inventory-entry.schema.json. Controls: RA-006 (registered before development), GV-006 (complete and reconciled).
+# Quote every date ("YYYY-MM-DD"). Leave optional fields out rather than empty once the entry is live.
+
+system_id: ""                           # Unique, stable, lower case, e.g. "research-agent-v0.9". Never reused.
+name: ""                                # e.g. "Investment Research Assistant Agent"
+entry_type: ""                          # ai-system | material-ai-feature (an AI capability inside a bought product)
+host_product: ""                        # material-ai-feature only: the product or SaaS service it sits in
+purpose: ""                             # What the system does and for whom, in one or two sentences
+business_unit: ""
+
+owners:                                 # Exactly one business owner, one product owner and one AI lead per system
+  business_owner: ""                    # Accepts the residual risk
+  product_owner: ""                     # Creates the entry at intake (RA-006)
+  system_owner: ""                      # Keeps the entry current in production
+  ai_lead: ""                           # Model, vendor and model card fields
+  technical_owner: ""
+
+deployment_status: ""                   # proposed | in-development | pilot | production | deprecated | retired | rejected
+risk_tier: ""                           # T1 | T2 | T3 | T4 | pending (until RA-004 approval) | not-tiered (rejected at Step 0 only)
+tier_basis: ""                          # Highest-scoring dimension or override item, e.g. "Override item 6 (agentic)"
+
+characteristics: []                     # Any of: ml, genai, rag, agentic, fine-tuned, external-model, open-source,
+                                        # personal-data, external-data-flow, customer-facing (same values as control applicability)
+
+data:
+  classes: []                           # Any of: public, internal, confidential, personal-data, mnpi, regulated
+  processing_regions: []                # Where prompts, data and outputs are processed and stored, e.g. ["EU (Frankfurt)"]
+
+decision_impact: ""                     # informational | recommendation | automated
+human_oversight: ""                     # human-in-the-loop | human-on-the-loop | human-over-the-loop | human-out-of-the-loop | not-set
+
+eu_ai_act:
+  in_scope: false                       # In scope under Art. 2(1)
+  role: ""                              # provider | deployer | provider-and-deployer | not-applicable | to-be-determined (RA-008)
+  gpai_downstream: false                # Built on a general-purpose AI model from another provider
+  annex_iii: "none"                     # Annex III point, e.g. "5(b)" for creditworthiness, or "none"
+  high_risk_status: ""                  # high-risk | not-high-risk | art-6-3-exemption-documented | to-be-determined
+  art_50_applies: false                 # Transparency duties apply (interaction disclosure, marking, deep fakes)
+  role_record: ""                       # Reference to the RA-008 role record
+
+vendor_and_model:
+  vendor: ""                            # Vendor name, or "internal"
+  hosting: ""                           # vendor-api | self-hosted | vpc-hosted | embedded-saas | internal-platform
+  models:
+    - provider: ""
+      model_id: ""                      # Pinned model identifier
+      version: ""
+      role: ""                          # primary | fallback | embedding | judge
+
+dates:
+  registered: ""                        # Date the entry was created; before development starts (RA-006)
+  deployed: ""                          # Required for pilot and production
+  last_review: ""                       # Last formal review (RV-001)
+  next_review: ""                       # Required for pilot and production; set from the tier cadence
+  retired: ""
+
+linked_controls:                        # One row per applicable control; status as in the retroactive gap matrix
+  - control: "RA-001"
+    status: ""                          # evidence-exists | evidence-missing | not-applicable | excepted
+    evidence: ""                        # Document reference or link
+  - control: "RA-004"
+    status: ""
+    evidence: ""
+
+exceptions: []                          # Exception IDs in the register, e.g. ["EXC-YYYY-NNN"] (GV-004)
+
+references:
+  risk_assessment: ""
+  model_card: ""                        # Kept current under RV-002
+  model_risk_inventory_id: ""           # Where the model is also in the model risk inventory
+  vendor_assessment: ""                 # AR-005 reference, where an external vendor is used
+
+registration_source: ""                 # intake | reconciliation (found by GV-006) | retroactive (registered at framework adoption)
+notes: ""

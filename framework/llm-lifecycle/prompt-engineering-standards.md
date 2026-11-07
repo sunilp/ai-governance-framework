@@ -74,33 +74,7 @@ Each prompt must include:
 
 ## Prompt Review Process
 
-### Review Checklist
-
-Before a prompt enters production, it must pass the following review:
-
-**Functional Review:**
-- [ ] Prompt produces correct outputs for representative test cases
-- [ ] Edge cases are tested and documented
-- [ ] Output format is consistent and parseable (if structured)
-- [ ] Prompt handles missing or malformed input gracefully
-
-**Safety Review:**
-- [ ] No prompt injection vulnerabilities (tested with standard injection payloads)
-- [ ] No PII leakage — prompt does not instruct model to reveal training data or context
-- [ ] Guardrails are explicit — not relying on model's default safety behavior
-- [ ] Toxicity constraints are defined where applicable
-- [ ] Hallucination mitigation is appropriate (e.g., "only answer based on provided context")
-
-**Compliance Review:**
-- [ ] Output cannot be mistaken for regulated advice (financial, legal, medical) unless appropriately qualified
-- [ ] Disclosure requirements are met (if output is customer-facing)
-- [ ] Prompt does not violate model provider's usage policy
-- [ ] Data handling in prompt context complies with data classification policy
-
-**Operational Review:**
-- [ ] Token usage is within budget (system prompt + expected input + output)
-- [ ] Latency is acceptable for the use case
-- [ ] Prompt works with the fallback model (if T1/T2)
+Before a prompt enters production, it passes the [prompt review checklist](../../templates/prompt-review-checklist.md): functional, safety, compliance, bias and documentation checks, each marked with the tiers that require it. Submit the completed checklist with the prompt's pull request.
 
 ### Review Authority
 
@@ -110,6 +84,8 @@ Before a prompt enters production, it must pass the following review:
 | T2 | Peer review + prompt engineering lead |
 | T3 | Peer review |
 | T4 | Self-review with documentation |
+
+Prompt review is control DE-003 in the [control register](../governance-operations/control-register.md), owned by the AI lead. DE-003 applies to T1 to T3 (T3 is peer review only); T4 prompts are self-reviewed.
 
 ---
 
@@ -131,8 +107,8 @@ prompts/
 
 ### Versioning Rules
 
-- **Major version (v1 → v2):** Behavioral change — different output characteristics, new guardrails, different model target. Requires full review.
-- **Minor version (v1.0 → v1.1):** Refinement — improved phrasing, additional examples, minor guardrail adjustments. Requires peer review.
+- **Major version (v1 → v2):** Behavioral change: different output characteristics, new guardrails, different model target. Requires full review.
+- **Minor version (v1.0 → v1.1):** Refinement: improved phrasing, additional examples, minor guardrail adjustments. Requires peer review.
 - **No unversioned changes.** Every prompt change creates a new version.
 
 ### Deployment
@@ -160,12 +136,16 @@ prompts/
 
 ### Minimum Evaluation Suite Size
 
-| Tier | Test Cases | Adversarial Tests |
+T1 and T2 pass or fail on the 95% confidence bound, so suite sizes follow the [statistical pass rule](evaluation-governance.md#statistical-pass-rule).
+
+| Tier | Test Cases | Prompt-Change Adversarial Regression Set |
 |------|-----------|-------------------|
-| T1 | ≥ 200 | ≥ 50 |
-| T2 | ≥ 100 | ≥ 25 |
+| T1 | ≥ 300 | ≥ 50 |
+| T2 | ≥ 100 | ≥ 50 |
 | T3 | ≥ 50 | ≥ 10 |
 | T4 | ≥ 20 | ≥ 5 |
+
+Test case counts restate the pre-release suite sizes in [evaluation-governance.md](evaluation-governance.md#evaluation-types). The prompt-change adversarial regression set is re-run on every prompt change. It is separate from the pre-release red-team, whose depth per tier is set in [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md#tiered-testing-depth).
 
 ---
 

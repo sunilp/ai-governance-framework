@@ -6,11 +6,13 @@ Every AI system depends on components the organization did not build: foundation
 
 AI supply chain security extends traditional software supply chain practices to cover model provenance, training data risk, and the unique legal and safety considerations of AI components.
 
+In public taxonomies this is OWASP [LLM03:2025 Supply Chain](https://genai.owasp.org/llmrisk/llm032025-supply-chain/), OWASP ASI04 Agentic Supply Chain Vulnerabilities for agent tools, and MITRE ATLAS AML.T0010 Supply Chain Compromise. See the [threat taxonomy mapping](adversarial-robustness.md#threat-taxonomy-mapping). Control SR-004 in the [control register](../governance-operations/control-register.md) requires the AI-BOM and provenance verification described here for systems using open-source models.
+
 ---
 
 ## Model Provenance
 
-Before deploying any model — commercial, open-source, or community-contributed — verify its provenance.
+Before deploying any model (commercial, open-source, or community-contributed), verify its provenance.
 
 | Check | Description | Tier Requirement |
 |-------|-------------|:---:|
@@ -46,18 +48,9 @@ Open-source models offer control and cost advantages but shift responsibility fo
 | Maintenance risk | Project may become abandoned; no security patches or safety updates | Assess community health (contributors, commit frequency, issue responsiveness); have alternatives identified |
 | Supply chain tampering | Model files modified between source and deployment | Verify checksums; use signed releases where available; store models in controlled artifact registry |
 
-### Open-Source License Risk Matrix
+### Open-Source License Risk
 
-| License | Commercial Use | Derivative Works | Restrictions | Risk Level |
-|---------|:---:|:---:|-------------|:---:|
-| Apache 2.0 | Yes | Yes | Patent grant; attribution | Low |
-| MIT | Yes | Yes | Attribution | Low |
-| Llama Community License | Yes (MAU-gated) | Yes | >700M MAU triggers additional commercial terms; acceptable use policy | Medium |
-| Mistral licenses (vary by model) | Varies | Varies | Some models Apache 2.0; others have commercial restrictions — check per model | Medium-High |
-| CC BY-NC | No | Yes | Non-commercial only | High |
-| Custom community licenses | Varies | Varies | Case-by-case legal review required | Variable |
-
-For T1/T2 systems, only use models with Low or Medium license risk. High-risk licenses require legal sign-off and documented risk acceptance.
+License risk levels are set in the license matrix in [open-source-model-governance.md](../llm-lifecycle/open-source-model-governance.md#license-compatibility-matrix). Legal approves the license; AI Risk is consulted, and the CISO is consulted on security terms. For T1/T2 systems, only use models with Low or Medium license risk.
 
 ---
 
@@ -80,13 +73,7 @@ Models from Hugging Face, GitHub, or other community platforms require additiona
 
 ### Ongoing Monitoring
 
-| Activity | Frequency | Owner |
-|----------|-----------|-------|
-| Community health check (contributor activity, issue resolution) | Quarterly | AI Operations |
-| CVE and vulnerability scan (model, framework, dependencies) | Weekly (automated) | Security |
-| License change monitoring | Quarterly | Legal |
-| Safety benchmark re-evaluation | Semi-annually | AI Risk |
-| Performance regression testing | Monthly | AI Operations |
+Self-hosted community and open-source models follow the maintenance schedule in [open-source model governance](../llm-lifecycle/open-source-model-governance.md#ongoing-maintenance): weekly CVE scans, quarterly community health and license checks, semi-annual safety re-evaluation, performance re-evaluation by tier, and the security patch SLA.
 
 ---
 
@@ -121,7 +108,19 @@ Every AI system should maintain an AI Bill of Materials documenting its supply c
 | Embedding model | Provider, version, embedding dimensions, hosting |
 | Inference framework | Name, version, deployment configuration |
 | Key dependencies | Framework versions, critical libraries, container base image |
-| Guardrail components | Safety classifiers, content filters, PII detectors — versions and sources |
+| Guardrail components | Safety classifiers, content filters, PII detectors: versions and sources |
+| Agent tools and integrations | For agentic systems: each tool or tool server the agent can call, its version, source, and the permissions granted to the agent |
+
+### Formats
+
+Use a machine-readable format so the AI-BOM can be generated in CI and checked at the deployment gate. Two open formats cover AI components:
+
+| Format | AI coverage |
+|--------|-------------|
+| CycloneDX ML-BOM | Represents models, datasets and their dependencies alongside software components. CycloneDX v1.7 is also published as ECMA-424 (2nd edition, December 2025) |
+| SPDX 3.0 AI and Dataset profiles | The AI profile's AIPackage class records model type, autonomy type, safety risk assessment, limitations and energy consumption; the Dataset profile describes datasets |
+
+OWASP LLM03:2025 recommends a signed, up-to-date SBOM and suggests starting with OWASP CycloneDX when evaluating AI BOM options. A format does not replace the review: the contents table above sets what must be recorded.
 
 ### Maintenance
 
@@ -134,14 +133,17 @@ Every AI system should maintain an AI Bill of Materials documenting its supply c
 
 ## Decision Framework: Open-Source vs. Commercial API
 
-| Factor | Open-Source Advantage | Commercial API Advantage | Decision Guidance |
-|--------|----------------------|-------------------------|-------------------|
-| Cost at scale | Lower marginal cost after infrastructure investment | Lower upfront cost; pay-per-use | Open-source at >$10K/month API spend |
-| Control | Full control over model, data, infrastructure | Limited to API parameters | Open-source when data residency is non-negotiable |
-| Data residency | Complete; all processing on your infrastructure | Depends on vendor's regional endpoints | Open-source for MNPI or strict residency |
-| Capability | Varies; may lag frontier models | Frontier performance; regular updates | API for state-of-the-art requirements |
-| Support | Community only; no SLA | Vendor SLA; dedicated support | API for T1 systems requiring guaranteed uptime |
-| Security patching | Self-managed; may lag | Vendor-managed; typically faster | API unless you have dedicated ML security team |
-| Compliance | Full audit access; self-attested | Vendor certifications (SOC 2, ISO 27001) | Depends on regulatory expectations |
+The decision framework, including security patching and support, is in [open-source model governance](../llm-lifecycle/open-source-model-governance.md#decision-framework-open-source-vs-commercial-api).
 
-Use this framework during model selection; document the decision rationale in the risk assessment.
+---
+
+## Sources
+
+- OWASP, LLM03:2025 Supply Chain: https://genai.owasp.org/llmrisk/llm032025-supply-chain/
+- OWASP GenAI Security Project, OWASP Top 10 for Agentic Applications 2026: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+- CycloneDX, Machine Learning Bill of Materials (ML-BOM): https://cyclonedx.org/capabilities/mlbom/
+- CycloneDX v1.5 JSON reference (machine-learning-model component type): https://cyclonedx.org/docs/1.5/json/
+- Ecma International, ECMA-424 CycloneDX Bill of materials specification: https://ecma-international.org/publications-and-standards/standards/ecma-424/
+- SPDX 3.0.1 specification, AI profile: https://spdx.github.io/spdx-spec/v3.0.1/model/AI/AI/
+- SPDX 3.0.1 specification, Dataset profile: https://spdx.github.io/spdx-spec/v3.0.1/model/Dataset/Dataset/
+- MITRE ATLAS data, release 2026.10: https://github.com/mitre-atlas/atlas-data/blob/main/dist/v6/ATLAS-2026.10.yaml

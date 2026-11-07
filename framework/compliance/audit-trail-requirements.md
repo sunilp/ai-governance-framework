@@ -4,7 +4,7 @@
 
 Every AI system in production must maintain an audit trail sufficient to reconstruct decisions, trace data lineage, and satisfy regulatory examination. The depth of logging is proportional to the system's risk tier.
 
-An auditor — whether internal, external, or regulatory — should be able to answer: **"Why did this system make this decision, for this customer, at this point in time?"**
+An auditor, whether internal, external, or regulatory, should be able to answer: **"Why did this system make this decision, for this customer, at this point in time?"**
 
 ## What Must Be Logged
 
@@ -58,16 +58,14 @@ For each model version in production, maintain records of:
 
 ## Retention Periods
 
-| Data Type | Minimum Retention | Regulatory Basis |
-|-----------|------------------|-----------------|
-| Model predictions (T1) | 7 years | SR 11-7, BCBS 239, local banking regulations |
-| Model predictions (T2) | 5 years | General regulatory expectation |
-| Model predictions (T3/T4) | 3 years | Internal policy |
-| Training data lineage | Life of model + 3 years | Model reproducibility requirement |
-| Lifecycle events | 7 years | Audit requirements |
+| Data Type | Minimum Retention | Basis |
+|-----------|------------------|-------|
+| Interaction logs: model predictions, prompts, responses, agent actions | T1 7 years; T2 5 years; T3 3 years; T4 1 year | Set in [prompt-audit-trail.md](prompt-audit-trail.md#retention-requirements) |
+| Governance records: risk assessments, approvals, validation and evaluation reports, red-team reports, incident reports, model cards, change history (including lifecycle events and training data lineage) | Life of the system plus the tier period after retirement: T1 7 years; T2 5 years; T3 3 years; T4 1 year | Framework default |
+| Technical documentation of a high-risk AI system, where the organisation is its provider under the EU AI Act | 10 years after the system is placed on the market | EU AI Act Art. 18 |
 | Access logs | 3 years | Security policy |
 
-Retention periods may be extended by specific regulatory requirements in certain jurisdictions. Consult compliance for jurisdiction-specific requirements.
+Tier periods are framework defaults. Set retention to the longest obligation that applies to you. Reference points: EU AI Act Art. 18 (provider technical documentation, 10 years), Art. 19 (provider-generated logs, at least 6 months), Art. 26(6) (deployer logs, at least 6 months); MiFID II Art. 16(7) (records of client communications, 5 years, up to 7 if the authority requests).
 
 ## Storage and Access Controls
 
@@ -88,7 +86,7 @@ Retention periods may be extended by specific regulatory requirements in certain
 At any point, the organization must be able to produce:
 
 1. **Model inventory:** Complete list of all AI systems in production with risk tiers, owners, and current versions
-2. **Decision reconstruction:** For any specific prediction, retrieve the full context — inputs, model version, output, downstream decision, and any human override
+2. **Decision reconstruction:** For any specific prediction, retrieve the full context: inputs, model version, output, downstream decision, and any human override
 3. **Performance history:** Trend data for model performance, drift metrics, and fairness indicators
 4. **Governance evidence:** Validation reports, deployment approvals, review meeting minutes, incident reports
 5. **Data lineage:** End-to-end lineage from source system to model prediction

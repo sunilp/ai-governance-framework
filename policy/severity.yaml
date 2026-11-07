@@ -1,0 +1,82 @@
+# Incident severity and alert priority. Source of truth for the "Severity Classification",
+# "Follow-Up by Severity" and "Alert Priority to Incident Severity" tables in
+# framework/operating-model/escalation-paths.md. Alert response times restate
+# framework/llm-lifecycle/monitoring.md and framework/model-lifecycle/monitoring.md.
+#
+# *_minutes fields hold the same time as a number; null when the time is not a fixed
+# duration (for example "Next business day").
+# Links in notifications are relative to escalation-paths.md.
+# After editing, run: python tools/build.py && python tools/check.py
+
+response_sla_meaning: The response SLA is the time to acknowledge the incident and start containment.
+tier_floor: Any incident on a T1 system that reached customers is at least S2.
+
+severities:
+  - id: S1
+    name: Critical
+    definition: Harm to customers, financial loss, a regulatory breach or a data exposure has occurred or is occurring.
+    response_sla: 15 minutes
+    response_sla_minutes: 15
+    root_cause: Identified within 48 hours
+    post_mortem: Report within 1 week (IR-004)
+    post_mortem_required: true
+    notifications: "AI Risk Committee chair within 1 hour. Every S1 is a material incident: the Board Risk Committee is notified within 24 hours (see [board-reporting.md](board-reporting.md#material-incident-criteria))."
+
+  - id: S2
+    name: High
+    definition: Incorrect or harmful output reached customers or external parties with no confirmed harm yet, or a key control failed on a T1/T2 system.
+    response_sla: 4 hours
+    response_sla_minutes: 240
+    root_cause: Identified within 48 hours
+    post_mortem: Report within 2 weeks (IR-004)
+    post_mortem_required: true
+    notifications: "Board Risk Committee notified when the incident meets the [material incident criteria](board-reporting.md#material-incident-criteria)."
+
+  - id: S3
+    name: Medium
+    definition: A problem detected internally before it reached anyone outside, or quality degraded but still within tolerance on a T1/T2 system.
+    response_sla: 24 hours
+    response_sla_minutes: 1440
+    root_cause: Documented within 10 business days
+    post_mortem: Not required
+    post_mortem_required: false
+    notifications: Reported at the monthly Model Review Board.
+
+  - id: S4
+    name: Low
+    definition: Minor issue, no external exposure, no control failure.
+    response_sla: Next business day
+    response_sla_minutes: null
+    root_cause: Tracked in the team backlog
+    post_mortem: Not required
+    post_mortem_required: false
+    notifications: Reviewed at the weekly AI Operations Stand-up.
+
+alert_priorities:
+  - id: P1
+    acknowledgement: Within 15 minutes, then triaged
+    acknowledgement_minutes: 15
+    response_time: 15 minutes
+    usual_severity: S1 or S2 if external impact is confirmed
+    severities: [S1, S2]
+
+  - id: P2
+    acknowledgement: Within 1 hour
+    acknowledgement_minutes: 60
+    response_time: 4 hours
+    usual_severity: Usually S2 or S3
+    severities: [S2, S3]
+
+  - id: P3
+    acknowledgement: Within the monitoring standard's response SLA
+    acknowledgement_minutes: null
+    response_time: 24 hours
+    usual_severity: S3 or S4, or no incident
+    severities: [S3, S4]
+
+  - id: P4
+    acknowledgement: Within the monitoring standard's response SLA
+    acknowledgement_minutes: null
+    response_time: Next business day
+    usual_severity: S3 or S4, or no incident
+    severities: [S3, S4]

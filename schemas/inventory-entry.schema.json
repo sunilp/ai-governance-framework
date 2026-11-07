@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI inventory entry",
+  "description": "One entry in the AI inventory: an AI system or a material AI feature. Standard: framework/governance-operations/ai-inventory.md. Template: templates/ai-inventory-entry.yaml. Controls: RA-006 (registered before development) and GV-006 (inventory complete and reconciled). Dates are quoted strings in YYYY-MM-DD form.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["system_id", "name", "entry_type", "purpose", "business_unit", "owners", "deployment_status",
+               "risk_tier", "characteristics", "data", "decision_impact", "human_oversight", "eu_ai_act",
+               "vendor_and_model", "dates", "linked_controls", "registration_source"],
+  "properties": {
+    "system_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$", "description": "Unique, stable identifier. Never reused."},
+    "name": {"$ref": "#/$defs/text"},
+    "entry_type": {"enum": ["ai-system", "material-ai-feature"]},
+    "host_product": {"$ref": "#/$defs/text", "description": "For a material AI feature: the product or SaaS service it sits in."},
+    "purpose": {"$ref": "#/$defs/text"},
+    "business_unit": {"$ref": "#/$defs/text"},
+    "owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["business_owner", "product_owner", "ai_lead"],
+      "properties": {
+        "business_owner": {"$ref": "#/$defs/text"},
+        "product_owner": {"$ref": "#/$defs/text"},
+        "system_owner": {"$ref": "#/$defs/text"},
+        "ai_lead": {"$ref": "#/$defs/text"},
+        "technical_owner": {"$ref": "#/$defs/text"}
+      }
+    },
+    "deployment_status": {"enum": ["proposed", "in-development", "pilot", "production", "deprecated", "retired", "rejected"]},
+    "risk_tier": {"enum": ["T1", "T2", "T3", "T4", "pending", "not-tiered"], "description": "pending until the Stage 2 assessment is approved; not-tiered only for a use rejected at the Step 0 prohibited-use screen."},
+    "tier_basis": {"$ref": "#/$defs/text", "description": "Highest-scoring dimension or override item that set the tier."},
+    "characteristics": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "Same values as applies_to.systems in schemas/controls.schema.json, so the applicable controls can be derived.",
+      "items": {"enum": ["ml", "genai", "rag", "agentic", "fine-tuned", "external-model", "open-source",
+                         "personal-data", "external-data-flow", "customer-facing"]}
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classes", "processing_regions"],
+      "properties": {
+        "classes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Classes from the residency standard (framework/compliance/cross-border-data-governance.md).",
+          "items": {"enum": ["public", "internal", "confidential", "personal-data", "mnpi", "regulated"]}
+        },
+        "processing_regions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}}
+      }
+    },
+    "decision_impact": {"enum": ["informational", "recommendation", "automated"]},
+    "human_oversight": {"enum": ["human-in-the-loop", "human-on-the-loop", "human-over-the-loop", "human-out-of-the-loop", "not-set"]},
+    "eu_ai_act": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_scope", "role", "annex_iii", "high_risk_status"],
+      "properties": {
+        "in_scope": {"type": "boolean", "description": "In scope of the Act under Art. 2(1)."},
+        "role": {"enum": ["provider", "deployer", "provider-and-deployer", "not-applicable", "to-be-determined"]},
+        "gpai_downstream": {"type": "boolean", "description": "Built on a general-purpose AI model supplied by another provider."},
+        "annex_iii": {"type": "string", "pattern": "^(none|[1-8](\\([a-z]\\))?)$", "description": "Annex III point, for example 5(b), or none."},
+        "high_risk_status": {"enum": ["high-risk", "not-high-risk", "art-6-3-exemption-documented", "to-be-determined"]},
+        "art_50_applies": {"type": "boolean"},
+        "role_record": {"$ref": "#/$defs/text", "description": "Reference to the RA-008 role record."}
+      }
+    },
+    "vendor_and_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vendor", "hosting", "models"],
+      "properties": {
+        "vendor": {"$ref": "#/$defs/text", "description": "Vendor name, or internal for a system built in-house on an internal model."},
+        "hosting": {"enum": ["vendor-api", "self-hosted", "vpc-hosted", "embedded-saas", "internal-platform"]},
+        "models": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "model_id"],
+            "properties": {
+              "provider": {"$ref": "#/$defs/text"},
+              "model_id": {"$ref": "#/$defs/text"},
+              "version": {"$ref": "#/$defs/text"},
+              "role": {"$ref": "#/$defs/text", "description": "For example primary, fallback, embedding, judge."}
+            }
+          }
+        }
+      }
+    },
+    "dates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registered"],
+      "properties": {
+        "registered": {"$ref": "#/$defs/date"},
+        "deployed": {"$ref": "#/$defs/date"},
+        "last_review": {"$ref": "#/$defs/date"},
+        "next_review": {"$ref": "#/$defs/date"},
+        "retired": {"$ref": "#/$defs/date"}
+      }
+    },
+    "linked_controls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["control", "status"],
+        "properties": {
+          "control": {"type": "string", "pattern": "^[A-Z]{2}-[0-9]{3}$"},
+          "status": {"enum": ["evidence-exists", "evidence-missing", "not-applicable", "excepted"]},
+          "evidence": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "exceptions": {"type": "array", "uniqueItems": true, "items": {"type": "string", "pattern": "^EXC-[0-9]{4}-[0-9]{3}$"}},
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "risk_assessment": {"$ref": "#/$defs/text"},
+        "model_card": {"$ref": "#/$defs/text"},
+        "model_risk_inventory_id": {"$ref": "#/$defs/text"},
+        "vendor_assessment": {"$ref": "#/$defs/text"}
+      }
+    },
+    "registration_source": {"enum": ["intake", "reconciliation", "retroactive"]},
+    "notes": {"type": "string"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"entry_type": {"const": "material-ai-feature"}}, "required": ["entry_type"]},
+      "then": {"required": ["host_product"]}
+    },
+    {
+      "if": {"properties": {"deployment_status": {"enum": ["in-development", "pilot", "production", "deprecated"]}}, "required": ["deployment_status"]},
+      "then": {"properties": {"risk_tier": {"enum": ["T1", "T2", "T3", "T4"]}}}
+    },
+    {
+      "if": {"properties": {"risk_tier": {"const": "not-tiered"}}, "required": ["risk_tier"]},
+      "then": {"properties": {"deployment_status": {"const": "rejected"}}}
+    },
+    {
+      "if": {"properties": {"deployment_status": {"enum": ["pilot", "production"]}}, "required": ["deployment_status"]},
+      "then": {"properties": {"dates": {"required": ["registered", "deployed", "next_review"]}}}
+    }
+  ],
+  "$defs": {
+    "text": {"type": "string", "minLength": 1},
+    "date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"}
+  }
+}

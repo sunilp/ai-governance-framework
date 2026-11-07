@@ -8,7 +8,8 @@
 | System ID | doc-summarizer-compliance-v1.0 |
 | Business Unit | Compliance Operations |
 | Assessment Date | 2025-10-10 |
-| Assessor | AI Risk Analyst, Model Risk Management |
+| Prepared by | Product Owner, Compliance Operations |
+| Risk assessment approved by | AI Risk (second line), 2025-10-14 |
 
 ---
 
@@ -17,25 +18,27 @@
 | Dimension | Score | Justification |
 |-----------|-------|---------------|
 | Hallucination Severity | **High (3)** | Incorrect summary of regulatory requirements could lead to compliance gaps. However, all outputs are reviewed by human compliance analysts before use. |
-| Data Exposure Risk | **Medium (2)** | Documents are confidential but do not contain customer PII. Processed within GCP EU region on Vertex AI (VPC-hosted). |
+| Data Exposure Risk | **High (3)** | Documents are confidential business data (regulatory correspondence, pre-publication policy) but do not contain customer personal data. Primary processing on Vertex AI in the GCP EU region (VPC-hosted). During a primary outage only, documents go to the fallback model (Claude Sonnet 4.5), also served through Vertex AI in the EU region under the same Google Cloud agreement, with zero data retention. |
 | Prompt Injection Susceptibility | **Low (1)** | Internal users only; input is uploaded documents, not free-text queries. Limited attack surface. |
 | Output Controllability | **Low (1)** | All outputs reviewed by qualified compliance analyst before use (Pattern 1: full human-in-the-loop). |
-| Third-Party Model Dependency | **Medium (2)** | Hosted on Vertex AI (GCP); fallback to Claude 3.5 Sonnet validated. Data stays within organizational GCP tenancy. |
+| Third-Party Model Dependency | **Medium (2)** | Primary model hosted on Vertex AI (GCP). Validated fallback to Claude Sonnet 4.5 on Vertex AI (EU region), used only on primary outage. |
 
-**Aggregate Score: 9**
-**Highest Dimension: High (3)**
+**Highest Dimension: High (3)** (Hallucination Severity, Data Exposure Risk)
+**Aggregate Score: 10** (context only; does not set the tier)
 
 ### Risk Tier Determination
 
-**Tier: T2 — High**
+**Tier: T2 (High)**
 
-Automatic T1 trigger check:
-- [ ] Processes customer PII through external LLM API — *No*
-- [ ] Generates customer-facing content without human review — *No: internal only, human-reviewed*
-- [ ] Makes or influences regulated decisions — *Indirect: summaries inform compliance analysis*
-- [ ] Involves agentic behavior with production system access — *No*
+Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
+- [ ] 1. Regulated decisions: *No. Summaries inform compliance analysts; no credit, insurance, AML/sanctions or employment decision.*
+- [ ] 2. Customer-facing content without per-output review: *No. Internal only; every summary is reviewed.*
+- [ ] 3. Customer personal data through an external LLM API without all four safeguards: *No. Documents do not contain customer personal data, and the external fallback runs under a DPA with zero retention in the EU region.*
+- [ ] 4. Agentic write access or authority: *No.*
+- [ ] 5. Biometric, deepfake-capable media, voice cloning, medical imagery: *No.*
+- [ ] 6 to 9 (minimum T2 items): *No.*
 
-No automatic T1 triggers. Classified as T2 based on aggregate score and hallucination severity.
+No override applies. The highest-scoring dimension is High (Hallucination Severity and Data Exposure Risk), so the tier is T2.
 
 ---
 
@@ -60,15 +63,16 @@ No automatic T1 triggers. Classified as T2 based on aggregate score and hallucin
 
 **Scenario:** Confidential regulatory correspondence or pre-publication policy documents are exposed through the processing pipeline.
 
-**Likelihood:** Very Low (VPC-hosted on Vertex AI; no external API calls)
+**Likelihood:** Low (primary model VPC-hosted on Vertex AI; external API calls happen only when the fallback is active during a primary outage)
 **Impact:** Medium (confidential document exposure)
 **Residual risk after mitigation:** Very Low
 
 **Mitigations:**
-1. VPC-hosted model — no data leaves organizational infrastructure
-2. Google contractual commitment: no data used for training
-3. Document access controls enforced at application layer
-4. Audit logging of all document processing
+1. Primary model VPC-hosted; documents leave organizational infrastructure only when the fallback is active
+2. Fallback (Anthropic API): signed DPA, zero data retention, EU-region endpoint, contractual exclusion from training; every fallback activation is logged
+3. Google contractual commitment: no data used for training
+4. Document access controls enforced at application layer
+5. Audit logging of all document processing
 
 ---
 
@@ -76,21 +80,25 @@ No automatic T1 triggers. Classified as T2 based on aggregate score and hallucin
 
 | Requirement | Status | Evidence |
 |-------------|--------|----------|
-| Head of AI approval | Complete | Approval dated 2025-10-20 |
+| Risk assessment approval (AI Risk, second line) | Complete | Approval dated 2025-10-14 |
+| Independent validation (reduced scope) | Complete | Model Risk Management, outside the development team; report 2025-10-17 |
+| Deployment approval (Head of AI + Business Unit Head) | Complete | Head of AI 2025-10-20; Head of Compliance Operations 2025-10-15 |
 | Security review | Complete | Security review report 2025-10-18 |
-| Deployment gates (4 of 5) | Passed | Gate evidence package |
+| Bias evaluation | Complete | 100 counterfactual pairs per attribute; consistency 0.91 against the T2 threshold of 0.85 |
+| Red-team | Complete | 120 cases (T2 minimum 100) |
+| Pre-deployment evidence | Complete | T2 evidence pack per [governance workflow](../../framework/governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) |
 | Prompt/response audit logging | Active | 5-year retention |
-| Weekly quality monitoring | Active | 20% sample evaluation |
-| Fallback model validated | Complete | Claude 3.5 Sonnet tested |
-| Quarterly review cadence | Active | Next: 2026-05-15 |
+| Production evaluation | Active | 20% sampled automated scoring; weekly metrics review |
+| Fallback model validated | Complete | Claude Sonnet 4.5 on Vertex AI (EU region) tested |
+| Semi-annual governance review | Active | Next: 2026-08-15 |
 
 ---
 
 ## Risk Acceptance
 
-**Residual risks accepted by Head of AI (2025-10-20):**
+**Residual risks accepted by AI Risk (second line) with the risk assessment approval (2025-10-14):**
 
-1. Hallucination rate of ≤ 3% — accepted given full human review of every output
-2. Document length limitations — accepted with user warning for documents >80 pages
+1. Hallucination rate of ≤ 3%: accepted given full human review of every output
+2. Document length limitations: accepted with user warning for documents >80 pages
 
 **No conditions or restrictions beyond standard T2 governance requirements.**

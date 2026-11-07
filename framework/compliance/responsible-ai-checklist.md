@@ -18,7 +18,7 @@ This checklist must be completed before any AI system is deployed to production.
 | Mitigation measures documented (if bias detected) | Required | Required | - | - | Development document |
 | Ongoing fairness monitoring configured | Required | Required | - | - | Monitoring dashboard |
 
-**Sign-off:** Model Risk Management (T1), Senior Data Scientist (T2), Team Lead (T3)
+**Sign-off:** Model Risk Management (T1), MRM or another second-line reviewer outside the development team (T2), Team Lead (T3)
 
 ---
 
@@ -41,7 +41,8 @@ This checklist must be completed before any AI system is deployed to production.
 
 | Check | T1 | T2 | T3 | T4 | Evidence |
 |-------|----|----|----|----|----------|
-| Data Protection Impact Assessment (DPIA) completed | Required | Required | If PII | - | DPIA document |
+| DPIA screening completed (any system processing personal data) | Required | Required | Required | Required | DPIA screening record |
+| Full Data Protection Impact Assessment (DPIA) completed | Required if personal data | Required if personal data | If screening indicates high risk | If screening indicates high risk | DPIA document |
 | PII identified and minimized | Required | Required | Required | Recommended | Data inventory |
 | Consent/legal basis for data processing documented | Required | Required | Required | - | Privacy review |
 | Data retention policies defined and implemented | Required | Required | Required | Recommended | Data governance config |
@@ -62,7 +63,7 @@ This checklist must be completed before any AI system is deployed to production.
 | Adversarial robustness tested | Required | Required | Recommended | - | Validation report |
 | Prompt injection defenses (LLM systems) | Required | Required | Required | - | Security test report |
 | Model artifact encryption at rest and in transit | Required | Required | Required | Recommended | Infrastructure config |
-| Penetration testing completed | Required | Recommended | - | - | Pentest report |
+| Penetration testing completed | Required if customer-facing or internet-exposed | Required if customer-facing or internet-exposed | Recommended | - | Pentest report |
 
 **Sign-off:** Security team (T1/T2), Engineering Lead (T3/T4)
 
@@ -78,21 +79,25 @@ This checklist must be completed before any AI system is deployed to production.
 | Rollback procedure tested | Required | Required | Recommended | - | Deployment test report |
 | Monitoring and alerting configured | Required | Required | Required | Recommended | Monitoring dashboard |
 | Audit logging enabled | Required | Required | Required | Recommended | Audit trail config |
-| Quarterly review scheduled | Required | Required | Annually | - | Calendar/tracker |
+| Formal governance review scheduled (RV-001) | Quarterly | Semi-annual | Annual | Annual self-assessment | Calendar/tracker |
 
-**Sign-off:** AI Risk Committee (T1), Senior Management (T2), Team Lead (T3/T4)
+**Sign-off:** AI Risk Committee (T1), Head of AI (T2), Team Lead (T3/T4)
 
 ---
 
 ## Final Approval
 
+Final approval is the deployment approval at Stage 7 of the [governance workflow](../governance-operations/governance-workflow.md). Approvers follow [Approvals by Tier](../operating-model/roles-responsibilities.md#approvals-by-tier); the section sign-offs above are inputs to it.
+
 | Role | T1 | T2 | T3 | T4 |
 |------|----|----|----|----|
-| Model Owner | Required | Required | Required | Required |
-| Model Risk Management | Required | Required | - | - |
-| Compliance | Required | Required | - | - |
-| Security | Required | Recommended | - | - |
+| Product owner (submits the completed checklist) | Required | Required | Required | Required |
 | AI Risk Committee | Required | - | - | - |
-| Senior Management Sponsor | Required | Required | - | - |
+| CISO | Required | - | - | - |
+| DPO (if personal data is processed) | Required | - | - | - |
+| Head of AI | - | Required | - | - |
+| Business Unit Head | - | Required | - | - |
+| Team lead | - | - | Required | Required |
+| Business owner | - | - | Required | - |
 
 All sign-offs must be documented with name, role, date, and any conditions or caveats.

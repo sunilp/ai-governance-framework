@@ -1,6 +1,7 @@
 # AI System Risk Assessment Template
 # Complete this template for every new AI system before development begins.
-# Submit to the AI Risk Committee for T1/T2 classifications.
+# Prepared by the product owner. Approved by: T1 AI Risk Committee; T2 AI Risk (second line);
+# T3 team lead; T4 team lead (acknowledges the self-assessment).
 
 system:
   name: ""                          # e.g., "Retail Credit Scoring Model v3"
@@ -40,7 +41,7 @@ risk_assessment:
   regulatory_exposure:
     score: ""
     justification: ""
-    applicable_regulations: []      # e.g., ["SR 11-7", "EU AI Act Art. 6", "ECOA"]
+    applicable_regulations: []      # e.g., ["SR 26-2", "EU AI Act Art. 6", "ECOA"]
   reversibility:
     score: ""
     justification: ""
@@ -50,11 +51,15 @@ risk_assessment:
     affected_customers: 0
     capital_exposure: ""            # e.g., "$500M"
 
+  # Tier rule: the highest-scoring dimension sets the tier. Any critical -> T1; else any high -> T2;
+  # else any medium -> T3; all low -> T4. Then check the canonical override list in
+  # genai-risk-matrix.md (Tier Override Rules). Overrides can raise the tier, never lower it.
+  # An aggregate score, if recorded, is informational only and does not set the tier.
   overall_tier: ""                  # "T1" | "T2" | "T3" | "T4"
-  tier_justification: ""            # Why this tier? Reference the highest-scoring dimension.
+  tier_justification: ""            # Why this tier? Name the highest-scoring dimension and any override items applied.
 
 human_oversight:
-  level: ""                         # "human_in_the_loop" | "human_on_the_loop" | "human_out_of_the_loop"
+  level: ""                         # "human-in-the-loop" | "human-on-the-loop" | "human-over-the-loop" | "human-out-of-the-loop"
   override_mechanism: ""            # How can a human override the system's output?
   escalation_threshold: ""          # When must a human review be triggered?
 
@@ -83,12 +88,12 @@ operational:
   monitoring_plan: ""               # How will the system be monitored in production?
 
 approval:
-  assessor:
+  assessor:                         # Product owner (prepares the assessment)
     name: ""
     date: ""
-  reviewer:                         # AI Risk Committee reviewer (T1/T2 only)
+  reviewer:                         # Approver: T1 AI Risk Committee; T2 AI Risk (second line); T3/T4 team lead
     name: ""
     date: ""
-  model_risk_management:            # Independent validation (T1 only)
+  model_risk_management:            # Independent validation: T1 full (MRM); T2 reduced scope (MRM or second line, outside the development team)
     name: ""
     date: ""

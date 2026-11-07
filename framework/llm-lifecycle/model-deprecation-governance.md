@@ -2,7 +2,7 @@
 
 ## Overview
 
-AI models have finite lifespans. Commercial providers routinely retire model versions — OpenAI, Anthropic, and Google each sunset models on timelines of months to a year. Open-source models lose community support. Internal models are replaced by newer versions. Each deprecation event is a governance event: it can trigger re-assessment, require migration, and affect compliance posture.
+AI models have finite lifespans. Commercial providers routinely retire model versions: OpenAI, Anthropic, and Google each sunset models on timelines of months to a year. Open-source models lose community support. Internal models are replaced by newer versions. Each deprecation event is a governance event: it can trigger re-assessment, require migration, and affect compliance posture.
 
 Unmanaged model deprecation leads to rushed migrations, untested replacements, and compliance gaps. Structured deprecation governance prevents this.
 
@@ -50,7 +50,7 @@ When a deprecation trigger is identified, complete the following assessment.
 |----------|----------|
 | Does the replacement model require re-assessment? | New risk assessment if model capabilities, provider, or architecture change |
 | Does migration affect regulatory compliance? | EU AI Act conformity, audit trail continuity, data residency |
-| Do existing model cards need updating? | Always — document model change and rationale |
+| Do existing model cards need updating? | Always: document model change and rationale |
 | Are there audit trail implications? | Ensure traceability across model versions |
 
 ---
@@ -78,7 +78,7 @@ For T1 and T2 systems:
 | Shadow mode | 1–2 weeks | New model runs alongside old; outputs compared but not served |
 | Canary deployment | 1–2 weeks | New model serves subset of traffic (5–10%); monitor quality metrics |
 | Gradual rollout | 1–2 weeks | Increase to 50%, then 100% if metrics hold |
-| Full cutover | — | Old model decommissioned; new model at 100% |
+| Full cutover | N/A | Old model decommissioned; new model at 100% |
 
 For T3/T4 systems: shadow mode (1 week) → full cutover is acceptable.
 
@@ -116,11 +116,11 @@ Migration cutover follows the same [deployment gates](deployment-gates.md) as an
 
 ## Archival Requirements
 
-When a model is deprecated, preserve the following for audit and compliance:
+When a model is deprecated, preserve the following for audit and compliance. "Per tier retention policy" means the governance-record rule in [audit-trail-requirements.md](../compliance/audit-trail-requirements.md#retention-periods): the life of the system plus the tier period (T1 7 years, T2 5, T3 3, T4 1) after the system is retired.
 
 | Artifact | Retention | Purpose |
 |----------|-----------|---------|
-| Model card (deprecated version) | Per tier retention policy (7/5/3/1 years) | Audit trail; regulatory evidence |
+| Model card (deprecated version) | Life of the system plus the tier period (7/5/3/1 years) | Audit trail; regulatory evidence |
 | Risk assessment (deprecated version) | Per tier retention policy | Compliance evidence |
 | Evaluation results (deprecated model) | Per tier retention policy | Performance baseline; comparison evidence |
 | Sample outputs (deprecated model) | 1 year minimum | Behavioral comparison; incident investigation |

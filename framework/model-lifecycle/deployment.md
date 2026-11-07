@@ -2,31 +2,36 @@
 
 ## Purpose
 
-No AI system reaches production without passing through defined gates. The number and rigor of gates is proportional to the system's risk tier. This is not about slowing down deployment — it is about ensuring that what reaches production is safe, monitored, and reversible.
+No AI system reaches production without meeting defined deployment criteria. This is not about slowing down deployment: it is about ensuring that what reaches production is safe, monitored, and reversible.
 
-## Pre-Deployment Gates
+This document is not a separate gate model. The [governance workflow](../governance-operations/governance-workflow.md) is the only process; the checklists below are the detailed criteria for traditional ML models at its stages. Which evidence each tier must produce is set by the [minimum evidence pack by tier](../governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier). Control DA-003 (deployment gates passed) means the criteria below that apply to the system's tier are met.
 
-### Gate 1: Development Complete (All Tiers)
+## Pre-Deployment Criteria by Workflow Stage
+
+### Development Complete (Stage 4, All Tiers)
 - [ ] Model development document finalized
 - [ ] Model card completed
 - [ ] Code peer-reviewed and merged to main branch
 - [ ] Unit tests passing with adequate coverage
 - [ ] All training artifacts versioned and stored
 
-### Gate 2: Validation Approved (T1, T2, T3)
-- [ ] Validation report completed with pass recommendation
+### Validation Approved (Stage 5)
+
+Depth by tier, per [validation.md](validation.md#validation-independence): T1 full independent validation by MRM; T2 reduced-scope independent validation by a qualified reviewer outside the development team; T3 peer review; T4 self-test.
+
+- [ ] Validation report (T1/T2) or peer review record (T3) completed with pass recommendation; self-test recorded (T4)
 - [ ] All critical findings resolved
 - [ ] Major findings have documented remediation plan with timeline
 - [ ] Challenger model benchmarked (T1 required, T2 recommended)
 
-### Gate 3: Risk and Compliance Review (T1, T2)
-- [ ] Risk assessment completed and tier confirmed
+### Risk and Compliance Review (Stage 2, Confirmed at Stage 7; T1, T2)
+- [ ] Risk assessment completed, tier confirmed and approved (AI Risk Committee for T1, AI Risk for T2)
 - [ ] Impact assessment reviewed by compliance
-- [ ] Data privacy review completed (DPIA where required)
+- [ ] Data privacy review completed: DPIA screening for any system processing personal data (all tiers), full DPIA where required
 - [ ] Fairness testing results reviewed and approved
 - [ ] Regulatory mapping documented (which regulations apply, how requirements are met)
 
-### Gate 4: Operational Readiness (T1, T2)
+### Operational Readiness (Stages 6 and 8; T1, T2)
 - [ ] Monitoring dashboards deployed and tested
 - [ ] Alert thresholds configured and escalation paths defined
 - [ ] Fallback mechanism tested (what happens when the model is unavailable)
@@ -34,10 +39,11 @@ No AI system reaches production without passing through defined gates. The numbe
 - [ ] Load testing completed against production traffic estimates
 - [ ] Security review completed (access controls, data encryption, API security)
 
-### Gate 5: Deployment Approval (T1)
-- [ ] AI Risk Committee approval obtained
-- [ ] Senior management sign-off documented
-- [ ] Model Risk Management sign-off documented
+T3 and T4 systems need the monitoring and alerting their tier requires in [monitoring.md](monitoring.md) before traffic is enabled.
+
+### Deployment Approval (Stage 7, All Tiers)
+- [ ] Deployment approval recorded (DA-002): AI Risk Committee with the CISO, and the DPO if personal data is processed (T1); Head of AI and Business Unit Head (T2); team lead and business owner (T3); team lead (T4). See [Approvals by Tier](../operating-model/roles-responsibilities.md#approvals-by-tier)
+- [ ] Independent validation sign-off on file (MRM for T1; MRM or second line for T2)
 - [ ] Deployment window agreed with operations team
 
 ## Deployment Patterns

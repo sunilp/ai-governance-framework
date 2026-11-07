@@ -1,0 +1,83 @@
+# Governance gate input for the customer service chatbot (v1.2.0 release).
+# Read by reference-implementations/governance-gate/gate.py. Format and matching rule:
+# reference-implementations/README.md. Paths are relative to this file.
+#
+# Run from the repository root:
+#   python reference-implementations/governance-gate/gate.py examples/customer-service-chatbot/governance.yaml
+#
+# The files under evidence/ are placeholders that point to the case file, risk assessment and
+# model card. Placeholders marked "Gap in this example" stand in for records the example does
+# not yet show. The gate checks that evidence is registered and present, not that it is adequate.
+
+schema_version: 1
+
+system:
+  id: cs-assistant-retail-v1.2
+  name: Retail Banking Customer Service Assistant
+  tier: T1
+  types: [genai, rag, customer-facing, external-model, external-data-flow, personal-data]
+  dpia_legally_required: true     # DPO screening outcome; true makes RA-005 non-waivable
+
+framework:
+  path: ../..                     # a system repository points at its pinned copy of this framework
+  ref: null                       # tag or commit of that copy, recorded in gate-result.json
+
+eval_report: evidence/eval-report.json
+
+evidence:
+  RA-001: evidence/RA-001-risk-assessment.md
+  RA-002: evidence/RA-002-override-check.md
+  RA-003: evidence/RA-003-impact-assessment.md
+  RA-004: evidence/RA-004-risk-assessment-approval.md
+  RA-005: evidence/RA-005-dpia.md
+  RA-006: evidence/RA-006-inventory-entry.md
+  RA-007: evidence/RA-007-prohibited-use-screen.md
+  RA-008: evidence/RA-008-eu-ai-act-role.md
+  AR-001: evidence/AR-001-architecture-document.md
+  AR-002: evidence/AR-002-architecture-review.md
+  AR-003: evidence/AR-003-data-residency.md
+  AR-004: evidence/AR-004-model-selection.md
+  AR-005: evidence/AR-005-vendor-risk-assessment.md
+  AR-007: evidence/AR-007-vendor-contract-check.md
+  DE-001: evidence/DE-001-model-card.md
+  DE-002: evidence/DE-002-prompt-version-history.md
+  DE-003: evidence/DE-003-prompt-review.md
+  DE-004: evidence/DE-004-guardrail-configuration.md
+  DE-006: evidence/DE-006-ai-disclosure.md
+  DE-007: evidence/DE-007-output-marking.md
+  EV-001: [evidence/EV-001-pre-release-evaluation.md, evidence/eval-report.json]
+  EV-002: [evidence/EV-002-safety-evaluation.md, evidence/eval-report.json]
+  EV-003: evidence/EV-003-regression-report.md
+  EV-004: [evidence/EV-004-rag-retrieval-evaluation.md, evidence/eval-report.json]
+  EV-005: [evidence/EV-005-bias-evaluation.md, evidence/eval-report.json]
+  EV-006: evidence/EV-006-dataset-integrity.md
+  EV-007: evidence/EV-007-judge-calibration.md
+  EV-009: [evidence/EV-009-guardrail-evaluation.md, evidence/eval-report.json]
+  SR-001: evidence/SR-001-red-team-report.md
+  SR-002: evidence/SR-002-findings-closure.md
+  SR-003: evidence/SR-003-adversarial-defences.md
+  DA-001: evidence/DA-001-evidence-checklist.md
+  DA-002: evidence/DA-002-deployment-approval.md
+  DA-003: evidence/DA-003-gate-evidence.md
+  DA-004: evidence/DA-004-rollback-test.md
+  PM-001: evidence/PM-001-monitoring-configuration.md
+  PM-002: evidence/PM-002-alert-configuration.md
+  PM-003: evidence/PM-003-human-oversight.md
+  PM-004: evidence/PM-004-production-evaluation-schedule.md
+  PM-005: evidence/PM-005-cost-monitoring.md
+  PM-006: evidence/PM-006-kill-switch-test.md
+  PM-007: evidence/PM-007-audit-logging.md
+  IR-001: evidence/IR-001-incident-playbook.md
+  IR-002: evidence/IR-002-on-call-rotation.md
+
+# Conditional controls the system does not meet. The approver confirms each reason.
+not_applicable:
+  - control: RA-009
+    reason: Not an Annex III system. The assistant gives information only and makes no decision about customers (decision_type informational in the model card).
+  - control: DE-008
+    reason: The RAG sources are customer-facing documents with no per-user access restrictions (rag_configuration.document_sources in the model card). Account data comes from a read-only API scoped to the authenticated customer, not from the index.
+  - control: DE-009
+    reason: Makes and assists no decisions about people. Credit, complaints, fraud disputes and account changes are out of scope and routed to human agents.
+
+# No exceptions were needed for v1.2.0 (case file Section 6: no conditional passes or waivers).
+exceptions: []

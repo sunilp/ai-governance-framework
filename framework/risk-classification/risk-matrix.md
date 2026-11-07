@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Every AI system in a regulated organization must be classified by risk tier before development begins. The tier determines the governance intensity — how much oversight, documentation, validation, and monitoring the system requires.
+Every AI system in a regulated organization must be classified by risk tier before development begins. The tier determines the governance intensity: how much oversight, documentation, validation, and monitoring the system requires.
 
 This is not a theoretical exercise. Regulators expect you to demonstrate that you understand the risk profile of every AI system in production and that governance controls are proportional to that risk.
 
@@ -10,14 +10,16 @@ This is not a theoretical exercise. Regulators expect you to demonstrate that yo
 
 | Tier | Label | Governance Intensity | Examples |
 |------|-------|---------------------|----------|
-| **T1** | Critical | Full lifecycle governance, independent validation, board-level reporting | Credit decisioning, AML/CTF screening, capital adequacy models |
-| **T2** | High | Model risk management review, quarterly monitoring, senior management sign-off | Fraud detection, customer segmentation for pricing, collections prioritization |
+| **T1** | Critical | Full lifecycle governance, independent validation, board-level reporting | Credit decisioning, AML/CTF screening, capital adequacy models, real-time card fraud blocking at retail scale |
+| **T2** | High | Independent validation (reduced scope), weekly metrics review, semi-annual governance review, senior management sign-off | Fraud alert prioritization for analyst queues, customer segmentation for pricing, collections prioritization |
 | **T3** | Medium | Documented development standards, automated monitoring, annual review | Chatbot routing, document classification, marketing propensity models |
 | **T4** | Low | Lightweight documentation, standard deployment practices | Internal search ranking, log anomaly detection, test automation |
 
 ## Classification Criteria
 
-Assess each AI system against five dimensions. The highest-scoring dimension determines the overall tier.
+Assess each AI system against five dimensions. Score each dimension Critical (4), High (3), Medium (2) or Low (1).
+
+**The highest-scoring dimension sets the tier:** any Critical dimension gives T1; otherwise any High gives T2; otherwise any Medium gives T3; all Low gives T4. Then check the [canonical override list](genai-risk-matrix.md#tier-override-rules). Overrides can raise the tier, never lower it. The approver may raise a tier with a recorded rationale (for example, a pilot with an unusual exposure profile). Nobody can lower a tier below what the scoring and overrides give. Record the aggregate score (the sum of the five scores) for context and comparison only. It does not set the tier. The same rule applies in the [GenAI](genai-risk-matrix.md#risk-tier-determination-for-genai), [multimodal](multimodal-risk-matrix.md) and [agentic](agentic-ai-risk.md) matrices.
 
 ### 1. Decision Autonomy
 
@@ -47,7 +49,7 @@ Is the system subject to specific regulatory requirements?
 
 | Score | Description |
 |-------|-------------|
-| Critical | Directly in scope for SR 11-7, EU AI Act high-risk, BCBS 239, anti-discrimination laws |
+| Critical | Directly in scope for SR 26-2 model risk guidance (replaced SR 11-7; traditional and non-generative AI models), EU AI Act high-risk, BCBS 239, anti-discrimination laws |
 | High | Subject to general supervisory expectations, data protection regulations |
 | Medium | Indirectly supports regulated processes |
 | Low | No regulatory nexus |
@@ -76,23 +78,26 @@ How many people or how much capital is affected by the system's outputs?
 
 ## Decision Process
 
-1. **System owner** completes the [assessment template](assessment-template.yaml) for each new AI system.
-2. **AI Risk Committee** reviews assessments for T1 and T2 systems.
+1. **Product owner** prepares the risk assessment using the [assessment template](assessment-template.yaml) for each new AI system.
+2. **Approval by tier:** T1 AI Risk Committee; T2 AI Risk (second line); T3 team lead; T4 team lead (acknowledges the self-assessment).
 3. **Model Risk Management** validates the tier classification independently for T1 systems.
 4. **Tier is recorded** in the AI system inventory and determines all downstream governance requirements.
-5. **Re-classification** is triggered by material changes to scope, data, autonomy level, or regulatory environment.
+5. **Re-assessment** (a re-tiering check) happens at every formal governance review and on material change to scope, data, autonomy level, or regulatory environment.
 
 ## Governance Intensity by Tier
 
 | Requirement | T1 Critical | T2 High | T3 Medium | T4 Low |
 |-------------|-------------|---------|-----------|--------|
-| Independent validation | Required | Required | Not required | Not required |
+| Independent validation | Full, by Model Risk Management | Reduced scope, by a qualified reviewer outside the development team (MRM or second line) | Peer review | Self-test |
+| Independent revalidation | Annual and on material change | Every 24 months and on material change | On material change (peer re-review) | On material change (peer re-review) |
 | Model card | Full | Full | Summary | Minimal |
 | Impact assessment | Required | Required | Recommended | Not required |
 | Challenger model | Required | Recommended | Not required | Not required |
-| Monitoring frequency | Real-time + daily | Daily | Weekly | Monthly |
-| Review cadence | Quarterly | Quarterly | Annually | Annually |
+| Metrics review | Daily dashboard check by AI Operations, plus monthly system-owner review | Weekly | Monthly | Quarterly |
+| Formal governance review (RV-001) | Quarterly | Semi-annual | Annual | Annual self-assessment |
 | Board reporting | Yes | Summarized | No | No |
-| Incident response SLA | 1 hour | 4 hours | 24 hours | 72 hours |
-| Pre-deployment gates | 5 gates | 4 gates | 2 gates | 1 gate |
+
+The team that builds a T1 or T2 model never validates it.
+
+Pre-deployment evidence by tier is set in the governance workflow: see [minimum evidence pack by tier](../governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier). Incident response times depend on severity, not tier: see [severity classification](../operating-model/escalation-paths.md#severity-classification).
 
