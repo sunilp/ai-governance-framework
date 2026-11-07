@@ -2,7 +2,7 @@
 
 ## Instructions
 
-Complete this template for any incident involving a GenAI system. Severity classification follows the GenAI incident taxonomy. Submit within 24 hours of incident resolution (or sooner for S1/S2).
+Complete this template for any incident involving a GenAI system. Classify severity using the definitions in [escalation-paths.md](../framework/operating-model/escalation-paths.md#severity-classification); any incident on a T1 system that reached customers is at least S2. Submit within 24 hours of incident resolution. For S1 and S2, record the root cause within 48 hours and complete the post-mortem within 1 week (S1) or 2 weeks (S2), per IR-004.
 
 ---
 
@@ -11,7 +11,8 @@ Complete this template for any incident involving a GenAI system. Severity class
 | Field | Value |
 |-------|-------|
 | Incident ID | GEN-YYYY-NNN |
-| Severity | S1 / S2 / S3 / S4 |
+| Severity | S1 Critical / S2 High / S3 Medium / S4 Low |
+| Triggering alert priority (if any) | P1 / P2 / P3 / P4 / None |
 | Status | Open / Investigating / Mitigated / Resolved / Closed |
 | AI System | |
 | Risk Tier | T1 / T2 / T3 / T4 |

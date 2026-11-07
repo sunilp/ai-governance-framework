@@ -6,7 +6,7 @@ Multi-agent systems — where multiple AI agents collaborate, coordinate, or are
 
 This document defines governance standards for multi-agent systems. It extends the single-agent risk taxonomy in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md) and should be used alongside it.
 
-All multi-agent systems are classified as **minimum T2 (High)**. Systems with production data access, customer interaction, or financial authority are automatically **T1 (Critical)**.
+All multi-agent systems are classified as **minimum T2 (High)**. A multi-agent system is automatically **T1 (Critical)** when any agent has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access, or when any other automatic T1 override applies. See the [canonical override list](../risk-classification/genai-risk-matrix.md#tier-override-rules) (items 4 and 6) and the tier rule in [agentic-ai-risk.md](../risk-classification/agentic-ai-risk.md#mandatory-risk-tier-classification).
 
 ---
 

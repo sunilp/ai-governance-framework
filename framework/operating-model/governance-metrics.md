@@ -39,7 +39,7 @@ Measure whether AI systems are meeting ethical and fairness standards.
 |--------|-----------|--------|---------|-------|
 | Bias incident count | Number of confirmed bias incidents across portfolio | Quarter-over-quarter decrease | Quarterly | Responsible AI |
 | Fairness compliance rate | % of T1/T2 systems meeting fairness metric thresholds | 100% | Quarterly | Responsible AI |
-| Hallucination rate | Per-system hallucination rate for T1/T2 GenAI systems | Within system-specific threshold | Monthly (T1), Quarterly (T2) | AI Operations |
+| Hallucination rate | Per-system hallucination rate for T1/T2 GenAI systems | Within the [tier threshold](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier), or a stricter use-case tolerance | Monthly (T1), Quarterly (T2) | AI Operations |
 | Human override rate | % of AI outputs overridden by human reviewers | Trend analysis | Monthly | AI Operations |
 | Transparency compliance | % of customer-facing AI systems with proper disclosure | 100% | Quarterly | Compliance |
 | Counterfactual test coverage | % of T1 systems with current counterfactual bias testing | 100% | Quarterly | Responsible AI |

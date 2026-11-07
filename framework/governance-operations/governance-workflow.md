@@ -29,60 +29,69 @@ This document defines the end-to-end governance process for AI systems — from 
 
 ## Stage 2: Risk Assessment & Tiering
 
-**What happens:** Full risk assessment using framework matrices. Tier determined through structured dimension scoring. Auto-override rules applied — certain characteristics force a minimum tier regardless of aggregate score.
+**What happens:** The Product owner prepares a full risk assessment using the framework matrices. Each risk dimension is scored Critical (4), High (3), Medium (2) or Low (1), and the highest-scoring dimension sets the tier. Override rules are then applied. Overrides can raise the tier, never lower it. The approver may raise a tier with a recorded rationale (for example, a pilot with an unusual exposure profile). Nobody can lower a tier below what the scoring and overrides give. The aggregate score is recorded for context and comparison only; it does not set the tier.
 
-**Gate criteria:** All dimensions scored, tier determination documented, auto-overrides checked, assessment reviewed and accepted by the appropriate authority.
+**Gate criteria:** All dimensions scored, tier determination documented, override list checked, assessment approved by the appropriate authority.
 
 **Evidence produced:**
 - Signed risk assessment with dimension scoring and tier determination (Control ID: RA-001)
-- Override decision document for auto-T1 triggers (Control ID: RA-002)
+- Override decision document for any override trigger, automatic T1 or minimum T2 (Control ID: RA-002)
 - Completed impact assessment (Control ID: RA-003)
-- Risk assessment review record with sign-off (Control ID: RA-004)
-- Filed DPIA if PII is processed (Control ID: RA-005)
+- Risk assessment approval record with sign-off (Control ID: RA-004)
+- DPIA screening for any system processing personal data; full DPIA for T1/T2 and wherever screening indicates high risk (Control ID: RA-005)
 
 ### Tier Determination Decision Flowchart
+
+The rule and the override list below are canonical in the [GenAI risk matrix](../risk-classification/genai-risk-matrix.md#risk-tier-determination-for-genai). The same rule applies to the ML, multimodal and agentic matrices.
 
 ```
 START: New AI system proposed
   │
-  ├─ Does it make or directly influence regulated decisions?
-  │   YES → T1 (Critical)
+  ├─ Score each risk dimension: Critical (4), High (3), Medium (2), Low (1)
+  │   The highest-scoring dimension sets the tier:
+  │   any Critical → T1; else any High → T2;
+  │   else any Medium → T3; all Low → T4
+  │   (Record the aggregate score for context only. It does not set the tier.)
   │
-  ├─ Does it process customer PII through an external LLM API?
-  │   YES → T1 (Critical)
+  ├─ Automatic T1 overrides (any YES → T1 Critical)
+  │   1. Makes or directly influences regulated decisions (credit,
+  │      insurance underwriting or pricing, AML/sanctions, employment)?
+  │   2. Generates customer-facing content delivered without
+  │      per-output human review?
+  │   3. Processes customer personal data through an external LLM API
+  │      without ALL four safeguards: vendor zero data retention, a
+  │      regional endpoint that meets data residency requirements, a
+  │      signed DPA, and PII redaction or minimisation before the call?
+  │   4. Agentic with write access to production systems or data stores,
+  │      or with authority to move money, communicate with customers,
+  │      or change identity and access?
+  │   5. Biometric identification or categorisation, synthetic media
+  │      that can depict real people (deepfake-capable), voice cloning,
+  │      or medical imagery?
   │
-  ├─ Does it generate customer-facing content without human review?
-  │   YES → T1 (Critical)
+  ├─ Minimum T2 overrides (any YES → at least T2)
+  │   6. Any agentic system, including read-only tool use, and any
+  │      multi-agent system?
+  │   7. Synthetic media generation not covered by item 5?
+  │   8. Customer personal data through an external LLM API with all
+  │      four safeguards in place?
+  │   9. Personal data in visual content?
   │
-  ├─ Is it agentic with production system access?
-  │   YES → T1 (Critical)
-  │
-  ├─ Score GenAI risk dimensions (hallucination, data exposure,
-  │  prompt injection, output control, vendor dependency)
-  │   Any dimension = Critical, or aggregate ≥ 16 → T1
-  │   Aggregate 12–15, no Critical → T2
-  │   Aggregate 8–11 → T3
-  │   Aggregate ≤ 7 → T4
-  │
-  └─ Apply multimodal/agentic overrides if applicable
-      Synthetic media generation → minimum T2
-      Biometric processing → T1
-      Multi-agent system → minimum T2
+  └─ Final tier = the higher of the scored tier and any override
 ```
 
 **Tier scaling:**
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Full risk assessment | Required | Required | Required | Required |
+| Full risk assessment (prepared by Product owner) | Required | Required | Required | Required |
+| Override list check | Required | Required | Required | Required |
 | Impact assessment | Required | Required | Recommended | N/A |
-| DPIA (if PII) | Required | Required | Required | N/A |
-| AI Risk Committee review | Required | N/A | N/A | N/A |
-| Head of AI review | N/A | Required | N/A | N/A |
-| Team lead review | N/A | N/A | Required | N/A |
-| Self-assessment | N/A | N/A | N/A | Required |
+| DPIA screening (if personal data) | Required | Required | Required | Required |
+| Full DPIA (if personal data) | Required | Required | If screening indicates high risk | If screening indicates high risk |
+| Risk assessment approval | AI Risk Committee | AI Risk (second line) | Team lead | Team lead (acknowledges self-assessment) |
 
-**Decision point:** Reviewed by: AI Risk Committee (T1), Head of AI (T2), team lead (T3), self-assessment (T4). Any stakeholder can challenge and escalate.
+**Decision point:** Prepared by the Product owner. Approved by the AI Risk Committee (T1), AI Risk as second line (T2), or the team lead (T3; for T4 the team lead acknowledges the self-assessment). Any stakeholder can challenge and escalate.
 
 **Framework references:**
 - [Risk matrix](../risk-classification/risk-matrix.md)
@@ -95,26 +104,27 @@ START: New AI system proposed
 
 **What happens:** System architecture documented with component diagrams, data flows, and integration points. Vendor/model selection justified. Data residency confirmed against jurisdictional rules.
 
-**Gate criteria:** Architecture approved, data residency confirmed, vendor/model assessment completed.
+**Gate criteria:** Architecture approved (T1/T2) or documented (T3/T4), data residency confirmed, model selection approved, vendor assessment completed where required.
 
 **Evidence produced:**
 - Architecture document with data flows (Control ID: AR-001)
-- Architecture review board sign-off (Control ID: AR-002)
+- Architecture review record: review board sign-off (T1) or recorded team-level design review (T2) (Control ID: AR-002)
 - Data residency confirmation per jurisdiction (Control ID: AR-003)
-- Model selection document with evaluation rationale (Control ID: AR-004)
+- Model selection document with evaluation rationale and approval (Control ID: AR-004)
 - Third-party model risk assessment (Control ID: AR-005)
 
 **Tier scaling:**
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Architecture documentation | Required | Required | Required | Required |
-| Architecture review board | Required | Required | N/A | N/A |
-| Team-level architecture review | N/A | N/A | Required | Required |
-| Data residency confirmation | Required | Required | Required | Recommended |
-| Vendor risk assessment | Required | Required | Required | Recommended |
+| Architecture documentation (technical owner) | Required | Required | Required | Required |
+| Architecture review board sign-off | Required | N/A | N/A | N/A |
+| Recorded team-level design review, approved by Head of AI or delegate | N/A | Required | N/A | N/A |
+| Data residency confirmation (external data flows) | Required | Required | Required | Required |
+| Model selection approval (external models) | AI Risk Committee + CISO | Head of AI | Team lead (approved vendor list) | Team lead (approved vendor list) |
+| Vendor risk assessment | Required | Required | Required | Approved vendors only, no separate assessment |
 
-**Decision point:** Architecture review board approves (T1/T2); team lead approves (T3/T4). Data residency concerns block regardless of tier.
+**Decision point:** T1: architecture review board signs off. T2: a recorded team-level design review is approved by the Head of AI or delegate. T3/T4: the technical owner documents the architecture; no separate review. Data residency concerns block regardless of tier.
 
 **Framework references:**
 - [Deployment gates](../llm-lifecycle/deployment-gates.md)
@@ -125,7 +135,7 @@ START: New AI system proposed
 
 **What happens:** Model cards created documenting capabilities, limitations, and intended use. Prompts developed, version-controlled, and peer-reviewed. Guardrails implemented per tier requirements.
 
-**Gate criteria:** Model card exists (all tiers), peer review completed (T1/T2), guardrails tested, data governance applied to training data.
+**Gate criteria:** Model card exists (all tiers), prompts version-controlled (all GenAI tiers), prompt review completed per tier (T1-T3), guardrails tested (T1/T2), data governance applied to training data.
 
 **Evidence produced:**
 - Model card in version control (Control ID: DE-001)
@@ -139,17 +149,18 @@ START: New AI system proposed
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
 | Model card creation | Required | Required | Required | Required |
-| Prompt version control | Required | Required | Required | Recommended |
-| Prompt peer review | Required | Required | Recommended | N/A |
+| Prompt version control (GenAI) | Required | Required | Required | Required |
+| Prompt review | Peer review + prompt engineering lead + security review + AI Risk sign-off | Peer review + prompt engineering lead | Peer review | Self-review |
 | Guardrail implementation | Required | Required | Recommended | N/A |
 | Fine-tuning data governance | Required | Required | Required | Recommended |
 
-**Decision point:** Prompt review sign-off from second engineer (T1/T2). Cannot proceed to evaluation without a model card.
+**Decision point:** The AI lead owns prompt review (DE-003). Sign-off per tier is in the table above and in the [prompt engineering standards](../llm-lifecycle/prompt-engineering-standards.md). Cannot proceed to evaluation without a model card.
 
 **Framework references:**
 - [Prompt engineering standards](../llm-lifecycle/prompt-engineering-standards.md)
 - [Fine-tuning governance](../llm-lifecycle/fine-tuning-governance.md)
-- [Model card template](../../templates/model-card-template.yaml)
+- [LLM model card template](../../templates/llm-model-card.yaml) (GenAI systems)
+- [Model card template](../../templates/model-card-template.yaml) (traditional ML systems)
 
 ## Stage 5: Evaluation & Testing
 
@@ -165,45 +176,56 @@ START: New AI system proposed
 - Bias evaluation with counterfactual test results (Control ID: EV-005)
 - Eval dataset integrity confirmation (Control ID: EV-006)
 - LLM-as-judge calibration report (Control ID: EV-007)
+- Validation report: independent validation per tier (no separate control ID; see [validation](../model-lifecycle/validation.md))
+
+Suite sizes, thresholds and release criteria are set in [evaluation governance](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier). Release criteria: T1 all eval types pass; T2 pre-release, safety, regression, bias, RAG retrieval (if RAG) and red-team; T3 pre-release, safety, RAG retrieval (if RAG) and red-team (automated scan + 50 manual cases); T4 pre-release and safety (automated, 20+ cases each), with RAG retrieval evaluation and a red-team scan recommended.
 
 **Tier scaling:**
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
 | Pre-release evaluation | Required | Required | Required | Required |
-| Safety evaluation | Required | Required | Required | Recommended |
-| Regression evaluation | Required | Required | Recommended | N/A |
-| RAG retrieval evaluation | Required | Required | Required | Recommended |
+| Safety evaluation (GenAI) | Required | Required | Required | Required (automated, 20+ cases) |
+| Regression evaluation (on model or prompt change) | Required | Required | Recommended | N/A |
+| RAG retrieval evaluation (RAG systems) | Required | Required | Required | Recommended |
 | Bias evaluation | Required | Required | Recommended | N/A |
-| LLM-as-judge calibration | Required | Required | N/A | N/A |
+| Eval dataset integrity check | Required | Required | Required | Required |
+| LLM-as-judge calibration (where automated eval is used) | Required | Required | N/A | N/A |
+| Independent validation | Full, by Model Risk Management (MRM) | Reduced scope, by a qualified reviewer outside the development team (MRM or second line) | Peer review | Self-test |
 
-**Decision point:** AI lead certifies all evals pass. Failures block deployment. Threshold exceptions: AI Risk Committee (T1), Head of AI (T2).
+The team that builds a T1 or T2 model never validates it.
+
+**Decision point:** AI lead certifies all evals pass; release sign-off per tier is in the [release criteria](../llm-lifecycle/evaluation-governance.md#release-criteria-by-tier). Failures block deployment. A system that misses a threshold can proceed only under an approved exception (see [Exceptions and Risk Acceptance](#exceptions-and-risk-acceptance)).
 
 **Framework references:**
 - [Evaluation governance](../llm-lifecycle/evaluation-governance.md)
+- [Model validation](../model-lifecycle/validation.md)
 
 ## Stage 6: Security Review & Red-Teaming
 
-**What happens:** Adversarial testing per red-teaming protocol. Depth scales with tier — T1/T2 get comprehensive red-teaming; T3/T4 use automated scanning. Supply chain verified for open-source models.
+**What happens:** Adversarial testing per the red-teaming protocol. Depth scales with tier, using the suite sizes in [evaluation governance](../llm-lifecycle/evaluation-governance.md#evaluation-types): T1 200+ cases including manual testing (external testers recommended); T2 100+ cases; T3 an automated adversarial scan plus 50 manual cases; T4 an automated scan of 20+ cases, recommended. Application security review and penetration testing for customer-facing or internet-exposed systems. Supply chain verified for open-source models.
 
-**Gate criteria:** No Critical findings (all tiers), no unaddressed High (T1/T2), adversarial defenses validated (T1/T2).
+**Gate criteria:** No unresolved Critical findings (all tiers; this cannot be excepted), no unaddressed High (T1/T2), adversarial defenses validated (T1/T2).
 
 **Evidence produced:**
 - Red-team report with findings and severity ratings (Control ID: SR-001)
 - Confirmation of zero Critical/High findings or remediation evidence (Control ID: SR-002)
 - Adversarial robustness defense documentation (Control ID: SR-003)
 - AI-BOM and supply chain provenance verification (Control ID: SR-004)
+- Application security review and penetration test report, where required (deployment gate criteria, recorded under DA-003)
 
 **Tier scaling:**
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Comprehensive red-teaming | Required | Required | N/A | N/A |
-| Automated adversarial scanning | Required | Required | Required | Recommended |
-| Supply chain verification | Required | Required | Required | Recommended |
+| Red-team testing (GenAI) | 200+ cases incl. manual (external testers recommended) | 100+ cases | Automated scan + 50 manual cases | Automated scan, 20+ cases (recommended) |
+| Zero unresolved Critical findings | Required | Required | Required | Required (if red-teamed) |
+| Zero unaddressed High findings | Required | Required | Risk acceptance | Risk acceptance |
 | Adversarial defense implementation | Required | Required | Recommended | N/A |
+| Penetration testing (customer-facing or internet-exposed) | Required | Required | Recommended | N/A |
+| Supply chain verification (open-source models) | Required | Required | Required | Recommended |
 
-**Decision point:** Security lead signs off. T1/T2 blocked by any unaddressed High/Critical. T3/T4 Critical blocks; High requires risk acceptance.
+**Decision point:** Security lead signs off. T1/T2 blocked by any unaddressed High/Critical. T3/T4: Critical blocks; High requires a recorded risk acceptance (see [Exceptions and Risk Acceptance](#exceptions-and-risk-acceptance)).
 
 **Framework references:**
 - [Red-teaming protocol](../ai-security/red-teaming-protocol.md)
@@ -224,26 +246,27 @@ START: New AI system proposed
 
 ### Minimum Evidence Pack by Tier
 
-**T1 (Critical) — all 12 items required:**
+Each row lists what the pack must contain at each tier. "Not required" means the item is not part of the minimum pack for that tier.
 
-1. Signed risk assessment with tier determination (RA-001)
-2. Architecture review record (AR-002)
-3. DPIA, if PII processed (RA-005)
-4. Model card (DE-001)
-5. Prompt review record (DE-003)
-6. Evaluation report — pre-release, safety, regression, RAG, bias (EV-001, EV-002, EV-003, EV-004, EV-005)
-7. Red-team report (SR-001, SR-002)
-8. Security assessment (SR-003)
-9. Monitoring configuration (PM-001, PM-002)
-10. Incident response playbook (IR-001)
-11. Rollback plan (DA-004)
-12. Deployment approval with sign-offs (DA-002)
-
-**T2 (High):** Items 1–12 (architecture review may be team-level rather than review board).
-
-**T3 (Moderate):** Items 1, 4, 6 (pre-release + safety evaluation only), 9, 12.
-
-**T4 (Low):** Items 1, 4, 6 (pre-release evaluation only), 12.
+| # | Evidence | Controls | T1 (Critical) | T2 (High) | T3 (Medium) | T4 (Low) |
+|---|----------|----------|---------------|-----------|-------------|----------|
+| 1 | Signed risk assessment with tier determination, override check and approval | RA-001, RA-002, RA-004 | Required | Required | Required | Required |
+| 2 | Impact assessment | RA-003 | Required | Required | Not required | Not required |
+| 3 | DPIA (if personal data processed) | RA-005 | Full DPIA | Full DPIA | Screening; full DPIA if high risk | Screening; full DPIA if high risk |
+| 4 | Architecture document and data residency confirmation | AR-001, AR-003 | Required | Required | Required | Required |
+| 5 | Architecture review record | AR-002 | Review board sign-off | Team-level design review | Not required | Not required |
+| 6 | Model selection record and vendor risk assessment (external models) | AR-004, AR-005 | Required | Required | Required | Model selection only (approved vendor) |
+| 7 | Model card and prompt version history | DE-001, DE-002 | Required | Required | Required | Required |
+| 8 | Prompt review record (GenAI) | DE-003 | Required | Required | Peer review record | Not required |
+| 9 | Guardrail configuration and test results (GenAI) | DE-004 | Required | Required | Not required | Not required |
+| 10 | Evaluation report | EV-001 to EV-007 | All eval types | Pre-release, safety, regression, bias, RAG retrieval (if RAG), dataset integrity, judge calibration | Pre-release, safety, RAG retrieval (if RAG), dataset integrity | Pre-release, safety (automated, 20+ cases), dataset integrity |
+| 11 | Validation report | (see Stage 5) | Full independent validation (MRM) | Reduced-scope independent validation | Peer review | Self-test |
+| 12 | Red-team report (GenAI) | SR-001, SR-002 | 200+ cases | 100+ cases | Automated scan + 50 manual cases | Not required (scan recommended) |
+| 13 | Security assessment: adversarial defense configuration; application security review and penetration test (customer-facing or internet-exposed); supply chain verification (open-source models) | SR-003, SR-004, DA-003 | Required | Required | Supply chain verification if open-source models | Not required |
+| 14 | Monitoring, alerting, human oversight, production evaluation and cost monitoring configuration | PM-001 to PM-005 | Required | Required | PM-001, PM-002, PM-004, PM-005 | PM-001, PM-004 |
+| 15 | Incident response playbook and on-call rotation | IR-001, IR-002 | Required | Required | Not required | Not required |
+| 16 | Rollback plan with test evidence | DA-004 | Required | Required | Not required | Not required |
+| 17 | Evidence checklist, deployment gate evidence and signed deployment approval | DA-001, DA-002, DA-003 | Required | Required | Required | Required |
 
 ### Data Classification Note
 
@@ -253,23 +276,21 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Full evidence pack (12 items) | Required | Required | N/A | N/A |
-| Reduced evidence pack | N/A | N/A | Required | Required |
-| AI Risk Committee sign-off | Required | N/A | N/A | N/A |
-| Head of AI sign-off | N/A | Required | N/A | N/A |
-| Team lead sign-off | N/A | N/A | Required | N/A |
-| Self-certification | N/A | N/A | N/A | Required |
+| Evidence pack per the minimum evidence pack table | Required | Required | Required | Required |
+| Deployment gate criteria ([deployment gates](../llm-lifecycle/deployment-gates.md)) | Required | Required | Required | Required |
+| Rollback plan tested | Required | Required | N/A | N/A |
+| Deployment approval | AI Risk Committee + CISO (+ DPO if personal data is processed) | Head of AI + Business Unit Head | Team lead + business owner | Team lead |
 
-**Decision point:** Sign-off chain: AI Risk Committee (T1), Head of AI (T2), team lead (T3), self-certification (T4). Missing evidence blocks — no exceptions.
+**Decision point:** Sign-off chain as in the table above. Missing evidence blocks deployment unless an exception is approved under [Exceptions and Risk Acceptance](#exceptions-and-risk-acceptance). Non-waivable items can never be excepted.
 
 **Framework references:**
 - [Deployment gates](../llm-lifecycle/deployment-gates.md)
 
 ## Stage 8: Production Operations
 
-**What happens:** Monitoring configured and validated before traffic. Alerting thresholds set per tier. Human oversight activated for T1/T2. Cost dashboards track inference spend.
+**What happens:** Monitoring configured and validated before traffic. Alerting thresholds set per tier. Human oversight activated for T1/T2. Cost dashboards track inference spend. Production evaluation runs as three named activities. Incidents are handled under the incident response controls below.
 
-**Gate criteria:** Monitoring operational, alerting configured, human oversight staffed (T1/T2), eval schedule running, cost monitoring active.
+**Gate criteria:** Monitoring operational, alerting configured, human oversight staffed (T1/T2), production evaluation schedule running, cost monitoring active, incident playbook published and on-call assigned (T1/T2), audit logging active, kill switch tested for T1 customer-facing and all agentic systems.
 
 **Evidence produced:**
 - Monitoring configuration with dashboard reference (Control ID: PM-001)
@@ -278,30 +299,62 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 - Production evaluation schedule and latest results (Control ID: PM-004)
 - Cost dashboard with alert configuration (Control ID: PM-005)
 
+**Production evaluation** ([evaluation governance](../llm-lifecycle/evaluation-governance.md#production-evaluation) owns the cadences restated below):
+1. Online automated scoring of live traffic.
+2. Metrics review.
+3. Full offline suite re-run, and always on a model, provider or prompt change.
+
 **Tier scaling:**
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Real-time monitoring | Required | Required | Required | Recommended |
-| Alerting with escalation | Required | Required | Required | Recommended |
-| Human oversight process | Required | Required | N/A | N/A |
-| Production evaluation cadence | Daily | Weekly | Monthly | Quarterly |
-| Cost monitoring | Required | Required | Required | Recommended |
+| Basic usage and error monitoring | Required | Required | Required | Required |
+| Alerting with escalation | Required | Required | Required | Covered by platform-level budget alerts |
+| Human oversight process ([pattern selection](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix)) | Required | Required | N/A | N/A |
+| Online automated scoring of live traffic | Every response (async) | 20% sample | 5% sample | Weekly batch sample |
+| Metrics review | Daily dashboard check (AI Operations) + monthly system-owner review | Weekly | Monthly | Quarterly |
+| Full offline suite re-run | Monthly | Quarterly | Semi-annual | Semi-annual |
+| Vendor behaviour canary (external models, see [third-party model risk](../compliance/third-party-model-risk.md#ongoing-monitoring)) | Daily | Weekly | Monthly | Monthly |
+| Cost monitoring | Required | Required | Required | Covered by platform-level budget alerts |
 
-**Decision point:** AI Operations confirms monitoring is live before traffic. Hard gate — no manual overrides.
+**Decision point:** AI Operations confirms monitoring is live before traffic. Traffic is not enabled without monitoring unless an exception is approved under [Exceptions and Risk Acceptance](#exceptions-and-risk-acceptance). Audit logging and the kill switch are non-waivable.
+
+### Incident Response (Stage 8 sub-group)
+
+Severity (S1-S4), response SLAs and notifications are defined in [escalation paths](../operating-model/escalation-paths.md#severity-classification). Monitoring alerts use priorities P1-P4, which are not incident severities; the mapping is in [alert priority to incident severity](../operating-model/escalation-paths.md#alert-priority-to-incident-severity).
+
+**Evidence produced:**
+- Published incident response playbook accessible to on-call (Control ID: IR-001)
+- On-call rotation schedule (Control ID: IR-002)
+- Incident report per template, with root cause: S1/S2 within 48 hours, S3 within 10 business days (Control ID: IR-003)
+- Post-mortem report: S1 within 1 week, S2 within 2 weeks (Control ID: IR-004)
+- Remediation tracker with status; S4 items tracked in the backlog (Control ID: IR-005)
+
+**Tier scaling:**
+
+| Activity | T1 | T2 | T3 | T4 |
+|----------|:---:|:---:|:---:|:---:|
+| Incident response playbook | Required | Required | N/A | N/A |
+| On-call team assigned | Required | Required | N/A | N/A |
+| Incident reporting per severity SLA | Required | Required | Required | Required |
+| Post-mortem for S1/S2 incidents | Required | Required | Required | Required |
+| Remediation tracking | Required | Required | Required | Required |
+
+Response SLAs depend on severity, not tier. Any incident on a T1 system that reached customers is at least S2.
 
 **Framework references:**
 - [LLM monitoring](../llm-lifecycle/monitoring.md)
 - [Model lifecycle monitoring](../model-lifecycle/monitoring.md)
+- [Escalation paths](../operating-model/escalation-paths.md)
 
 ## Stage 9: Ongoing Governance
 
 **What happens:** Scheduled reviews per tier cadence assess performance, risk assessment relevance, and provider updates. Material changes (model swap, prompt revision, regulatory change) trigger revalidation outside cadence.
 
-**Gate criteria:** Review completed within cadence, model card updated, revalidation done for material changes, regulatory impact assessed.
+**Gate criteria:** Review completed within cadence, risk re-assessment (re-tiering check) done, model card updated, revalidation done for material changes, regulatory impact assessed.
 
 **Evidence produced:**
-- Review record with findings and actions (Control ID: RV-001)
+- Review record with findings, actions and risk re-assessment (Control ID: RV-001)
 - Updated model card (Control ID: RV-002)
 - Revalidation assessment with evaluation results (Control ID: RV-003)
 - Regulatory change impact assessment (Control ID: RV-004)
@@ -310,9 +363,12 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 
 | Activity | T1 | T2 | T3 | T4 |
 |----------|:---:|:---:|:---:|:---:|
-| Scheduled review | Monthly | Quarterly | Semi-annually | Annually |
+| Formal governance review | Quarterly | Semi-annual | Annual | Annual self-assessment |
+| Metrics review (operational, see Stage 8) | Daily dashboard check + monthly system-owner review | Weekly | Monthly | Quarterly |
+| Risk re-assessment (re-tiering check) | At every formal review and on material change | At every formal review and on material change | At every formal review and on material change | At every formal review and on material change |
 | Model card update | At each review | At each review | At each review | At each review |
-| Revalidation on change | Required | Required | Required | Required |
+| Revalidation on material change | Required | Required | Required | Required |
+| Independent revalidation | Annual and on material change | Every 24 months and on material change | On material change (peer re-review) | On material change (peer re-review) |
 | Regulatory change assessment | Required | Required | Required | Recommended |
 
 **Decision point:** System owner certifies review complete. Overdue >30 days escalates to AI Risk. Revalidation failure sends system back through Stage 5.
@@ -347,6 +403,44 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 
 **Framework references:**
 - [Model deprecation governance](../llm-lifecycle/model-deprecation-governance.md)
+
+## Exceptions and Risk Acceptance
+
+This is the only process for proceeding without meeting a control. An exception is time-limited, recorded, and approved by the authority for the system's tier.
+
+**Non-waivable.** These cannot be excepted at any tier:
+- A DPIA where it is legally required
+- Checks against prohibited uses
+- Zero unresolved Critical red-team findings (the Critical part of SR-002)
+- A kill switch for T1 customer-facing systems and for all agentic systems
+- Audit logging
+
+Any other control can be excepted through this process.
+
+**Exception register.** Every exception is recorded with these fields:
+
+| Field | Content |
+|-------|---------|
+| Exception ID | Unique reference |
+| System | System name and ID |
+| Control ID | The control being excepted |
+| Reason | Why the control cannot be met now |
+| Compensating controls | What reduces the risk while the exception is open |
+| Approver | Name and role, per the table below |
+| Start date | Date the exception takes effect |
+| Expiry date | No more than 90 days after the start date |
+| Status | Open, renewed, closed or expired |
+
+**Duration.** 90 days maximum. One renewal at most, approved one level higher than the original approver. For T1, where the AI Risk Committee is already the approver, a renewal needs a full committee decision (not a delegated or out-of-cycle one) and is reported to the Board Risk Committee.
+
+**Approvers:**
+
+| Tier | Approver |
+|------|----------|
+| T1 | AI Risk Committee |
+| T2 | Head of AI Risk |
+| T3 | Head of AI |
+| T4 | Team lead |
 
 ## Retroactive Governance
 

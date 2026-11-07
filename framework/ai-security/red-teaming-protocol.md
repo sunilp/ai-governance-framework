@@ -4,7 +4,7 @@
 
 Red-teaming is structured adversarial testing of AI systems — attempting to make them behave in ways they should not. It is the primary method for discovering safety failures, security vulnerabilities, and behavioral gaps before they reach production.
 
-Red-teaming is not optional for T1 and T2 systems. It is a deployment gate.
+Red-teaming is required for T1, T2 and T3 systems (control SR-001); for T4 an automated scan is recommended. For T1 and T2 systems it is a deployment gate.
 
 This protocol defines scope, methodology, severity classification, and cadence. For the defenses that red-teaming validates, see [adversarial-robustness.md](adversarial-robustness.md).
 
@@ -31,10 +31,10 @@ This protocol defines scope, methodology, severity classification, and cadence. 
 
 | Tier | Pre-Deployment | Ongoing | Methodology | Minimum Test Cases |
 |------|:---:|:---:|-------------|:---:|
-| T1 | Full adversarial red-team | Quarterly | Internal + external (if available); manual + automated | 200+ |
+| T1 | Full adversarial red-team | Quarterly | Manual + automated; external testers recommended | 200+, including manual testing |
 | T2 | Internal red-team | Semi-annually | Internal team; manual + automated | 100+ |
-| T3 | Automated scan + manual spot-check | Annually | Automated adversarial scanning + 50 manual test cases | 50+ |
-| T4 | Automated scan | Annually | Automated adversarial scanning only | 20+ |
+| T3 | Automated adversarial scan + manual cases | Annually | Automated adversarial scanning + 50 manual test cases | Automated scan + 50 manual |
+| T4 | Automated scan (recommended) | Annually (recommended) | Automated adversarial scanning only | 20+ (automated) |
 | All tiers | — | Ad-hoc | On model provider update, prompt change, or guardrail modification | Per change scope |
 
 ---
@@ -110,7 +110,7 @@ This protocol defines scope, methodology, severity classification, and cadence. 
 | Severity | Definition | Example | Remediation Timeline |
 |----------|-----------|---------|---------------------|
 | Critical | Complete safety bypass; data exfiltration; unauthorized action execution; PII leakage | Jailbreak succeeds consistently; agent executes unauthorized database write | Block deployment; fix before any release |
-| High | Partial safety bypass; information disclosure; significant behavior deviation | System prompt extracted; model generates harmful content with specific technique | Fix before production; accept risk only with CRO sign-off |
+| High | Partial safety bypass; information disclosure; significant behavior deviation | System prompt extracted; model generates harmful content with specific technique | Fix before production; accept risk only through the [exception process](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance) |
 | Medium | Minor safety gap; limited information disclosure; degraded guardrail effectiveness | Model can be coerced into mildly inappropriate responses with effort | Fix within next release cycle |
 | Low | Theoretical vulnerability; cosmetic issue; requires unrealistic attack conditions | Encoding trick works but produces incoherent harmful output | Track; fix when convenient |
 

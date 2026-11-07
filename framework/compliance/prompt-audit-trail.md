@@ -74,12 +74,16 @@ This is not application logging. This is regulatory-grade audit trail designed t
 
 ## Retention Requirements
 
-| Tier | Retention Period | Rationale |
-|------|-----------------|-----------|
-| T1 | 7 years | Aligned with SR 11-7, MiFID II, and general banking record-keeping |
-| T2 | 5 years | Aligned with standard regulatory retention |
-| T3 | 3 years | Aligned with internal audit cycle |
-| T4 | 1 year | Operational purposes |
+This section sets retention for interaction logs: prompts, responses, predictions and agent actions. Governance records (risk assessments, approvals, evaluation and incident reports, model cards, change history) follow [audit-trail-requirements.md](audit-trail-requirements.md#retention-periods).
+
+| Tier | Retention Period |
+|------|-----------------|
+| T1 | 7 years |
+| T2 | 5 years |
+| T3 | 3 years |
+| T4 | 1 year |
+
+Tier periods are framework defaults. Set retention to the longest obligation that applies to you. Reference points: EU AI Act Art. 18 (provider technical documentation, 10 years), Art. 19 (provider-generated logs, at least 6 months), Art. 26(6) (deployer logs, at least 6 months); MiFID II Art. 16(7) (records of client communications, 5 years, up to 7 if the authority requests).
 
 ### PII in Audit Logs
 

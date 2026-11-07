@@ -28,14 +28,14 @@ model_details:
 
 intended_use:
   primary_use: "Predict the probability of default (PD) for unsecured retail credit applications within a 12-month horizon. Score is used as a primary input to the credit decision engine."
-  primary_users: "Credit decision engine (automated), credit underwriters (manual review for edge cases)"
+  primary_users: "Credit decision engine (automated approvals within policy), credit underwriters (decide every proposed decline or adverse outcome, and boundary cases)"
   out_of_scope_uses:
     - "Secured lending decisions (mortgage, auto loan)"
     - "Business or commercial lending"
     - "Collection prioritization or recovery estimation"
     - "Marketing or cross-selling targeting"
-  decision_type: "automated"
-  human_oversight: "on_the_loop"   # Underwriters review applications near decision boundary
+  decision_type: "automated"       # Approvals within policy are automated; proposed declines and adverse outcomes are recommendations an underwriter decides
+  human_oversight: "human-in-the-loop"   # Pattern 1 for declines and adverse outcomes; automated approvals within policy, with human review on request
 
 training_data:
   description: "Retail unsecured credit applications with 12-month outcome labels (default/non-default). Includes bureau data, application data, and behavioral data for existing customers."

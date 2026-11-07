@@ -22,7 +22,8 @@ AI generates → Human reviews every output → Human approves/edits → Output 
 - AI output is a draft; human output is the final product
 
 **Appropriate for:**
-- T1 use cases with customer-facing or regulated outputs
+- T1 regulated decisions and decisions with legal or similarly significant effect: required for adverse or non-standard outcomes (declines, adverse pricing, account restrictions)
+- T1 customer-facing informational systems that do not have all five Pattern 3 safeguards in place (see [Pattern Selection Matrix](#pattern-selection-matrix))
 - Regulatory submissions and disclosures
 - Legal and compliance communications
 - Medical or safety-related guidance
@@ -68,6 +69,8 @@ AI generates → Automated quality checks → Pass: output delivered; Fail: esca
 - Humans handle exceptions, edge cases, and guardrail triggers
 
 **Appropriate for:**
+- T1 customer-facing informational systems (no regulated decision), only when all five safeguards (a to e) in the [Pattern Selection Matrix](#pattern-selection-matrix) are in place and evidenced
+- T2 outputs reaching external parties, with safeguards a (sampled review), c and e
 - T2/T3 use cases with effective automated quality monitoring
 - Use cases where the failure modes are well-understood and detectable
 - High-volume applications where full review is not feasible
@@ -103,9 +106,29 @@ AI generates → Output delivered → Periodic audit
 
 ## Pattern Selection Matrix
 
+This section is the canonical human oversight rule for T1 and T2 systems. Other documents link here rather than restating it.
+
+| Tier and use | Required pattern | Conditions |
+|--------------|------------------|------------|
+| T1: regulated decisions, and decisions with legal or similarly significant effect | Pattern 1 for adverse or non-standard outcomes (declines, adverse pricing, account restrictions) | Automated favourable outcomes within approved policy are allowed where the law permits, with a route to human review on request |
+| T1: customer-facing informational systems (no regulated decision) | Pattern 1, or Pattern 3 | Pattern 3 only when all five safeguards a to e below are in place and evidenced |
+| T2: outputs reaching external parties | Pattern 1, or Pattern 3 | Pattern 3 with sampled review: safeguards a, c and e below |
+
+**Pattern 3 safeguards:**
+
+- **a) Sampled human review:** daily review of at least 1% of outputs (minimum 50 per day) by qualified reviewers.
+- **b) Risk-based routing:** route to a human for defined topics (complaints, vulnerability indicators, fee or pricing disputes, anything that looks like regulated advice) and for low-confidence responses.
+- **c) Output scope guardrails.**
+- **d) Kill switch:** can stop or degrade the AI channel within 15 minutes; tested at least quarterly.
+- **e) Hallucination monitoring** against the thresholds in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier).
+
+Customer-facing content delivered without per-output human review is T1 (override rules in [genai-risk-matrix.md](../risk-classification/genai-risk-matrix.md#risk-tier-determination-for-genai)). This rule does not forbid unreviewed delivery. It requires either per-output review (Pattern 1) or Pattern 3 with all five safeguards.
+
+For other uses, select a pattern using the factors below.
+
 | Factor | Pattern 1 (Full) | Pattern 2 (Sampling) | Pattern 3 (Exception) | Pattern 4 (Autonomous) |
 |--------|------------------|---------------------|----------------------|----------------------|
-| Risk tier | T1 | T2 | T2, T3 | T3, T4 |
+| Risk tier | T1 (required for adverse regulated outcomes) | T2 | T1 customer-facing informational (all five safeguards), T2, T3 | T3, T4 |
 | Output volume | Low-Medium | Medium-High | High | Very High |
 | Consequence of error | Critical | Significant | Moderate | Low |
 | Regulatory requirement | Often mandated | May satisfy with controls | Conditional | Rarely required |
@@ -167,10 +190,10 @@ Agentic AI systems require special HITL considerations due to their autonomous, 
 | Regulation | Requirement | Minimum Pattern |
 |-----------|-------------|-----------------|
 | EU AI Act (Article 14) | High-risk systems must have human oversight measures | Pattern 1 or 2 for high-risk; specific requirements vary |
-| GDPR (Article 22) | Right not to be subject to solely automated decisions with legal effects | Pattern 1 for decisions with legal/significant effects |
+| GDPR (Article 22) | Right not to be subject to solely automated decisions with legal effects | Pattern 1 for adverse or non-standard outcomes of decisions with legal or similarly significant effects; route to human review on request for automated favourable outcomes |
 | SR 11-7 | Model outputs used in consequential decisions require appropriate oversight | Pattern 1 or 2 based on model risk tier |
 | Consumer Duty (FCA) | Fair outcomes for consumers | Pattern appropriate to consumer impact |
-| EBA Guidelines on ML | Human judgment in credit decisions | Pattern 1 for credit decisions |
+| EBA Guidelines on ML | Human judgment in credit decisions | Pattern 1 for adverse or non-standard credit outcomes |
 
 ---
 

@@ -71,7 +71,7 @@ _Could this system disproportionately affect vulnerable populations (elderly, lo
 ### 3.4 Autonomy
 - Does the system respect individual autonomy and choice?
 - Could the system create feedback loops that limit future options for individuals?
-- Is there meaningful human oversight?
+- Is there meaningful human oversight? Which pattern applies: human-in-the-loop, human-on-the-loop, human-over-the-loop or human-out-of-the-loop (see [human-in-loop-patterns.md](../framework/responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix))?
 
 ## 4. Regulatory Impact
 

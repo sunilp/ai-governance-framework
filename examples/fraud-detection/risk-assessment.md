@@ -41,32 +41,40 @@ Blocked transactions can be released after fraud analyst review (typically withi
 
 **Score: Medium**
 
-### 5. Scale of Impact — High
+### 5. Scale of Impact: Critical
 
 - 25 million transactions per day
 - ~75,000 transactions blocked or stepped up daily
 - Protects approximately $2B in daily transaction volume
 - System failure would expose the organization to significant fraud losses
 
-**Score: High**
+This is far above the [risk matrix](../../framework/risk-classification/risk-matrix.md#5-scale-of-impact) Critical threshold (>100,000 customers or >$100M in exposure).
 
-## Overall Risk Tier: T2 — High
+**Score: Critical**
 
-**Justification:** Decision autonomy and scale of impact score High, but reversibility is Medium (blocked transactions can be quickly released), and regulatory exposure is Medium compared to credit models. The system is critical for fraud prevention but decisions are more easily reversible than credit decisions. T2 governance provides appropriate oversight without the full T1 burden.
+## Overall Risk Tier: T1 (Critical)
 
-## Governance Requirements (per T2 classification)
+**Justification:** Scale of Impact scores Critical. Under the framework rule the highest-scoring dimension sets the tier, so the system is T1. The Medium scores for reversibility and regulatory exposure do not lower it. No override applies (fraud blocking is not a regulated decision on the override list, and there is no GenAI or agentic component), and none is needed. Aggregate score: 14 of 20 (High 3 + High 3 + Medium 2 + Medium 2 + Critical 4), recorded for context only.
+
+**Human oversight:** Transaction blocks are temporary and are released after fraud analyst review or customer contact, typically within 2 hours. Analysts review blocked transactions after the decision (human-on-the-loop), and customers can reach a human through support.
+
+## Governance Requirements (per T1 classification)
 
 | Requirement | Status |
 |-------------|--------|
-| MRM review + senior DS validation | Completed — validation report approved |
-| Full model card | Completed — see model-card.yaml |
+| Independent validation by Model Risk Management | Completed for v7.0.0 and v7.2.0; the development team does not validate its own model |
+| Full model card | Completed: see model-card.yaml |
 | Impact assessment | Completed |
-| Challenger model | Baseline maintained (previous version v6.x) |
-| Daily monitoring | Configured — detection rate, FPR, latency |
-| Quarterly review | Scheduled |
-| Senior management sign-off | Approved by Head of Financial Crime |
-| Pre-deployment: 4 gates | All gates passed |
-| Incident response SLA | 4 hours |
+| DPIA | Completed (card identifiers and behavioural profiles are personal data) |
+| Challenger model | Active: previous version (v6.x) scored in shadow as challenger |
+| Metrics review | Daily dashboard check by AI Operations (detection rate, FPR, latency); monthly system-owner review |
+| Formal governance review | Quarterly, scheduled |
+| Independent revalidation | Annual and on material change |
+| Board reporting | Included in quarterly risk report |
+| Risk assessment approval | AI Risk Committee |
+| Deployment approval | AI Risk Committee + CISO + DPO (personal data processed) |
+| Pre-deployment evidence | Full T1 evidence pack per [governance workflow](../../framework/governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) (GenAI-only items not applicable) |
+| Incident response | Response SLAs by severity per [escalation paths](../../framework/operating-model/escalation-paths.md#severity-classification) |
 
 ## Key Risks and Mitigations
 

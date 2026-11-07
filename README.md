@@ -117,7 +117,7 @@ See the framework applied to real-world use cases:
 
 **Traditional ML:**
 - [Credit Scoring Model](examples/credit-scoring-model/) — T1 (Critical), heavily regulated, full validation
-- [Fraud Detection System](examples/fraud-detection/) — T2 (High), real-time, high-autonomy
+- [Fraud Detection System](examples/fraud-detection/): T1 (Critical), real-time automated blocking; Critical on scale (25M transactions a day)
 
 **GenAI / LLM:**
 - [Customer Service Chatbot](examples/customer-service-chatbot/) — T1 (Critical), customer-facing, RAG-based, [complete governance case file](examples/customer-service-chatbot/governance-case-file.md)

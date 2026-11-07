@@ -134,10 +134,10 @@ Use this matrix to score candidate models. Score each dimension 1–5 (5 = best 
 
 | Tier | Approval Authority |
 |------|-------------------|
-| T1 | AI Risk Committee + CISO + CRO |
-| T2 | Head of AI + Security review |
-| T3 | Team lead + security checklist |
-| T4 | Team lead |
+| T1 | AI Risk Committee + CISO |
+| T2 | Head of AI |
+| T3 | Team lead, choosing from the approved vendor list |
+| T4 | Team lead, choosing from the approved vendor list |
 
 ### Required Documentation for Model Approval
 

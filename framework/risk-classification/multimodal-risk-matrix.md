@@ -56,24 +56,28 @@ Risks arising when AI systems operate across multiple modalities simultaneously.
 
 ---
 
-## Tier Adjustment Rules
+## Tier Determination
 
-Regardless of aggregate score, a system is automatically classified as:
+Score each dimension Critical (4), High (3), Medium (2) or Low (1). The highest-scoring dimension sets the tier, using the same rule as the [GenAI risk matrix](genai-risk-matrix.md#risk-tier-determination-for-genai): any Critical gives T1; otherwise any High gives T2; otherwise any Medium gives T3; all Low gives T4. The aggregate score is recorded for context only and does not set the tier. For example, real-time video analysis in surveillance contexts scores Critical on Video Risk, so it is T1.
 
-### Mandatory T1 (Critical)
+### Tier Override Rules
 
-- Generates synthetic media depicting real people (deepfake-capable)
-- Processes biometric data (facial recognition, voiceprint analysis, gait recognition)
-- Processes medical or diagnostic imagery for clinical decisions
-- Generates synthetic voice of real individuals
-- Real-time video analysis in surveillance contexts
+This is the canonical override list, also used in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules) and [agentic-ai-risk.md](agentic-ai-risk.md). Overrides can raise the tier, never lower it.
 
-### Mandatory Minimum T2 (High)
+**Automatic T1:**
 
-- Generates any synthetic media (images, audio, video)
-- Processes visual content containing PII (faces, documents, license plates)
-- Voice cloning or text-to-speech with customized voices
-- Video analysis of human behavior or activity
+1. Makes or directly influences regulated decisions (credit, insurance underwriting or pricing, AML/sanctions, employment).
+2. Generates customer-facing content delivered without per-output human review.
+3. Processes customer personal data through an external LLM API without **all** of these safeguards: zero data retention by the vendor, a regional endpoint that meets data residency requirements, a signed DPA, and PII redaction or minimisation before the call. (With all four safeguards in place: minimum T2, and normal scoring decides.)
+4. Agentic behaviour with write access to production systems or data stores, or with authority to move money, communicate with customers, or change identity and access.
+5. Biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
+
+**Minimum T2:**
+
+6. Any agentic system, including read-only tool use, and any multi-agent system.
+7. Synthetic media generation not covered by item 5.
+8. Customer personal data through an external LLM API with all four safeguards in place.
+9. Personal data in visual content.
 
 ---
 

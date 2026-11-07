@@ -96,34 +96,43 @@ This document defines GenAI-specific roles, their responsibilities, required ski
 | Application security | Prompt injection defense, input/output sanitization |
 | Data security | PII redaction in prompts, data residency compliance, audit trail security |
 | Vendor security | LLM vendor security assessment, API security |
-| Incident response | GenAI-specific incident taxonomy and playbooks |
+| Incident response | GenAI incident playbooks; severity per [escalation-paths.md](escalation-paths.md#severity-classification) |
 
 ### Compliance Officer
 
 | Existing Responsibility | GenAI Extension |
 |------------------------|-----------------|
 | Regulatory compliance | EU AI Act mapping, AI system inventory, transparency obligations |
-| Risk assessment | GenAI risk classification, HITL requirement determination |
+| Risk assessment | Advises the Product owner on GenAI risk classification and HITL requirements |
 | Audit | Prompt audit trail review, AI system examination readiness |
 
 ---
 
-## RACI for GenAI Governance Activities
+## GenAI RACI Supplement
 
-| Activity | Business Owner | AI Engineering | Prompt Engineer | AI Risk | LLMOps | Compliance | Security |
-|----------|---------------|---------------|----------------|---------|--------|-----------|----------|
-| Use case identification | A | C | C | C | - | C | - |
-| Risk assessment | I | C | C | A | C | R | C |
-| Model selection | C | A | C | R | C | I | R |
-| Prompt development | C | C | A | I | - | I | C |
-| Evaluation & testing | I | R | A | R | C | I | C |
-| Security review | I | C | C | C | C | I | A |
-| Deployment approval | R | C | C | A | R | R | R |
-| Production monitoring | I | C | C | R | A | I | C |
-| Incident response | I | R | C | R | A | I | R |
-| Periodic review | R | C | C | A | C | R | C |
+The [RACI matrix and approvals by tier](roles-responsibilities.md#approvals-by-tier) in roles-responsibilities.md apply to GenAI systems unchanged: one Accountable role per activity per tier, risk assessments prepared by the Product owner and approved per tier, and deployment approved by the tier approver. This supplement maps the GenAI roles above onto that RACI and adds GenAI-specific activities.
 
-**R** = Responsible, **A** = Accountable, **C** = Consulted, **I** = Informed
+| GenAI role | RACI column in roles-responsibilities.md |
+|-----------|------------------------------------------|
+| Prompt Engineer | Works under the AI lead |
+| AI Risk Analyst | AI Risk (second line) |
+| LLM Operations Engineer | AI Operations |
+| AI Ethics and Responsible AI Lead | Responsible AI lead (see [Role Definitions](roles-responsibilities.md#role-definitions)) |
+| Security Engineer | Security |
+
+### GenAI-Specific Activities
+
+| Activity | Prompt Engineer | AI lead | AI Operations | Security | AI Risk | Responsible AI lead | Tier approver |
+|----------|----------------|---------|---------------|----------|---------|---------------------|---------------|
+| Prompt development and version control (DE-002) | R | **A** | I | C | I | I | I |
+| Prompt review (DE-003; depth per tier in [prompt-engineering-standards.md](../llm-lifecycle/prompt-engineering-standards.md)) | R | **A** | I | C (T1: R, security review) | C (T1: signs off) | I | I |
+| Model selection (AR-004) | C | R | C | C | C (vendor risk, AR-005) | I | **A** |
+| Evaluation and testing (EV-001 to EV-007) | R | **A** | C | I | C | R (bias evaluation, EV-005) | I |
+| Red-teaming and security review (SR-001 to SR-004) | C | R | C | **R/A** | C | I | I |
+| Production evaluation and vendor behaviour canary (PM-004) | C | R | **R/A** | I | I | I | I |
+| Incident response | C | R | **R/A** | R (security incidents) | C | C | I |
+
+**R** = Responsible, **A** = Accountable, **C** = Consulted, **I** = Informed. The tier approver for model selection is the AI Risk Committee with the CISO co-signing (T1), the Head of AI (T2) or the team lead from the approved vendor list (T3/T4). Incident severity, follow-ups and notifications are set in [escalation-paths.md](escalation-paths.md#severity-classification).
 
 ---
 

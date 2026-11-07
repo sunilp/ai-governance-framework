@@ -116,11 +116,11 @@ Migration cutover follows the same [deployment gates](deployment-gates.md) as an
 
 ## Archival Requirements
 
-When a model is deprecated, preserve the following for audit and compliance:
+When a model is deprecated, preserve the following for audit and compliance. "Per tier retention policy" means the governance-record rule in [audit-trail-requirements.md](../compliance/audit-trail-requirements.md#retention-periods): the life of the system plus the tier period (T1 7 years, T2 5, T3 3, T4 1) after the system is retired.
 
 | Artifact | Retention | Purpose |
 |----------|-----------|---------|
-| Model card (deprecated version) | Per tier retention policy (7/5/3/1 years) | Audit trail; regulatory evidence |
+| Model card (deprecated version) | Life of the system plus the tier period (7/5/3/1 years) | Audit trail; regulatory evidence |
 | Risk assessment (deprecated version) | Per tier retention policy | Compliance evidence |
 | Evaluation results (deprecated model) | Per tier retention policy | Performance baseline; comparison evidence |
 | Sample outputs (deprecated model) | 1 year minimum | Behavioral comparison; incident investigation |

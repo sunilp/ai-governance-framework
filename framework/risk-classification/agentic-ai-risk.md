@@ -156,14 +156,28 @@ These capabilities compound the standard GenAI risks (hallucination, prompt inje
 
 ## Mandatory Risk Tier Classification
 
-All agentic AI systems are classified as **minimum T2 (High)**.
+All agentic AI systems are **minimum T2 (High)** (override item 6). An agentic system is automatically **T1 (Critical)** when it has write access to production systems or data stores, or authority to move money, communicate with customers, or change identity and access (item 4), or when any other automatic T1 item applies.
 
-Any agentic system with the following characteristics is automatically **T1 (Critical)**:
-- Access to production databases or transaction systems
-- Ability to communicate with customers or external parties
-- Processing of PII, MNPI, or regulated data
-- Financial transaction authority of any amount
-- Access to identity or authentication systems
+Score the agent's GenAI dimensions in [genai-risk-matrix.md](genai-risk-matrix.md#risk-tier-determination-for-genai). The highest-scoring dimension sets the tier, and the aggregate score is recorded for context only. An agent that processes PII, MNPI or regulated data scores Critical on Data Exposure Risk, so it is T1 under that rule even with read-only tools.
+
+### Tier Override Rules
+
+This is the canonical override list, also used in [genai-risk-matrix.md](genai-risk-matrix.md#tier-override-rules) and [multimodal-risk-matrix.md](multimodal-risk-matrix.md). Overrides can raise the tier, never lower it.
+
+**Automatic T1:**
+
+1. Makes or directly influences regulated decisions (credit, insurance underwriting or pricing, AML/sanctions, employment).
+2. Generates customer-facing content delivered without per-output human review.
+3. Processes customer personal data through an external LLM API without **all** of these safeguards: zero data retention by the vendor, a regional endpoint that meets data residency requirements, a signed DPA, and PII redaction or minimisation before the call. (With all four safeguards in place: minimum T2, and normal scoring decides.)
+4. Agentic behaviour with write access to production systems or data stores, or with authority to move money, communicate with customers, or change identity and access.
+5. Biometric identification or categorisation; synthetic media that can depict real people (deepfake-capable); voice cloning; medical imagery.
+
+**Minimum T2:**
+
+6. Any agentic system, including read-only tool use, and any multi-agent system.
+7. Synthetic media generation not covered by item 5.
+8. Customer personal data through an external LLM API with all four safeguards in place.
+9. Personal data in visual content.
 
 ---
 
@@ -173,7 +187,7 @@ Any agentic system with the following characteristics is automatically **T1 (Cri
 
 | Requirement | Description |
 |------------|-------------|
-| Architecture review | Mandatory review by AI Risk Committee; document all tools, permissions, data flows |
+| Architecture review | Mandatory for every agent: architecture review board sign-off (T1) or a recorded design review approved by the Head of AI or delegate (T2); document all tools, permissions, data flows |
 | Action inventory | Complete catalog of every action the agent can take, with blast radius assessment |
 | Adversarial testing | Red-team testing for prompt injection, privilege escalation, goal manipulation |
 | Failure mode analysis | Document every known failure mode with mitigation and fallback |
@@ -200,18 +214,22 @@ Any agentic system with the following characteristics is automatically **T1 (Cri
 | Tool error rate | Real-time | > 5% triggers circuit breaker |
 | Cost per session | Daily | Budget ceiling with automatic alerts |
 | Adversarial input detection rate | Weekly | Trend analysis |
-| Hallucination rate in reasoning traces | Weekly | Per use case threshold |
+| Hallucination rate in reasoning traces | Weekly | Tier cap from [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier); a use-case threshold applies only when stricter |
 
 ---
 
 ## Agentic AI Incident Classification
 
-| Severity | Criteria | Response |
-|----------|----------|----------|
-| S1 — Critical | Agent takes unauthorized action with customer/financial impact | Immediate shutdown; 15-minute response; board notification |
-| S2 — High | Agent takes incorrect action caught before external impact | Pause agent; 4-hour response; root cause analysis |
-| S3 — Medium | Agent reasoning error without downstream action | Flag for review; 24-hour assessment |
-| S4 — Low | Agent performance degradation within acceptable bounds | Log; next scheduled review |
+Severity definitions and response SLAs are set in escalation-paths.md. This table gives agentic examples only.
+
+### Examples by severity (definitions: [escalation-paths.md#severity-classification](../operating-model/escalation-paths.md#severity-classification))
+
+| Severity | Agentic examples | Agent-specific first action |
+|----------|------------------|-----------------------------|
+| S1 Critical | Agent takes an unauthorized or incorrect action that causes customer harm, financial loss, a regulatory breach or a data exposure | Kill switch; roll back the action where possible; notify the AI Risk Committee chair within 1 hour; notify the Board Risk Committee within 24 hours per [material incident criteria](../operating-model/board-reporting.md#material-incident-criteria) |
+| S2 High | Agent output or action reaches customers or external parties with no confirmed harm yet; or a key control fails (a confirmation gate, action allowlist or blast radius limit does not stop an action), even if the action is caught before external impact | Pause the agent; preserve the full action trace; root cause identified within 48 hours; notify the Board Risk Committee if the [material incident criteria](../operating-model/board-reporting.md#material-incident-criteria) are met |
+| S3 Medium | Reasoning error or wrong tool call stopped by a control before any action took effect; or quality degraded but still within tolerance | Flag for review; root cause documented within 10 business days |
+| S4 Low | Minor performance degradation within acceptable bounds, no external exposure, no control failure | Log; track in backlog |
 
 ---
 

@@ -61,7 +61,7 @@ ISO 31000 defines a generic risk management process. AI governance maps to each 
 - Define and maintain governance standards (this framework)
 - Challenge 1st line risk assessments — verify tier assignments are appropriate
 - Monitor governance health KPIs across the portfolio
-- Conduct independent model validation for T1 systems
+- Conduct independent model validation: full scope for T1, reduced scope for T2 (see [validation.md](../model-lifecycle/validation.md#validation-independence))
 - Map controls to regulatory requirements
 - Report to AI Risk Committee and board
 

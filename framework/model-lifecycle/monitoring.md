@@ -59,14 +59,16 @@ Continue fairness assessments in production:
 
 ## Alert Configuration
 
-### Severity Levels
+### Alert Priorities
 
-| Severity | Description | Response Time | Escalation |
+| Priority | Description | Response Time | Escalation |
 |----------|-------------|---------------|------------|
 | P1 — Critical | Model producing incorrect outputs at scale, or complete system failure | 15 minutes | On-call → Engineering Lead → AI Risk Committee |
 | P2 — High | Significant performance degradation or drift detected | 4 hours | On-call → Engineering Lead |
 | P3 — Medium | Moderate drift or minor performance decline | 24 hours | Assigned to model owner |
 | P4 — Low | Informational anomaly, no immediate action needed | Next business day | Logged for review |
+
+P1 to P4 are alert priorities, not incident severities. Acknowledgement targets (P1 within 15 minutes, P2 within 1 hour) and the mapping from alert priority to incident severity (S1 to S4) are in [escalation-paths.md](../operating-model/escalation-paths.md#alert-priority-to-incident-severity). Once an incident is declared, follow-ups and notifications are set by its severity.
 
 ### Alert Routing
 - P1/P2 alerts must page the on-call engineer and notify the model owner simultaneously
@@ -79,7 +81,7 @@ A model retraining cycle is triggered when:
 
 1. **Performance degradation:** Sustained performance drop beyond warning threshold for >7 days
 2. **Data drift:** PSI > 0.25 on multiple key features sustained for >14 days
-3. **Scheduled cadence:** T1 models retrained at minimum annually, T2 biannually
+3. **Scheduled cadence:** T1 models retrained at least annually and T2 at least every 24 months, in line with the independent revalidation cycle in [validation.md](validation.md#revalidation-triggers)
 4. **Business change:** Material change to the business process the model supports
 5. **Regulatory requirement:** Examiner finding or new regulatory guidance
 
@@ -90,16 +92,16 @@ Retraining follows the same lifecycle as initial development:
 - Deployment follows the same gate process (shadow/canary as appropriate)
 - The retrained model is a new version — it does not overwrite the previous version
 
-## Quarterly Model Review
+## Periodic Model Review
 
-For T1 and T2 systems, a quarterly review must cover:
+The formal governance review (control RV-001) runs quarterly for T1, semi-annually for T2, annually for T3 and as an annual self-assessment for T4 (see [review-cadence.md](../operating-model/review-cadence.md#cadence-by-tier)). For T1 and T2 systems, the review must cover:
 
 1. **Performance summary:** Trend analysis of all monitored metrics
 2. **Drift analysis:** Summary of data and prediction drift observations
-3. **Incident review:** Any P1/P2 incidents, root causes, and remediations
+3. **Incident review:** Any S1/S2 incidents, root causes, and remediations
 4. **Fairness update:** Updated fairness metrics and any observed disparities
 5. **Retraining assessment:** Is retraining warranted? Document decision rationale.
 6. **Risk tier reassessment:** Has anything changed that would affect the risk classification?
 
-The quarterly review is documented and presented to the AI Risk Committee for T1 systems.
+The review is documented. T1 reviews are presented to the AI Risk Committee.
 

@@ -21,6 +21,8 @@ Sanitize all examples — redact any PII, confidential data, or content that cou
 | Assessor(s) | |
 | Assessment Type | Internal / External / Automated / Combined |
 | Total Test Cases Executed | |
+| Required Depth for Tier | T1: 200+ including manual testing (external testers recommended) / T2: 100+ / T3: automated scan + 50 manual cases / T4: automated scan, 20+ cases (recommended). See [red-teaming-protocol.md](../framework/ai-security/red-teaming-protocol.md#tiered-testing-depth) |
+| Required Depth Met | Yes / No |
 | Model Version(s) Tested | |
 | Prompt Version(s) Tested | |
 

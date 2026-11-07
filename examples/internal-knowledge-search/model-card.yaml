@@ -5,15 +5,15 @@ model_details:
   name: "Internal Knowledge Search"
   model_id: "knowledge-search-v1.0"
   version: "1.0.0"
-  type: "rag"
-  base_model: "Claude 3.5 Haiku"
-  base_model_version: "claude-3-5-haiku-20241022"
+  type: "rag-system"
+  base_model: "Claude Haiku 4.5"
+  base_model_version: "claude-haiku-4-5-20251001"
   base_model_provider: "Anthropic"
   hosting: "vendor-api"
   risk_tier: "T3"
   date_deployed: "2026-02-15"
   last_reviewed: "2026-02-15"
-  next_review: "2026-08-15"
+  next_review: "2027-02-15"           # Annual governance review (T3)
   owners:
     business_owner: "Head of IT Services"
     technical_owner: "AI Platform Team Lead"
@@ -38,7 +38,7 @@ intended_use:
   customer_facing: false
   regulatory_context:
     - "Internal use only — no direct regulatory requirements"
-    - "General data protection obligations apply to employee data"
+    - "General data protection obligations apply to employee data (DPIA screening 2026-02-09: not high risk)"
 
 system_architecture:
   components:
@@ -54,6 +54,22 @@ system_architecture:
     - name: "basic_guardrails"
       description: "Input validation and output content filtering"
       type: "guardrail"
+  data_flows:
+    - source: "employee_query"
+      destination: "query_processor"
+      data_classification: "internal"     # May contain incidental personal data typed by the employee
+    - source: "document_retriever"
+      destination: "answer_generator"
+      data_classification: "internal"
+    - source: "answer_generator"
+      destination: "Anthropic API (Claude Haiku 4.5; DPA, zero retention)"
+      data_classification: "internal"
+    - source: "answer_generator"
+      destination: "employee"
+      data_classification: "internal"
+    - source: "query_log (employee name, role, query, response)"
+      destination: "audit_store (tokenized; 3-year retention)"
+      data_classification: "pii"
   rag_configuration:
     enabled: true
     vector_store: "Cloud SQL pgvector"
@@ -107,15 +123,37 @@ evaluation:
       value: 0.94
       threshold: 0.90
       method: "automated"
+    - name: "safety_pass_rate"          # 50-case safety suite
+      value: 0.96
+      threshold: 0.95
+      method: "automated"
+    - name: "retrieval_precision_at_5"  # 50-query retrieval set
+      value: 0.80
+      threshold: 0.75
+      method: "automated"
+  # Red-team (T3): automated adversarial scan of 200 generated prompts plus 50 manual cases.
   adversarial_testing:
     prompt_injection_resistance: 0.90
-    test_suite_size: 30
-    methodology: "automated-scan"
+    jailbreak_resistance: 0.92
+    test_suite_size: 250
+  bias_evaluation:
+    tested_attributes:
+      - "employee_name"                 # Names varied by gender and ethnic origin
+      - "work_location"
+    counterfactual_consistency: 0.88    # T3 threshold 0.80
+    sentiment_parity: 0.94
+    methodology: >
+      Light counterfactual check, 50 pairs: HR-policy questions asked with the
+      employee name or work location swapped. A pair passes when both answers
+      cite the same policy and entitlement. Not a T3 release requirement; run
+      because HR answers could differ by employee attributes.
 
 safety:
   hallucination_tolerance: "≤ 5%"
+  toxicity_threshold: "Platform output filter default; responses above the toxicity classifier threshold are blocked"
   pii_leakage_tolerance: "low risk — internal users, no customer PII in corpus"
   content_policy: "Standard acceptable use policy"
+  refusal_behavior: "Declines questions outside the knowledge base and requests for legal, medical or financial advice; points the employee to the owning team"
   known_failure_modes:
     - "May return outdated information if documents not refreshed"
     - "Cannot answer questions requiring cross-document synthesis well"
@@ -132,6 +170,7 @@ operational:
   performance:
     latency_p50_ms: 2000
     latency_p95_ms: 5000
+    latency_p99_ms: 8000
     throughput_rps: 20
     availability_target: "99%"
   cost:
@@ -139,12 +178,14 @@ operational:
     cost_per_request: "$0.005"
     token_budget_per_request: 4000
   monitoring:
-    quality_monitoring: "Monthly spot-check of 50 responses"
+    quality_monitoring: "Automated scoring of a 5% sample of responses; monthly metrics review including a human spot-check of 50 sampled responses"
     safety_monitoring: "Basic input validation; weekly review of flagged queries"
     cost_monitoring: "Monthly cost review"
-    drift_detection: "Monthly evaluation on canonical questions"
+    drift_detection: "Vendor behaviour canary on a fixed question set monthly; RAG retrieval evaluation quarterly; full offline suite re-run semi-annually and on any model, provider or prompt change"
     alerting_configured: true
+    dashboard_url: "internal://dashboards/knowledge-search"
   incident_response:
+    runbook_url: "internal://runbooks/knowledge-search"
     on_call_team: "AI Platform On-Call"
     escalation_path: "On-call → AI Platform Lead"
 
@@ -153,28 +194,35 @@ vendor_risk:
   dpa_in_place: true
   data_retention_by_vendor: "None (zero retention)"
   training_data_exclusion: true
+  sla_uptime: "99.9%"
   exit_strategy_documented: false
   fallback_model: "None — service degradation acceptable"
+  fallback_validated: false             # No fallback by design; employees search documents manually during an outage
+  last_vendor_assessment: "2026-01-20"
 
 limitations:
   technical_limitations:
     - "Answers limited to content in the knowledge base"
     - "No real-time data access"
     - "English only"
+  knowledge_cutoff: "Not relied on: answers come from the knowledge base (refreshed weekly), not base model knowledge"
+  language_limitations:
+    - "English only; other languages not validated"
   domain_limitations:
     - "Internal policies and procedures only"
     - "Cannot provide legal, medical, or financial advice"
   ethical_considerations:
     - "May surface outdated policies — users should verify with source document"
     - "Potential for over-reliance — employees should still read full policy documents for important decisions"
+  regulatory_constraints:
+    - "Employee personal data in query logs: tokenized, access-restricted, 3-year retention (DPIA screening 2026-02-09)"
+    - "Must not be used for employment decisions; that would trigger automatic T1 (override item 1)"
 
-# T3 governance — note the lighter requirements compared to T1 examples
-governance_notes: >
-  This system demonstrates T3 governance. Compared to T1 systems
-  (e.g., the agentic research assistant), T3 governance is substantially lighter:
-  no board reporting, no mandatory quarterly red-teaming, no independent
-  validation, semi-annual review (not monthly), and simplified model card.
-  This is intentional — governance scales with risk.
+# Governance notes: this system demonstrates T3 governance. Compared with T1 systems
+# (for example, the agentic research assistant), T3 governance is lighter: no board
+# reporting, no quarterly red-team retesting, peer review instead of independent
+# validation, an annual governance review (T1: quarterly), and a simpler model card.
+# Governance scales with risk.
 
 approvals:
   - role: "AI Platform Lead"
@@ -185,3 +233,9 @@ approvals:
     name: "Head of IT Services"
     date: "2026-02-14"
     decision: "approved"
+
+change_history:
+  - version: "1.0.0"
+    date: "2026-02-15"
+    description: "Initial production deployment"
+    approved_by: "AI Platform Team Lead"

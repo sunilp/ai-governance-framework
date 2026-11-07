@@ -1,19 +1,20 @@
 # Customer Service Chatbot — Model Card
-# Risk Tier: T1 (Critical) — Customer-facing, processes PII, influences service outcomes
+# Risk Tier: T1 (Critical). Override trigger 2: customer-facing content delivered without per-output human review.
+# Current state: v1.2.0 (deployed 2026-01-10). Governance trail: governance-case-file.md
 
 model_details:
   name: "Retail Banking Customer Service Assistant"
   model_id: "cs-assistant-retail-v1.2"
   version: "1.2.0"
   type: "rag-system"
-  base_model: "Claude 3.5 Sonnet"
-  base_model_version: "claude-3-5-sonnet-20241022"
+  base_model: "Claude Sonnet 4.5"
+  base_model_version: "claude-sonnet-4-5-20250929"
   base_model_provider: "Anthropic"
   hosting: "vendor-api"
   risk_tier: "T1"
-  date_deployed: "2025-09-15"
-  last_reviewed: "2026-01-10"
-  next_review: "2026-04-10"
+  date_deployed: "2025-09-15"             # v1.0.0 on claude-sonnet-4-20250514
+  last_reviewed: "2026-03-10"             # Q1 2026 quarterly governance review (RV-001)
+  next_review: "2026-06-10"
   owners:
     business_owner: "Head of Retail Banking Digital"
     technical_owner: "AI Platform Engineering Lead"
@@ -33,8 +34,21 @@ intended_use:
     - "Account modifications (transfers, closures, limit changes)"
     - "Fraud dispute handling"
     - "Regulatory or legal guidance"
-  decision_type: "assistive"
+  decision_type: "informational"
   human_oversight_pattern: "human-over-the-loop"
+  human_oversight_safeguards:             # T1 Pattern 3 safeguards a-e (human-in-loop-patterns.md#pattern-selection-matrix)
+    sampled_review: "5% of responses reviewed daily, never fewer than 50, by trained customer service quality reviewers"
+    risk_based_routing:
+      - "Complaints"
+      - "Vulnerability indicators"
+      - "Fee or pricing disputes"
+      - "Anything that looks like regulated advice (investment, credit)"
+      - "Low-confidence responses"
+      - "Unsupported languages"
+    scope_guardrails: "Output guardrails and custom rules in prompt_governance.guardrails"
+    kill_switch: "Stops the AI channel and routes all chats to human agents within 15 minutes; tested quarterly"
+    kill_switch_last_tested: "2026-03-04"
+    hallucination_monitoring: "Every response scored (async); P2 alert if rolling 7-day rate > 1%, P1 alert if rolling 24-hour rate > 2%"
   customer_facing: true
   regulatory_context:
     - "EU AI Act (Article 50 — transparency)"
@@ -100,10 +114,10 @@ system_architecture:
       - "Fee schedules and terms"
 
 prompt_governance:
-  system_prompt_version: "v1.2.3"
+  system_prompt_version: "v2.0.0"         # Major version: retargeted to claude-sonnet-4-5-20250929 for v1.2.0. v1.2.3 served v1.0.0 and v1.1.0.
   prompt_repository: "git://internal/ai-prompts/cs-assistant"
-  last_prompt_review: "2026-01-05"
-  adversarial_testing_date: "2026-01-08"
+  last_prompt_review: "2026-01-05"        # Full T1 review (DE-003): peer, prompt engineering lead, security, AI Risk sign-off
+  adversarial_testing_date: "2026-01-07"
   guardrails:
     input_validation: true
     output_filtering: true
@@ -118,7 +132,7 @@ prompt_governance:
       - "All financial figures must be sourced from account API or documents"
 
 evaluation:
-  evaluation_date: "2026-01-08"
+  evaluation_date: "2026-01-08"           # v1.2.0 revalidation (RV-003). Pre-release results for v1.0.0 (2025-09-01) are in the case file.
   evaluation_dataset_size: 500
   metrics:
     - name: "faithfulness"
@@ -132,7 +146,7 @@ evaluation:
     - name: "hallucination_rate"
       value: 0.008
       threshold: 0.01
-      method: "llm-as-judge + human-eval"
+      method: "hybrid"                    # LLM-as-judge + human eval
     - name: "correctness"
       value: 0.96
       threshold: 0.95
@@ -145,7 +159,7 @@ evaluation:
       value: 0.93
       threshold: 0.90
       method: "human-eval"
-  adversarial_testing:
+  adversarial_testing:                    # Prompt-change adversarial regression set re-run for v1.2.0, not the quarterly red-team
     prompt_injection_resistance: 0.98
     jailbreak_resistance: 0.97
     test_suite_size: 150
@@ -157,7 +171,16 @@ evaluation:
       - "language_preference"
     counterfactual_consistency: 0.95
     sentiment_parity: 0.97
-    methodology: "Counterfactual testing with 200 pairs per attribute"
+    methodology: "Counterfactual testing with 200 pairs per attribute. Formal evaluation quarterly; production counterfactual spot-checks weekly since v1.2.0"
+  production_evaluations:
+    - date: "2026-03-15"
+      activity: "online-scoring"
+      trigger: "schedule"
+      dataset_size: null
+      results:
+        hallucination_rate_rolling_7d: 0.011
+        hallucination_rate_rolling_24h_peak: 0.015
+      outcome: "fail: P2 alert; incident GEN-2026-042 (S2). Stale RAG documents replaced the same day"
 
 safety:
   hallucination_tolerance: "≤ 1%"
@@ -173,13 +196,14 @@ safety:
     - "Non-English queries in less-supported languages may have lower accuracy"
   mitigations:
     - "RAG corpus refresh SLA: daily for product docs, weekly for policies"
+    - "Refresh pipeline health monitoring with P2 alert on failure (added after GEN-2026-042)"
     - "Complex query detection → escalation to human agent"
     - "Language detection → unsupported languages routed to human agent"
 
 operational:
   infrastructure:
     compute: "GCP europe-west1 (application layer)"
-    data_residency: "EU (application and RAG); Anthropic API (EU endpoint)"
+    data_residency: "EU (application, RAG, and model inference on Vertex AI EU region)"
   performance:
     latency_p50_ms: 1200
     latency_p95_ms: 2800
@@ -194,12 +218,16 @@ operational:
     quality_monitoring: "Every response (async LLM-as-judge)"
     safety_monitoring: "Real-time guardrail monitoring"
     cost_monitoring: "Real-time with daily budget alerts"
-    drift_detection: "Daily evaluation on 100 canonical queries"
+    drift_detection: "Vendor behaviour canary: 100 fixed domain queries, daily"
+    metrics_review: "Daily dashboard check by AI Operations; monthly system-owner review"
+    offline_suite_rerun: "Monthly, and on any model, provider or prompt change"
+    rag_retrieval_evaluation: "Weekly"
     alerting_configured: true
     dashboard_url: "internal://dashboards/cs-assistant"
   incident_response:
+    playbook_id: "CS-ASSIST-IRP-v1.0"     # IR-001
     runbook_url: "internal://runbooks/cs-assistant"
-    on_call_team: "AI Platform On-Call"
+    on_call_team: "AI Platform On-Call"   # IR-002
     escalation_path: "On-call → AI Platform Lead → Head of AI → CTO"
 
 vendor_risk:
@@ -209,8 +237,8 @@ vendor_risk:
   training_data_exclusion: true
   sla_uptime: "99.9%"
   exit_strategy_documented: true
-  fallback_model: "Gemini 1.5 Pro (GCP Vertex AI, EU region)"
-  fallback_validated: true
+  fallback_model: "Gemini 2.5 Pro (gemini-2.5-pro, GCP Vertex AI, EU region)"
+  fallback_validated: true                # Validated 2025-09-02; re-validated with prompt v2.0.0 on 2026-01-08
   last_vendor_assessment: "2025-12-15"
 
 limitations:
@@ -236,34 +264,38 @@ limitations:
     - "Must disclose AI nature of interaction (EU AI Act Article 50)"
     - "Must offer human alternative (Consumer Duty)"
 
-approvals:
-  - role: "AI Risk Committee"
-    name: "Chair, AI Risk Committee"
-    date: "2025-09-01"
+approvals:                                # Initial deployment approval (v1.0.0). Later change approvals are in change_history.
+  - role: "Business Owner"
+    name: "Head of Retail Banking Digital"
+    date: "2025-09-08"
     decision: "approved"
   - role: "CISO"
     name: "Chief Information Security Officer"
-    date: "2025-08-28"
-    decision: "approved"
-  - role: "Business Owner"
-    name: "Head of Retail Banking Digital"
-    date: "2025-08-25"
+    date: "2025-09-09"
     decision: "approved"
   - role: "DPO"
     name: "Data Protection Officer"
-    date: "2025-08-30"
+    date: "2025-09-09"
     decision: "approved-with-conditions"
+  - role: "Compliance"
+    name: "Head of Compliance"
+    date: "2025-09-10"
+    decision: "approved"
+  - role: "AI Risk Committee"
+    name: "Chair, AI Risk Committee"
+    date: "2025-09-10"
+    decision: "approved"
 
 change_history:
   - version: "1.0.0"
     date: "2025-09-15"
-    description: "Initial production deployment"
-    approved_by: "AI Risk Committee"
+    description: "Initial production deployment on claude-sonnet-4-20250514 with prompt v1.2.3; gemini-2.5-pro validated as fallback"
+    approved_by: "AI Risk Committee, CISO, DPO (2025-09-10)"
   - version: "1.1.0"
     date: "2025-11-20"
     description: "Added German language support; updated product documentation corpus"
     approved_by: "Head of AI"
   - version: "1.2.0"
     date: "2026-01-10"
-    description: "Upgraded to Claude 3.5 Sonnet; improved hallucination detection guardrails; added counterfactual bias testing"
-    approved_by: "AI Risk Committee"
+    description: "Migrated base model to claude-sonnet-4-5-20250929 for quality and cost; prompt v2.0.0; improved hallucination detection guardrails; added weekly production counterfactual spot-checks. Material change, revalidated under RV-003"
+    approved_by: "AI Risk Committee, CISO, DPO (2026-01-09)"

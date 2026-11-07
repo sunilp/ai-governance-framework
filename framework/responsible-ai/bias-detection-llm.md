@@ -52,13 +52,20 @@ When LLM outputs influence resource allocation or decisions, bias can lead to di
 
 ### Pre-Deployment Bias Evaluation
 
+Bias testing has two named activities:
+
+1. **Formal bias evaluation** (control EV-005): before deployment, then quarterly (T1) and semi-annual (T2). Required for T1/T2 release; recommended for T3 ([governance-workflow.md](../governance-operations/governance-workflow.md), Stage 5).
+2. **Production counterfactual spot-checks:** weekly (T1) and monthly (T2). See [Production Bias Monitoring](#production-bias-monitoring).
+
+Cadences, suite sizes and thresholds are owned by [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types).
+
 | Test Category | Method | Required For |
 |--------------|--------|-------------|
-| Counterfactual testing | Swap demographic identifiers in prompts; compare outputs | All tiers |
+| Counterfactual testing | Swap demographic identifiers in prompts; compare outputs | T1, T2 (T3 recommended) |
 | Stereotype association | Test for stereotypical associations using standardized prompts | T1, T2 |
 | Quality parity | Measure output quality metrics across demographic contexts | T1, T2 |
 | Sentiment analysis | Compare sentiment of outputs across demographic variations | T1, T2 |
-| Refusal parity | Measure refusal rates across demographic contexts | All tiers |
+| Refusal parity | Measure refusal rates across demographic contexts | T1, T2 (T3 recommended) |
 | Red-team for bias | Adversarial prompts designed to elicit biased outputs | T1 |
 
 ### Counterfactual Testing Protocol
@@ -73,20 +80,20 @@ When LLM outputs influence resource allocation or decisions, bias can lead to di
    - Recommendations or conclusions (should be equivalent)
 5. Flag and investigate any systematic differences
 
-**Minimum test set size:**
+**Minimum test set size** (pair counts restate [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types)):
 
 | Tier | Counterfactual Pairs | Protected Attributes Tested |
 |------|---------------------|---------------------------|
 | T1 | ≥ 200 pairs per attribute | All legally protected attributes relevant to use case |
 | T2 | ≥ 100 pairs per attribute | Primary protected attributes |
-| T3 | ≥ 50 pairs | Key protected attributes |
-| T4 | ≥ 20 pairs | Basic gender/ethnicity |
+| T3 | ≥ 50 pairs (when run) | Key protected attributes |
+| T4 | N/A (not required) | N/A |
 
 ### Metrics
 
 | Metric | Definition | Threshold |
 |--------|-----------|-----------|
-| Counterfactual Consistency Score | Semantic similarity between counterfactual output pairs | ≥ 0.90 |
+| Counterfactual consistency | Share of counterfactual pairs whose outputs are consistent ([definition](../llm-lifecycle/evaluation-governance.md#metric-definitions)) | T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80% ([evaluation-governance](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)) |
 | Sentiment Parity | Max sentiment difference across demographic variants | ≤ 0.1 (normalized scale) |
 | Quality Parity | Max quality score difference across demographic variants | ≤ 0.05 |
 | Refusal Parity | Max refusal rate difference across demographic variants | ≤ 0.02 |
@@ -100,7 +107,7 @@ When LLM outputs influence resource allocation or decisions, bias can lead to di
 
 | Activity | Frequency | Method |
 |----------|-----------|--------|
-| Counterfactual spot-checks | Weekly (T1), Monthly (T2) | Automated counterfactual testing on production model |
+| Production counterfactual spot-checks | Weekly (T1), Monthly (T2) | Automated counterfactual testing on production model; separate from the formal bias evaluation |
 | Output sentiment analysis | Continuous (sampled) | Automated sentiment analysis across demographic context |
 | User complaint analysis | Continuous | Categorize complaints for bias-related issues |
 | Fairness metric tracking | Monthly | Dashboard tracking of all bias metrics |
@@ -108,12 +115,16 @@ When LLM outputs influence resource allocation or decisions, bias can lead to di
 
 ### Bias Incident Response
 
-| Severity | Criteria | Response |
+#### Examples by severity (definitions: [escalation-paths.md](../operating-model/escalation-paths.md#severity-classification))
+
+Severity levels and response SLAs (S1 15 minutes, S2 4 hours, S3 24 hours, S4 next business day) are defined in escalation-paths.md. This table gives bias examples only.
+
+| Severity | Example | Response |
 |----------|----------|----------|
-| S1 | Discriminatory output delivered to customer or used in regulated decision | Immediate system pause; 15-minute response; root cause analysis |
-| S2 | Systematic bias detected in production outputs (pattern, not isolated) | 4-hour response; enhanced monitoring; remediation plan |
-| S3 | Bias detected in testing or spot-checks | 24-hour assessment; prompt/guardrail adjustment |
-| S4 | Minor bias indicator in metrics trending | Next scheduled review |
+| S1 | Discriminatory output delivered to customer or used in regulated decision | Immediate system pause; root cause identified within 48 hours |
+| S2 | Systematic bias detected in production outputs reaching customers or external parties (pattern, not isolated), no confirmed harm yet | Enhanced monitoring; remediation plan; root cause identified within 48 hours |
+| S3 | Bias detected in testing or spot-checks before reaching anyone outside | Prompt/guardrail adjustment; root cause documented within 10 business days |
+| S4 | Minor bias indicator in metrics trending | Tracked in backlog; next scheduled review |
 
 ---
 

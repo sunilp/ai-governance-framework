@@ -140,6 +140,6 @@ For vision and audio systems at T1/T2:
 ## Integration with Existing Governance
 
 - Risk classification: use [multimodal-risk-matrix.md](../risk-classification/multimodal-risk-matrix.md) alongside [genai-risk-matrix.md](../risk-classification/genai-risk-matrix.md)
-- Deployment gates: multimodal evaluations are additional gates on top of [deployment-gates.md](deployment-gates.md)
-- Incident response: extend [GenAI incident taxonomy](../../templates/incident-report-genai.md) with modality-specific incident types (deepfake generation, content safety failure, biometric privacy breach)
+- Deployment: multimodal evaluations are additional evidence for the evaluation stage of [governance-workflow.md](../governance-operations/governance-workflow.md) (Stage 5), alongside the criteria in [deployment-gates.md](deployment-gates.md)
+- Incident response: extend the [GenAI incident template](../../templates/incident-report-genai.md) with modality-specific incident types (severity per [escalation paths](../operating-model/escalation-paths.md#severity-classification)) (deepfake generation, content safety failure, biometric privacy breach)
 - Model card: document modalities processed/generated, safety classifiers deployed, labeling standards applied

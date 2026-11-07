@@ -67,11 +67,11 @@ For the reporting standards behind this template, see [board-reporting.md](../fr
 
 ## 4. Material Incidents
 
-*Include S1 and S2 incidents only. Reference full incident reports for detail.*
+*Include S1 and S2 incidents only. Reference full incident reports for detail. Severity definitions: [escalation-paths.md](../framework/operating-model/escalation-paths.md#severity-classification). Every S1, and every S2 that meets the [material incident criteria](../framework/operating-model/board-reporting.md#material-incident-criteria), should already have been notified to the Board Risk Committee between quarters (every S1 within 24 hours); record the date.*
 
-| Incident ID | Severity | System | Date | Impact Summary | Root Cause | Remediation Status | Board Action Required |
-|-------------|----------|--------|------|---------------|------------|-------------------|----------------------|
-| | | | | | | | |
+| Incident ID | Severity | System | Date | Impact Summary | Root Cause | Remediation Status | Board Notified (date) | Board Action Required |
+|-------------|----------|--------|------|---------------|------------|-------------------|----------------------|----------------------|
+| | | | | | | | | |
 
 **Systemic issues identified:**
 

@@ -4,16 +4,16 @@
 model_details:
   name: "Investment Research Assistant Agent"
   model_id: "research-agent-v0.9"
-  version: "0.9.0"
+  version: "0.9.1"
   type: "agent"
-  base_model: "Claude 3.5 Sonnet"
-  base_model_version: "claude-3-5-sonnet-20241022"
+  base_model: "Claude Sonnet 4.5"
+  base_model_version: "claude-sonnet-4-5-20250929"
   base_model_provider: "Anthropic"
   hosting: "vendor-api"
   risk_tier: "T1"
   date_deployed: "2026-02-01"
   last_reviewed: "2026-03-01"
-  next_review: "2026-04-01"
+  next_review: "2026-05-01"           # Quarterly formal governance review (T1)
   owners:
     business_owner: "Head of Investment Research"
     technical_owner: "AI Platform Engineering Lead"
@@ -33,7 +33,7 @@ intended_use:
     - "Executing trades or modifying portfolios"
     - "Accessing material non-public information (MNPI) systems"
     - "Unsupervised operation without analyst oversight"
-  decision_type: "assistive"
+  decision_type: "recommendation"
   human_oversight_pattern: "human-in-the-loop"
   customer_facing: false
   regulatory_context:
@@ -106,7 +106,7 @@ prompt_governance:
   system_prompt_version: "v0.9.1"
   prompt_repository: "git://internal/ai-prompts/research-agent"
   last_prompt_review: "2026-02-25"
-  adversarial_testing_date: "2026-02-28"
+  adversarial_testing_date: "2026-02-28"   # Prompt-change adversarial regression set for v0.9.1; pre-release red-team (220 cases) ran 2026-01-19
   guardrails:
     input_validation: true
     output_filtering: true
@@ -123,8 +123,8 @@ prompt_governance:
       - "All financial figures must be sourced; no LLM-generated numbers"
 
 evaluation:
-  evaluation_date: "2026-02-28"
-  evaluation_dataset_size: 150
+  evaluation_date: "2026-01-20"         # Pre-release evaluation of v0.9.0, before deployment on 2026-02-01
+  evaluation_dataset_size: 300
   metrics:
     - name: "faithfulness"
       value: 0.93
@@ -135,7 +135,7 @@ evaluation:
       threshold: 0.80
       method: "human-eval"
     - name: "hallucination_rate"
-      value: 0.012
+      value: 0.013                      # 4 of 300 responses; above the T1 cap. Deployed under exception EXC-2026-004 (see risk-assessment.md)
       threshold: 0.01
       method: "human-eval"
     - name: "plan_quality"
@@ -150,10 +150,18 @@ evaluation:
       value: 0.97
       threshold: 0.95
       method: "automated"
+    - name: "safety_pass_rate"          # 200-case safety suite
+      value: 0.995
+      threshold: 0.99
+      method: "automated"
+    - name: "retrieval_precision_at_5"  # 100-query RAG retrieval set
+      value: 0.88
+      threshold: 0.85
+      method: "automated"
   adversarial_testing:
     prompt_injection_resistance: 0.95
     jailbreak_resistance: 0.96
-    test_suite_size: 100
+    test_suite_size: 220                # T1 minimum 200, including manual testing
   bias_evaluation:
     tested_attributes:
       - "company_sector"
@@ -161,6 +169,15 @@ evaluation:
     counterfactual_consistency: 0.92
     sentiment_parity: 0.94
     methodology: "Counterfactual testing — same analysis request across sectors/geographies"
+  production_evaluations:
+    - date: "2026-02-28"
+      activity: "offline-suite-rerun"
+      trigger: "prompt change (v0.9.1)"
+      dataset_size: 300
+      results:
+        hallucination_rate: 0.007       # 2 of 300; within the T1 cap of 0.01
+        faithfulness: 0.94
+      outcome: "pass; exception EXC-2026-004 closed 2026-03-01"
 
 safety:
   hallucination_tolerance: "≤ 1%"
@@ -195,10 +212,10 @@ operational:
     cost_per_request: "€2.50"
     token_budget_per_request: 100000
   monitoring:
-    quality_monitoring: "Every session reviewed by analyst (implicit)"
+    quality_monitoring: "Automated scoring of every response (async); every output reviewed in full by the analyst (Pattern 1)"
     safety_monitoring: "Real-time action validation; MNPI detection on every output"
     cost_monitoring: "Per-session budget limits; daily cost alerts"
-    drift_detection: "Weekly evaluation on canonical research scenarios"
+    drift_detection: "Vendor behaviour canary on a fixed scenario set daily; RAG retrieval evaluation weekly; full offline suite re-run monthly and on any model, provider or prompt change"
     alerting_configured: true
     dashboard_url: "internal://dashboards/research-agent"
   incident_response:
@@ -213,7 +230,7 @@ vendor_risk:
   training_data_exclusion: true
   sla_uptime: "99.9%"
   exit_strategy_documented: true
-  fallback_model: "Gemini 1.5 Pro (Vertex AI EU)"
+  fallback_model: "Gemini 2.5 Pro (Vertex AI EU)"
   fallback_validated: true
   last_vendor_assessment: "2026-01-15"
 
@@ -242,6 +259,10 @@ approvals:
     name: "Chair, AI Risk Committee"
     date: "2026-01-25"
     decision: "approved-with-conditions"
+  - role: "AI Risk Committee (exception EXC-2026-004, control EV-001)"
+    name: "Chair, AI Risk Committee"
+    date: "2026-01-25"
+    decision: "approved-with-conditions"
   - role: "CISO"
     name: "Chief Information Security Officer"
     date: "2026-01-20"
@@ -255,4 +276,8 @@ change_history:
   - version: "0.9.0"
     date: "2026-02-01"
     description: "Limited pilot deployment with 5 senior analysts"
+    approved_by: "AI Risk Committee"
+  - version: "0.9.1"
+    date: "2026-02-28"
+    description: "System prompt v0.9.1: source citation required for every figure. Full suite re-run passed (hallucination rate 0.007); exception EXC-2026-004 closed 2026-03-01."
     approved_by: "AI Risk Committee"

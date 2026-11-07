@@ -13,10 +13,12 @@ Evaluation is the primary mechanism for proving an AI system works as intended. 
 | Pre-release | Domain accuracy, faithfulness, format compliance | Before every deployment | 200+ | 100+ | 50+ | 20+ |
 | Safety | Toxicity, harmful content, jailbreak resistance, PII leakage | Before every deployment | 200+ | 100+ | 50+ | 20+ |
 | Regression | Performance vs. previous version on identical test set | On model/prompt changes | Full suite | Full suite | 50 cases | N/A |
-| RAG retrieval | Retrieval precision, recall, relevance, source attribution | Before deployment + weekly (T1) | 100+ | 50+ | 25+ | N/A |
-| Red-team | Adversarial robustness | Per [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md) cadence | 200+ | 100+ | 50 | 20 |
-| Bias | Counterfactual fairness, demographic parity | Before deployment + quarterly (T1) | 200 pairs | 100 pairs | 50 pairs | N/A |
-| Production | Ongoing output quality on sampled live traffic | Continuous per tier | Every response (async) | 20% sample | 5% sample | Weekly batch |
+| RAG retrieval | Retrieval precision, recall, relevance, source attribution | Before deployment, then weekly (T1), monthly (T2), quarterly (T3) | 100+ | 50+ | 25+ | Recommended |
+| Red-team | Adversarial robustness | Before deployment, then per [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md) cadence | 200+, including manual testing (external testers recommended) | 100+ | Automated adversarial scan + 50 manual cases | Automated scan, 20+ cases (recommended) |
+| Bias | Counterfactual fairness, demographic parity | Formal bias evaluation before deployment, then quarterly (T1), semi-annual (T2) | 200 pairs | 100 pairs | 50 pairs | N/A |
+| Production | Ongoing output quality on live traffic | Continuous: three activities, see [Production Evaluation](#production-evaluation) | Every response scored (async) | 20% sample | 5% sample | Weekly batch sample |
+
+Suite sizes apply whenever an eval type is run. Which eval types must pass before release at each tier is set in [Release Criteria by Tier](#release-criteria-by-tier).
 
 ---
 
@@ -33,16 +35,53 @@ Evaluation is the primary mechanism for proving an AI system works as intended. 
 
 These are opinionated defaults. Organizations should calibrate to their domain and risk appetite. The principle is non-negotiable: every tier has thresholds, and thresholds are enforced.
 
+This document is the single source for these thresholds and for suite sizes. Other documents link here rather than restating different values. Use-case tolerances (for example in [hallucination-policy.md](../responsible-ai/hallucination-policy.md)) apply only when they are stricter than the tier threshold.
+
+---
+
+## Metric Definitions
+
+| Metric | Definition |
+|--------|-----------|
+| Hallucination rate | Share of evaluated responses that contain at least one material unsupported or false claim. Measured at response level. A claim is material if a user could act on it: facts, figures, policy terms, fees, dates, eligibility. |
+| Faithfulness | Average share of claims in a response that are supported by the retrieved context. Measured at claim level. Faithfulness and hallucination rate measure different things and both thresholds apply: a response with high faithfulness still counts as a hallucination if its one unsupported claim is material. |
+| Safety pass rate | Share of safety test cases where the system responds acceptably. Each test case defines the acceptable response (for example, a refusal, a safe completion, or no PII in the output). |
+| Retrieval precision@5 | Share of the top 5 retrieved chunks that are relevant to the query, averaged across evaluation queries. Relevance is judged against labelled references or by a calibrated LLM-as-judge. |
+| Counterfactual consistency | Share of counterfactual pairs (prompts identical except for a demographic attribute) whose outputs are consistent: same substance and conclusion, comparable sentiment and level of detail. Test protocol: [bias-detection-llm.md](../responsible-ai/bias-detection-llm.md). |
+
 ---
 
 ## Release Criteria by Tier
 
 | Tier | Required Evals | Reviewer | Sign-off |
 |------|---------------|----------|----------|
-| T1 | All eval types pass | Independent reviewer validates results | AI Risk sign-off |
-| T2 | Pre-release + safety + regression + bias pass | Peer review of results | AI lead sign-off |
-| T3 | Pre-release + safety pass | Self-attested | Team lead sign-off |
-| T4 | Pre-release pass | Self-attested | Self-attested |
+| T1 | All eval types pass: pre-release, safety, regression, RAG retrieval (if RAG), bias, red-team | Full independent validation by Model Risk Management (MRM) | AI Risk sign-off |
+| T2 | Pre-release + safety + regression + bias + RAG retrieval (if RAG) + red-team | Independent validation, reduced scope, by a qualified reviewer outside the development team (MRM or second line) | AI lead sign-off |
+| T3 | Pre-release + safety + RAG retrieval (if RAG) + red-team (automated scan + 50 manual cases) | Peer review | Team lead sign-off |
+| T4 | Pre-release + safety (automated, 20+ cases each). RAG retrieval eval and red-team scan recommended | Self-test | Self-attested |
+
+The team that builds a T1 or T2 system never validates its own evaluation results.
+
+---
+
+## Production Evaluation
+
+Production evaluation is three named activities (control PM-004):
+
+| Activity | T1 | T2 | T3 | T4 |
+|----------|:---:|:---:|:---:|:---:|
+| 1. Online automated scoring of live traffic | Every response (async) | 20% sample | 5% sample | Weekly batch sample |
+| 2. Metrics review | Daily dashboard check by AI Operations, plus monthly system-owner review | Weekly | Monthly | Quarterly |
+| 3. Full offline suite re-run | Monthly | Quarterly | Semi-annual | Semi-annual |
+
+Always re-run the full offline suite on a model, provider or prompt change.
+
+Related production checks with their own cadence:
+
+- **RAG retrieval evaluation:** weekly (T1), monthly (T2), quarterly (T3); recommended for T4.
+- **Production counterfactual spot-checks:** weekly (T1), monthly (T2). These are separate from the formal bias evaluation (before deployment, then quarterly for T1 and semi-annual for T2). See [bias-detection-llm.md](../responsible-ai/bias-detection-llm.md).
+- **Vendor behaviour canary:** for third-party models, a fixed domain set run daily (T1), weekly (T2), monthly (T3/T4) to detect silent vendor model changes. See [third-party-model-risk.md](../compliance/third-party-model-risk.md#ongoing-monitoring).
+- **Prompt-change adversarial regression set:** at least 50 cases for T1/T2, re-run on every prompt change. This is separate from the pre-release red-team. See [prompt-engineering-standards.md](prompt-engineering-standards.md#minimum-evaluation-suite-size).
 
 ---
 
@@ -62,7 +101,7 @@ These are opinionated defaults. Organizations should calibrate to their domain a
 - Results linked to: model version, prompt version, dataset version, evaluator identity
 - Automated eval pipeline for T1/T2 (CI/CD integrated; manual acceptable for T3/T4)
 - Eval failures automatically block deployment pipeline for T1/T2
-- Historical eval results retained for trending and regression detection (minimum 2 years)
+- Evaluation results are governance records: retain them for the life of the system plus the tier retention period, per [audit-trail-requirements.md](../compliance/audit-trail-requirements.md). Historical results also support trending and regression detection.
 
 ---
 
@@ -90,5 +129,5 @@ These are opinionated defaults. Organizations should calibrate to their domain a
 
 - Red-team eval references [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md) — this file owns "what must pass"; red-teaming owns "how to test"
 - Production eval cadence aligned with [LLM monitoring](monitoring.md)
-- Control register IDs (EV-001 through EV-007) assigned — one per eval type
+- Control register IDs ([control-register.md](../governance-operations/control-register.md)): pre-release EV-001, safety EV-002, regression EV-003, RAG retrieval EV-004, bias EV-005, red-team SR-001, production PM-004. EV-006 covers eval dataset integrity and EV-007 covers LLM-as-judge calibration.
 - Eval report is a required artifact in the deployment evidence pack (see [governance-workflow.md](../governance-operations/governance-workflow.md) Stage 7)

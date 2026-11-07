@@ -91,10 +91,11 @@ Actions requiring board decision or awareness. Each recommendation should includ
 
 ## Material Incident Criteria
 
-Not every incident requires board notification. Material incidents do.
+Not every incident requires board notification. Material incidents do. Every S1 incident is material. An S2 incident is material when it meets any of the other criteria below. Severity levels are defined in [escalation-paths.md](escalation-paths.md#severity-classification).
 
 | Criterion | Threshold | Notification Timeline |
 |-----------|-----------|----------------------|
+| Severity | Any S1 incident | Within 24 hours |
 | Customer impact | > 100 customers affected OR any financial harm to customers | Within 24 hours |
 | Financial impact | > $100K direct cost (remediation, compensation, fines) | Within 24 hours |
 | Regulatory notification triggered | Any incident requiring regulatory notification | Within 24 hours |
@@ -106,10 +107,10 @@ Not every incident requires board notification. Material incidents do.
 ### Between-Quarter Notification
 
 For material incidents between quarterly reports:
-1. AI Risk Committee chair notified immediately
+1. AI Risk Committee chair notified: within 1 hour for S1 ([escalation-paths.md](escalation-paths.md#notifications)); immediately once an S2 is assessed as material
 2. Brief written summary within 24 hours
-3. Full incident report within 48 hours
-4. Board Risk Committee notified per existing board notification protocol
+3. Incident report with root cause within 48 hours; post-mortem report within 1 week (S1) or 2 weeks (S2), per IR-004
+4. Board Risk Committee notified within the timeline in the table above
 
 ---
 
@@ -123,8 +124,8 @@ The board should define and annually approve an AI risk appetite statement.
 |-----------|------------------|
 | Deployment scope | "We deploy AI systems up to T1 in customer-facing contexts with appropriate governance." |
 | Vendor dependency | "No single model provider accounts for more than 70% of our T1/T2 AI systems." |
-| Human oversight | "All T1 customer-facing AI outputs are reviewed by a qualified human before delivery." |
-| Incident tolerance | "We target zero S1 incidents per year. S2 incidents are investigated and remediated within 48 hours." |
+| Human oversight | "Every T1 customer-facing AI system meets our human oversight rules: a qualified human reviews adverse regulated decisions before they take effect, and informational systems have per-output review or evidenced Pattern 3 safeguards." (See [human-in-loop-patterns.md](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix).) |
+| Incident tolerance | "We target zero S1 incidents per year. S2 incidents have their root cause identified within 48 hours." |
 | Regulatory posture | "We comply with all applicable AI regulation in jurisdictions where we operate." |
 | Innovation balance | "We accept measured risk in T3/T4 systems to enable AI experimentation and innovation." |
 

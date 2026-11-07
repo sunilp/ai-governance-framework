@@ -111,6 +111,8 @@ Before a prompt enters production, it must pass the following review:
 | T3 | Peer review |
 | T4 | Self-review with documentation |
 
+Prompt review is control DE-003 in the [control register](../governance-operations/control-register.md), owned by the AI lead. DE-003 applies to T1 to T3 (T3 is peer review only); T4 prompts are self-reviewed.
+
 ---
 
 ## Version Control
@@ -160,12 +162,14 @@ prompts/
 
 ### Minimum Evaluation Suite Size
 
-| Tier | Test Cases | Adversarial Tests |
+| Tier | Test Cases | Prompt-Change Adversarial Regression Set |
 |------|-----------|-------------------|
 | T1 | ≥ 200 | ≥ 50 |
-| T2 | ≥ 100 | ≥ 25 |
+| T2 | ≥ 100 | ≥ 50 |
 | T3 | ≥ 50 | ≥ 10 |
 | T4 | ≥ 20 | ≥ 5 |
+
+Test case counts restate the pre-release suite sizes in [evaluation-governance.md](evaluation-governance.md#evaluation-types). The prompt-change adversarial regression set is re-run on every prompt change. It is separate from the pre-release red-team, whose depth per tier is set in [red-teaming-protocol.md](../ai-security/red-teaming-protocol.md#tiered-testing-depth).
 
 ---
 

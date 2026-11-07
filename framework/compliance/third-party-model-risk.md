@@ -21,7 +21,7 @@ Third-party model risk management ensures that the organization understands, mon
 | Benchmark gaming | Model optimized for public benchmarks but underperforms on real tasks | Low-Medium |
 
 **Controls:**
-- Run your domain-specific evaluation suite continuously (not just at onboarding)
+- Run the vendor behaviour canary (see [Ongoing Monitoring](#ongoing-monitoring)) and the production evaluation in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation), not just onboarding evaluation
 - Monitor for output distribution changes daily
 - Maintain a fixed evaluation dataset; alert on score changes
 - Subscribe to provider changelog and API announcements
@@ -115,7 +115,7 @@ Third-party model risk management ensures that the organization understands, mon
 | T1 | Full assessment: all phases, CISO + CRO + Legal sign-off |
 | T2 | Standard assessment: all phases, Head of AI + Security sign-off |
 | T3 | Simplified assessment: technical eval + security checklist + DPA |
-| T4 | Minimal: security checklist + acceptable use policy compliance |
+| T4 | No separate assessment: T4 systems use an already-approved vendor (control AR-005 applies to T1 to T3) |
 
 ---
 
@@ -123,7 +123,7 @@ Third-party model risk management ensures that the organization understands, mon
 
 | Activity | Frequency | Responsibility |
 |----------|-----------|---------------|
-| Domain eval suite execution | Daily (T1), Weekly (T2), Monthly (T3/T4) | AI Operations |
+| Vendor behaviour canary: a fixed domain eval set run to detect silent vendor model changes (see [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation)) | Daily (T1), Weekly (T2), Monthly (T3/T4) | AI Operations |
 | Provider changelog review | Weekly | AI Operations |
 | Output distribution monitoring | Continuous | Automated monitoring |
 | SLA compliance tracking | Monthly | Vendor Management |

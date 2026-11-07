@@ -7,7 +7,7 @@ model_details:
   model_id: ""                          # Unique identifier
   version: ""                           # Semantic version
   type: ""                              # foundation | fine-tuned | rag-system | agent
-  base_model: ""                        # Foundation model used (e.g., "GPT-4", "Claude 3.5 Sonnet", "Llama 3 70B")
+  base_model: ""                        # Foundation model used (e.g., "Claude Sonnet 4.5", "Gemini 2.5 Pro", "Llama 3.3 70B")
   base_model_version: ""                # Specific version or checkpoint
   base_model_provider: ""               # OpenAI | Anthropic | Google | Meta | Self-hosted
   hosting: ""                           # vendor-api | self-hosted | vpc-hosted
@@ -24,8 +24,8 @@ intended_use:
   primary_use_case: ""                  # Clear description of what the system does
   target_users: []                      # Who uses this system
   out_of_scope_uses: []                 # What this system should NOT be used for
-  decision_type: ""                     # advisory | assistive | autonomous
-  human_oversight_pattern: ""           # human-in-the-loop | human-on-the-loop | human-over-the-loop | autonomous
+  decision_type: ""                     # informational | recommendation | automated
+  human_oversight_pattern: ""           # human-in-the-loop | human-on-the-loop | human-over-the-loop | human-out-of-the-loop
   customer_facing: false                # true | false
   regulatory_context: []               # Applicable regulations
 
@@ -69,7 +69,7 @@ evaluation:
     - name: "faithfulness"
       value: null
       threshold: null
-      method: ""                        # llm-as-judge | human-eval | automated
+      method: ""                        # llm-as-judge | human-eval | automated | hybrid
     - name: "relevance"
       value: null
       threshold: null
@@ -95,9 +95,16 @@ evaluation:
     counterfactual_consistency: null     # Score
     sentiment_parity: null              # Score
     methodology: ""
+  production_evaluations:               # Post-deployment results (PM-004). Keep separate from the pre-release results above.
+    - date: ""                          # YYYY-MM-DD
+      activity: ""                      # online-scoring | metrics-review | offline-suite-rerun
+      trigger: ""                       # schedule | model change | provider change | prompt change
+      dataset_size: null
+      results: {}                       # metric name: value
+      outcome: ""                       # e.g., "pass", "fail: exception raised"
 
 safety:
-  hallucination_tolerance: ""           # e.g., "≤ 1%"
+  hallucination_tolerance: ""           # e.g., "≤ 1%". The tier cap is a ceiling; a use-case tolerance applies only when stricter.
   toxicity_threshold: ""
   pii_leakage_tolerance: "zero"
   content_policy: ""                    # Reference to content policy document

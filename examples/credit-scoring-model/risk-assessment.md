@@ -2,13 +2,15 @@
 
 ## System Overview
 
-The Retail Credit Scoring Model (MDL-CS-003) predicts the probability of default for unsecured retail credit applications. It processes approximately 15,000 applications per day and directly determines automated approve/decline decisions for 85% of applications. The remaining 15% (near decision boundary) are routed to human underwriters.
+The Retail Credit Scoring Model (MDL-CS-003) predicts the probability of default for unsecured retail credit applications. It processes approximately 15,000 applications per day. About 60% of applications are approved automatically within approved credit policy. The other 40% (every proposed decline or other adverse outcome, such as a lower limit or higher price than applied for, plus cases near the decision boundary) go to a human underwriter, who decides before anything is issued. Any applicant can ask for human review of an automated decision.
+
+Human oversight follows the T1 rule for regulated decisions in [human-in-loop-patterns.md](../../framework/responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix): Pattern 1 (human-in-the-loop) for adverse and non-standard outcomes, automated favourable outcomes within approved policy, and a route to human review on request.
 
 ## Risk Dimension Scoring
 
 ### 1. Decision Autonomy — Critical
 
-The model makes binding credit decisions (approve/decline) for 85% of applications without human review. Declined applicants receive an adverse action notice but the initial decision is fully automated. This is the highest level of decision autonomy.
+The model makes binding approval decisions for about 60% of applications with no human review. Proposed declines and other adverse outcomes are decided by an underwriter, but the model score is the main input to that decision. Binding automated decisions at this volume are the highest level of decision autonomy.
 
 **Score: Critical**
 
@@ -55,7 +57,7 @@ Incorrect credit decisions can be reversed (approved applications can be monitor
 
 ## Overall Risk Tier: T1 — Critical
 
-**Justification:** Four of five dimensions score at Critical level. The model makes autonomous decisions affecting millions of customers, processes highly restricted data, is subject to multiple regulatory frameworks, and influences billions in credit exposure. This is unambiguously a T1 system requiring the highest level of governance.
+**Justification:** Decision autonomy, data sensitivity, regulatory exposure and scale of impact all score Critical, and any Critical dimension sets T1. Override item 1 (regulated credit decisions) in the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules) also makes it T1 automatically. Aggregate score: 19 of 20, recorded for context only.
 
 ## Governance Requirements (per T1 classification)
 
@@ -65,12 +67,13 @@ Incorrect credit decisions can be reversed (approved applications can be monitor
 | Full model card | Completed — see model-card.yaml |
 | Impact assessment | Completed — reviewed by compliance |
 | Challenger model | Active — logistic regression v2.x maintained as challenger |
-| Real-time + daily monitoring | Configured — PSI daily, AUC monthly, fairness monthly |
+| Metrics review | Configured: daily dashboard check by AI Operations (PSI, approval rate); monthly system-owner review (AUC, fairness) |
+| Human oversight | Pattern 1 for every proposed decline or adverse outcome; automated approvals within policy; human review on request |
 | Quarterly review | Scheduled — next review 2025-Q1 |
 | Board reporting | Included in quarterly risk report |
-| AI Risk Committee approval | Approved — 2024-11-22 |
-| Pre-deployment: 5 gates | All gates passed |
-| Incident response SLA | 1 hour — on-call rotation established |
+| Deployment approval | AI Risk Committee, CISO and DPO approved 2024-11-22 |
+| Pre-deployment evidence | Full T1 evidence pack per [governance workflow](../../framework/governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) (GenAI-only items not applicable) |
+| Incident response | Response SLAs by severity per [escalation paths](../../framework/operating-model/escalation-paths.md#severity-classification); on-call rotation established |
 
 ## Key Risks and Mitigations
 

@@ -5,7 +5,7 @@
 | Field | Value |
 |-------|-------|
 | Incident ID | |
-| Severity | S1 / S2 / S3 / S4 |
+| Severity | S1 Critical / S2 High / S3 Medium / S4 Low ([definitions](../framework/operating-model/escalation-paths.md#severity-classification)) |
 | System Name | |
 | System ID | |
 | Risk Tier | |

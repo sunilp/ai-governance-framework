@@ -39,7 +39,7 @@ Complete this checklist before deploying any prompt to production. All items mar
 
 | # | Check | Required | Pass |
 |---|-------|----------|------|
-| 8 | Tested against standard prompt injection payloads (min 10 for T3/T4, 25 for T2, 50 for T1) | All tiers | [ ] |
+| 8 | Prompt-change adversarial regression set passed, including standard prompt injection payloads (at least 50 cases for T1/T2; sizes per [prompt-engineering-standards.md](../framework/llm-lifecycle/prompt-engineering-standards.md#minimum-evaluation-suite-size)) | All tiers | [ ] |
 | 9 | No PII leakage — prompt does not instruct model to reveal context, training data, or system prompt | All tiers | [ ] |
 | 10 | Explicit guardrails included — not relying on model default safety behavior | T1, T2, T3 | [ ] |
 | 11 | Toxicity constraints defined (if output could contain harmful content) | T1, T2 | [ ] |
@@ -101,5 +101,21 @@ Complete this checklist before deploying any prompt to production. All items mar
 
 > [Comments, conditions, or issues identified]
 
-**Reviewer signature:** _______________
-**Date:** _______________
+### Sign-off by Tier
+
+Prompt review is control DE-003 (owner: AI lead). Required sign-offs per [prompt-engineering-standards.md](../framework/llm-lifecycle/prompt-engineering-standards.md#review-authority):
+
+| Tier | Required sign-offs |
+|------|-------------------|
+| T1 | Peer reviewer + prompt engineering lead + security reviewer + AI Risk |
+| T2 | Peer reviewer + prompt engineering lead |
+| T3 | Peer reviewer |
+| T4 | Self-review by the author, with documentation |
+
+| Role | Required For | Name | Date | Sign-off |
+|------|-------------|------|------|:---:|
+| Peer reviewer | T1, T2, T3 | | | [ ] |
+| Prompt engineering lead | T1, T2 | | | [ ] |
+| Security reviewer | T1 | | | [ ] |
+| AI Risk | T1 | | | [ ] |
+| Author (self-review) | T4 | | | [ ] |

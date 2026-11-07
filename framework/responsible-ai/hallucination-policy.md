@@ -22,23 +22,27 @@ This policy defines organizational tolerance for hallucination, measurement stan
 
 ## Hallucination Tolerance by Tier and Use Case
 
-| Tier | Maximum Hallucination Rate | Rationale |
+Tier caps restate [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier), which owns them. Hallucination rate is a response-level metric, defined in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#metric-definitions); it is measured separately from faithfulness.
+
+| Tier | Maximum Hallucination Rate (tier cap) | Rationale |
 |------|---------------------------|-----------|
-| T1 — Critical | ≤ 1% (measured by faithfulness evaluation) | Outputs directly influence regulated decisions or customer communications |
-| T2 — High | ≤ 3% | Outputs reviewed by qualified human before use; limited direct impact |
-| T3 — Medium | ≤ 5% | Internal use; errors caught in normal workflow |
-| T4 — Low | ≤ 10% | Advisory or brainstorming; user expected to verify independently |
+| T1 Critical | ≤ 1% | Outputs directly influence regulated decisions or customer communications |
+| T2 High | ≤ 3% | Outputs reviewed by qualified human before use; limited direct impact |
+| T3 Medium | ≤ 5% | Internal use; errors caught in normal workflow |
+| T4 Low | ≤ 10% | Advisory or brainstorming; user expected to verify independently |
 
 ### Use Case-Specific Overrides
 
-| Use Case Category | Maximum Rate | Override Rationale |
-|------------------|-------------|-------------------|
-| Regulatory reporting or disclosure | 0% (human verification required for all outputs) | Zero tolerance for regulatory submissions |
-| Customer-facing communications | ≤ 1% | Reputational and regulatory risk |
-| Financial analysis and credit memos | ≤ 2% | Consequential decision support |
-| Internal knowledge Q&A | ≤ 5% | Users expected to verify; low consequence |
-| Content drafting (non-customer) | ≤ 8% | Human editing expected |
-| Code generation | ≤ 5% (measured by functional correctness) | Code review and testing expected |
+**Precedence rule:** a use-case tolerance applies only when it is stricter than the tier cap. The tier cap is a ceiling; no use-case tolerance can raise it. The effective limit is the lower of the two.
+
+| Use Case Category | Maximum Rate | Tightens the Cap For | Override Rationale |
+|------------------|-------------|---------------------|-------------------|
+| Regulatory reporting or disclosure | 0% (human verification required for all outputs) | All tiers | Zero tolerance for regulatory submissions |
+| Customer-facing communications | ≤ 1% | T2, T3, T4 (the T1 cap is already ≤ 1%) | Reputational and regulatory risk |
+| Financial analysis and credit memos | ≤ 2% | T2, T3, T4 (T1 systems use the T1 cap of ≤ 1%) | Consequential decision support |
+| Internal knowledge Q&A | ≤ 5% | T4 (T1 to T3 caps are already ≤ 5%) | Users expected to verify; low consequence |
+| Content drafting (non-customer) | ≤ 8% | T4 | Human editing expected |
+| Code generation | ≤ 5% (measured by functional correctness) | T4 | Code review and testing expected |
 
 ---
 
@@ -56,8 +60,8 @@ This policy defines organizational tolerance for hallucination, measurement stan
 
 ### Evaluation Protocol
 
-1. **Baseline measurement:** Before deployment, measure hallucination rate on a representative test set (minimum 200 queries for T1, 100 for T2)
-2. **Production monitoring:** Ongoing automated evaluation on sampled production queries
+1. **Baseline measurement:** Before deployment, measure hallucination rate on a representative test set, sized per the pre-release suite in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#evaluation-types) (200+ queries for T1, 100+ for T2, 50+ for T3, 20+ for T4)
+2. **Production monitoring:** Ongoing automated evaluation of production traffic per [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation)
 3. **Periodic human evaluation:** Scheduled human review to calibrate automated metrics
 4. **Trend tracking:** Monitor hallucination rate over time; alert on degradation
 
@@ -79,7 +83,7 @@ This policy defines organizational tolerance for hallucination, measurement stan
 |-----------|----|----|----|----|
 | RAG with verified sources | Required | Required | Recommended | Optional |
 | Automated faithfulness evaluation on every response | Required | Recommended | Optional | — |
-| Human review of all outputs | Required for customer-facing | Required for external outputs | — | — |
+| Human oversight per [human-in-loop-patterns.md](human-in-loop-patterns.md#pattern-selection-matrix) | Regulated decisions: Pattern 1 for adverse or non-standard outcomes. Customer-facing informational: Pattern 1, or Pattern 3 with all five safeguards | Outputs reaching external parties: Pattern 1, or Pattern 3 with sampled review | N/A | N/A |
 | Confidence scoring | Required | Recommended | Optional | — |
 | Output cross-verification against structured data | Required for factual claims | Recommended | — | — |
 | Guardrail-based hallucination detection | Required | Required | Recommended | Optional |
@@ -90,7 +94,7 @@ For systems using RAG to reduce hallucination:
 
 | Requirement | Standard |
 |-------------|---------|
-| Retrieval quality | Faithfulness score ≥ 0.9 for T1; ≥ 0.85 for T2 |
+| Retrieval quality | Faithfulness and retrieval precision@5 meet the tier thresholds in [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier) (faithfulness: T1 ≥ 90%, T2 ≥ 85%, T3 ≥ 80%, T4 ≥ 75%) |
 | Source currency | Retrieved documents must meet freshness requirements |
 | Context sufficiency | System must detect when retrieved context is insufficient and decline to answer |
 | Attribution | Every claim in the output should be traceable to a retrieved source |
@@ -122,14 +126,16 @@ For systems using RAG to reduce hallucination:
 
 ## Incident Response
 
-### Hallucination Incident Classification
+### Examples by severity (definitions: [escalation-paths.md](../operating-model/escalation-paths.md#severity-classification))
 
-| Severity | Criteria | Response |
+Severity levels, response SLAs and notifications are defined in escalation-paths.md. This table gives hallucination examples only.
+
+| Severity | Example | Response |
 |----------|----------|----------|
-| S1 — Critical | Hallucinated output caused customer harm, financial loss, or regulatory issue | Immediate system pause; incident commander assigned; root cause analysis; regulatory notification if required |
-| S2 — High | Hallucinated output reached customer but was caught before causing harm | System review; enhanced monitoring; root cause analysis within 48 hours |
-| S3 — Medium | Hallucinated output detected internally before external delivery | Root cause documented; prompt/guardrail adjustment; retest |
-| S4 — Low | Hallucination detected in monitoring/evaluation but within tolerance | Logged; reviewed at next scheduled assessment |
+| S1 Critical | Hallucinated output caused customer harm, financial loss, or a regulatory issue | Immediate system pause; incident commander assigned; root cause identified within 48 hours; regulatory notification if required |
+| S2 High | Hallucinated output reached a customer but was caught before causing harm | System review; enhanced monitoring; root cause identified within 48 hours |
+| S3 Medium | Hallucinated output detected internally before external delivery, or hallucination rate rising but still within tolerance on a T1/T2 system | Root cause documented within 10 business days; prompt/guardrail adjustment; retest |
+| S4 Low | Isolated hallucination found in monitoring or evaluation, within tolerance, no external exposure | Logged and tracked in backlog; reviewed at next scheduled assessment |
 
 ### Post-Incident Actions
 

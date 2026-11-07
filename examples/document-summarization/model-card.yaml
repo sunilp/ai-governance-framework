@@ -5,15 +5,15 @@ model_details:
   name: "Compliance Document Summarizer"
   model_id: "doc-summarizer-compliance-v1.0"
   version: "1.0.0"
-  type: "rag-system"
-  base_model: "Gemini 1.5 Pro"
-  base_model_version: "gemini-1.5-pro-002"
+  type: "foundation"                  # Foundation model used through prompting; no RAG (rag_configuration.enabled: false)
+  base_model: "Gemini 2.5 Pro"
+  base_model_version: "gemini-2.5-pro"
   base_model_provider: "Google"
   hosting: "vpc-hosted"
   risk_tier: "T2"
   date_deployed: "2025-11-01"
   last_reviewed: "2026-02-15"
-  next_review: "2026-05-15"
+  next_review: "2026-08-15"           # Semi-annual governance review (T2)
   owners:
     business_owner: "Head of Compliance Operations"
     technical_owner: "AI Engineering Lead"
@@ -33,7 +33,7 @@ intended_use:
     - "Determining regulatory applicability without human review"
     - "Customer-facing communications"
     - "Processing privileged legal documents"
-  decision_type: "assistive"
+  decision_type: "recommendation"
   human_oversight_pattern: "human-in-the-loop"
   customer_facing: false
   regulatory_context:
@@ -67,6 +67,9 @@ system_architecture:
     - source: "output_validator"
       destination: "compliance_analyst"
       data_classification: "internal"
+    - source: "document_ingestion"
+      destination: "fallback_model (Anthropic API, EU-region endpoint; primary outage only)"
+      data_classification: "confidential"
   rag_configuration:
     enabled: false
 
@@ -94,7 +97,7 @@ evaluation:
     - name: "faithfulness"
       value: 0.96
       threshold: 0.90
-      method: "llm-as-judge + human-eval"
+      method: "hybrid"                  # LLM-as-judge with human review of a sample
     - name: "completeness"
       value: 0.89
       threshold: 0.85
@@ -111,15 +114,26 @@ evaluation:
       value: 0.99
       threshold: 0.98
       method: "automated"
+    - name: "safety_pass_rate"          # 100-case safety suite
+      value: 0.98
+      threshold: 0.97
+      method: "automated"
   adversarial_testing:
     prompt_injection_resistance: 0.96
     jailbreak_resistance: 0.95
-    test_suite_size: 50
+    test_suite_size: 120                # T2 minimum 100
   bias_evaluation:
-    tested_attributes: []
-    counterfactual_consistency: null
-    sentiment_parity: null
-    methodology: "N/A — document summarization does not involve demographic attributes"
+    tested_attributes:
+      - "counterparty_name"             # Names varied by gender and ethnic origin
+      - "jurisdiction"                  # Issuing regulator and country
+    counterfactual_consistency: 0.91    # T2 threshold 0.85
+    sentiment_parity: 0.95
+    methodology: >
+      Counterfactual testing, 100 pairs per attribute: the same source document
+      with counterparty names or the issuing jurisdiction swapped. A pair passes
+      when both summaries keep the same obligations, deadlines and severity
+      wording. Most failures were softer severity wording for non-EU
+      jurisdictions; each was reviewed and none changed an obligation or deadline.
 
 safety:
   hallucination_tolerance: "≤ 3%"
@@ -139,7 +153,7 @@ safety:
 operational:
   infrastructure:
     compute: "GCP europe-west1 (Vertex AI)"
-    data_residency: "EU only — documents processed within GCP EU region"
+    data_residency: "EU only: primary processing in GCP europe-west1; the fallback (Anthropic API, external) uses an EU-region endpoint under DPA with zero data retention, only during a primary outage"
   performance:
     latency_p50_ms: 8000
     latency_p95_ms: 15000
@@ -151,10 +165,10 @@ operational:
     cost_per_request: "€0.15"
     token_budget_per_request: 32000
   monitoring:
-    quality_monitoring: "Weekly batch evaluation on 20% sample"
+    quality_monitoring: "Automated scoring of a 20% sample of outputs; weekly metrics review"
     safety_monitoring: "Output validation on every response"
     cost_monitoring: "Daily budget tracking"
-    drift_detection: "Monthly evaluation on canonical document set"
+    drift_detection: "Vendor behaviour canary on a fixed document set weekly; full offline suite re-run quarterly and on any model, provider or prompt change"
     alerting_configured: true
     dashboard_url: "internal://dashboards/doc-summarizer"
   incident_response:
@@ -169,7 +183,7 @@ vendor_risk:
   training_data_exclusion: true
   sla_uptime: "99.9%"
   exit_strategy_documented: true
-  fallback_model: "Claude 3.5 Sonnet (Anthropic EU endpoint)"
+  fallback_model: "Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) on Vertex AI, EU region, same Google Cloud agreement and zero data retention; used only on primary outage"
   fallback_validated: true
   last_vendor_assessment: "2025-10-15"
 
@@ -194,6 +208,14 @@ limitations:
     - "Document handling must comply with information classification policy"
 
 approvals:
+  - role: "AI Risk (second line), risk assessment"
+    name: "Head of AI Risk"
+    date: "2025-10-14"
+    decision: "approved"
+  - role: "Independent validation (reduced scope)"
+    name: "Model Risk Management"
+    date: "2025-10-17"
+    decision: "approved"
   - role: "Head of AI"
     name: "Head of AI and Data Science"
     date: "2025-10-20"

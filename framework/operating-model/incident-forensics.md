@@ -16,8 +16,8 @@ Preserve evidence within 1 hour of incident detection. AI evidence degrades: mod
 
 | Evidence Type | Collection Method | Retention | Priority |
 |--------------|------------------|-----------|:---:|
-| Prompt/response logs | Extract from audit trail system | Per [audit trail requirements](../compliance/audit-trail-requirements.md) | Immediate |
-| Full conversation context | Extract complete session including system prompt, all turns, retrieved documents | Incident retention (minimum 3 years) | Immediate |
+| Prompt/response logs | Extract from audit trail system | Source logs: per [prompt-audit-trail.md](../compliance/prompt-audit-trail.md#retention-requirements); extracted copies: incident retention | Immediate |
+| Full conversation context | Extract complete session including system prompt, all turns, retrieved documents | Incident retention (see [Evidence Retention](#evidence-retention)) | Immediate |
 | Model version at time of incident | Record exact model version (API model ID, checkpoint hash) | Incident retention | Immediate |
 | Guardrail configuration | Capture active guardrail rules, thresholds, filter versions | Incident retention | Within 1 hour |
 | RAG retrieval results | Documents retrieved, relevance scores, source metadata | Incident retention | Within 1 hour |
@@ -120,6 +120,7 @@ Every multi-agent system must use correlation IDs that persist across agent boun
 |----------|----------|-------|
 | Evidence preservation | Within 1 hour of detection | On-call engineer |
 | Initial investigation summary | Within 24 hours (S1) / 48 hours (S2) | Incident commander |
+| Root cause identified | Within 48 hours (S1 and S2) | Incident commander |
 | Post-mortem meeting | Within 48 hours (S1) / 1 week (S2) | Incident commander |
 | Post-mortem report | Within 1 week (S1) / 2 weeks (S2) | Incident commander |
 | Remediation tracking | Until all actions complete | System owner |
@@ -157,16 +158,16 @@ Every multi-agent system must use correlation IDs that persist across agent boun
 
 ## Evidence Retention
 
-Incident evidence follows the system's tier-based retention per [audit-trail-requirements.md](../compliance/audit-trail-requirements.md):
+Incident reports, post-mortem reports and the evidence preserved for them are governance records. Keep them for the life of the system plus the tier period after retirement, per [audit-trail-requirements.md](../compliance/audit-trail-requirements.md#retention-periods):
 
-| Tier | Retention |
+| Tier | Retention after the system is retired |
 |------|-----------|
 | T1 | 7 years |
 | T2 | 5 years |
 | T3 | 3 years |
-| T4 | 3 years (minimum for incident evidence, regardless of tier) |
+| T4 | 1 year |
 
-Post-mortem reports are retained for the same period as incident evidence.
+The source interaction logs in the audit trail keep their own retention ([prompt-audit-trail.md](../compliance/prompt-audit-trail.md#retention-requirements)). Copies extracted as incident evidence follow the governance-record period above.
 
 ---
 

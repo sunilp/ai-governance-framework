@@ -46,18 +46,9 @@ Open-source models offer control and cost advantages but shift responsibility fo
 | Maintenance risk | Project may become abandoned; no security patches or safety updates | Assess community health (contributors, commit frequency, issue responsiveness); have alternatives identified |
 | Supply chain tampering | Model files modified between source and deployment | Verify checksums; use signed releases where available; store models in controlled artifact registry |
 
-### Open-Source License Risk Matrix
+### Open-Source License Risk
 
-| License | Commercial Use | Derivative Works | Restrictions | Risk Level |
-|---------|:---:|:---:|-------------|:---:|
-| Apache 2.0 | Yes | Yes | Patent grant; attribution | Low |
-| MIT | Yes | Yes | Attribution | Low |
-| Llama Community License | Yes (MAU-gated) | Yes | >700M MAU triggers additional commercial terms; acceptable use policy | Medium |
-| Mistral licenses (vary by model) | Varies | Varies | Some models Apache 2.0; others have commercial restrictions — check per model | Medium-High |
-| CC BY-NC | No | Yes | Non-commercial only | High |
-| Custom community licenses | Varies | Varies | Case-by-case legal review required | Variable |
-
-For T1/T2 systems, only use models with Low or Medium license risk. High-risk licenses require legal sign-off and documented risk acceptance.
+License risk levels are set in the license matrix in [open-source-model-governance.md](../llm-lifecycle/open-source-model-governance.md#license-compatibility-matrix). Legal approves the license; AI Risk is consulted, and the CISO is consulted on security terms. For T1/T2 systems, only use models with Low or Medium license risk.
 
 ---
 
@@ -86,7 +77,7 @@ Models from Hugging Face, GitHub, or other community platforms require additiona
 | CVE and vulnerability scan (model, framework, dependencies) | Weekly (automated) | Security |
 | License change monitoring | Quarterly | Legal |
 | Safety benchmark re-evaluation | Semi-annually | AI Risk |
-| Performance regression testing | Monthly | AI Operations |
+| Performance regression testing (full offline suite re-run) | Monthly (T1), Quarterly (T2), Semi-annual (T3/T4), per [evaluation-governance.md](../llm-lifecycle/evaluation-governance.md#production-evaluation) | AI Operations |
 
 ---
 

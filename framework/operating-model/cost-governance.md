@@ -104,7 +104,7 @@ Cost optimization is legitimate and encouraged — but not at the expense of saf
 |-------------|-----|
 | Reducing evaluation coverage | Degraded eval = undetected quality regression |
 | Removing guardrails or safety filters | Cost savings from removing safety = incident cost waiting to happen |
-| Eliminating human review for T1 systems | Human oversight is a governance control, not a cost center |
+| Removing human review or sampling that policy requires (see [human-in-loop-patterns.md](../responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix)) to save cost | Human oversight is a governance control, not a cost center |
 | Reducing logging or audit trail | Compliance violation; unrecoverable in an audit |
 | Skipping red-team testing | Security testing is non-negotiable for T1/T2 |
 

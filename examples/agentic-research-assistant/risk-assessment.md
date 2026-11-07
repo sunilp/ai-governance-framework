@@ -8,7 +8,8 @@
 | System ID | research-agent-v0.9 |
 | Business Unit | Investment Research |
 | Assessment Date | 2026-01-15 |
-| Assessor | Senior AI Risk Analyst, Model Risk Management |
+| Prepared by | Product Owner, Investment Research |
+| Risk assessment approved by | AI Risk Committee, 2026-01-25 |
 
 ---
 
@@ -22,20 +23,23 @@
 | Output Controllability | **Medium (2)** | Agent executes multi-step plans autonomously within a session. Plan approval gate exists but intermediate steps are automated. |
 | Third-Party Model Dependency | **High (3)** | Anthropic Claude API; Vertex AI fallback. Core workflow depends on LLM capability. |
 
-**Aggregate Score: 13**
 **Highest Dimension: High (3)**
+**Aggregate Score: 13** (context only; does not set the tier)
 
 ### Risk Tier Determination
 
 **Tier: T1 — Critical**
 
-Automatic T1 trigger:
-- [ ] Processes customer PII through external LLM API — *No*
-- [ ] Generates customer-facing content without human review — *No*
-- [ ] Makes or influences regulated decisions — *Indirect: research informs investment decisions*
-- [x] Involves agentic behavior with production system access — *Yes: queries internal databases*
+Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
+- [ ] 1. Regulated decisions: *No. Research informs investment decisions, but there is no credit, insurance, AML/sanctions or employment decision.*
+- [ ] 2. Customer-facing content without per-output review: *No. Internal drafts; an analyst reviews every output.*
+- [ ] 3. Customer personal data through an external LLM API without all four safeguards: *No. No customer personal data.*
+- [ ] 4. Agentic write access or authority: *No. Tools are read-only. The agent cannot write to production systems, move money, communicate with customers, or change identity and access.*
+- [ ] 5. Biometric, deepfake-capable media, voice cloning, medical imagery: *No.*
+- [x] 6. Any agentic system: *Yes. Minimum T2.*
+- [ ] 7 to 9: *No.*
 
-Automatic T1 due to agentic behavior with production data access.
+Scoring (highest dimension High) and override item 6 give T2. The AI Risk Committee classified the pilot as T1 at its 2026-01-25 meeting because the agent sends confidential research data to an external vendor API, plans and runs multi-step tool use within a session, and its drafts feed research distributed under MiFID II. All T1 controls apply.
 
 ---
 
@@ -93,14 +97,16 @@ Automatic T1 due to agentic behavior with production data access.
 | AI Risk Committee approval | Complete | Approved with conditions 2026-01-25 |
 | Architecture review (full tool and data flow audit) | Complete | Architecture review doc AR-2026-RA-001 |
 | Action inventory and blast radius assessment | Complete | 12 permitted tools documented |
-| Adversarial testing (red-team) | Complete | 100 adversarial scenarios tested |
+| Pre-release evaluation | Complete, with exception | 300 cases, 2026-01-20. Hallucination rate 1.3% against the T1 cap of 1%: see [exception EXC-2026-004](#exception-exc-2026-004-hallucination-threshold) |
+| Adversarial testing (red-team) | Complete | 220 adversarial cases including manual testing, 2026-01-19 (T1 minimum 200); no unresolved Critical findings |
 | MNPI isolation verification | Complete | Security team verification dated 2026-01-18 |
 | Plan review gate | Implemented | Analyst must approve plan before execution |
 | Full session logging | Active | 7-year retention; every tool call, parameter, and result |
 | Real-time action monitoring | Active | Anomaly detection on tool call patterns |
 | Circuit breaker | Implemented | Triggers on: >3 consecutive errors, budget exceeded, anomaly detected |
 | Kill switch | Implemented | Operator can halt any session immediately |
-| Monthly review | Active | Next: 2026-04-01 |
+| Metrics review | Active | Daily dashboard check by AI Operations; monthly system-owner review |
+| Formal governance review | Scheduled | Quarterly. Next: 2026-05-01 |
 | Quarterly red-team testing | Scheduled | Next: 2026-04-15 |
 
 ---
@@ -112,4 +118,23 @@ Automatic T1 due to agentic behavior with production data access.
 3. **Weekly session review:** AI Risk team reviews 20% of sessions weekly
 4. **MNPI controls verification:** Security team re-verifies MNPI isolation quarterly
 5. **Analyst training required:** All pilot users must complete agentic AI awareness training
-6. **Hallucination rate gate:** If hallucination rate exceeds 2% in any rolling 2-week window, system is paused pending investigation
+6. **Hallucination rate gate:** If the production hallucination rate exceeds 1% (the [T1 cap](../../framework/llm-lifecycle/evaluation-governance.md#threshold-definitions-by-tier)) in any rolling 2-week window, the system is paused pending investigation. A use-case tolerance applies only when it is stricter than the tier cap, so this gate cannot be set above 1%.
+7. **Hallucination threshold exception:** Deployment proceeds under exception EXC-2026-004 (below). The exception covers the pre-release result only and does not relax the gate in condition 6.
+
+---
+
+## Exception EXC-2026-004: Hallucination Threshold
+
+Recorded in the exception register per [exceptions and risk acceptance](../../framework/governance-operations/governance-workflow.md#exceptions-and-risk-acceptance).
+
+| Field | Value |
+|-------|-------|
+| Exception ID | EXC-2026-004 |
+| System | Investment Research Assistant Agent (research-agent-v0.9) |
+| Control ID | EV-001 (pre-release evaluation; hallucination rate against the T1 cap of 1%) |
+| Reason | Pre-release evaluation on 2026-01-20 measured a hallucination rate of 1.3% (4 of 300 responses). All other metrics passed. The four failures were unsourced figures in multi-source synthesis. |
+| Compensating controls | Pattern 1 (human-in-the-loop): an analyst reviews every output in full before any use, with no move to sampled review, until a re-evaluation passes. Prompt fix to require a source citation for every figure. |
+| Approver | AI Risk Committee (signed by the Chair) |
+| Start date | 2026-01-25 |
+| Expiry date | 2026-03-26 (60 days) |
+| Status | Closed 2026-03-01. The full suite re-run on prompt v0.9.1 (2026-02-28) measured 0.7% (2 of 300), within the T1 cap. |
