@@ -2,6 +2,8 @@
 
 **Practical governance patterns for AI and GenAI systems in regulated industries**
 
+New here? Read [START-HERE.md](START-HERE.md) first: a short reading path for your role, a 30-day minimum setup, a 6-week path for one GenAI system, the fast lane for low-risk systems, and how small teams cover the roles.
+
 ---
 
 ## Philosophy
@@ -126,17 +128,17 @@ See the framework applied to real-world use cases:
 
 ## Adoption Approach
 
-This framework is designed for phased rollout:
+Roll out from the [governance workflow](framework/governance-operations/governance-workflow.md) and the [control register](framework/governance-operations/control-register.md). Every other document adds detail to a stage or a control. [START-HERE.md](START-HERE.md) turns the first phases into a 30-day plan.
 
-1. **Phase 1 (Week 1–2):** Adopt the risk classification matrix. Tier your existing AI and GenAI systems.
-2. **Phase 2 (Month 1):** Apply lifecycle standards to one high-risk system as a pilot.
-3. **Phase 3 (Month 2–3):** Roll out templates (model cards, impact assessments, prompt review checklists) org-wide.
-4. **Phase 4 (Ongoing):** Establish the operating model — governance cadence, escalation paths, RACI.
-5. **Phase 5 (GenAI):** Apply LLM lifecycle standards — model selection, prompt governance, RAG governance, deployment gates.
-6. **Phase 6 (Security):** Establish red-teaming program, adversarial robustness standards, supply chain governance.
-7. **Phase 7 (Global):** Extend compliance mapping to all operating jurisdictions; implement regulatory change monitoring.
+1. **Inventory and tiering:** list every AI and GenAI system, run the Step 0 prohibited-use screen, and tier each one with the risk matrices.
+2. **Pilot the workflow on one high-risk system:** walk it through the stages and close its gaps against the control register.
+3. **Templates org-wide:** make the use case assessment the intake for every new system, and the model card, prompt review checklist and incident report templates the defaults.
+4. **Operating model:** AI Risk Committee, review cadence, escalation paths and approvals by tier.
+5. **GenAI and agentic standards:** evaluation governance, prompt and RAG standards, human oversight patterns, agentic and multi-agent controls.
+6. **Security:** red-teaming, adversarial robustness and supply chain controls.
+7. **Global compliance:** extend the mappings to every jurisdiction you operate in and run regulatory change monitoring.
 
-Start where the risk is highest. Expand as the organization builds muscle memory.
+Start where the risk is highest. T3 and T4 systems can use the [fast lane](framework/governance-operations/governance-workflow.md#fast-lane-t3t4) from day one.
 
 ## Regulatory Alignment
 

@@ -2,7 +2,30 @@
 
 ## Instructions
 
-Complete this assessment before initiating development of any GenAI use case. The product owner prepares it and submits it to the approver for the resulting risk tier (see section 8).
+Complete this assessment before initiating development of any GenAI use case. The product owner prepares it and submits it to the approver for the resulting risk tier (see section 8). Start with section 0: if the use case fails it, stop before spending time on the rest.
+
+---
+
+## 0. Should This Use GenAI at All?
+
+Answer these before scoring anything. Each question maps to a position in [when to say no](../framework/governance-operations/when-to-say-no.md). A "Yes" means stop or redesign, and the approver reviews these answers with the rest of the assessment.
+
+| # | Question | Yes / No | If yes |
+|---|----------|----------|--------|
+| 0.1 | Does the use case fall under EU AI Act Art. 5 or the internal prohibited-use policy? Run the [Step 0 prohibited-use screen](../framework/risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) | | Rejected. Not tiered, cannot be excepted ([position 6](../framework/governance-operations/when-to-say-no.md#6-prohibited-practices-are-rejected-at-step-0)) |
+| 0.2 | Would the model generate a fee, rate, balance, limit, eligibility outcome or regulatory figure, instead of taking it from a system of record? | | Redesign ([position 1](../framework/governance-operations/when-to-say-no.md#1-figures-with-legal-or-contractual-effect-come-from-a-system-of-record)) |
+| 0.3 | Would GenAI make an adverse regulated decision without a qualified human deciding? | | Redesign ([position 2](../framework/governance-operations/when-to-say-no.md#2-genai-never-makes-an-adverse-regulated-decision-on-its-own)) |
+| 0.4 | Would an agent take a write action that cannot be reversed, or cannot be rate-limited and capped, without human confirmation? | | Redesign ([position 3](../framework/governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped)) |
+| 0.5 | Would customer personal data, MNPI or regulated data go to an external model API without evidenced residency, zero retention and a signed DPA? | | Redesign ([position 4](../framework/governance-operations/when-to-say-no.md#4-no-external-model-api-without-evidenced-residency-and-zero-retention)) |
+| 0.6 | Is there no agreed definition of a correct answer, or no way to build evaluation suites of the tier size? | | Not ready ([position 5](../framework/governance-operations/when-to-say-no.md#5-no-launch-when-the-evaluation-cannot-show-the-threshold-is-met)) |
+| 0.7 | Would search, a rules engine or a conventional model meet the need? | | Use the simpler method ([position 7](../framework/governance-operations/when-to-say-no.md#7-no-genai-where-a-simpler-method-meets-the-need)) |
+| 0.8 | Would a business-critical process depend on one vendor model with no validated fallback? | | Redesign ([position 8](../framework/governance-operations/when-to-say-no.md#8-no-business-critical-process-on-a-model-you-cannot-replace)) |
+
+| Field | Response |
+|-------|----------|
+| Step 0 prohibited-use screen result (recorded under RA-001) | Pass / Rejected |
+| Positions triggered and redesign made | |
+| If proceeding despite a "Yes" (not possible for 0.1): reasoning, and the approver's recorded decision | |
 
 ---
 

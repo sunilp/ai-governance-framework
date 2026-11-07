@@ -406,6 +406,79 @@ Response SLAs depend on severity, not tier. Any incident on a T1 system that rea
 **Framework references:**
 - [Model deprecation governance](../llm-lifecycle/model-deprecation-governance.md)
 
+## Fast Lane (T3/T4)
+
+T3 and T4 systems follow the same ten stages with less evidence and no committee. This section gathers the T3 and T4 columns of the tier tables above and the [minimum evidence pack](#minimum-evidence-pack-by-tier) in one place. It adds no requirement and removes none. If it ever differs from those tables, the tables govern.
+
+**Entry.** The Stage 2 assessment gives T3 or T4 after scoring and the full override check. Any override item puts a system at T2 or above, so a system that matches one is never in the fast lane. The [Step 0 prohibited-use screen](../risk-classification/genai-risk-matrix.md#step-0-prohibited-use-screen) and the [when to say no](when-to-say-no.md) questions apply as at every tier.
+
+**Required evidence.** Row numbers refer to the minimum evidence pack.
+
+| Pack row | Evidence | Controls | T3 | T4 |
+|---|---|---|---|---|
+| 1 | Signed risk assessment with Step 0 result, tier determination, override check and approval | RA-001, RA-002, RA-004 | Approved by the team lead | Self-assessment acknowledged by the team lead |
+| 3 | DPIA (if personal data is processed) | RA-005 | Screening; full DPIA if screening indicates high risk | Screening; full DPIA if screening indicates high risk |
+| 4 | Architecture document and data residency confirmation (external data flows) | AR-001, AR-003 | Documented by the technical owner | Documented by the technical owner |
+| 6 | Model selection (external models) | AR-004 | Team lead, from the approved vendor list | Team lead, from the approved vendor list |
+| 6 | Vendor risk assessment (external vendor APIs) | AR-005 | Simplified assessment: technical evaluation, security checklist and DPA ([assessment depth](../compliance/third-party-model-risk.md#assessment-depth-by-tier)) | No separate assessment; approved vendors only |
+| 7 | Model card and prompt version history | DE-001, DE-002 | Required | Required |
+| 8 | Prompt review (GenAI) | DE-003 | Peer review record | Self-review with documentation |
+| 10 | Evaluation report | EV-001, EV-002, EV-004, EV-006 | Pre-release, safety, RAG retrieval (if RAG) and dataset integrity | Pre-release and safety (automated, 20+ cases each) and dataset integrity |
+| 11 | Validation | Stage 5 | Peer review | Self-test |
+| 12 | Red-team report (GenAI) | SR-001, SR-002 | Automated scan + 50 manual cases | Not required (automated scan recommended) |
+| 13 | Supply chain verification (open-source models) | SR-004 | Required | Not required (recommended at Stage 6) |
+| 14 | Monitoring and production evaluation configuration | PM-001, PM-002, PM-004, PM-005 | PM-001, PM-002, PM-004, PM-005 | PM-001, PM-004 |
+| 17 | Evidence checklist, deployment gate evidence and signed deployment approval | DA-001, DA-002, DA-003 | Team lead + business owner | Team lead |
+
+Suite sizes and thresholds are in [evaluation governance](../llm-lifecycle/evaluation-governance.md#evaluation-types). Not in the fast-lane pack at either tier: impact assessment (row 2, recommended at T3), architecture review record (row 5), guardrail configuration and test results (row 9; the [GenAI risk matrix](../risk-classification/genai-risk-matrix.md#governance-requirements-by-tier-genai-specific) still expects basic input validation at T3), incident response playbook and on-call (row 15), rollback plan (row 16) and human oversight (PM-003).
+
+**Sign-off.** No fast-lane decision goes to the AI Risk Committee or the architecture review board, and the second line does not approve the risk assessment, the design or the deployment.
+
+| Decision | T3 | T4 |
+|---|---|---|
+| Risk assessment | Team lead | Team lead acknowledges the self-assessment |
+| Model selection | Team lead (approved vendor list) | Team lead (approved vendor list) |
+| Evaluation release | Team lead sign-off | Self-attested |
+| Red-team result (where run) | Security lead; Critical blocks, High needs a recorded risk acceptance | Security lead; Critical blocks, High needs a recorded risk acceptance |
+| Deployment | Team lead; business owner co-signs | Team lead |
+| Exception | Head of AI | Team lead |
+
+Two second-line touchpoints remain: AI Risk owns the T3 vendor risk assessment (AR-005) when the system calls an external vendor API, and the DPO owns DPIA screening (RA-005) when personal data is processed. Request both at intake.
+
+**Still non-waivable.** Audit logging (interaction logs retained 3 years at T3 and 1 year at T4, per [prompt audit trail](../compliance/prompt-audit-trail.md#retention-requirements)), the prohibited-use check, zero unresolved Critical red-team findings, and a DPIA where the law requires one.
+
+**After go-live.** From the Stage 8 and Stage 9 tables: online automated scoring of a 5% sample (T3) or a weekly batch sample (T4); metrics review monthly (T3) or quarterly (T4); full offline suite re-run semi-annually; vendor behaviour canary monthly for external models; RAG retrieval evaluation quarterly (T3); formal review annually (T3) or annual self-assessment (T4); revalidation by peer re-review on material change. Incident reporting per severity SLA and post-mortems for S1/S2 incidents apply at every tier.
+
+**Leaving the fast lane.** Run the re-tiering check at every formal review and on any material change to scope, data, autonomy level or regulatory environment ([risk matrix decision process](../risk-classification/risk-matrix.md#decision-process)). RV-003 treats a model change, provider update, prompt change or regulatory change as material. The system leaves the fast lane when the check gives T2 or above. Common triggers:
+- It starts serving customers or other external parties. Customer-facing content without per-output human review is automatic T1 (override item 2).
+- Customer personal data reaches an external LLM API (override items 3 and 8).
+- It gains tool use of any kind, read-only included (item 6), or write access or authority to act (item 4).
+- Its output starts to make or directly influence a regulated decision (item 1).
+- It adds biometric, synthetic media or visual personal data processing (items 5, 7 and 9).
+- Any risk dimension scores High or Critical, for example confidential business data entering prompts (Data Exposure Risk: High).
+
+A proposed change that raises the tier goes back through Stage 2 for approval at the new tier, and the changed version needs the new tier's minimum evidence pack and deployment approval before it goes live. If the change has already happened, for example scope drift found at a review, the missing controls for the new tier are handled under [Exceptions and Risk Acceptance](#exceptions-and-risk-acceptance) until the evidence exists.
+
+## Small Teams
+
+These rules decide which roles one person may combine. They restate [roles and responsibilities](../operating-model/roles-responsibilities.md), [validation independence](../model-lifecycle/validation.md#validation-independence) and the [red-teaming protocol](../ai-security/red-teaming-protocol.md#team-and-qualifications). [START-HERE](../../START-HERE.md#small-teams) shows how a team of 3 to 5 people applies them.
+
+**May be combined at any tier.** The first-line delivery roles: Product owner, System owner, AI lead, Technical owner and AI Operations. Each is still named in the AI system inventory, with exactly one Business owner, one Product owner and one AI lead per system.
+
+**Must be different people wherever the activity applies.**
+- Red-teaming is never done by the build team: you cannot red-team your own system.
+- T3 peer review, for validation and for prompt review, is done by someone other than the developer.
+- Where two roles sign (T3 deployment: team lead and business owner), two different people sign.
+
+**Must sit outside the team at T1 and T2.**
+- Independent validation: Model Risk Management, full scope (T1); MRM or another second-line reviewer who did not contribute to development, reduced scope (T2). The team that builds a T1 or T2 model never validates it.
+- Risk assessment approval: AI Risk Committee (T1); AI Risk, second line (T2).
+- Architecture, model selection and deployment approval, per [Approvals by Tier](../operating-model/roles-responsibilities.md#approvals-by-tier).
+- Prompt review beyond the peer: the prompt engineering lead (T2), plus security review and AI Risk sign-off (T1).
+- Vendor risk assessment (AR-005, AI Risk) and DPIA (RA-005, DPO).
+
+A small team cannot supply any of these from inside. Book them at intake, not at Stage 5. A T1 or T2 system also needs a staffed on-call rotation (IR-002) and staffed human oversight (PM-003), which usually means sharing with an AI Operations or business operations team.
+
 ## Exceptions and Risk Acceptance
 
 This is the only process for proceeding without meeting a control. An exception is time-limited, recorded, and approved by the authority for the system's tier.
