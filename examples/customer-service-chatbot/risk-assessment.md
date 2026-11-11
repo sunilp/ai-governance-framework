@@ -22,7 +22,7 @@
 | Data Exposure Risk | **Critical (4)** | Customer PII (names, account details, transaction history) flows through the LLM pipeline. PII redaction is applied pre-API but residual risk exists. |
 | Prompt Injection Susceptibility | **High (3)** | Customer-facing with unrestricted text input. Input validation and injection detection are in place but cannot guarantee 100% coverage. |
 | Output Controllability | **High (3)** | Outputs are delivered to customers after automated guardrail checks but without individual human review. Guardrails catch known patterns but not novel failure modes. |
-| Third-Party Model Dependency | **High (3)** | Primary model is Anthropic Claude, served through Vertex AI in the EU region. Fallback to Gemini 2.5 Pro on Vertex AI is validated. Single-vendor dependency for primary path. |
+| Third-Party Model Dependency | **High (3)** | Customer-facing. Primary model is Anthropic Claude, served through Vertex AI in the EU region. Fallback to Gemini 2.5 Pro on Vertex AI is validated on the pre-release and safety suites, but it is not a tested fallback: both models are served through Vertex AI, so one Vertex AI outage stops both, and no switch to the fallback is recorded. It counts as degraded, and so does the other fallback: the kill switch, which routes all chats to human agents. |
 
 **Aggregate Score: 16** (recorded for context; it does not set the tier)
 **Highest Dimension: Critical (4)**, so the scored tier is T1

@@ -8,6 +8,25 @@ Control IDs are stable. A retired control keeps its ID, is marked retired in `co
 
 Regulatory documents carry a "Status as of" line. CI warns when one is older than 90 days and fails after 180 days.
 
+## 2.1.0 (11 November 2026)
+
+This release fixes how the GenAI risk matrix scores dependency on a vendor-hosted model.
+
+### Changed
+- **Third-party model dependency (GenAI Dimension 5)** now grades a vendor API by how much the process relies on the vendor, not only by where the model runs, so a vendor-API system can score Medium. In 2.0.0 only a self-hosted model could score Medium, which put every vendor-API GenAI system at T2 or above and kept it out of the T3/T4 fast lane. A vendor API now scores Medium in either of two cases:
+  - the process is internal and not business-critical, and the business owner records in the risk assessment that an outage is tolerable and names the degraded fallback;
+  - it has a tested fallback: one served by a different vendor or self-hosted, run through the system's evaluation suite at the tier's thresholds, and with the switch exercised.
+
+  A vendor API that meets neither scores High. Critical needs a customer-facing or business-critical process with no fallback of any kind. The level text now defines customer-facing, business-critical, degraded fallback, tested fallback and outage tolerance. It also closes a gap in the 2.0.0 text, which did not say how to score a customer-facing process with no fallback: it is Critical, as the 2.0.0 example (core customer service on one vendor's API) already implied.
+- **Worked examples:** the recorded Dimension 5 scores now match the level text. Document summarization is corrected from Medium to High, and its aggregate from 10 to 11, because its fallback has no recorded switch exercise and so is not a tested fallback. Its tier stays T2. The chatbot, the agentic assistant and internal knowledge search keep their scores, and their rationales now name the clause each meets.
+- **Restatements aligned** with the new levels: position 8 in [when to say no](framework/governance-operations/when-to-say-no.md#8-no-business-critical-process-on-a-model-you-cannot-replace) and the fallback architecture in [third-party model risk](framework/compliance/third-party-model-risk.md#fallback-architecture).
+
+### Why this is a minor version
+Under the policy above, a major version changes tier rules in ways that change what an adopter must evidence. This change relaxes the rule: a vendor-API system can now score Medium if it records outage tolerance or a tested fallback. No evidence an adopter produced under 2.0.0 becomes insufficient. The T1 and T2 requirements for a validated fallback model and a documented exit strategy are unchanged. One worked example's Dimension 5 score is corrected to High, with no tier change.
+
+### Retired
+- No control IDs retired. None added or changed.
+
 ## 2.0.0 (November 2026)
 
 This release turns the framework from a set of consistent-looking documents into one system with a single source for every rule, checks that enforce it, and regulatory content updated to November 2026.

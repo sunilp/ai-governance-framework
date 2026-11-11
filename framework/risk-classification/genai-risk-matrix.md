@@ -58,14 +58,22 @@ The degree to which the organization can constrain, validate, and correct genera
 
 ### Dimension 5: Third-Party Model Dependency
 
-The degree of reliance on foundation models controlled by external vendors.
+How much the process relies on a foundation model that an external vendor controls. Grade a vendor API by what happens to the process when the vendor's service stops, not only by where the model runs. A vendor API is any model the organisation cannot run without the vendor's service: a public API, a managed endpoint, or a private or VPC endpoint the vendor operates.
 
 | Level | Description | Examples |
 |-------|-------------|----------|
-| Critical | Single-vendor API dependency for business-critical process | Core customer service on GPT-4 API only |
-| High | Vendor API with limited fallback options | Primary model is vendor-hosted; fallback is degraded |
-| Medium | Self-hosted model with vendor training data | Fine-tuned open model (Llama, Mistral) on own infrastructure |
-| Low | Fully self-hosted, self-trained | Custom model trained on internal data |
+| Critical | A vendor API with no fallback of any kind, behind a customer-facing or business-critical process. When the vendor's service stops, the process stops. | Core customer service on one vendor's API only |
+| High | A vendor API that is not Critical and meets no Medium condition. This covers a customer-facing or business-critical process whose only fallback is degraded, a fallback model that is not a tested fallback, and an internal process with no outage tolerance recorded by the business owner. | A customer chatbot whose fallback is a scripted menu or a human queue |
+| Medium | Any one of: (a) a vendor API behind an internal process that is not business-critical, where the business owner records in the risk assessment that an outage is tolerable and that the degraded fallback is acceptable for this use; (b) a vendor API with a tested fallback; (c) a self-hosted model with vendor training data | (a) Internal search, with manual search as its fallback. (b) A model on one vendor's API, with a tested fallback served by a different vendor. (c) A fine-tuned open model (Llama, Mistral) on your own infrastructure |
+| Low | A fully self-hosted, self-trained model | Custom model trained on internal data |
+
+The terms an assessor checks:
+
+- **Customer-facing:** customers see or receive the output (`customer_facing` in the model card). An internal process serves employees only.
+- **Business-critical:** the organisation's business continuity classification marks the process critical or important, or the business owner records that it cannot stop during a vendor outage.
+- **Degraded fallback:** a way to keep the process going without an equivalent model, at lower quality or capacity, such as a scripted menu, a human queue or a manual process. A fallback model that is not a tested fallback counts as degraded.
+- **Tested fallback:** a fallback model that passes three tests. First, it runs on a different vendor's service from the primary, or is self-hosted, so that one vendor's outage cannot stop both models. The vendor that counts is the one serving the model, not the one that trained it: a Claude fallback served on Vertex AI behind a Gemini primary on Vertex AI does not qualify, because one Vertex AI outage stops both. Second, it has been run through the system's evaluation suite and met the tier's thresholds. Third, the switch from the primary to the fallback has been exercised. The risk assessment records the date of the evaluation and of the switch.
+- **Outage tolerance (clause a):** the business owner records it in the risk assessment and names the degraded fallback the use will run on. A customer-facing or business-critical process cannot use clause (a).
 
 ---
 

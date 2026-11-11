@@ -180,6 +180,8 @@ Fallback path (activated on Provider A failure or exit):
 
 Fallback must be tested quarterly for T1 use cases.
 
+A fallback lowers [third-party model dependency](../risk-classification/genai-risk-matrix.md#dimension-5-third-party-model-dependency) to Medium only when it is a tested fallback: served by a different vendor from the primary or self-hosted, so that one vendor's outage cannot stop both, run through the system's evaluation suite at the tier's thresholds, and with the switch exercised. Two models served through the same vendor's platform do not qualify, even when different providers trained them.
+
 ---
 
 ## Concentration Risk

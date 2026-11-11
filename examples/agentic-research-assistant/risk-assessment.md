@@ -21,7 +21,7 @@
 | Data Exposure Risk | **High (3)** | Processes confidential research data and market analysis. No customer PII, but sensitive business data. Vendor API with zero retention. |
 | Prompt Injection Susceptibility | **Medium (2)** | Internal users only. However, agent processes retrieved documents which could contain adversarial content. |
 | Output Controllability | **Medium (2)** | Agent executes multi-step plans autonomously within a session. Plan approval gate exists but intermediate steps are automated. |
-| Third-Party Model Dependency | **High (3)** | Anthropic Claude API; Vertex AI fallback. Core workflow depends on LLM capability. |
+| Third-Party Model Dependency | **High (3)** | Anthropic Claude API; Vertex AI fallback (Gemini 2.5 Pro, recorded as validated in the [model card](model-card.yaml)). No switch to the fallback is recorded, so it is not a tested fallback and counts as degraded. Core workflow depends on LLM capability, and no outage tolerance is recorded. |
 
 **Highest Dimension: High (3)**
 **Aggregate Score: 13** (context only; does not set the tier)
