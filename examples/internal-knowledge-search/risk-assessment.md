@@ -21,7 +21,7 @@
 | Data Exposure Risk | **Medium (2)** | Internal documents only: no customer PII, no MNPI, no regulated data in knowledge base. Employee queries may contain internal context. |
 | Prompt Injection Susceptibility | **Low (1)** | Internal users only with controlled access. No connection to external systems. Basic input validation in place. |
 | Output Controllability | **Low (1)** | Output is informational only. Users make their own decisions. No downstream system consumes outputs. |
-| Third-Party Model Dependency | **Medium (2)** | Anthropic Claude API. Service degradation is acceptable: employees can search documents manually. No business-critical dependency. |
+| Third-Party Model Dependency | **Medium (2)** | Anthropic Claude API, internal process. No business-critical dependency. Outage tolerance, restated from the business owner's approval of the [model card](model-card.yaml): service degradation is acceptable, and employees search documents manually during an outage. |
 
 **Highest Dimension: Medium (2)**
 **Aggregate Score: 8** (context only; does not set the tier)

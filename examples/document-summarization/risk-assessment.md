@@ -21,10 +21,10 @@
 | Data Exposure Risk | **High (3)** | Documents are confidential business data (regulatory correspondence, pre-publication policy) but do not contain customer personal data. Primary processing on Vertex AI in the GCP EU region (VPC-hosted). During a primary outage only, documents go to the fallback model (Claude Sonnet 4.5), also served through Vertex AI in the EU region under the same Google Cloud agreement, with zero data retention. |
 | Prompt Injection Susceptibility | **Low (1)** | Internal users only; input is uploaded documents, not free-text queries. Limited attack surface. |
 | Output Controllability | **Low (1)** | All outputs reviewed by qualified compliance analyst before use (Pattern 1: full human-in-the-loop). |
-| Third-Party Model Dependency | **Medium (2)** | Primary model hosted on Vertex AI (GCP). Validated fallback to Claude Sonnet 4.5 on Vertex AI (EU region), used only on primary outage. |
+| Third-Party Model Dependency | **High (3)** | Primary model hosted on Vertex AI (GCP). Validated fallback to Claude Sonnet 4.5 on Vertex AI (EU region), used only on primary outage. No switch to the fallback is recorded, so it is not a tested fallback and counts as degraded. No outage tolerance is recorded. |
 
-**Highest Dimension: High (3)** (Hallucination Severity, Data Exposure Risk)
-**Aggregate Score: 10** (context only; does not set the tier)
+**Highest Dimension: High (3)** (Hallucination Severity, Data Exposure Risk, Third-Party Model Dependency)
+**Aggregate Score: 11** (context only; does not set the tier)
 
 ### Risk Tier Determination
 
@@ -38,7 +38,7 @@ Override check against the [canonical override list](../../framework/risk-classi
 - [ ] 5. Biometric, deepfake-capable media, voice cloning, medical imagery: *No.*
 - [ ] 6 to 9 (minimum T2 items): *No.*
 
-No override applies. The highest-scoring dimension is High (Hallucination Severity and Data Exposure Risk), so the tier is T2.
+No override applies. The highest-scoring dimension is High (Hallucination Severity, Data Exposure Risk and Third-Party Model Dependency), so the tier is T2.
 
 ---
 
