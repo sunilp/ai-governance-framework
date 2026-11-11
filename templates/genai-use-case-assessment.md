@@ -23,7 +23,7 @@ Answer these before scoring anything. Each question maps to a position in [when 
 
 | Field | Response |
 |-------|----------|
-| Step 0 prohibited-use screen result (recorded under RA-001) | Pass / Rejected |
+| Step 0 prohibited-use screen result (recorded under RA-007, inside the RA-001 risk assessment) | Pass / Rejected |
 | Positions triggered and redesign made | |
 | If proceeding despite a "Yes" (not possible for 0.1): reasoning, and the approver's recorded decision | |
 
@@ -223,7 +223,11 @@ If any of items 1 to 5 is checked, the use case is **T1**. If any of items 6 to 
 | Does the vendor use your data for training? | Yes / No / Contractually excluded |
 | Vendor security certifications | |
 | Fallback model identified? | Yes / No (required for T1/T2) |
-| Exit strategy documented? | Yes / No (required for T1/T2) |
+| Exit strategy documented? | Yes / No (required for T1/T2, and at any tier for a critical or important function under DORA) |
+| Process is customer-facing or business-critical? | Yes / No |
+| Third-party model dependency scored Medium on a vendor API: which case applies? | (a) outage is tolerable / (b) tested fallback / Not applicable |
+| Case (a): business owner's statement that an outage is tolerable, and the degraded fallback the use will run on | [statement, name, date] |
+| Case (b): vendor serving the fallback, date it passed the evaluation suite at the tier's thresholds, date the switch was exercised | |
 
 ---
 

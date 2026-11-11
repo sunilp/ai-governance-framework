@@ -28,7 +28,7 @@ Every agent has its own non-human identity. The agent proves who it is to every 
 | No borrowed human credentials | An agent never uses a person's password, session cookie, personal access token or API key. When it acts for a user, it uses delegated authority (section 2), not the user's credentials |
 | Accountable human owner | Each agent identity names one accountable person, normally the system owner. An identity with no active owner is disabled until a new owner accepts it |
 | Credentials out of the model's reach | Secrets and tokens are held by the agent runtime or tool gateway, never placed in the prompt, memory, tool outputs or logs the model can read |
-| Issue | The identity is created at deployment, recorded in the agent identity record below, and linked to the system's [AI inventory](../governance-operations/ai-inventory.md) entry (RA-006) |
+| Issue | The agent identity record below is written and approved at Stage 3, before development (AR-006). The identity and its credentials are issued at deployment against that record. The record names the system's [AI inventory](../governance-operations/ai-inventory.md) ID (RA-006), which links the two |
 | Rotate | Prefer short-lived credentials issued at runtime. Where a static secret cannot be avoided, keep it in a secrets manager and rotate it at least every 90 days (framework default) and on any suspected exposure |
 | Revoke | Revoke on retirement (DR-004), on loss of an owner, on suspected compromise and as part of every kill switch activation (section 8) |
 

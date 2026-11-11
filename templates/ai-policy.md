@@ -2,7 +2,7 @@
 
 ## Instructions
 
-This is the skeleton of the board-approved AI policy required by control GV-001. The policy is short: it states what the organisation commits to and who decides what, and points to the framework standards for how. Aim for 6 to 10 pages. Replace every bracketed item, delete guidance in italics, and keep the section numbers so the policy can be cited.
+This is the skeleton of the board-approved AI policy required by control GV-001. The policy is short: it states what the organisation commits to and who decides what, and points to the framework standards for how. Aim for 6 to 10 pages. The first page is the Policy on a Page: publish that page to all staff, and keep the sections behind it for the approver and the auditor. Replace every bracketed item, delete guidance in italics, and keep the section numbers so the policy can be cited.
 
 The policy is drafted by AI Risk, endorsed by the AI Risk Committee, and approved by the board or the Board Risk Committee. It is reviewed at least annually and on a material change in regulation, strategy or risk appetite.
 
@@ -22,6 +22,23 @@ The policy is drafted by AI Risk, endorsed by the AI Risk Committee, and approve
 | Effective date | [date] |
 | Next review | [no later than 12 months after approval] |
 | Related standards | [Governance workflow](../framework/governance-operations/governance-workflow.md), [control register](../framework/governance-operations/control-register.md), [acceptable use](../framework/operating-model/acceptable-use.md), [AI literacy](../framework/operating-model/ai-literacy.md), [AI inventory](../framework/governance-operations/ai-inventory.md) |
+
+---
+
+## Policy on a Page
+
+*Publish this page to everyone. Each line names an owner and how a breach would show. Keep it to one page.*
+
+| What we commit to | Owner | How a breach shows |
+|---|---|---|
+| Every AI system is in the AI inventory before development starts, with one named business owner (section 7) | [Head of AI Risk] | An inventory check finds a system with no entry or no owner |
+| Every system has a risk tier, and the tier sets who approves it and what it must pass (sections 7 and 8) | [Head of AI Risk] | A system is live without an approved risk assessment |
+| Prohibited uses are rejected before tiering, with no exceptions (section 5, Annex B) | [Chief Risk Officer] | A Step 0 screen is missing or failed |
+| Staff use only approved AI tools, with the data each tool is approved for (section 10) | [CISO] | Data loss prevention alerts and shadow AI reports |
+| A control is missed only through an approved, time-limited exception (section 12) | [Approver for the system's tier] | A gap with no entry in the exception register |
+| AI incidents and concerns are reported, and nobody is penalised for raising one (section 13) | [Head of AI Operations] | An incident found by audit that was never reported |
+
+**Owner of this policy:** [name and role]. **Next review:** [date], or sooner on a material change in regulation, strategy or risk appetite.
 
 ---
 

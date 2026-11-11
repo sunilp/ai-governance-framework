@@ -27,7 +27,7 @@ These controls apply to the AI programme as a whole, not to one system: the AI p
 
 ## Stage 1: Idea Intake
 
-No register controls. Intake produces pre-register artifacts only (intake form and initial risk screening); see workflow Stage 1.
+No register controls. Intake produces the intake form, the initial risk screening and a `proposed` AI inventory entry. The entry is evidenced under RA-006 at Stage 2; see workflow Stage 1.
 
 ## Stage 2: Risk Assessment & Tiering
 
@@ -138,6 +138,7 @@ No register controls. Intake produces pre-register artifacts only (intake form a
 | PM-005 | Cost monitoring active | T1-T3 (T4: covered by platform-level budget alerts) | AI Operations | Cost dashboard + alert configuration | Before traffic enabled | Block go-live |
 | PM-006 | Kill switch tested | T1 customer-facing systems and all agentic systems (T1-T2) | AI Operations | Kill switch runbook; quarterly test record showing the decision time, the time stop or degrade was confirmed (within 15 minutes) and, for agentic systems, that revoked credentials were refused | Before traffic enabled; at least quarterly; after any change to the runtime or agent identity set-up | Block go-live; a live system is restricted or switched off until a test passes. Cannot be excepted (non-waivable) |
 | PM-007 | Audit logging complete and retained | T1-T4 (agent action records for agentic systems) | AI Operations | Audit log configuration covering the per-request record and, for agentic systems, the agent action audit record; retention set to the tier period; completeness and integrity check results | Before traffic enabled; completeness checked in real time, integrity daily | Block go-live; a gap in a live system is raised as an incident and fixed. Cannot be excepted (non-waivable) |
+| PM-008 | Fallback model switch tested | T1 systems using external models | AI Operations | Fallback test record for each quarter: date, time taken to switch, and the evaluation result on the fallback model | At least quarterly from go-live | Escalate to AI Risk; the system counts as having no tested fallback until a test passes, and its third-party model dependency score is reviewed |
 
 <!-- END GENERATED: controls-stage-08 -->
 
@@ -189,7 +190,7 @@ Severity, response SLAs and notifications: [escalation paths](../operating-model
 
 ## Summary
 
-This register contains 48 controls, grouped under the 10 stages of the governance workflow (Stage 1, Idea Intake, has no register controls). For the full governance workflow describing how systems progress through these stages, see [governance-workflow.md](governance-workflow.md). For a worked example, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md#control-coverage): it shows the evidence for every control that applies to that T1 GenAI RAG system and lists the controls that do not apply, with reasons.
+This register contains 71 controls: 6 programme-level controls and 65 grouped under stages 2 to 10 of the governance workflow (Stage 1, Idea Intake, has no register controls). For the full governance workflow describing how systems progress through these stages, see [governance-workflow.md](governance-workflow.md). For a worked example, see the [customer service chatbot governance case file](../../examples/customer-service-chatbot/governance-case-file.md#control-coverage): it shows the evidence for every control that applies to that T1 GenAI RAG system and lists the controls that do not apply, with reasons.
 
 ## Traceability
 
@@ -254,6 +255,7 @@ For each control: the framework documents that define the requirement (the `sour
 | PM-005 | [governance-workflow.md](governance-workflow.md), [cost-governance.md](../operating-model/cost-governance.md) |  | Yes | Yes |  |
 | PM-006 | [agent-identity-and-tool-governance.md](../llm-lifecycle/agent-identity-and-tool-governance.md), [human-in-loop-patterns.md](../responsible-ai/human-in-loop-patterns.md), [governance-workflow.md](governance-workflow.md) |  |  |  |  |
 | PM-007 | [prompt-audit-trail.md](../compliance/prompt-audit-trail.md), [audit-trail-requirements.md](../compliance/audit-trail-requirements.md), [agent-identity-and-tool-governance.md](../llm-lifecycle/agent-identity-and-tool-governance.md), [governance-workflow.md](governance-workflow.md) | Yes |  |  |  |
+| PM-008 | [third-party-model-risk.md](../compliance/third-party-model-risk.md), [genai-risk-matrix.md](../risk-classification/genai-risk-matrix.md) |  |  |  |  |
 | IR-001 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) |  | Yes |  |  |
 | IR-002 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) |  |  |  |  |
 | IR-003 | [governance-workflow.md](governance-workflow.md), [escalation-paths.md](../operating-model/escalation-paths.md) | Yes |  | Yes |  |
@@ -270,6 +272,6 @@ For each control: the framework documents that define the requirement (the `sour
 | DR-003 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md), [audit-trail-requirements.md](../compliance/audit-trail-requirements.md) | Yes |  | Yes |  |
 | DR-004 | [governance-workflow.md](governance-workflow.md), [model-deprecation-governance.md](../llm-lifecycle/model-deprecation-governance.md) |  | Yes | Yes |  |
 
-Controls cited by no regulatory mapping: DE-002, PM-006, IR-002.
+Controls cited by no regulatory mapping: DE-002, PM-006, PM-008, IR-002.
 
 <!-- END GENERATED: traceability -->

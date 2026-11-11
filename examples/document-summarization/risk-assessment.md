@@ -33,7 +33,7 @@
 Override check against the [canonical override list](../../framework/risk-classification/genai-risk-matrix.md#tier-override-rules):
 - [ ] 1. Regulated decisions: *No. Summaries inform compliance analysts; no credit, insurance, AML/sanctions or employment decision.*
 - [ ] 2. Customer-facing content without per-output review: *No. Internal only; every summary is reviewed.*
-- [ ] 3. Customer personal data through an external LLM API without all four safeguards: *No. Documents do not contain customer personal data, and the external fallback runs under a DPA with zero retention in the EU region.*
+- [ ] 3. Customer personal data through an external LLM API without all four safeguards: *No. Documents do not contain customer personal data, and the fallback is also served on Vertex AI in the EU region, under the same Google Cloud agreement, with zero data retention.*
 - [ ] 4. Agentic write access or authority: *No.*
 - [ ] 5. Biometric, deepfake-capable media, voice cloning, medical imagery: *No.*
 - [ ] 6 to 9 (minimum T2 items): *No.*
@@ -63,13 +63,13 @@ No override applies. The highest-scoring dimension is High (Hallucination Severi
 
 **Scenario:** Confidential regulatory correspondence or pre-publication policy documents are exposed through the processing pipeline.
 
-**Likelihood:** Low (primary model VPC-hosted on Vertex AI; external API calls happen only when the fallback is active during a primary outage)
+**Likelihood:** Low (primary and fallback models are both served on Vertex AI in the EU region; no document goes to a vendor outside the Google Cloud agreement)
 **Impact:** Medium (confidential document exposure)
 **Residual risk after mitigation:** Very Low
 
 **Mitigations:**
-1. Primary model VPC-hosted; documents leave organizational infrastructure only when the fallback is active
-2. Fallback (Anthropic API): signed DPA, zero data retention, EU-region endpoint, contractual exclusion from training; every fallback activation is logged
+1. Primary model VPC-hosted on Vertex AI; the fallback is also served on Vertex AI in the EU region, so documents go to no other vendor
+2. Fallback (Claude Sonnet 4.5 on Vertex AI): same Google Cloud agreement, zero data retention, EU region, contractual exclusion from training; every fallback activation is logged
 3. Google contractual commitment: no data used for training
 4. Document access controls enforced at application layer
 5. Audit logging of all document processing

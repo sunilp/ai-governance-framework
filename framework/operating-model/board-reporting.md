@@ -53,7 +53,7 @@ For material incidents between quarterly reports:
 
 ## AI Risk Appetite Statement
 
-The board should define and annually approve an AI risk appetite statement.
+The board, or its Board Risk Committee, approves an AI risk appetite statement every year.
 
 ### What It Should Cover
 
@@ -69,7 +69,7 @@ The board should define and annually approve an AI risk appetite statement.
 ### Annual Review Process
 
 1. AI Risk function drafts updated risk appetite statement
-2. CTO and CRO review and endorse
+2. AI Risk Committee endorses it and recommends it to the board
 3. Board Risk Committee reviews and approves
 4. Communicated to all AI practitioners
 5. Governance controls calibrated to approved risk appetite
