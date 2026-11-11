@@ -196,7 +196,7 @@ Contributions are welcome. If you work in regulated industries and have governan
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md). Version 2.0.0 (November 2026) added machine-readable controls with CI checks, statistical pass rules, 22 new controls, agent identity and tool governance, and regulatory content updated to November 2026.
+See [CHANGELOG.md](CHANGELOG.md). Version 2.1.0 (November 2026) changes how the GenAI risk matrix scores third-party model dependency: a vendor API is graded by how much the process relies on the vendor, so a vendor-API system can score Medium, and the worked examples' recorded scores now match the level text. Version 2.0.0 (November 2026) added machine-readable controls with CI checks, statistical pass rules, 22 new controls, agent identity and tool governance, and regulatory content updated to November 2026.
 
 ## License
 
