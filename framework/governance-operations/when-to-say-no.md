@@ -21,7 +21,7 @@ Each position below gives the rule, why it holds, what to do instead, and which 
 | 3 | [No autonomous write that cannot be undone or capped](#3-no-autonomous-write-that-cannot-be-undone-or-capped) | Override item 4, agentic pre-deployment requirements, DA-004, kill switch |
 | 4 | [No external model API without evidenced residency and zero retention](#4-no-external-model-api-without-evidenced-residency-and-zero-retention) | AR-003, AR-005, RA-005, override items 3 and 8 |
 | 5 | [No launch when the evaluation cannot show the threshold is met](#5-no-launch-when-the-evaluation-cannot-show-the-threshold-is-met) | EV-001 to EV-009, statistical pass rule, release criteria, independent validation |
-| 6 | [Prohibited practices are rejected at Step 0](#6-prohibited-practices-are-rejected-at-step-0) | RA-001, non-waivable list |
+| 6 | [Prohibited practices are rejected at Step 0](#6-prohibited-practices-are-rejected-at-step-0) | RA-007, non-waivable list |
 | 7 | [No GenAI where a simpler method meets the need](#7-no-genai-where-a-simpler-method-meets-the-need) | Business justification, AR-004, validation |
 | 8 | [No business-critical process on a model you cannot replace](#8-no-business-critical-process-on-a-model-you-cannot-replace) | AR-004, AR-005, exit strategy requirements |
 
@@ -109,7 +109,7 @@ Each position below gives the rule, why it holds, what to do instead, and which 
 
 **Instead.** Stop. If the business need survives without the practice, redesign and restart at intake.
 
-**Enforced by.** The Step 0 result recorded in the risk assessment (RA-001); the non-waivable list in [Exceptions and Risk Acceptance](governance-workflow.md#exceptions-and-risk-acceptance).
+**Enforced by.** The Step 0 result recorded in the risk assessment (RA-007); the non-waivable list in [Exceptions and Risk Acceptance](governance-workflow.md#exceptions-and-risk-acceptance).
 
 ## 7. No GenAI Where a Simpler Method Meets the Need
 

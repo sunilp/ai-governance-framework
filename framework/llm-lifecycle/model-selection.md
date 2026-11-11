@@ -36,7 +36,7 @@ Assess where inference runs and data is stored, retention, training use, sub-pro
 
 Score this dimension from the [third-party model risk assessment](../compliance/third-party-model-risk.md) (AR-005), which covers model behaviour changes and deprecation, operational and availability risk (SLAs, API changes, rate limits), vendor viability and pricing, [exit strategy](../compliance/third-party-model-risk.md#exit-strategy-requirements) and [concentration risk](../compliance/third-party-model-risk.md#concentration-risk). Open-weight models are assessed under [open-source model governance](open-source-model-governance.md) instead.
 
-**Vendor lock-in mitigation:** For T1 and T2 use cases, maintain a validated fallback model from a different provider. Document the performance delta and switchover procedure.
+**Vendor lock-in mitigation:** For T1 and T2 use cases, maintain a validated fallback model served by a different vendor from the primary, or self-hosted. The vendor that counts is the one serving the model, not the company that trained it (see [Dimension 5](../risk-classification/genai-risk-matrix.md#dimension-5-third-party-model-dependency)). Document the performance delta and switchover procedure.
 
 ### 4. Safety and Alignment
 

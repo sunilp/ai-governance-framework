@@ -93,7 +93,7 @@ Hold the inventory in a system of record with access control and change history,
 
 ## How Entries Are Created
 
-1. **At intake.** The Stage 1 intake form creates the entry with status `proposed` and tier `pending`. RA-006 requires the entry to exist before development begins. The Step 0 screen and the RA-008 role record are recorded against it.
+1. **At intake.** The Stage 1 intake form creates the entry with status `proposed` and tier `pending`. RA-006 requires the entry to exist before development begins. The Step 0 screen and the RA-008 role record, both produced at Stage 2, are then recorded against it.
 2. **At tiering.** When the Stage 2 assessment is approved (RA-004), the tier, tier basis, characteristics and data classes are set.
 3. **From reconciliation.** Anything the quarterly reconciliation finds that has no entry gets one, with `registration_source: reconciliation`, and is routed to intake. A live system found this way follows [Retroactive Governance](governance-workflow.md#retroactive-governance).
 4. **At adoption.** Systems already running when the framework is adopted are registered with `registration_source: retroactive` in week 1 ([START-HERE](../../START-HERE.md#minimum-viable-governance-the-first-30-days)).

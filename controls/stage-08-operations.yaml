@@ -146,6 +146,26 @@ controls:
   - framework/llm-lifecycle/agent-identity-and-tool-governance.md
   - framework/governance-operations/governance-workflow.md
 
+
+- id: PM-008
+  title: Fallback model switch tested
+  stage: 8
+  applies_to:
+    text: T1 systems using external models
+    tiers: [T1]
+    systems: [external-model]
+  owner: ai-operations
+  evidence: 'Fallback test record for each quarter: date, time taken to switch, and the evaluation result on the fallback model'
+  frequency: At least quarterly from go-live
+  on_fail: Escalate to AI Risk; the system counts as having no tested fallback until a test passes, and its third-party model dependency score is reviewed
+  type: detective
+  automation: semi-automated
+  key_control: false
+  test: For every T1 system using an external model, inspect the fallback test records for the last four quarters. Confirm a test ran in each quarter, the switch completed, and the fallback met the tier's evaluation thresholds.
+  sources:
+  - framework/compliance/third-party-model-risk.md
+  - framework/risk-classification/genai-risk-matrix.md
+
 - id: IR-001
   title: Incident response playbook documented
   stage: 8

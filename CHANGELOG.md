@@ -8,6 +8,32 @@ Control IDs are stable. A retired control keeps its ID, is marked retired in `co
 
 Regulatory documents carry a "Status as of" line. CI warns when one is older than 90 days and fails after 180 days.
 
+## 2.2.0 (11 November 2026)
+
+This release adds one control and fixes places where two documents disagreed.
+
+### Added
+- **PM-008, Fallback model switch tested.** The quarterly fallback test for T1 systems using external models was required in [third-party model risk](framework/compliance/third-party-model-risk.md#fallback-architecture) but had no control and no evidence. It now has both.
+- **Policy on a Page** at the front of the [AI policy template](templates/ai-policy.md): six commitments, each with an owner and how a breach would show.
+- **Use case assessment rows** to record how a vendor API earned a Medium on third-party model dependency: the business owner's outage statement, or the tested fallback's vendor and dates.
+
+### Changed
+- **Exit strategy** is now also required at any tier when the use case supports a critical or important function under DORA Art. 28(8). Before, only T1 and T2 needed one, so a T3 system with a tested fallback could support such a function with no exit strategy.
+- **Risk appetite:** [board reporting](framework/operating-model/board-reporting.md) now says the AI Risk Committee endorses the statement, matching the committee charter, the policy template and the review cadence. It used to say the CTO and CRO.
+- **RA-006:** the inventory entry is opened at intake (Stage 1) and evidenced at Stage 2. The workflow, control register and inventory standard now say the same thing.
+- **Step 0 screen:** recorded under RA-007 everywhere. The use case assessment, when to say no and the fast-lane pack used to cite RA-001.
+- **Agent identity record:** written and approved at Stage 3 (AR-006), with the identity issued at deployment. One row used to say the identity was created at deployment, after the review that checks it.
+- **Model selection:** the fallback must be served by a different vendor, or self-hosted. "A different provider" allowed two models on one vendor's platform.
+- **Document summarization example:** the fallback is Claude Sonnet 4.5 on Vertex AI throughout. Six lines still called it the Anthropic API.
+- **EU AI Act mapping:** the Art. 16 row now lists registration (Art. 49) among the gaps.
+- **README:** the ISO/IEC 42001 and DORA rows match their mappings, and the opening is in plainer words.
+
+### Why this is a minor version
+It adds a control and widens one requirement (the DORA exit strategy). No control ID, tier rule or threshold changes.
+
+### Retired
+- No control IDs retired. Added: PM-008. Changed: none.
+
 ## 2.1.0 (11 November 2026)
 
 This release fixes how the GenAI risk matrix scores dependency on a vendor-hosted model.

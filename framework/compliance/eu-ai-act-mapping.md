@@ -32,7 +32,7 @@ The Act applies to providers placing AI systems or general-purpose AI models on 
 
 High-risk systems already placed on the market or put into service before the Chapter III date fall under the Act only if their design changes significantly after that date. Systems intended for use by public authorities must comply by 2 August 2030 in any case (Art. 111(2) as amended).
 
-The other high-risk duties mapped below (Arts. 49, 72, 73 and 86) depend on a system being classified as high-risk under Art. 6, which is in Chapter III, Section 1. Plan for the same dates.
+The other high-risk duties listed below (Arts. 49, 72, 73 and 86) depend on a system being classified as high-risk under Art. 6, which is in Chapter III, Section 1. Plan for the same dates.
 
 ## Working Out the Role
 
@@ -114,7 +114,7 @@ Conformity assessment for Annex III points 2 to 8 uses the internal control proc
 | 13 | Enough transparency for deployers to interpret and use the output; instructions for use | DE-001 | [Transparency standards](../responsible-ai/transparency-standards.md) |
 | 14 | Designed for effective human oversight, including the ability to override or stop the system | PM-003, DA-004 | [Human-in-the-loop patterns](../responsible-ai/human-in-loop-patterns.md), [Deployment](../model-lifecycle/deployment.md) |
 | 15 | Appropriate accuracy, robustness and cybersecurity | EV-001, EV-002, EV-003, EV-008, EV-009, SR-001, SR-002, SR-003, SR-004 | [Validation](../model-lifecycle/validation.md), [Red-teaming protocol](../ai-security/red-teaming-protocol.md), [Adversarial robustness](../ai-security/adversarial-robustness.md) |
-| 16 | Provider obligations: meet Section 2, show name and contact on the system, keep documentation and logs, complete conformity assessment, EU declaration of conformity (Art. 47), CE marking (Art. 48), registration (Art. 49), corrective action (Art. 20), accessibility | DA-001, DA-002. Declaration of conformity, CE marking and accessibility: no control yet (gap) | [Governance workflow, Stage 7](../governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) |
+| 16 | Provider obligations: meet Section 2, show name and contact on the system, keep documentation and logs, complete conformity assessment, EU declaration of conformity (Art. 47), CE marking (Art. 48), registration (Art. 49), corrective action (Art. 20), accessibility | DA-001, DA-002. Declaration of conformity, CE marking, registration and accessibility: no control yet (gap) | [Governance workflow, Stage 7](../governance-operations/governance-workflow.md#minimum-evidence-pack-by-tier) |
 | 17 | Documented quality management system (see Art. 17(4) above) | The control register as a whole; RV-001, RV-004 | [Control register](../governance-operations/control-register.md), [Governance workflow](../governance-operations/governance-workflow.md) |
 | 18 | Keep technical documentation, quality management system records and the declaration of conformity for 10 years | DR-003 | [Audit trail: retention](audit-trail-requirements.md#retention-periods) |
 | 19 | Keep automatically generated logs under the provider's control for at least 6 months | DA-003, DR-003 | [Prompt audit trail](prompt-audit-trail.md#retention-requirements) |

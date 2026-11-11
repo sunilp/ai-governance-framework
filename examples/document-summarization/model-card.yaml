@@ -68,7 +68,7 @@ system_architecture:
       destination: "compliance_analyst"
       data_classification: "internal"
     - source: "document_ingestion"
-      destination: "fallback_model (Anthropic API, EU-region endpoint; primary outage only)"
+      destination: "fallback_model (Claude Sonnet 4.5 on Vertex AI, EU region; primary outage only)"
       data_classification: "confidential"
   rag_configuration:
     enabled: false
@@ -197,7 +197,7 @@ safety:
 operational:
   infrastructure:
     compute: "GCP europe-west1 (Vertex AI)"
-    data_residency: "EU only: primary processing in GCP europe-west1; the fallback (Anthropic API, external) uses an EU-region endpoint under DPA with zero data retention, only during a primary outage"
+    data_residency: "EU only: primary processing in GCP europe-west1; the fallback (Claude Sonnet 4.5 on Vertex AI) runs in the EU region under the same Google Cloud agreement with zero data retention, only during a primary outage"
   performance:
     latency_p50_ms: 8000
     latency_p95_ms: 15000

@@ -11,6 +11,7 @@ This document defines the end-to-end governance process for AI systems, from ide
 **Evidence produced:**
 - Intake form with business justification (no Control ID; pre-register artifact)
 - Initial risk screening questionnaire (no Control ID; pre-register artifact)
+- AI inventory entry opened with status `proposed` (evidenced under RA-006 at Stage 2)
 
 **Tier scaling:**
 
@@ -316,6 +317,7 @@ Governance artifacts (risk assessments, case files, red-team reports, incident p
 - Cost dashboard with alert configuration (Control ID: PM-005)
 - Kill switch test record (Control ID: PM-006)
 - Audit logging configuration and retention check (Control ID: PM-007)
+- Quarterly fallback model test record for T1 systems using external models (Control ID: PM-008)
 
 **Production evaluation** ([evaluation governance](../llm-lifecycle/evaluation-governance.md#production-evaluation) owns the cadences restated below):
 1. Online automated scoring of live traffic.
@@ -434,7 +436,7 @@ T3 and T4 systems follow the same ten stages with less evidence and no committee
 
 | Pack row | Evidence | Controls | T3 | T4 |
 |---|---|---|---|---|
-| 1 | Signed risk assessment with Step 0 result, tier determination, override check and approval | RA-001, RA-002, RA-004 | Approved by the team lead | Self-assessment acknowledged by the team lead |
+| 1 | Signed risk assessment with Step 0 result, tier determination, override check and approval | RA-001, RA-002, RA-004, RA-007 | Approved by the team lead | Self-assessment acknowledged by the team lead |
 | 3 | DPIA (if personal data is processed) | RA-005 | Screening; full DPIA if screening indicates high risk | Screening; full DPIA if screening indicates high risk |
 | 4 | Architecture document and data residency confirmation (external data flows) | AR-001, AR-003 | Documented by the technical owner | Documented by the technical owner |
 | 6 | Model selection (external models) | AR-004 | Team lead, from the approved vendor list | Team lead, from the approved vendor list |

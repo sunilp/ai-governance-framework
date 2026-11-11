@@ -155,7 +155,7 @@ Regulations that set expectations for third-party models. Sources are listed at 
 
 ## Exit Strategy Requirements
 
-For T1 and T2 use cases, a documented exit strategy is mandatory:
+For T1 and T2 use cases, a documented exit strategy is mandatory. It is also mandatory at any tier when the use case supports a critical or important function under DORA (Art. 28(8)). A tested fallback does not replace it:
 
 | Component | Description |
 |-----------|-------------|
@@ -178,7 +178,7 @@ Fallback path (activated on Provider A failure or exit):
   Application → Self-hosted model (pre-deployed) → Response
 ```
 
-Fallback must be tested quarterly for T1 use cases.
+Fallback must be tested quarterly for T1 use cases, and the test record kept (PM-008).
 
 A fallback lowers [third-party model dependency](../risk-classification/genai-risk-matrix.md#dimension-5-third-party-model-dependency) to Medium only when it is a tested fallback: served by a different vendor from the primary or self-hosted, so that one vendor's outage cannot stop both, run through the system's evaluation suite at the tier's thresholds, and with the switch exercised. Two models served through the same vendor's platform do not qualify, even when different providers trained them.
 

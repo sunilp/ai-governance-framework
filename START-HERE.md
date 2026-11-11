@@ -120,7 +120,7 @@ Before go-live you also need staffed human oversight (PM-003), an incident playb
 - A red team of 200+ cases including manual testing. External testers are recommended; contract them in week 1.
 - A full DPIA started in week 1. The DPO co-signs deployment when personal data is processed.
 - Human oversight designed and staffed. For a customer-facing informational system that means Pattern 1, or Pattern 3 with all five safeguards evidenced, including daily review of at least 1% of outputs (minimum 50 a day) and a kill switch that can stop or degrade the channel within 15 minutes ([pattern selection matrix](framework/responsible-ai/human-in-loop-patterns.md#pattern-selection-matrix)).
-- A validated fallback model and a documented exit strategy; T1 fallbacks are tested quarterly.
+- A validated fallback model and a documented exit strategy; T1 fallbacks are tested quarterly (PM-008).
 
 If any of these slips, move the date. Do not cut validation or the red team to hold it: an unresolved Critical finding cannot be excepted, and a missed threshold at T1 needs an exception approved by the committee.
 

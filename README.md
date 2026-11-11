@@ -1,6 +1,6 @@
 # AI Governance Framework
 
-**Practical governance patterns for AI and GenAI systems in regulated industries**
+**Working patterns for governing AI and GenAI systems in regulated industries**
 
 New here? Read [START-HERE.md](START-HERE.md) first: a short reading path for your role, a 30-day minimum setup, a 6-week path for one GenAI system, the fast lane for low-risk systems, and how small teams cover the roles.
 
@@ -8,18 +8,18 @@ New here? Read [START-HERE.md](START-HERE.md) first: a short reading path for yo
 
 ## Philosophy
 
-Governance is enablement, not gatekeeping. The goal is not to slow down AI adoption. It is to make AI adoption durable, defensible, and scalable across a regulated organization.
+Good governance helps teams ship AI. It tells them who decides, what evidence they need and what is off limits, before they build. A system approved this way still has an answer when a regulator, an auditor or a customer asks how it went live.
 
-This framework provides opinionated, field-tested patterns for governing both traditional ML and GenAI/LLM systems in financial services, healthcare, and other industries where model risk, data privacy, and regulatory compliance are non-negotiable.
+This framework gives you opinionated patterns for governing traditional ML and GenAI/LLM systems. It is written for financial services, healthcare and other industries where model risk, data privacy and regulation carry real penalties.
 
 ## Who This Is For
 
-- **Chief Risk Officers** who need confidence that AI systems meet regulatory expectations
-- **CTOs and Engineering VPs** who need repeatable standards for AI productionization
-- **AI/ML leads** who need clear guardrails without bureaucratic overhead
+- **Chief Risk Officers** who need to know that AI systems meet what regulators expect
+- **CTOs and Engineering VPs** who need one repeatable way to put AI into production
+- **AI/ML leads** who need clear rules without extra paperwork
 - **Compliance teams** who need to map AI controls to regulatory requirements
-- **CISOs** who need to assess the security surface of LLM and agentic AI systems
-- **Board members** who need to understand AI risk posture without operational detail
+- **CISOs** who need to assess the security risks of LLM and agentic AI systems
+- **Board members** who need to understand the organization's AI risk without the operational detail
 
 ## Framework Components
 
@@ -170,12 +170,12 @@ The framework maps to these instruments. "Reference only" means the repo cites t
 |---|---|
 | **EU AI Act** | Deployer and provider obligations for high-risk systems, GPAI downstream checks (Arts. 53 to 55), transparency (Art. 50), AI literacy and prohibited practices (Arts. 4 and 5), application dates as amended by Regulation (EU) 2026/1744 |
 | **NIST AI RMF** | Category-level mapping of all 19 AI RMF 1.0 Core categories to framework docs and control IDs, with gaps marked (subcategories not mapped); NIST AI 600-1 Generative AI Profile risk mapping |
-| **ISO/IEC 42001** | Clauses 4 to 10 and Annex A (A.2 to A.10) mapped to framework docs and control IDs; lists what a certification audit needs that the framework lacks (AI policy, Statement of Applicability, AIMS scope, AI Risk Committee charter) |
+| **ISO/IEC 42001** | Clauses 4 to 10 and Annex A (A.2 to A.10) mapped to framework docs and control IDs; lists what a certification audit needs that the framework lacks (Statement of Applicability, a process for staff to report concerns, a channel for outside parties to report adverse impacts). The AI policy and committee charter have templates that the organization still has to complete and approve |
 | **SR 26-2 (Federal Reserve, OCC, FDIC; replaced SR 11-7 in April 2026)** | Model risk management for traditional and non-generative AI models: development, validation, monitoring and vendor models. GenAI and agentic AI are outside SR 26-2's scope; the framework's GenAI and agentic controls stand on their own |
 | **MAS Guidelines on AI Risk Management (issued 7 October 2026)** | Document-level mapping in the Singapore profile and third-party hooks; AI inventory via RA-006 and GV-006; phase dates in the regulatory change monitoring deadlines table |
 | **MAS FEAT Principles** | Reference only: Singapore profile maps FEAT at document level to the bias, transparency and human oversight standards |
 | **IMDA/PDPC Model AI Governance Framework (incl. Agentic AI)** | Reference only: Singapore profile; the agentic framework points to the agentic risk and multi-agent standards |
-| **DORA** | ICT third-party risk for AI vendors: Arts. 28 to 30 contract terms, data locations, exit strategies, concentration risk and CTPP status (third-party model risk, data residency). No register-of-information control yet; ICT risk management and incident reporting articles are not mapped |
+| **DORA** | ICT third-party risk for AI vendors: Arts. 28 to 30 contract terms, data locations, exit strategies, concentration risk and CTPP status (third-party model risk, data residency), and the register of information (AR-007). ICT risk management and incident reporting articles are not mapped |
 | **GDPR** | Data protection, automated decision-making (Art. 22), DPIAs (RA-005), right to explanation |
 | **PRA SS1/23** | Reference only: UK profile maps it at document level to model lifecycle standards and vendor assessment (AR-005) |
 | **OSFI Guideline E-23 (effective 1 May 2027)** | Reference only: Canada profile maps it to tiering, lifecycle and review controls; model inventory via RA-006 and GV-006 |
@@ -196,7 +196,7 @@ Contributions are welcome. If you work in regulated industries and have governan
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md). Version 2.1.0 (November 2026) changes how the GenAI risk matrix scores third-party model dependency: a vendor API is graded by how much the process relies on the vendor, so a vendor-API system can score Medium, and the worked examples' recorded scores now match the level text. Version 2.0.0 (November 2026) added machine-readable controls with CI checks, statistical pass rules, 22 new controls, agent identity and tool governance, and regulatory content updated to November 2026.
+See [CHANGELOG.md](CHANGELOG.md). Version 2.2.0 (November 2026) adds control PM-008 for the quarterly T1 fallback test, a one-page front sheet for the AI policy template, and fixes eleven places where two documents disagreed. Version 2.1.0 (November 2026) changes how the GenAI risk matrix scores third-party model dependency: a vendor API is graded by how much the process relies on the vendor, so a vendor-API system can score Medium, and the worked examples' recorded scores now match the level text. Version 2.0.0 (November 2026) added machine-readable controls with CI checks, statistical pass rules, 22 new controls, agent identity and tool governance, and regulatory content updated to November 2026.
 
 ## License
 
