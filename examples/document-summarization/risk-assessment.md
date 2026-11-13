@@ -19,12 +19,12 @@
 |-----------|-------|---------------|
 | Hallucination Severity | **High (3)** | Incorrect summary of regulatory requirements could lead to compliance gaps. However, all outputs are reviewed by human compliance analysts before use. |
 | Data Exposure Risk | **High (3)** | Documents are confidential business data (regulatory correspondence, pre-publication policy) but do not contain customer personal data. Primary processing on Vertex AI in the GCP EU region (VPC-hosted). During a primary outage only, documents go to the fallback model (Claude Sonnet 4.5), also served through Vertex AI in the EU region under the same Google Cloud agreement, with zero data retention. |
-| Prompt Injection Susceptibility | **Low (1)** | Internal users only; input is uploaded documents, not free-text queries. Limited attack surface. |
+| Prompt Injection Susceptibility | **Medium (2)** | Internal users only, but the input is uploaded documents, which can carry instructions (indirect prompt injection). The system has no tools and every summary is reviewed before use, which limits what an injected instruction can do. |
 | Output Controllability | **Low (1)** | All outputs reviewed by qualified compliance analyst before use (Pattern 1: full human-in-the-loop). |
 | Third-Party Model Dependency | **High (3)** | Primary model hosted on Vertex AI (GCP). Validated fallback to Claude Sonnet 4.5 on Vertex AI (EU region), used only on primary outage. No switch to the fallback is recorded, so it is not a tested fallback and counts as degraded. No outage tolerance is recorded. |
 
 **Highest Dimension: High (3)** (Hallucination Severity, Data Exposure Risk, Third-Party Model Dependency)
-**Aggregate Score: 11** (context only; does not set the tier)
+**Aggregate Score: 12** (context only; does not set the tier)
 
 ### Risk Tier Determination
 
