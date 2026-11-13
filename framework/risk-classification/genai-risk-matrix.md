@@ -38,12 +38,14 @@ The sensitivity of data that flows through the LLM pipeline: prompts, context wi
 
 The exposure surface for adversarial prompt manipulation.
 
+Count every channel that puts text in front of the model, not only what a user types. Uploaded files, emails, retrieved documents, web pages and tool results can carry instructions too (indirect prompt injection). A pipeline with no user input still scores at least Medium when it reads content from outside the organisation's control.
+
 | Level | Description | Examples |
 |-------|-------------|----------|
 | Critical | User-facing with unrestricted input, connected to downstream actions | Customer chatbot with transaction capabilities |
 | High | User-facing with unrestricted input, read-only | Customer Q&A, public-facing assistants |
-| Medium | Internal users with controlled input templates | Employee productivity tools with structured prompts |
-| Low | No user input; fully automated prompts | Batch summarization, scheduled report generation |
+| Medium | Internal users with controlled input templates, or no user input but the model reads untrusted content | Employee productivity tools with structured prompts; batch summarization of inbound documents |
+| Low | No user input, and everything the model reads is trusted internal content | Scheduled report generation from internal structured data |
 
 ### Dimension 4: Output Controllability
 

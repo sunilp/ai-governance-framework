@@ -8,6 +8,16 @@ Control IDs are stable. A retired control keeps its ID, is marked retired in `co
 
 Regulatory documents carry a "Status as of" line. CI warns when one is older than 90 days and fails after 180 days.
 
+## 2.3.0 (13 November 2026)
+
+This release fixes how prompt injection exposure is scored.
+
+### Changed
+- **Prompt injection susceptibility** in the [GenAI risk matrix](framework/risk-classification/genai-risk-matrix.md#dimension-3-prompt-injection-susceptibility) now counts every channel that puts text in front of the model. Low used to read "No user input; fully automated prompts" with batch summarization as the example, but uploaded files, emails, retrieved documents, web pages and tool results can carry instructions as well. A pipeline that reads untrusted content now scores at least Medium. Low is kept for pipelines whose every input is trusted internal content.
+- **Document summarization example:** prompt injection susceptibility moves from Low to Medium, because its input is uploaded documents. The aggregate score moves from 11 to 12. The tier stays T2, since the highest dimension sets the tier.
+
+No control IDs were added, changed or retired.
+
 ## 2.2.0 (11 November 2026)
 
 This release adds one control and fixes places where two documents disagreed.
