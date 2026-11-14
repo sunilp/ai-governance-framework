@@ -85,7 +85,7 @@ Before a prompt enters production, it passes the [prompt review checklist](../..
 | T3 | Peer review |
 | T4 | Self-review with documentation |
 
-This is the full review, which a new prompt or a major version takes. A minor version takes peer review at every tier ([versioning rules](#versioning-rules)).
+This is the full review, which a new prompt or a major version takes. A minor version takes peer review at T1 to T3 ([versioning rules](#versioning-rules)). A T4 prompt is self-reviewed at any version.
 
 Prompt review is control DE-003 in the [control register](../governance-operations/control-register.md), owned by the AI lead. DE-003 applies to T1 to T3 (T3 is peer review only); T4 prompts are self-reviewed.
 
@@ -110,7 +110,7 @@ prompts/
 ### Versioning Rules
 
 - **Major version (v1 → v2):** Behavioral change: different output characteristics, new guardrails, different model target, or facts and policy terms added to or removed from the prompt. Requires full review. It is a [material change](../governance-operations/governance-workflow.md#stage-9-ongoing-governance), so it also triggers the re-tiering check and revalidation (RV-003).
-- **Minor version (v1.0 → v1.1):** Refinement: improved phrasing, additional examples, minor guardrail adjustments. Requires peer review and a passing evaluation suite at the pull request gate. It is not a material change on its own.
+- **Minor version (v1.0 → v1.1):** Refinement: improved phrasing, additional examples, minor guardrail adjustments. Requires peer review (self-review at T4) and a passing evaluation suite at the pull request gate. It is not a material change on its own.
 - **Who decides.** The reviewer classifies the change, not the author. A change that moves any evaluation metric outside its run-to-run variation is major, whatever the author intended. When in doubt, it is major.
 - **No unversioned changes.** Every prompt change creates a new version.
 
