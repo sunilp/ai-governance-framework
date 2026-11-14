@@ -155,7 +155,7 @@ Safeguards in place for item 3 (all four required to stay out of automatic T1):
 
 ## Risk Acceptance
 
-**Residual risks accepted by AI Risk Committee (2025-09-10):**
+**Residual risks accepted by the business owner (Head of Retail Banking Digital) and confirmed by the AI Risk Committee (2025-09-10):**
 
 1. Hallucination rate of ≤ 1%: accepted given RAG grounding, monitoring, and human spot-checks
 2. Prompt injection residual risk: accepted given multi-layer defense and quarterly red-teaming

@@ -82,7 +82,7 @@ How many people or how much capital is affected by the system's outputs?
 2. **Approval by tier:** T1 AI Risk Committee; T2 AI Risk (second line); T3 team lead; T4 team lead (acknowledges the self-assessment).
 3. **Model Risk Management** validates the tier classification independently for T1 systems.
 4. **Tier is recorded** in the AI system inventory and determines all downstream governance requirements.
-5. **Re-assessment** (a re-tiering check) happens at every formal governance review and on material change to scope, data, autonomy level, or regulatory environment.
+5. **Re-assessment** (a re-tiering check) happens at every formal governance review and on [material change](../governance-operations/governance-workflow.md#stage-9-ongoing-governance): a change of model, provider, prompt behaviour, scope, data, autonomy or regulatory environment.
 
 ## Governance Intensity by Tier
 

@@ -93,7 +93,7 @@ Override check against the canonical list in the [GenAI risk matrix](../../frame
 
 ### Risk Acceptance Conditions
 
-Residual risks accepted by AI Risk Committee (2025-09-10, with the deployment approval):
+Residual risks accepted by the business owner (Head of Retail Banking Digital) and confirmed by the AI Risk Committee (2025-09-10, with the deployment approval):
 
 1. Hallucination rate of ≤ 1%: accepted given RAG grounding, monitoring, and human spot-checks
 2. Prompt injection residual risk: accepted given multi-layer defense and quarterly red-teaming

@@ -110,7 +110,7 @@ A use rejected at Step 0 keeps its entry with status `rejected` and tier `not-ti
 | Deployment approved | `deployment_status`, `dates.deployed`, `dates.next_review`, model versions | System owner | DA-002 |
 | Formal governance review | `dates.last_review`, `dates.next_review`, `risk_tier` after the re-tiering check, `linked_controls` | System owner | RV-001 |
 | Model card updated | `vendor_and_model`, `human_oversight`, `references.model_card` | AI lead | RV-002 |
-| Material change (model, provider, prompt, scope, data, autonomy, regulation) | `risk_tier`, `characteristics`, `data`, `eu_ai_act` | System owner; Compliance for the Act fields | RV-003, RA-008 |
+| [Material change](governance-workflow.md#stage-9-ongoing-governance) (model, provider, major prompt version, scope, data, autonomy, regulation) | `risk_tier`, `characteristics`, `data`, `eu_ai_act` | System owner; Compliance for the Act fields | RV-003, RA-008 |
 | Exception approved, renewed or closed | `exceptions`, the control's status in `linked_controls` | AI Risk | GV-004 |
 | Deprecation or retirement | `deployment_status`, `dates.retired` | System owner | DR-001, DR-003 |
 

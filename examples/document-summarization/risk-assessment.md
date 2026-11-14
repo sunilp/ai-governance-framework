@@ -96,7 +96,7 @@ No override applies. The highest-scoring dimension is High (Hallucination Severi
 
 ## Risk Acceptance
 
-**Residual risks accepted by AI Risk (second line) with the risk assessment approval (2025-10-14):**
+**Residual risks accepted by the business owner (Head of Compliance Operations) and confirmed by AI Risk (second line) with the risk assessment approval (2025-10-14):**
 
 1. Hallucination rate of ≤ 3%: accepted given full human review of every output
 2. Document length limitations: accepted with user warning for documents >80 pages

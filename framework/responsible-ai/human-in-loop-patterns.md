@@ -183,6 +183,8 @@ Agentic AI systems require special HITL considerations due to their autonomous, 
 | Budget gates | Agent must pause and seek approval when approaching token, cost, or action limits |
 | Emergency stop | Operator can immediately halt agent execution |
 
+**Pattern 3 and agents.** Pattern 3 lets a T1 customer-facing informational system deliver content without per-output review. When an agent produces that content, the agent does not send it. An outbound customer message cannot be undone, so the agent stages it, and a person or a deterministic release service applies the Pattern 3 safeguards and sends it ([when to say no, rule 3](../governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped)). The agent's own action is then a reversible entry in a queue.
+
 ---
 
 ## Regulatory Requirements for Human Oversight
@@ -194,6 +196,8 @@ Agentic AI systems require special HITL considerations due to their autonomous, 
 | SR 26-2 (US model risk guidance, replaced SR 11-7 in April 2026) | Oversight of model use scaled to model materiality, for traditional and non-generative AI models. GenAI and agentic AI are out of its scope | Pattern 1 or 2 based on model risk tier for in-scope models; GenAI and agentic systems follow the [pattern selection matrix](#pattern-selection-matrix) on its own |
 | Consumer Duty (FCA) | Fair outcomes for consumers | Pattern appropriate to consumer impact |
 | EBA Guidelines on ML | Human judgment in credit decisions | Pattern 1 for adverse or non-standard credit outcomes |
+
+Where this table and the [selection matrix](#pattern-selection-matrix) give different answers for one system, the stricter applies. Article 14 sets what oversight must achieve, such as awareness of automation bias and the ability to disregard, override or stop the system. The pattern is how this framework meets it.
 
 ---
 

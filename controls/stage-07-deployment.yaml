@@ -19,7 +19,7 @@ controls:
   frequency: Before deployment
   on_fail: Block deployment
   type: preventive
-  automation: manual
+  automation: semi-automated
   key_control: false
   test: Sample 25 deployments from the period (or all, if fewer). Check each evidence pack against the minimum evidence pack for its tier; every missing item needs an approved exception.
   sources:

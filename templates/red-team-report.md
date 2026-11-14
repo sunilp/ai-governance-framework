@@ -157,9 +157,11 @@ Sanitize all examples: redact any PII, confidential data, or content that could 
 
 Based on this assessment:
 
-- [ ] **Pass**: no Critical or High findings; system may proceed to deployment
-- [ ] **Conditional pass**: no Critical findings; High findings have documented remediation plan with timeline; remediated High/Critical findings must pass retest before production approval
-- [ ] **Fail**: Critical or unaddressed High findings; system must not proceed to deployment
+- [ ] **Pass**: no open Critical or High findings. Every Critical or High finding raised was remediated and passed retest. The system may proceed to deployment
+- [ ] **Conditional pass**: no open Critical findings, and every open High finding is covered: at T1 and T2 by an approved exception (GV-004), at T3 and T4 by a recorded risk acceptance. Give each exception or acceptance ID in the rationale below
+- [ ] **Fail**: an open Critical finding at any tier, or at T1 or T2 an open High finding with no approved exception. The system must not proceed to deployment
+
+A remediation plan does not address a finding. A High finding is addressed when its fix has passed retest or an approved exception covers it ([SR-002](../framework/governance-operations/control-register.md)). A Critical finding cannot be excepted.
 
 **Rationale:**
 

@@ -107,6 +107,7 @@ Incident response: AI Operations assigns the incident commander, who leads the r
 3. **Escalation obligation:** Any role holder who identifies a material risk is obligated to escalate, regardless of tier.
 4. **Documentation duty:** Decisions must be documented. Verbal approvals are not sufficient for T1/T2 systems.
 5. **Regulatory representation:** Compliance must be consulted on all T1/T2 systems and any system processing customer data.
+6. **Residual risk:** The Business owner accepts the residual risk of their system. The approver for the tier confirms that it sits within risk appetite when approving the risk assessment ([decision process](../risk-classification/risk-matrix.md#decision-process)). A risk left open because a required control is unmet is accepted only through the [exception process](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance).
 
 ## Onboarding New AI Systems
 

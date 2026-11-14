@@ -56,7 +56,7 @@ controls:
     systems: [all]
   owner: product-owner
   evidence: Completed impact assessment template
-  frequency: Before development
+  frequency: Before development; reviewed on material change
   on_fail: Cannot proceed to development
   type: preventive
   automation: manual
