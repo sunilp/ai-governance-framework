@@ -136,7 +136,7 @@ Define degraded operation modes:
 ### Approval Gates
 
 - Irreversible actions require human confirmation, regardless of which agent initiates them
-- High-impact actions (financial, customer-facing, data-modifying) require human approval even if the individual agent has permission
+- High-impact actions (financial, customer-facing, data-modifying) require human approval even if the individual agent has permission, or a staged write that a person or a deterministic service releases ([when to say no, rule 3](../governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped))
 - Configure approval gates at the system level, not per-agent; the orchestrator manages human checkpoints
 - What the approver sees and how the gate is enforced: [human approval gates](agent-identity-and-tool-governance.md#4-human-approval-gates)
 

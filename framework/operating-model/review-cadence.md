@@ -136,4 +136,4 @@ The following conditions require immediate escalation outside the regular cadenc
 | Internal audit of AI governance | Internal Audit | Q2 |
 | Regulatory compliance mapping update | Compliance | When regulations change |
 | Mock regulatory examination (T1 systems) | MRM + Compliance | Q3 |
-| Training and awareness program | Data Science Lead + Compliance | Ongoing |
+| Training and awareness program ([AI literacy](ai-literacy.md#ownership), GV-002) | Head of AI; AI Risk tracks completion; Compliance supplies the regulatory content | Ongoing |

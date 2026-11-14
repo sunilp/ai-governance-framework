@@ -120,6 +120,7 @@ Irreversible and high-value actions need a human decision before they run. The g
 - Only a person can approve. An agent cannot approve another agent's action.
 - The approver must hold the authority for the action. Approval does not extend anyone's authority.
 - The gate is enforced in the tool gateway or policy layer, so an injected instruction cannot skip it.
+- A staged write is the alternative to a gate: the agent writes to a pending queue or draft state, which can be reversed, and a person or a deterministic service releases it ([when to say no, rule 3](../governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped)). This is how an agent's output is delivered under [Pattern 3](../responsible-ai/human-in-loop-patterns.md#hitl-for-agentic-ai).
 - Each approval is recorded with approver, action, parameters shown, decision and time, and referenced from the agent action audit record.
 
 ---

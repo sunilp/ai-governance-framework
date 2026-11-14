@@ -153,7 +153,7 @@ Complete the [red-team report template](../../templates/red-team-report.md) with
 ### Deployment Gate Integration
 
 For T1 and T2 systems, red-team sign-off is a mandatory [deployment gate](../llm-lifecycle/deployment-gates.md):
-- No Critical or High findings unresolved
+- No Critical or High findings unresolved. A finding is resolved when its fix has passed retest. A High finding with no fix yet blocks the release unless an approved exception covers it (SR-002, [exceptions](../governance-operations/governance-workflow.md#exceptions-and-risk-acceptance)); a remediation plan is not enough. A Critical finding cannot be excepted
 - Medium findings documented with remediation plan and timeline
 - Red-team report filed and accessible for audit
 - Sign-off from red-team lead and system owner

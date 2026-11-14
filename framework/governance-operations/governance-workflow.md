@@ -370,7 +370,18 @@ Response SLAs depend on severity, not tier. Any incident on a T1 system that rea
 
 ## Stage 9: Ongoing Governance
 
-**What happens:** Scheduled reviews per tier cadence assess performance, risk assessment relevance, and provider updates. Material changes (model swap, prompt revision, regulatory change) trigger revalidation outside cadence.
+**What happens:** Scheduled reviews per tier cadence assess performance, risk assessment relevance, and provider updates. Material changes trigger a risk re-assessment and revalidation outside cadence.
+
+**Material change.** A change is material when it can alter what the system does or the risk it carries:
+
+- a model swap or a new model version, including a provider update to a hosted model;
+- a major prompt version, meaning a change in behaviour under the [prompt versioning rules](../llm-lifecycle/prompt-engineering-standards.md#versioning-rules);
+- a change of scope or use: a new purpose, user group or channel;
+- a new class or source of data (a routine update to an approved source follows [RAG governance](../llm-lifecycle/rag-governance.md#updates));
+- a change to its autonomy or tool authority;
+- a change in the regulatory environment that applies to it.
+
+A material change triggers the re-tiering check and revalidation (RV-003) before release. A minor prompt version is not material on its own: it takes peer review and the evaluation suite at the pull request gate. The change record states the classification and who approved it. When in doubt, treat the change as material. Every other document that says "material change" means this definition.
 
 **Gate criteria:** Review completed within cadence, risk re-assessment (re-tiering check) done, model card updated, revalidation done for material changes, regulatory impact assessed.
 
@@ -469,7 +480,7 @@ Two second-line touchpoints remain: AI Risk owns the T3 vendor risk assessment (
 
 **After go-live.** From the Stage 8 and Stage 9 tables: online automated scoring of a 5% sample (T3) or a weekly batch sample (T4); metrics review monthly (T3) or quarterly (T4); full offline suite re-run semi-annually; vendor behaviour canary monthly for external models; RAG retrieval evaluation quarterly (T3); formal review annually (T3) or annual self-assessment (T4); revalidation by peer re-review on material change. Incident reporting per severity SLA and post-mortems for S1/S2 incidents apply at every tier.
 
-**Leaving the fast lane.** Run the re-tiering check at every formal review and on any material change to scope, data, autonomy level or regulatory environment ([risk matrix decision process](../risk-classification/risk-matrix.md#decision-process)). RV-003 treats a model change, provider update, prompt change or regulatory change as material. The system leaves the fast lane when the check gives T2 or above. Common triggers:
+**Leaving the fast lane.** Run the re-tiering check at every formal review and on any [material change](#stage-9-ongoing-governance) ([risk matrix decision process](../risk-classification/risk-matrix.md#decision-process)). The system leaves the fast lane when the check gives T2 or above. Common triggers:
 - It starts serving customers or other external parties. Customer-facing content without per-output human review is automatic T1 (override item 2).
 - Customer personal data reaches an external LLM API (override items 3 and 8).
 - It gains tool use of any kind, read-only included (item 6), or write access or authority to act (item 4).

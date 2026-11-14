@@ -53,12 +53,12 @@ controls:
     systems: [all]
   owner: ai-lead
   evidence: Revalidation assessment + eval results
-  frequency: On model change, provider update, prompt change, or regulatory change. Independent revalidation also annual (T1) and every 24 months (T2)
+  frequency: On material change (model, provider, major prompt version, scope, data, autonomy or regulation). Independent revalidation also annual (T1) and every 24 months (T2)
   on_fail: Re-enter deployment gates
   type: preventive
   automation: manual
   key_control: true
-  test: Sample 25 model, provider, prompt or regulatory changes from the change log (or all, if fewer). Confirm each material change was revalidated before release, and that no T1/T2 scheduled independent revalidation is overdue.
+  test: Sample 25 changes from the change log (or all, if fewer), including prompt changes recorded as minor versions. Confirm each was classified against the material change definition, that each material change was revalidated before release, and that no T1/T2 scheduled independent revalidation is overdue.
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/model-lifecycle/validation.md

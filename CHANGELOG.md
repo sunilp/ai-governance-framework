@@ -8,6 +8,24 @@ Control IDs are stable. A retired control keeps its ID, is marked retired in `co
 
 Regulatory documents carry a "Status as of" line. CI warns when one is older than 90 days and fails after 180 days.
 
+## 2.4.0 (14 November 2026)
+
+This release fixes places where two documents disagreed. It adds no controls.
+
+### Changed
+- **Material change** now has one definition, in [Stage 9 of the workflow](framework/governance-operations/governance-workflow.md#stage-9-ongoing-governance): a change of model, provider, major prompt version, scope, data source, autonomy or regulation. RV-003, the inventory standard and the risk matrix each listed different triggers. The definition takes all of them, so any material change now triggers both the re-tiering check and revalidation, and the three documents point to the one list.
+- **Prompt versions:** a major version, meaning a change in behaviour, is a material change and triggers the re-tiering check and revalidation. A minor version takes peer review at every tier and a passing evaluation suite at the pull request gate. RV-003 used to treat every prompt change as a trigger for revalidation, while the [versioning rules](framework/llm-lifecycle/prompt-engineering-standards.md#versioning-rules) gave a minor version peer review only. The reviewer classifies the change, not the author. The reviewers DE-003 lists for each tier apply to a new prompt or a major version.
+- **Red-team findings:** the [report template](templates/red-team-report.md) let a High finding through as a "Conditional pass" on a remediation plan. SR-002, the protocol and the reference gate block an unaddressed High at T1 and T2. The template now follows SR-002: an open High needs an approved exception at T1 and T2, or a recorded risk acceptance at T3 and T4, and a remediation plan does not address a finding. The [protocol](framework/ai-security/red-teaming-protocol.md#deployment-gate-integration) says when a finding counts as resolved.
+- **Residual risk:** the business owner accepts it, the approver for the tier confirms it with the risk assessment, and a risk left by an unmet control is accepted only through the exception process. [Roles and responsibilities](framework/operating-model/roles-responsibilities.md#accountability-principles) now says so once. The NIST AI RMF mapping said residual risk was accepted only through exceptions, and two worked examples said the approver accepted it.
+- **Impact assessment (RA-003)** is reviewed on material change, as the ISO/IEC 42001 mapping already said. The control used to say "Before development" only.
+- **Pattern 3 and agents:** [human-in-the-loop patterns](framework/responsible-ai/human-in-loop-patterns.md#hitl-for-agentic-ai) now says how Pattern 3 applies when an agent writes the content. The agent stages the message, and a person or a deterministic release service applies the safeguards and sends it. Before, Pattern 3 allowed delivery without per-output review while [when to say no](framework/governance-operations/when-to-say-no.md#3-no-autonomous-write-that-cannot-be-undone-or-capped) had no agent send a customer message on its own, and nothing joined the two. The agent standard and the multi-agent standard name the staged write as the alternative to an approval gate.
+- **Disclosure:** an AI-drafted communication sent to a customer carries a visible label. One table in the [transparency standards](framework/responsible-ai/transparency-standards.md#user-interaction-disclosure) allowed disclosure "in the output or metadata" while another required the visible label.
+- **Human oversight and regulation:** where the regulatory table and the pattern selection matrix give different answers for one system, the stricter applies.
+- **Training programme owner:** the annual activities in [review cadence](framework/operating-model/review-cadence.md#annual-activities) now name the Head of AI, with AI Risk tracking completion, matching GV-002 and the AI literacy standard. They used to name the Data Science Lead and Compliance.
+- **DA-001 and SR-002** are marked semi-automated. They were marked manual, although the reference gate writes the DA-001 evidence checklist and re-checks SR-002's open findings. The register now holds 4 automated, 27 semi-automated and 40 manual controls.
+
+Control records changed: RA-003, DE-003, RV-003, SR-002 and DA-001. No control IDs were added or retired.
+
 ## 2.3.0 (13 November 2026)
 
 This release fixes how prompt injection exposure is scored.

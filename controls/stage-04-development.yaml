@@ -53,13 +53,13 @@ controls:
     tiers: [T1, T2, T3]
     systems: [genai]
   owner: ai-lead
-  evidence: 'Signed prompt review checklist + prompt version link. Reviewers: T1 peer review + prompt engineering lead + security review + AI Risk sign-off; T2 peer review + prompt engineering lead; T3 peer review'
+  evidence: 'Signed prompt review checklist + prompt version link. Reviewers for a new prompt or a major version: T1 peer review + prompt engineering lead + security review + AI Risk sign-off; T2 peer review + prompt engineering lead; T3 peer review. A minor version: peer review'
   frequency: Before release
   on_fail: Block deployment
   type: preventive
   automation: manual
   key_control: false
-  test: Sample 25 prompt releases from the period (or all, if fewer), including every T1 release. Inspect the signed checklist for the reviewers required at the tier and a link to the released prompt version.
+  test: Sample 25 prompt releases from the period (or all, if fewer), including every T1 release. Inspect the signed checklist for the reviewers required at the tier and version type, a link to the released prompt version, and that no release recorded as a minor version changed behaviour.
   sources:
   - framework/governance-operations/governance-workflow.md
   - framework/llm-lifecycle/prompt-engineering-standards.md

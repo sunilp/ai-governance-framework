@@ -40,7 +40,7 @@ controls:
   frequency: Before deployment
   on_fail: Block deployment. Unresolved Critical findings cannot be excepted
   type: preventive
-  automation: manual
+  automation: semi-automated
   key_control: true
   test: For the SR-001 sample, trace every Critical and High finding to remediation evidence or, for T3/T4 High findings, a recorded risk acceptance. Confirm no system went live with an open Critical finding.
   sources:
