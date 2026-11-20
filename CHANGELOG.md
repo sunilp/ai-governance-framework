@@ -8,6 +8,15 @@ Control IDs are stable. A retired control keeps its ID, is marked retired in `co
 
 Regulatory documents carry a "Status as of" line. CI warns when one is older than 90 days and fails after 180 days.
 
+## 2.4.1 (14 November 2026)
+
+A patch. It fixes one line that 2.4.0 added.
+
+### Fixed
+- **Minor prompt versions at T4:** the note under [review authority](framework/llm-lifecycle/prompt-engineering-standards.md#review-authority) said a minor version takes peer review at every tier. The next line, and DE-003, have T4 prompts self-reviewed. A minor version takes peer review at T1 to T3, and a T4 prompt is self-reviewed at any version. The [versioning rules](framework/llm-lifecycle/prompt-engineering-standards.md#versioning-rules) say the same.
+
+No control records changed.
+
 ## 2.4.0 (14 November 2026)
 
 This release fixes places where two documents disagreed. It adds no controls.
